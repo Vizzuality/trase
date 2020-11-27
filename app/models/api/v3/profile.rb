@@ -4,7 +4,7 @@
 #
 #  id                                                                                                                                            :integer          not null, primary key
 #  context_node_type_id                                                                                                                          :integer          not null
-#  name(Profile name, either actor or place. One of restricted set of values.)                                                                   :text
+#  name(Profile name, either actor, place or country.)                                                                                           :text
 #  main_topojson_path(Path must be relative to https://github.com/Vizzuality/trase/tree/develop/frontend/public/vector_layers and start with /)  :string
 #  main_topojson_root(Path within the TopoJSON file where geometries are contained)                                                              :string
 #  adm_1_name                                                                                                                                    :string
@@ -22,7 +22,6 @@
 #
 #  fk_rails_...  (context_node_type_id => context_node_types.id) ON DELETE => cascade
 #
-
 module Api
   module V3
     class Profile < YellowTable
@@ -73,19 +72,8 @@ module Api
       end
 
       def refresh_dependents
-        Api::V3::Readonly::Context.refresh(sync: false, skip_dependencies: true)
-        Api::V3::Readonly::NodeWithFlowsOrGeo.refresh(sync: false, skip_dependencies: true)
-        Api::V3::Readonly::Dashboards::Source.refresh(sync: false, skip_dependencies: true)
-        Api::V3::Readonly::Dashboards::Company.refresh(sync: false, skip_dependencies: true)
-        Api::V3::Readonly::Dashboards::Exporter.refresh(sync: false, skip_dependencies: true)
-        Api::V3::Readonly::Dashboards::Importer.refresh(sync: false, skip_dependencies: true)
-        Api::V3::Readonly::Dashboards::Destination.refresh(sync: false, skip_dependencies: true)
-        Api::V3::Readonly::Dashboards::Country.refresh(sync: false, skip_dependencies: true)
-        Api::V3::Readonly::Dashboards::Commodity.refresh(sync: false, skip_dependencies: true)
-
         # TODO: needs refreshing synchronously, otherwise race condition
         # with refreshing basic_attributes
-        Api::V3::Readonly::NodeWithFlows.refresh(sync: true, skip_dependencies: true)
         refresh_actor_basic_attributes
       end
 
@@ -109,16 +97,16 @@ module Api
       end
 
       def update_node_with_flows_actor_basic_attributes(context_node_type_id)
-        context_node_type = Api::V3::ContextNodeType.find(context_node_type_id)
-        context = context_node_type.context
-        nodes = context_node_type.node_type.nodes
-        node_with_flows = Api::V3::Readonly::NodeWithFlows.
+        nodes_with_flows = Api::V3::Readonly::NodeWithFlows.
+          select(:id, :context_id).
           without_unknowns.
           without_domestic.
-          where(context_id: context.id, id: nodes.map(&:id))
-        NodeWithFlowsRefreshActorBasicAttributesWorker.new.perform(
-          node_with_flows.map(&:id)
-        )
+          where(context_node_type_id: context_node_type_id)
+        nodes_with_flows.each do |node|
+          NodeWithFlowsRefreshActorBasicAttributesWorker.perform_async(
+            node.id, node.context_id
+          )
+        end
       end
     end
   end

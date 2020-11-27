@@ -72,27 +72,52 @@ function Explore(props) {
   const clearStep =
     step === EXPLORE_STEPS.selected ? () => setCountry(null) : () => setCommodity(null);
 
+  const renderHighlighted = txt => (
+    <Text as="span" size="sm" weight="bold">
+       {translateText(txt)}
+    </Text>
+  );
+
+  const renderBackButton = isMobile => (
+    <span>
+      {step > EXPLORE_STEPS.selectCommodity && !isMobile && (
+        <button
+          onClick={clearStep}
+          className="back-button"
+          data-test="featured-cards-back-button"
+        >
+          <Text variant="mono" size="lg" weight="bold" className="featured-cards-back">
+            <Icon color="pink" icon="icon-arrow" className="arrow-icon" />
+            BACK
+          </Text>
+        </button>
+      )}
+    </span>
+  )
+
   const renderTitle = isMobile => {
     const titleParts = ['commodity', 'source country', 'supply chain to explore'];
     return (
       <div className="step-title-container">
-        <Heading size="lg" align="center" data-test="step-title" className="notranslate">
-          {translateText(`${step}. Choose a ${titleParts[step - 1]}`)}
-        </Heading>
-        <span>
-          {step > EXPLORE_STEPS.selectCommodity && !isMobile && (
-            <button
-              onClick={clearStep}
-              className="back-button"
-              data-test="featured-cards-back-button"
-            >
-              <Text variant="mono" size="lg" weight="bold" className="featured-cards-back">
-                <Icon color="pink" icon="icon-arrow" className="arrow-icon" />
-                BACK
-              </Text>
-            </button>
-          )}
-        </span>
+        {(step === 1 || step === 2) && (
+          <div className="row column">
+            <Heading size="lg" align="center" data-test="step-title" className="notranslate">
+              {translateText(`${step}. Choose a ${titleParts[step - 1]}`)}
+              {renderBackButton(isMobile)}
+            </Heading>
+            <Heading size="sm" align="center">
+              {translateText('Options marked in')} {renderHighlighted('gray')} {translateText('provide')} {renderHighlighted('national-scale')} {translateText('data only')}
+            </Heading>
+          </div>
+        )}
+        {step === 3 && (
+          <>
+            <Heading size="lg" align="center" data-test="step-title" className="notranslate">
+              {translateText(`${step}. Choose a ${titleParts[step - 1]}`)}
+            </Heading>
+            {renderBackButton(isMobile)}
+          </>
+        )}
       </div>
     );
   };
@@ -172,12 +197,14 @@ function Explore(props) {
                       <div className={cx('explore-grid', { [`rows${rowsNumber}`]: rowsNumber })}>
                         {step < EXPLORE_STEPS.selected &&
                           items.map(item => (
-                            <GridListItem
-                              item={item}
-                              enableItem={i => setItemFunction(i.id)}
-                              onHover={onItemHover}
-                              color="transparent"
-                            />
+                           <GridListItem
+                             item={item}
+                             tooltip={item.isSubnational ? null : 'This data is currently only available at a national scale.'}
+                             tooltipCover
+                             enableItem={i => setItemFunction(i.id)}
+                             onHover={onItemHover}
+                             color={!item.isSubnational ? 'transparent' : 'strong-pink'}
+                           />
                           ))}
                       </div>
                     )}
@@ -229,8 +256,8 @@ function Explore(props) {
                             ))
                           ) : (
                             <div className="bubble">
-                              {(highlightedCountryIds.level1.length > 0 ||
-                                highlightedCountryIds.level2.length > 0 ||
+                              {(highlightedCountryIds?.level1.length > 0 ||
+                                highlightedCountryIds?.level2.length > 0 ||
                                 highlightedCommodityIds.length > 0) && (
                                 <>
                                   <Text

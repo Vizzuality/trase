@@ -7,6 +7,7 @@
 #  commodity_id                                                                         :integer          not null
 #  years(Years for which country-commodity data is present; empty (NULL) for all years) :integer          is an Array
 #  default_year(Default year for this context)                                          :integer
+#  subnational_years                                                                    :integer          is an Array
 #
 # Indexes
 #
@@ -18,7 +19,6 @@
 #  fk_rails_...  (commodity_id => commodities.id) ON DELETE => cascade ON UPDATE => cascade
 #  fk_rails_...  (country_id => countries.id) ON DELETE => cascade ON UPDATE => cascade
 #
-
 module Api
   module V3
     class Context < BlueTable
@@ -49,7 +49,6 @@ module Api
 
       delegate :is_default, to: :context_property
       delegate :is_disabled, to: :context_property
-      delegate :is_subnational, to: :context_property
       delegate :is_highlighted, to: :context_property
       delegate :default_basemap, to: :context_property
 
@@ -76,6 +75,10 @@ module Api
           {name: :country_id, table_class: Api::V3::Country},
           {name: :commodity_id, table_class: Api::V3::Commodity}
         ]
+      end
+
+      def is_subnational
+        subnational_years && subnational_years.any?
       end
     end
   end

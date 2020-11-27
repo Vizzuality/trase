@@ -43,9 +43,12 @@ RSpec.describe Api::V3::CountriesComTradeIndicators::ImporterService do
       commodity[:com_trade_codes]
     end.flatten
 
-    uri = com_trade_uri(codes, 2015)
-    response = File.read(com_trade_request_path('BEEF', 'BRA', 2015))
-    stub_request(:get, uri).to_return(body: response)
+    world_uri = com_trade_world_uri(codes, 2015)
+    world_response = File.read(com_trade_world_request_path('BEEF', 'BRA', 2015))
+    stub_request(:get, world_uri).to_return(body: world_response)
+    partner_uri = com_trade_partner_uri(codes, 2015)
+    partner_response = File.read(com_trade_partner_request_path('BEEF', 'BRA', 2015))
+    stub_request(:get, partner_uri).to_return(body: partner_response)
   end
 
   describe '#call' do
@@ -54,7 +57,16 @@ RSpec.describe Api::V3::CountriesComTradeIndicators::ImporterService do
       Sidekiq::Testing.inline! do
         expect do
           importer.call
-        end.to change(Api::V3::CountriesComTradeIndicator, :count).by(8)
+        end.to change(Api::V3::CountriesComTradeWorldIndicator, :count).by(8)
+      end
+    end
+
+    it 'aggregates rows by commodity' do
+      importer = Api::V3::CountriesComTradeIndicators::ImporterService.new
+      Sidekiq::Testing.inline! do
+        expect do
+          importer.call
+        end.to change(Api::V3::Readonly::CountriesComTradeWorldAggregatedIndicator, :count).by(4)
       end
     end
   end

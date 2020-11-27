@@ -1,11 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Api::Public::Nodes::Sources::Filter do
-  include_context 'api v3 brazil flows'
+  include_context 'api v3 brazil soy flows'
   include_context 'api v3 brazil beef flows'
 
   before(:each) do
-    Api::V3::Readonly::Context.refresh(sync: true)
     Api::V3::Readonly::FlowNode.refresh(sync: true)
     Api::V3::Readonly::NodeWithFlowsPerYear.refresh(sync: true)
     Api::V3::Readonly::NodeWithFlows.refresh(sync: true)

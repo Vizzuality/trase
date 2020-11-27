@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import uniqBy from 'lodash/uniqBy';
+import groupBy from 'lodash/groupBy';
 import { EXPLORE_STEPS } from 'constants';
 import translateLink from 'utils/translate-link';
 
@@ -21,13 +22,12 @@ export const getStep = createSelector(
 
 export const getCommodities = createSelector([getContexts], contexts => {
   if (!contexts) return null;
-  return uniqBy(
-    contexts.map(c => ({
-      name: c.commodityName,
-      id: c.commodityId
-    })),
-    'name'
-  );
+  const groupedContexts = groupBy(contexts, 'commodityName');
+  return Object.keys(groupedContexts).map(name => ({
+    name,
+    id: groupedContexts[name][0].commodityId,
+    isSubnational: groupedContexts[name].some(c => !!c.subnationalYears)
+  }));
 });
 
 const getAllCountries = createSelector([getContexts], contexts => {
@@ -53,7 +53,8 @@ export const getCountries = createSelector(
       .filter(c => c.commodityId === commodityId)
       .map(c => ({
         name: c.countryName,
-        id: c.countryId
+        id: c.countryId,
+        isSubnational: !!c.subnationalYears
       }));
   }
 );
@@ -107,7 +108,7 @@ export const getCountryQuickFacts = createSelector([getQuickFacts], quickFacts =
   return countryQuickFacts;
 });
 
-const getRecentCard = () => {
+export const getRecentCard = () => {
   const recentCard = localStorage.getItem('recentCard');
   if (!recentCard) return null;
   const [countryId, commodityId] = recentCard.split('-');
@@ -122,13 +123,17 @@ const getRecentCard = () => {
         commodityId: parseInt(commodityId, 10)
       }
     ],
-    meta: [{}]
+    meta: []
   };
 }
 
-const getCardsWithRecentCard = createSelector(
-  [getSankeyCards, getRecentCard],
-  (cards, recentCard) => {
+export const getCardsWithRecentCard = createSelector(
+  [getSankeyCards, getRecentCard, getContexts],
+  (cards, recentCard, contexts) => {
+    if (!recentCard) return cards;
+    const { countryId: recentCountryId, commodityId: recentCommodityId } = recentCard.data[0];
+    const recentValidContext = contexts.find(context => recentCountryId === context.countryId && recentCommodityId === context.commodityId);
+    if (!recentValidContext) return cards;
     if (!cards) return recentCard;
     return recentCard ? { data: [...recentCard.data, ...cards.data], meta: cards.meta } : cards;
   }

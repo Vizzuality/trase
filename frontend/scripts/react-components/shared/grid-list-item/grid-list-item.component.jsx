@@ -7,12 +7,29 @@ import Text from 'react-components/shared/text';
 
 import './grid-list-item.scss';
 
+function WrapWithTooltip({ tooltip, wrap, children }) {
+  if (wrap) {
+    return (
+      <HelpTooltip
+        theme="black-padding"
+        showInfoIcon={false}
+        className="size-sm"
+        text={tooltip}
+      >
+        {children}
+      </HelpTooltip>
+    );
+  }
+  return children;
+}
+
 function GridListItem(props) {
   const {
     item,
     style,
     isGroup,
     tooltip,
+    tooltipCover = false,
     isActive,
     isDisabled,
     enableItem,
@@ -46,31 +63,33 @@ function GridListItem(props) {
             className="grid-list-item-content"
             data-test={isToggleAll ? 'grid-list-item-toggle-all' : 'grid-list-item-button'}
           >
-            <button
-              type="button"
-              disabled={isDisabled}
-              onClick={isToggleAll ? item.setExcludingMode : () => onClick(item)}
-              onMouseEnter={onHover && !isToggleAll ? () => onHover(item) : undefined}
-              onMouseLeave={onHover && !isToggleAll ? () => onHover(null) : undefined}
-              className={cx('grid-list-item-button', {
-                '-active': !isToggleAll && isActive,
-                '-has-info': !isToggleAll && !!tooltip
-              })}
-              data-test={`grid-list-item-button-${testId}`}
-            >
-              <Text
-                as="p"
-                variant="mono"
-                weight="bold"
-                align="center"
-                title={item.name}
-                transform="capitalize"
-                className="grid-list-item-text"
+            <WrapWithTooltip tooltip={tooltip} wrap={tooltip && tooltipCover}>
+              <button
+                type="button"
+                disabled={isDisabled}
+                onClick={isToggleAll ? item.setExcludingMode : () => onClick(item)}
+                onMouseEnter={onHover && !isToggleAll ? () => onHover(item) : undefined}
+                onMouseLeave={onHover && !isToggleAll ? () => onHover(null) : undefined}
+                className={cx('grid-list-item-button', {
+                  '-active': !isToggleAll && isActive,
+                  '-has-info': !isToggleAll && !!tooltip && !tooltipCover
+                })}
+                data-test={`grid-list-item-button-${testId}`}
               >
-                {item.name}
-              </Text>
-            </button>
-            {tooltip && (
+                <Text
+                  as="p"
+                  variant="mono"
+                  weight="bold"
+                  align="center"
+                  title={item.name}
+                  transform="capitalize"
+                  className="grid-list-item-text"
+                >
+                  {item.name}
+                </Text>
+              </button>
+            </WrapWithTooltip>
+            {tooltip && !tooltipCover && (
               <div
                 className={cx('grid-list-item-info', {
                   '-item-active': !isToggleAll && isActive,
@@ -105,6 +124,7 @@ GridListItem.propTypes = {
   color: PropTypes.string,
   isActive: PropTypes.bool,
   tooltip: PropTypes.string,
+  tooltipCover: PropTypes.bool,
   isDisabled: PropTypes.bool,
   enableItem: PropTypes.func,
   disableItem: PropTypes.func,

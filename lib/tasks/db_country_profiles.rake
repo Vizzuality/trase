@@ -1,5 +1,19 @@
 namespace :db do
   namespace :country_profiles do
+    desc 'Clear & populate country profiles configuration'
+    task clear_and_populate: :environment do
+      without_chart_callbacks do
+        delete_profiles
+        populate_exporters
+        populate_importers
+      end
+
+      Api::V3::Profile.new.refresh_dependents
+
+      # dependencies of chart attribute
+      Api::V3::Readonly::ChartAttribute.refresh(sync: false, skip_dependencies: true)
+    end
+
     desc 'Populate country profiles configuration'
     task populate: :environment do
       without_chart_callbacks do
@@ -9,9 +23,6 @@ namespace :db do
       end
 
       Api::V3::Profile.new.refresh_dependents
-
-      # dependencies of chart attribute
-      Api::V3::Readonly::ChartAttribute.refresh(sync: false, skip_dependencies: true)
     end
 
     EXPORTERS_RUNNING_ORDER = {
@@ -29,6 +40,10 @@ namespace :db do
       country_top_consumer_actors: 3,
       country_top_consumer_countries: 4
     }.freeze
+
+    def delete_profiles
+      Api::V3::Profile.where(name: Api::V3::Profile::COUNTRY).each(&:delete)
+    end
 
     def delete_charts_in_wrong_running_order
       charts = Api::V3::Chart.
@@ -83,8 +98,36 @@ namespace :db do
     end
 
     def populate_basic_attributes(profile)
-      find_or_create_chart(
+      country_chart = find_or_create_chart(
         profile, nil, :country_basic_attributes, 0, 'Basic attributes'
+      )
+      find_or_create_chart_ind(
+        country_chart,
+        'HDI',
+        {identifier: 'hdi'}
+      )
+      if profile.context_node_type.node_type_id == country_of_import_node_type.id
+        find_or_create_chart_quant(
+          country_chart,
+          'AGRICULTURAL_IMPORTS', # TODO
+          {identifier: 'agricultural_imports'}
+        )
+      else
+        find_or_create_chart_quant(
+          country_chart,
+          'AGRICULTURAL_EXPORTS', # TODO
+          {identifier: 'agricultural_exports'}
+        )
+      end
+      find_or_create_chart_qual(
+        country_chart,
+        'NYDF', # TODO
+        {identifier: 'nydf'}
+      )
+      find_or_create_chart_qual(
+        country_chart,
+        'AMSTERDAM', # TODO
+        {identifier: 'amsterdam'}
       )
     end
 
@@ -120,7 +163,21 @@ namespace :db do
 
       copy_chart_attributes(place_chart, country_chart)
       # remove the "state average" line
-      country_chart.chart_attributes.where(display_type: 'line').delete_all
+      country_chart.chart_attributes.where(state_average: true).delete_all
+      # try adding commodity production line
+      commodity_name = profile.context_node_type.context.commodity.name
+      last_position = country_chart.chart_attributes.maximum(:position) || 0
+
+      find_or_create_chart_quant(
+        country_chart,
+        "#{commodity_name.upcase}_TN",
+        {
+          position: position + 1,
+          legend_name: "Production of #{commodity_name}",
+          display_type: 'line',
+          display_style: 'line-dashed-black'
+        }
+      )
     end
 
     def populate_import_trajectory(profile)
@@ -176,7 +233,7 @@ namespace :db do
         profile, nil, identifier, position, title
       )
       find_or_create_chart_node_type(
-        top_countries_chart, country_of_export_node_type, 'destination'
+        top_countries_chart, country_of_export_node_type, 'source'
       )
     end
 
@@ -268,6 +325,73 @@ namespace :db do
       )
     end
 
+    def find_or_create_chart_attribute(chart, chart_attribute_properties)
+      identifier = chart_attribute_properties[:identifier]
+      position = chart_attribute_properties[:position]
+      chart_attribute =
+        if identifier
+          chart.chart_attributes.find_by(identifier: identifier)
+        else
+          chart.chart_attributes.find_by(position: position)
+        end
+      return chart_attribute if chart_attribute
+
+      Api::V3::ChartAttribute.create(
+        chart_attribute_properties.merge(chart: chart)
+      )
+    end
+
+    def find_or_create_chart_quant(chart, quant_name, chart_attribute_properties)
+      quant = Api::V3::Quant.find_by_name(quant_name)
+      return unless quant.present?
+
+      chart_attribute = find_or_create_chart_attribute(chart, chart_attribute_properties)
+
+      chart_quant = Api::V3::ChartQuant.find_by(
+        chart_attribute_id: chart_attribute.id, quant_id: quant.id
+      )
+      return chart_quant if chart_quant
+
+      Api::V3::ChartQuant.create(
+        chart_attribute: chart_attribute,
+        quant: quant
+      )
+    end
+
+    def find_or_create_chart_ind(chart, ind_name, chart_attribute_properties)
+      ind = Api::V3::Ind.find_by_name(ind_name)
+      return unless ind.present?
+
+      chart_attribute = find_or_create_chart_attribute(chart, chart_attribute_properties)
+
+      chart_ind = Api::V3::ChartInd.find_by(
+        chart_attribute_id: chart_attribute.id, ind_id: ind.id
+      )
+      return chart_ind if chart_ind
+
+      Api::V3::ChartInd.create(
+        chart_attribute: chart_attribute,
+        ind: ind
+      )
+    end
+
+    def find_or_create_chart_qual(chart, qual_name, chart_attribute_properties)
+      qual = Api::V3::Qual.find_by_name(qual_name)
+      return unless qual.present?
+
+      chart_attribute = find_or_create_chart_attribute(chart, chart_attribute_properties)
+
+      chart_qual = Api::V3::ChartQual.find_by(
+        chart_attribute_id: chart_attribute.id, qual_id: qual.id
+      )
+      return chart_qual if chart_qual
+
+      Api::V3::ChartQual.create(
+        chart_attribute: chart_attribute,
+        qual: qual
+      )
+    end
+
     def place_chart(country_id, identifier)
       place_profile = Api::V3::Profile.
         joins(context_node_type: :context).
@@ -309,15 +433,19 @@ namespace :db do
     end
 
     def without_callbacks
-      Api::V3::Profile.skip_callback(:commit, :after, :refresh_dependents)
-      Api::V3::Chart.skip_callback(:commit, :after, :refresh_dependents)
-      Api::V3::ChartAttribute.skip_callback(:commit, :after, :refresh_dependents)
+      Api::V3::RefreshDependencies.instance.classes_with_dependents.each do |class_with_dependents|
+        class_with_dependents.skip_callback(:create, :after, :refresh_dependents_after_create)
+        class_with_dependents.skip_callback(:update, :after, :refresh_dependents_after_update)
+        class_with_dependents.skip_callback(:destroy, :after, :refresh_dependents_after_destroy)
+      end
 
       yield
 
-      Api::V3::Profile.set_callback(:commit, :after, :refresh_dependents)
-      Api::V3::Chart.set_callback(:commit, :after, :refresh_dependents)
-      Api::V3::ChartAttribute.set_callback(:commit, :after, :refresh_dependents)
+      Api::V3::RefreshDependencies.instance.classes_with_dependents.each do |class_with_dependents|
+        class_with_dependents.set_callback(:create, :after, :refresh_dependents_after_create)
+        class_with_dependents.set_callback(:update, :after, :refresh_dependents_after_update)
+        class_with_dependents.set_callback(:destroy, :after, :refresh_dependents_after_destroy)
+      end
     end
   end
 end

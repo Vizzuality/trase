@@ -10,7 +10,6 @@
 #
 #  countries_iso2_key  (iso2) UNIQUE
 #
-
 module Api
   module V3
     class Country < BlueTable

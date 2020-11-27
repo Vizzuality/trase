@@ -1,13 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe 'Countries', type: :request do
-  include_context 'api v3 brazil flows quants'
+  include_context 'api v3 brazil soy flow quants'
 
   before(:each) do
     Api::V3::Readonly::FlowNode.refresh(
-      sync: true, skip_dependencies: true, skip_dependents: true
+      sync: true, skip_dependents: true
     )
-    Api::V3::Readonly::Dashboards::Country.refresh(sync: true, skip_dependencies: true)
+    Api::V3::Readonly::Dashboards::Country.refresh(sync: true)
   end
 
   describe 'GET /api/v3/dashboards/countries' do

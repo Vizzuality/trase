@@ -40,15 +40,16 @@ module Api
               :node_type,
               :geo_id,
               'JSON_AGG(' \
-                'JSON_BUILD_OBJECT(' \
-                  '\'country\', contexts_mv.iso2, ' \
-                  '\'commodity\', contexts_mv.commodity_name, ' \
+                'DISTINCT JSONB_BUILD_OBJECT(' \
+                  '\'country\', contexts_v.iso2, ' \
+                  '\'commodity\', contexts_v.commodity_name, ' \
                   '\'years\', nodes_with_flows.years' \
                 ')' \
               ') AS availability'
             ).
             group(:id, :name, :node_type, :geo_id)
           apply_country_filter
+          apply_commodity_filter
           apply_node_type_filter
           apply_geo_id_filter
           apply_name_filter
@@ -57,13 +58,13 @@ module Api
         def apply_country_filter
           return unless @country
 
-          @query = @query.where('contexts_mv.iso2' => @country)
+          @query = @query.where('contexts_v.iso2' => @country)
         end
 
         def apply_commodity_filter
           return unless @commodity
 
-          @query = @query.where('contexts_mv.commodity_name' => @commodity)
+          @query = @query.where('contexts_v.commodity_name' => @commodity)
         end
 
         def apply_node_type_filter

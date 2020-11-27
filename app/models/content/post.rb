@@ -14,7 +14,6 @@
 #  image_file_size    :integer
 #  image_updated_at   :datetime
 #
-
 module Content
   class Post < Content::Base
     CATEGORIES = [

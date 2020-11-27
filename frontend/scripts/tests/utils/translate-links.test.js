@@ -66,35 +66,55 @@ const meta = {
 describe('translate links', () => {
   test('get sankey link using translateLink', () => {
     expect(translateLink(cardLink, meta)).toEqual({
-      type: 'tool',
-      payload: {
-        serializerParams: {
-          ...cardLink.queryParams,
-          toolLayout: parseInt(cardLink.queryParams.toolLayout, 10),
-          selectedNodesIds: cardLink.queryParams.selectedNodesIds.map(id => parseInt(id, 10)),
-          expandedNodesIds: cardLink.queryParams.expandedNodesIds.map(id => parseInt(id, 10)),
-          countries: 107,
-          commodities: 6,
-          sources: [13406],
-          destinations: [13486],
-          companies: [13430, 13460, 13417, 13404, 13392, 13408, 13410, 13419]
+        type: 'tool',
+        payload: {
+          serializerParams: {
+            toolLayout: 1,
+            mapView: '-1.51,111.93,4',
+            selectedCountryId: 107,
+            selectedCommodityId: 6,
+            selectedResizeBy: 37,
+            selectedColumnsIds: '0_15-1_6-2_7-3_8',
+            sources: [
+              13406
+            ],
+            destinations: [
+              13486
+            ],
+            companies: [
+              13430,
+              13460,
+              13417,
+              13404,
+              13392,
+              13408,
+              13410,
+              13419
+            ],
+            countries: 107,
+            commodities: 6
+          }
         }
-      }
-    });
+      });
   });
 
   test('get dashboard link using translateLink', () => {
     expect(translateLink(cardLink, meta, 'dashboard')).toEqual({
-      type: 'dashboardElement',
+      type: 'tool',
       payload: {
-        dashboardId: 'top-exporters',
+        section: 'data-view',
         serializerParams: {
+          mapView: '-1.51,111.93,4',
+          selectedColumnsIds: '0_15-1_6-2_7-3_8',
+          selectedCommodityId: 6,
+          selectedCountryId: 107,
           selectedResizeBy: 37,
           countries: 107,
           commodities: 6,
           sources: [13406],
           destinations: [13486],
-          companies: [13430, 13460, 13417, 13404, 13392, 13408, 13410, 13419]
+          companies: [13430, 13460, 13417, 13404, 13392, 13408, 13410, 13419],
+          toolLayout: 1
         }
       }
     });

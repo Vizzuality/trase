@@ -170,6 +170,14 @@ export const getExpandedNodesByRole = createSelector(
   getNodesByRole
 );
 
+export const getSubnationalYears = createSelector(
+  [getSelectedContext],
+  (selectedContext) => {
+    if (!selectedContext || !selectedContext.subnationalYears) return [];
+    return selectedContext.subnationalYears;
+  }
+)
+
 export const getToolGroupedCharts = makeGetGroupedCharts(getToolCharts);
 
 export const getToolLinksUrlProps = createStructuredSelector({
@@ -184,5 +192,6 @@ export const getToolLinksUrlProps = createStructuredSelector({
 
 export const getToolYearsProps = createStructuredSelector({
   selectedYears: getSelectedYears,
+  subNationalYears: getSubnationalYears,
   years: makeGetAvailableYears(getToolResizeBy, getToolRecolorBy, getSelectedContext)
 });

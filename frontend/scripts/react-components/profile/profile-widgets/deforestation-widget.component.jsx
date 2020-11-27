@@ -61,7 +61,7 @@ class DeforestationWidget extends React.PureComponent {
             );
           }
 
-          const { lines, unit, includedYears } = data[mainQuery];
+          const { lines, unit, includedYears, multiUnit = false } = data[mainQuery];
 
           if (!lines) {
             return null;
@@ -91,6 +91,7 @@ class DeforestationWidget extends React.PureComponent {
                         testId={testId}
                         lines={lines}
                         xValues={includedYears}
+                        multiUnit={multiUnit}
                         unit={unit}
                         margin={{ top: 0, right: 20, bottom: 30, left: 60 }}
                         settingsHeight={425}

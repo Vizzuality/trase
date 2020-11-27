@@ -50,19 +50,19 @@ exports[`Widget config parse selectors getYKeys returns the parsed YKeys 1`] = `
 Object {
   "bars": Object {
     "x0": Object {
-      "fill": "#ea6869",
+      "fill": "#c2e699",
       "interval": "preserveStartEnd",
-      "stroke": "#ea6869",
+      "stroke": "#c2e699",
     },
     "x1": Object {
-      "fill": "#ffeb8b",
+      "fill": "#e36845",
       "interval": "preserveStartEnd",
-      "stroke": "#ffeb8b",
+      "stroke": "#e36845",
     },
     "x2": Object {
-      "fill": "#2d586e",
+      "fill": "#1d6837",
       "interval": "preserveStartEnd",
-      "stroke": "#2d586e",
+      "stroke": "#1d6837",
     },
     "y": Object {
       "fill": "#007d29",
@@ -199,15 +199,15 @@ Object {
   },
   "colors": Array [
     Object {
-      "color": "#ea6869",
+      "color": "#c2e699",
       "label": "Company commitment",
     },
     Object {
-      "color": "#ffeb8b",
+      "color": "#e36845",
       "label": "None",
     },
     Object {
-      "color": "#2d586e",
+      "color": "#1d6837",
       "label": "Soy Moratorium",
     },
   ],
@@ -259,21 +259,21 @@ Object {
     "bars": Object {
       "x0": Object {
         "barSize": 10,
-        "fill": "#ea6869",
+        "fill": "#c2e699",
         "interval": "preserveStartEnd",
-        "stroke": "#ea6869",
+        "stroke": "#c2e699",
       },
       "x1": Object {
         "barSize": 10,
-        "fill": "#ffeb8b",
+        "fill": "#e36845",
         "interval": "preserveStartEnd",
-        "stroke": "#ffeb8b",
+        "stroke": "#e36845",
       },
       "x2": Object {
         "barSize": 10,
-        "fill": "#2d586e",
+        "fill": "#1d6837",
         "interval": "preserveStartEnd",
-        "stroke": "#2d586e",
+        "stroke": "#1d6837",
       },
     },
   },

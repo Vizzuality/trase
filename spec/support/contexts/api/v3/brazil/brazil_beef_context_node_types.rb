@@ -1,5 +1,5 @@
 shared_context 'api v3 brazil beef context node types' do
-  include_context 'api v3 brazil contexts'
+  include_context 'api v3 brazil beef context'
   include_context 'api v3 node types'
 
   let!(:api_v3_brazil_beef_country_of_production_context_node_type) do

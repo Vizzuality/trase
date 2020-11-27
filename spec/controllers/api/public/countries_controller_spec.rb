@@ -1,8 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe Api::Public::CountriesController, type: :controller do
-  include_context 'api v3 brazil flows quants'
+  include_context 'api v3 brazil soy flow quants'
   include_context 'api v3 paraguay flows quants'
+
+  before(:each) do
+    stub_request(:post, 'https://www.google-analytics.com/collect').
+      to_return(status: 200, body: '', headers: {})
+  end
 
   describe 'GET index' do
     it 'returns list in alphabetical order' do

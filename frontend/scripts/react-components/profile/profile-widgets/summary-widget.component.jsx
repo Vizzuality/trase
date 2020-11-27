@@ -1,10 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet';
+
 import ActorSummary from 'react-components/profile/profile-components/summary/actor-summary.component';
 import PlaceSummary from 'react-components/profile/profile-components/summary/place-summary.component';
 import CountrySummary from 'react-components/profile/profile-components/summary/country-summary.component';
 import Widget from 'react-components/widgets/widget.component';
 import { getSummaryEndpoint } from 'utils/getURLFromParams';
+import stripHtml from 'utils/stripHtml';
 import ShrinkingSpinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
 
 function SummaryWidget(props) {
@@ -50,16 +53,43 @@ function SummaryWidget(props) {
         };
 
         const SummaryComponent = summaryComponents[profileType];
+        const profileName =
+          data[summaryEndpoint].name ||
+          data[summaryEndpoint].nodeName ||
+          data[summaryEndpoint].countryName;
+
+        const juristiction = data[summaryEndpoint].jurisdictionName;
+
+        const description = data[summaryEndpoint]?.summary;
+
         return (
-          <SummaryComponent
-            year={year}
-            printMode={printMode}
-            onChange={onChange}
-            data={data[summaryEndpoint]}
-            context={context}
-            profileMetadata={profileMetadata}
-            openModal={openModal}
-          />
+          <>
+            <Helmet>
+              <title>{`TRASE Profile - ${profileName}`}</title>
+              <meta
+                property="twitter:title"
+                content={`TRASE Profile in ${juristiction} ${profileName}`}
+              />
+              {description && (
+                <meta property="twitter:description" content={stripHtml(description)} />
+              )}
+              <meta
+                property="og:title"
+                content={`TRASE Profile in ${juristiction} - ${profileName}`}
+              />
+              {description && <meta property="og:description" content={stripHtml(description)} />}
+              {description && <meta property="description" content={stripHtml(description)} />}
+            </Helmet>
+            <SummaryComponent
+              year={year}
+              printMode={printMode}
+              onChange={onChange}
+              data={data[summaryEndpoint]}
+              context={context}
+              profileMetadata={profileMetadata}
+              openModal={openModal}
+            />
+          </>
         );
       }}
     </Widget>

@@ -1,15 +1,14 @@
 /* eslint-disable no-use-before-define */
 import axios from 'axios';
-import { feature as topojsonFeature } from 'topojson';
 import { CARTO_NAMED_MAPS_BASE_URL } from 'constants';
 import { GET_NODE_ATTRIBUTES_URL, getURLFromParams } from 'utils/getURLFromParams';
 import contextLayersCarto from 'named-maps/tool_named_maps_carto';
 import getNodeIdFromGeoId from 'utils/getNodeIdFromGeoId';
-import setGeoJSONMeta from 'utils/setGeoJSONMeta';
 import compact from 'lodash/compact';
 import { getVisibleNodes } from 'react-components/tool-links/tool-links.selectors';
 import {
   getSelectedGeoColumn,
+  getAllSelectedGeoColumns,
   getSelectedMapDimensionsUids
 } from 'react-components/tool-layers/tool-layers.selectors';
 import { getSelectedContext, getSelectedYears } from 'app/app.selectors';
@@ -26,97 +25,12 @@ export const GET_MAP_VECTOR_DATA = 'GET_MAP_VECTOR_DATA';
 export const GET_CONTEXT_LAYERS = 'GET_CONTEXT_LAYERS';
 export const SELECT_UNIT_LAYERS = 'SELECT_UNIT_LAYERS';
 export const SELECT_CONTEXTUAL_LAYERS = 'SELECT_CONTEXTUAL_LAYERS';
+export const SELECT_LOGISTIC_LAYERS = 'SELECT_LOGISTIC_LAYERS';
 export const SELECT_BASEMAP = 'SELECT_BASEMAP';
 export const CHANGE_LAYOUT = 'CHANGE_LAYOUT';
 export const SET_SANKEY_SIZE = 'SET_SANKEY_SIZE';
 export const TOGGLE_MAP_DIMENSION = 'TOGGLE_MAP_DIMENSION';
-
-export function loadMapVectorData() {
-  return (dispatch, getState) => {
-    const { columns } = getState().toolLinks.data;
-    const geoColumns = columns
-      ? Object.values(columns).filter(column => column.isGeo === true)
-      : [];
-
-    const vectorMaps = geoColumns.map(geoColumn => {
-      const vectorData = {
-        id: geoColumn.id,
-        name: geoColumn.name,
-        geometryNodeTypeId: geoColumn.geometryNodeTypeId
-      };
-      if (geoColumn.geometryNodeTypeId === null) {
-        const selectedContext = getSelectedContext(getState());
-        const countryName = selectedContext.countryName;
-        const vectorLayerURL = `/vector_layers/${countryName}_${geoColumn.name.replace(
-          / /g,
-          '_'
-        )}.topo.json`;
-        return axios
-          .get(vectorLayerURL)
-          .then(res => res.data)
-          .then(
-            topoJSON =>
-              new Promise(resolve => {
-                const [key] = topoJSON.objects && Object.keys(topoJSON.objects);
-                setTimeout(() => {
-                  const geoJSON = topojsonFeature(topoJSON, topoJSON.objects[key]);
-                  setGeoJSONMeta(
-                    geoJSON,
-                    getState().toolLinks.data.nodes,
-                    getState().toolLinks.data.nodesByColumnGeoId,
-                    geoColumn.id
-                  );
-                  resolve({
-                    geoJSON,
-                    ...vectorData
-                  });
-                }, 0);
-              })
-          )
-          .catch(e => console.error(e) || Promise.reject(vectorLayerURL));
-      }
-      return Promise.resolve(vectorData);
-    });
-
-    const layerLoaded = new Promise(resolve => {
-      let totalLayers = vectorMaps.length;
-      const layers = [];
-      vectorMaps.forEach((layerPromise, index) =>
-        layerPromise
-          .then(res => {
-            totalLayers--;
-            layers[index] = {
-              ...res,
-              isPoint:
-                !!res.geoJSON &&
-                !!res.geoJSON.features.length &&
-                res.geoJSON.features[0].geometry.type === 'Point'
-            };
-            if (totalLayers === 0) {
-              resolve(layers.filter(Boolean));
-            }
-          })
-          .catch(err => {
-            totalLayers--;
-            console.warn('missing vector layer file', err);
-            if (totalLayers === 0) {
-              resolve(layers.filter(Boolean));
-            }
-          })
-      );
-    });
-
-    layerLoaded.then(layers => {
-      dispatch({
-        type: GET_MAP_VECTOR_DATA,
-        payload: {
-          mapVectorData: layers
-        }
-      });
-      dispatch(loadMapChoropleth());
-    });
-  };
-}
+export const RESET_MAP_DIMENSIONS = 'RESET_MAP_DIMENSIONS';
 
 export function setMapContextLayers(contextualLayers) {
   return (dispatch, getState) => {
@@ -170,13 +84,10 @@ export function setMapContextLayers(contextualLayers) {
 export function selectNodeFromGeoId(geoId) {
   return (dispatch, getState) => {
     const state = getState();
-    const selectedGeoColumn = getSelectedGeoColumn(state);
-
-    const nodeId = getNodeIdFromGeoId(
-      geoId,
-      getState().toolLinks.data.nodes,
-      selectedGeoColumn?.id
-    );
+    const allSelectedGeoColumns = getAllSelectedGeoColumns(state);
+    const selectedColumnsId = allSelectedGeoColumns && allSelectedGeoColumns.map(c => c.id);
+    const nodes = getState().toolLinks.data.nodes;
+    const nodeId = getNodeIdFromGeoId(geoId, nodes, selectedColumnsId);
 
     // node not in visible Nodes ---> expand node (same behavior as search)
     if (nodeId !== null) {
@@ -185,7 +96,7 @@ export function selectNodeFromGeoId(geoId) {
   };
 }
 
-export function selectExpandedNode(param) {
+function selectExpandedNode(param) {
   const ids = Array.isArray(param) ? param : [param];
   return (dispatch, getState) => {
     const state = getState();
@@ -211,8 +122,8 @@ export function highlightNodeFromGeoId(geoId, coordinates) {
       data: { nodes },
       highlightedNodeId
     } = state.toolLinks;
-
-    const nodeId = getNodeIdFromGeoId(geoId, nodes, selectedGeoColumn?.id);
+    const selectedColumnsId = selectedGeoColumn && [selectedGeoColumn.id];
+    const nodeId = getNodeIdFromGeoId(geoId, nodes, selectedColumnsId);
     if (nodeId === null) {
       if (highlightedNodeId) {
         dispatch(highlightNode(null));
@@ -243,6 +154,14 @@ export function toggleMapDimension(uid) {
         uid,
         selectedMapDimensions
       }
+    });
+  };
+}
+
+export function resetSelectedMapDimensions() {
+  return (dispatch) => {
+    dispatch({
+      type: RESET_MAP_DIMENSIONS
     });
   };
 }
@@ -307,6 +226,13 @@ export function selectContextualLayers(contextualLayers) {
   return {
     type: SELECT_CONTEXTUAL_LAYERS,
     payload: { contextualLayers }
+  };
+}
+
+export function selectLogisticLayers(logisticLayers) {
+  return {
+    type: SELECT_LOGISTIC_LAYERS,
+    payload: { logisticLayers }
   };
 }
 

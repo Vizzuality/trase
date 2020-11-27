@@ -1,0 +1,15 @@
+@import 'styles/settings';
+
+.c-logistic-legend {
+  padding: 6px;
+  border-bottom: 1px solid $medium-gray;
+
+  .title {
+    margin-bottom: 5px;
+  }
+
+  .bullets {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}

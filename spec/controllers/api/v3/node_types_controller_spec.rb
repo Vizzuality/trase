@@ -5,7 +5,7 @@ RSpec.describe Api::V3::NodeTypesController, type: :controller do
 
   describe 'GET index' do
     it 'returns biome with filter_to municipality' do
-      get :index, params: {context_id: api_v3_context.id}
+      get :index, params: {context_id: api_v3_brazil_soy_context.id}
       parsed_response = JSON.parse(response.body)
       node_types = parsed_response['data']
       biome = node_types.find { |nt| nt['id'] == api_v3_biome_node_type.id }
@@ -13,7 +13,7 @@ RSpec.describe Api::V3::NodeTypesController, type: :controller do
     end
 
     it 'returns exporter with filter_to null' do
-      get :index, params: {context_id: api_v3_context.id}
+      get :index, params: {context_id: api_v3_brazil_soy_context.id}
       parsed_response = JSON.parse(response.body)
       node_types = parsed_response['data']
       exporter = node_types.find do |nt|

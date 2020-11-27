@@ -105,10 +105,10 @@ module Api
         def refresh_materialized_views_now
           # synchronously, with dependencies
           [
-            Api::V3::Readonly::Context,
             Api::V3::Readonly::Attribute,
             Api::V3::Readonly::FlowNode,
-            Api::V3::Readonly::NodeWithFlowsPerYear
+            Api::V3::Readonly::NodeWithFlowsPerYear,
+            Api::V3::Readonly::NodesPerContextRankedByVolumePerYear
           ].each { |mview| mview.refresh(sync: true, skip_dependents: true) }
           Api::V3::TablePartitions::CreatePartitionsForFlows.new.call
           Api::V3::TablePartitions::CreatePartitionsForFlowQuants.new.call
@@ -123,30 +123,21 @@ module Api
             Api::V3::Readonly::DownloadFlowsStats,
             Api::V3::Readonly::NodeWithFlows,
             Api::V3::Readonly::NodeWithFlowsOrGeo,
-            Api::V3::Readonly::NodesStats,
-            Api::V3::Readonly::ChartAttribute,
-            Api::V3::Readonly::DashboardsAttribute,
-            Api::V3::Readonly::DownloadAttribute,
-            Api::V3::Readonly::MapAttribute,
-            Api::V3::Readonly::RecolorByAttribute,
-            Api::V3::Readonly::ResizeByAttribute,
+            Api::V3::Readonly::NodeStats,
             Api::V3::Readonly::Dashboards::Commodity,
             Api::V3::Readonly::Dashboards::Country,
-            Api::V3::Readonly::NodesPerContextRankedByVolumePerYear,
             Api::V3::Readonly::Dashboards::Source,
             # TODO: remove once dashboards_companies_mv retired
             Api::V3::Readonly::Dashboards::Company,
             Api::V3::Readonly::Dashboards::Exporter,
             Api::V3::Readonly::Dashboards::Importer,
             Api::V3::Readonly::Dashboards::Destination,
-            Api::V3::Readonly::ContextAttributeProperty,
-            Api::V3::Readonly::CountryAttributeProperty,
-            Api::V3::Readonly::CommodityAttributeProperty,
             Api::V3::Readonly::QuantValuesMeta,
             Api::V3::Readonly::IndValuesMeta,
             Api::V3::Readonly::QualValuesMeta,
-            Api::V3::Readonly::FlowQuantTotal
-          ].each { |mview| mview.refresh(sync: true, skip_dependencies: true) }
+            Api::V3::Readonly::FlowQuantTotal,
+            Api::V3::Readonly::FlowQualDistinctValues
+          ].each { |mview| mview.refresh(sync: true) }
         end
 
         def refresh_profiles_later
@@ -154,11 +145,11 @@ module Api
             without_unknowns.
             without_domestic.
             where(profile: Api::V3::Profile::ACTOR).
-            select(:id).
+            select(:id, :context_id).
             distinct.
             each do |node|
               NodeWithFlowsRefreshActorBasicAttributesWorker.perform_async(
-                [node.id]
+                node.id, node.context_id
               )
             end
         end

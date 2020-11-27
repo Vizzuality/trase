@@ -16,7 +16,6 @@
 #
 #  fk_rails_...  (context_id => contexts.id) ON DELETE => cascade
 #
-
 module Api
   module V3
     class DownloadAttribute < YellowTable
@@ -38,7 +37,6 @@ module Api
                      attribute: :download_quant, if: :new_download_quant_given?
 
       after_create :set_years
-      after_commit :refresh_dependents
 
       stringy_array :years
       manage_associated_attributes [:download_qual, :download_quant]
@@ -47,10 +45,6 @@ module Api
         [
           {name: :context_id, table_class: Api::V3::Context}
         ]
-      end
-
-      def refresh_dependents
-        Api::V3::Readonly::DownloadAttribute.refresh
       end
 
       def set_years

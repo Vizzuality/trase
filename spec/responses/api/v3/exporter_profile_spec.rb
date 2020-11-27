@@ -7,29 +7,22 @@ RSpec.describe 'Exporter profile', type: :request do
   include_context 'api v3 brazil municipality quant values'
   include_context 'api v3 brazil municipality qual values'
   include_context 'api v3 brazil municipality ind values'
-  include_context 'api v3 brazil flows quants'
+  include_context 'api v3 brazil soy flow quants'
   include_context 'api v3 brazil exporter actor profile'
 
   before(:each) do
-    Api::V3::Readonly::CommodityAttributeProperty.refresh
-    Api::V3::Readonly::CountryAttributeProperty.refresh
-    Api::V3::Readonly::ContextAttributeProperty.refresh
     Api::V3::Readonly::FlowNode.refresh(sync: true)
     Api::V3::Readonly::NodeWithFlowsPerYear.refresh(sync: true)
-    Api::V3::Readonly::NodeWithFlows.refresh(sync: true, skip_dependencies: true)
+    Api::V3::Readonly::NodeWithFlows.refresh(sync: true)
     Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
-    Api::V3::Readonly::ChartAttribute.refresh(sync: true, skip_dependencies: true)
-
-    NodeWithFlowsRefreshActorBasicAttributesWorker.new.perform(
-      Api::V3::Readonly::NodeWithFlows.where(profile: :actor).map(&:id)
-    )
+    Api::V3::Readonly::NodeWithFlows.where(profile: :actor).each(&:refresh_actor_basic_attributes)
   end
 
   let(:summary_params) { {year: 2015} }
 
   describe 'GET /api/v3/contexts/:context_id/actors/:id/basic_attributes' do
     it 'has the correct response structure' do
-      get "/api/v3/contexts/#{api_v3_context.id}/actors/#{api_v3_exporter1_node.id}/basic_attributes",
+      get "/api/v3/contexts/#{api_v3_brazil_soy_context.id}/actors/#{api_v3_exporter1_node.id}/basic_attributes",
         params: summary_params
 
       expect(@response.status).to eq 200
@@ -39,7 +32,7 @@ RSpec.describe 'Exporter profile', type: :request do
 
   describe 'GET /api/v3/contexts/:context_id/actors/:id/top_countries' do
     it 'has the correct response structure' do
-      get "/api/v3/contexts/#{api_v3_context.id}/actors/#{api_v3_exporter1_node.id}/top_countries", params: summary_params
+      get "/api/v3/contexts/#{api_v3_brazil_soy_context.id}/actors/#{api_v3_exporter1_node.id}/top_countries", params: summary_params
 
       expect(@response.status).to eq 200
       expect(@response).to match_response_schema('v3_actor_top_countries')
@@ -57,7 +50,7 @@ RSpec.describe 'Exporter profile', type: :request do
     let!(:flow_2014) {
       FactoryBot.create(
         :api_v3_flow,
-        context: api_v3_context,
+        context: api_v3_brazil_soy_context,
         path: [
           api_v3_biome_node,
           api_v3_state_node,
@@ -80,7 +73,7 @@ RSpec.describe 'Exporter profile', type: :request do
       )
     }
     it 'has the correct response structure' do
-      get "/api/v3/contexts/#{api_v3_context.id}/actors/#{api_v3_exporter1_node.id}/top_sources", params: summary_params
+      get "/api/v3/contexts/#{api_v3_brazil_soy_context.id}/actors/#{api_v3_exporter1_node.id}/top_sources", params: summary_params
 
       expect(@response.status).to eq 200
       expect(@response).to match_response_schema('v3_actor_top_sources')
@@ -90,13 +83,9 @@ RSpec.describe 'Exporter profile', type: :request do
   describe 'GET /api/v3/contexts/:context_id/actors/:id/sustainability' do
     before(:each) do
       Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
-      Api::V3::Readonly::ChartAttribute.refresh(sync: true, skip_dependencies: true)
-      Api::V3::Readonly::ContextAttributeProperty.refresh(sync: true, skip_dependencies: true)
-      Api::V3::Readonly::CountryAttributeProperty.refresh(sync: true, skip_dependencies: true)
-      Api::V3::Readonly::CommodityAttributeProperty.refresh(sync: true, skip_dependencies: true)
     end
     it 'has the correct response structure' do
-      get "/api/v3/contexts/#{api_v3_context.id}/actors/#{api_v3_exporter1_node.id}/sustainability", params: summary_params
+      get "/api/v3/contexts/#{api_v3_brazil_soy_context.id}/actors/#{api_v3_exporter1_node.id}/sustainability", params: summary_params
 
       expect(@response.status).to eq 200
       expect(@response).to match_response_schema('v3_actor_sustainability')
@@ -106,13 +95,9 @@ RSpec.describe 'Exporter profile', type: :request do
   describe 'GET /api/v3/contexts/:context_id/actors/:id/exporting_companies' do
     before(:each) do
       Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
-      Api::V3::Readonly::ChartAttribute.refresh(sync: true, skip_dependencies: true)
-      Api::V3::Readonly::ContextAttributeProperty.refresh(sync: true, skip_dependencies: true)
-      Api::V3::Readonly::CountryAttributeProperty.refresh(sync: true, skip_dependencies: true)
-      Api::V3::Readonly::CommodityAttributeProperty.refresh(sync: true, skip_dependencies: true)
     end
     it 'has the correct response structure' do
-      get "/api/v3/contexts/#{api_v3_context.id}/actors/#{api_v3_exporter1_node.id}/exporting_companies", params: summary_params
+      get "/api/v3/contexts/#{api_v3_brazil_soy_context.id}/actors/#{api_v3_exporter1_node.id}/exporting_companies", params: summary_params
 
       expect(@response.status).to eq 200
       expect(@response).to match_response_schema('v3_actor_exporting_companies')

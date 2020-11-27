@@ -11,16 +11,16 @@ shared_context 'api v3 brazil palm oil context' do
         country: api_v3_brazil,
         commodity: api_v3_palm_oil,
         years: [2014, 2015],
+        subnational_years: [],
         default_year: 2015
       )
   end
   let!(:api_v3_brazil_palm_oil_context_property) do
-    Api::V3::ContextProperty.find_by_context_id(api_v3_context.id) ||
+    Api::V3::ContextProperty.find_by_context_id(api_v3_brazil_palm_oil_context.id) ||
       FactoryBot.create(
         :api_v3_context_property,
-        context: api_v3_context,
+        context: api_v3_brazil_palm_oil_context,
         is_disabled: false,
-        is_subnational: false,
         is_default: false
       )
   end

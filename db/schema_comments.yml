@@ -236,8 +236,6 @@ tables:
         comment: When set, do not show this context
       - name: is_default
         comment: When set, show this context as default (only use for one)
-      - name: is_subnational
-        comment: When set, show indication that sub-national level data is available
       - name: is_highlighted
         comment: When set, shows the context on the context picker suggestions
   - name: contextual_layers
@@ -576,24 +574,24 @@ tables:
         comment: level used when commodity is selected
       - name: level3
         comment: level used when commodity and country are selected
-materialized_views:
-  - name: chart_attributes_mv
-    comment: Materialized view which merges chart_inds, chart_quals and chart_quants with chart_attributes.
+views:
+  - name: chart_attributes_v
+    comment: View which merges chart_inds, chart_quals and chart_quants with chart_attributes.
     columns:
       - name: display_name
         comment: If absent in chart_attributes this is pulled from attributes.
-  - name: dashboards_attributes_mv
-    comment: Materialized view which merges dashboards_inds, dashboards_quals and dashboards_quants with dashboards_attributes.
+  - name: dashboards_attributes_v
+    comment: View which merges dashboards_inds, dashboards_quals and dashboards_quants with dashboards_attributes.
     columns:
       - name: attribute_id
         comment: References the unique id in attributes.
-  - name: download_attributes_mv
-    comment: Materialized view which merges download_quals and download_quants with download_attributes.
+  - name: download_attributes_v
+    comment: View which merges download_quals and download_quants with download_attributes.
     columns:
       - name: attribute_id
         comment: References the unique id in attributes.
-  - name: map_attributes_mv
-    comment: Materialized view which merges map_inds and map_quants with map_attributes.
+  - name: map_attributes_v
+    comment: View which merges map_inds and map_quants with map_attributes.
     columns:
       - name: attribute_id
         comment: References the unique id in attributes.
@@ -609,52 +607,13 @@ materialized_views:
         comment: The attribute''s original id
       - name: context_id
         comment: References the context
-  - name: recolor_by_attributes_mv
-    comment: Materialized view which merges recolor_by_inds and recolor_by_quals with recolor_by_attributes.
+  - name: recolor_by_attributes_v
+    comment: View which merges recolor_by_inds and recolor_by_quals with recolor_by_attributes.
     columns:
       - name: attribute_id
         comment: References the unique id in attributes.
-  - name: resize_by_attributes_mv
-    comment: Materialized view which merges resize_by_quants with resize_by_attributes.
+  - name: resize_by_attributes_v
+    comment: View which merges resize_by_quants with resize_by_attributes.
     columns:
       - name: attribute_id
         comment: References the unique id in attributes.
-  - name: context_attribute_properties_mv
-    comment: Materialized view combining context specific properties for inds, quals and quants.
-    columns:
-      - name: ind_id
-        comment: Reference to ind
-      - name: quant_id
-        comment: Reference to quant
-      - name: qual_id
-        comment: Reference to qual
-      - name: context_id
-        comment: Reference to context
-      - name: tooltip_text
-        comment: Tooltip text
-  - name: commodity_attribute_properties_mv
-    comment: Materialized view combining commodity specific properties for inds, quals and quants.
-    columns:
-      - name: ind_id
-        comment: Reference to ind
-      - name: quant_id
-        comment: Reference to quant
-      - name: qual_id
-        comment: Reference to qual
-      - name: commodity_id
-        comment: Reference to commodity
-      - name: tooltip_text
-        comment: Tooltip text
-  - name: country_attribute_properties_mv
-    comment: Materialized view combining country specific properties for inds, quals and quants.
-    columns:
-      - name: ind_id
-        comment: Reference to ind
-      - name: quant_id
-        comment: Reference to quant
-      - name: qual_id
-        comment: Reference to qual
-      - name: country_id
-        comment: Reference to country
-      - name: tooltip_text
-        comment: Tooltip text

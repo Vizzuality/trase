@@ -17,7 +17,6 @@
 #
 #  fk_rails_...  (commodity_id => commodities.id) ON DELETE => cascade ON UPDATE => cascade
 #
-
 module Api
   module V3
     class TopProfileImage < YellowTable

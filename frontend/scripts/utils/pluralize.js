@@ -1,21 +1,21 @@
 import camelCase from 'lodash/camelCase';
+import pluralize from 'pluralize';
 
 export default name => {
   const camelCasedName = camelCase(name);
-  const plural = {
-    logisticsHub: 'logistics hubs',
+  const pluralException = {
     portOfImport: 'ports of import',
-    economicBloc: 'economic blocs',
     portOfExport: 'ports of export',
     districtOfExport: 'districts of export',
     countryOfProduction: 'country of production'
   }[camelCasedName];
-
-  if (!plural) {
-    return camelCasedName.endsWith('y')
-      ? camelCasedName.replace(/y$/, 'ies').toLowerCase()
-      : `${camelCasedName}s`.toLowerCase();
+  if (pluralException) {
+    return pluralException;
   }
-
-  return plural;
+  const words = name.toLowerCase().trim().split(' ');
+  if (words.length > 1) {
+    words[words.length - 1] = pluralize(words[words.length - 1]);
+    return words.join(' ');
+  }
+  return pluralize(camelCasedName.toLowerCase());
 };

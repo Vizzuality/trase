@@ -3,7 +3,7 @@
 # Table name: ind_commodity_properties
 #
 #  id                                                                                                                                                                                                                          :bigint(8)        not null, primary key
-#  tooltip_text(Commodity-specific tooltips are the third-most specific tooltips that can be defined after context and commodity-specific tooltips; in absence of a commodity-specific tooltip, a generic tooltip will be used.) :text             not null
+#  tooltip_text(Commodity-specific tooltips are the third-most specific tooltips that can be defined after context and country-specific tooltips; in absence of a commodity-specific tooltip, a generic tooltip will be used.) :text             not null
 #  commodity_id(Reference to commodity)                                                                                                                                                                                        :bigint(8)        not null
 #  ind_id(Reference to ind)                                                                                                                                                                                                    :bigint(8)        not null
 #
@@ -17,7 +17,6 @@
 #  fk_rails_...  (commodity_id => commodities.id) ON DELETE => cascade ON UPDATE => cascade
 #  fk_rails_...  (ind_id => inds.id) ON DELETE => cascade ON UPDATE => cascade
 #
-
 module Api
   module V3
     class IndCommodityProperty < YellowTable
@@ -38,7 +37,6 @@ module Api
       end
 
       def refresh_dependents
-        Api::V3::Readonly::CommodityAttributeProperty.refresh
         refresh_actor_basic_attributes
       end
 
@@ -56,16 +54,19 @@ module Api
       end
 
       def update_node_with_flows_actor_basic_attributes(commodity_id, ind_id)
-        contexts = Api::V3::Context.where(commodity_id: commodity_id)
-        node_inds = Api::V3::NodeInd.where(ind_id: ind_id)
-        nodes = node_inds.map(&:node)
-        node_with_flows = Api::V3::Readonly::NodeWithFlows.
+        nodes_with_flows = Api::V3::Readonly::NodeWithFlows.
+          select(:id, :context_id).
           without_unknowns.
           without_domestic.
-          where(context_id: contexts.map(&:id), id: nodes.map(&:id))
-        NodeWithFlowsRefreshActorBasicAttributesWorker.new.perform(
-          node_with_flows.map(&:id)
-        )
+          where(
+            commodity_id: commodity_id,
+            id: Api::V3::NodeInd.select(:node_id).where(ind_id: ind_id).distinct
+          )
+        nodes_with_flows.each do |node|
+          NodeWithFlowsRefreshActorBasicAttributesWorker.perform_async(
+            node.id, node.context_id
+          )
+        end
       end
     end
   end

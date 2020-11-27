@@ -7,12 +7,11 @@ RSpec.describe 'Download Attributes', type: :request do
 
   before(:each) do
     Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
-    Api::V3::Readonly::DownloadAttribute.refresh(sync: true, skip_dependencies: true)
   end
 
   describe 'GET /api/v3/contexts/:context_id/download_attributes' do
     it 'has the correct response structure' do
-      get "/api/v3/contexts/#{api_v3_context.id}/download_attributes"
+      get "/api/v3/contexts/#{api_v3_brazil_soy_context.id}/download_attributes"
 
       expect(@response).to have_http_status(:ok)
       expect(@response).to match_response_schema('indicators')

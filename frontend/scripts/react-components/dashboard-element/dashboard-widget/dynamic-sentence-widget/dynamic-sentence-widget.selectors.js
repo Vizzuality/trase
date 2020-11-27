@@ -1,7 +1,6 @@
 import { createSelector } from 'reselect';
 import { getDynamicSentence } from 'react-components/dashboard-element/dashboard-element.selectors';
-import { format } from 'd3-format';
-import { DEFAULT_DASHBOARD_UNIT_FORMAT } from 'constants';
+import formatDynamicSentenceValue from 'utils/formatDynamicSentenceValue';
 
 const getData = (state, props) => props.data || null;
 const getConfig = (state, props) => props.config || null;
@@ -25,15 +24,12 @@ export const makeAddIndicatorsPartToSentence = () =>
         value: [{ name: `${yAxisLabel.text}`.toLowerCase() }],
         transform: 'capitalize'
       };
-
       const indicatorValuePart = {
         id: 'indicator-value',
         prefix: 'was',
         value: [
           {
-            name: data[0].y0
-              ? `${format(DEFAULT_DASHBOARD_UNIT_FORMAT)(data[0].y0)} ${yAxisLabel.suffix}`
-              : 'N/A'
+            name: formatDynamicSentenceValue(data[0].y0, yAxisLabel.suffix)
           }
         ]
       };

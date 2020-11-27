@@ -17,14 +17,14 @@ RSpec.describe Api::V3::CountryProfilesController, type: :controller do
     )
     Api::V3::Readonly::FlowNode.refresh(sync: true)
     Api::V3::Readonly::NodeWithFlowsPerYear.refresh(sync: true)
-    Api::V3::Readonly::NodeWithFlows.refresh(sync: true, skip_dependencies: true)
+    Api::V3::Readonly::NodeWithFlows.refresh(sync: true)
   end
 
   context 'when exporter' do
     let(:node) { api_v3_brazil_palm_oil_country_of_production_node }
     let(:year) { 2015 }
     let(:valid_params) {
-      {context_id: api_v3_context.id, id: node.id, year: year}
+      {context_id: api_v3_brazil_palm_oil_context.id, id: node.id, year: year}
     }
 
     describe 'GET basic_attributes' do
@@ -126,7 +126,7 @@ RSpec.describe Api::V3::CountryProfilesController, type: :controller do
     let(:node) { api_v3_indonesia_country_node }
     let(:year) { 2015 }
     let(:valid_params) {
-      {context_id: api_v3_context.id, id: node.id, year: year}
+      {context_id: api_v3_brazil_soy_context.id, id: node.id, year: year}
     }
 
     describe 'GET basic_attributes' do

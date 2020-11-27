@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: chart_attributes_mv
+# Table name: chart_attributes_v
 #
 #  id                                                                          :integer          primary key
 #  chart_id                                                                    :integer
@@ -19,16 +19,11 @@
 #  original_id                                                                 :integer
 #  original_type                                                               :text
 #
-# Indexes
-#
-#  chart_attributes_mv_id_idx  (id) UNIQUE
-#
-
 module Api
   module V3
     module Readonly
       class ChartAttribute < Api::Readonly::BaseModel
-        self.table_name = 'chart_attributes_mv'
+        self.table_name = 'chart_attributes_v'
 
         belongs_to :chart
 

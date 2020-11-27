@@ -42,58 +42,20 @@ RSpec.configure do |config|
     DatabaseCleaner.strategy = :transaction
 
     # disable after commit refresh callbacks
-    Api::V3::Chart.skip_callback(:commit, :after, :refresh_dependents)
-    Api::V3::ChartAttribute.skip_callback(:commit, :after, :refresh_dependents)
-    Api::V3::ContextNodeTypeProperty.skip_callback(:commit, :after, :refresh_dependents)
-    Api::V3::DashboardsAttribute.skip_callback(:commit, :after, :refresh_dependents)
-    Api::V3::DashboardsAttributeGroup.skip_callback(:commit, :after, :refresh_dependents)
-    Api::V3::DownloadAttribute.skip_callback(:commit, :after, :refresh_dependents)
-    Api::V3::IndProperty.skip_callback(:commit, :after, :refresh_dependents)
-    Api::V3::MapAttribute.skip_callback(:commit, :after, :refresh_dependents)
-    Api::V3::MapAttributeGroup.skip_callback(:commit, :after, :refresh_dependents)
-    Api::V3::NodeProperty.skip_callback(:commit, :after, :refresh_dependents)
-    Api::V3::Profile.skip_callback(:commit, :after, :refresh_dependents)
-    Api::V3::QualProperty.skip_callback(:commit, :after, :refresh_dependents)
-    Api::V3::QuantProperty.skip_callback(:commit, :after, :refresh_dependents)
-    Api::V3::RecolorByAttribute.skip_callback(:commit, :after, :refresh_dependents)
-    Api::V3::ResizeByAttribute.skip_callback(:commit, :after, :refresh_dependents)
-    Api::V3::IndContextProperty.skip_callback(:commit, :after, :refresh_dependents)
-    Api::V3::IndCountryProperty.skip_callback(:commit, :after, :refresh_dependents)
-    Api::V3::IndCommodityProperty.skip_callback(:commit, :after, :refresh_dependents)
-    Api::V3::QualContextProperty.skip_callback(:commit, :after, :refresh_dependents)
-    Api::V3::QualCountryProperty.skip_callback(:commit, :after, :refresh_dependents)
-    Api::V3::QualCommodityProperty.skip_callback(:commit, :after, :refresh_dependents)
-    Api::V3::QuantContextProperty.skip_callback(:commit, :after, :refresh_dependents)
-    Api::V3::QuantCountryProperty.skip_callback(:commit, :after, :refresh_dependents)
-    Api::V3::QuantCommodityProperty.skip_callback(:commit, :after, :refresh_dependents)
+    Api::V3::RefreshDependencies.instance.classes_with_dependents.each do |class_with_dependents|
+      class_with_dependents.skip_callback(:create, :after, :refresh_dependents_after_create)
+      class_with_dependents.skip_callback(:update, :after, :refresh_dependents_after_update)
+      class_with_dependents.skip_callback(:destroy, :after, :refresh_dependents_after_destroy)
+    end
   end
 
   config.after(:suite) do
     # enable after commit refresh callbacks
-    Api::V3::Chart.set_callback(:commit, :after, :refresh_dependents)
-    Api::V3::ChartAttribute.set_callback(:commit, :after, :refresh_dependents)
-    Api::V3::ContextNodeTypeProperty.set_callback(:commit, :after, :refresh_dependents)
-    Api::V3::DashboardsAttribute.set_callback(:commit, :after, :refresh_dependents)
-    Api::V3::DashboardsAttributeGroup.set_callback(:commit, :after, :refresh_dependents)
-    Api::V3::DownloadAttribute.set_callback(:commit, :after, :refresh_dependents)
-    Api::V3::IndProperty.set_callback(:commit, :after, :refresh_dependents)
-    Api::V3::MapAttribute.set_callback(:commit, :after, :refresh_dependents)
-    Api::V3::MapAttributeGroup.set_callback(:commit, :after, :refresh_dependents)
-    Api::V3::NodeProperty.set_callback(:commit, :after, :refresh_dependents)
-    Api::V3::Profile.set_callback(:commit, :after, :refresh_dependents)
-    Api::V3::QualProperty.set_callback(:commit, :after, :refresh_dependents)
-    Api::V3::QuantProperty.set_callback(:commit, :after, :refresh_dependents)
-    Api::V3::RecolorByAttribute.set_callback(:commit, :after, :refresh_dependents)
-    Api::V3::ResizeByAttribute.set_callback(:commit, :after, :refresh_dependents)
-    Api::V3::IndContextProperty.set_callback(:commit, :after, :refresh_dependents)
-    Api::V3::IndCountryProperty.set_callback(:commit, :after, :refresh_dependents)
-    Api::V3::IndCommodityProperty.set_callback(:commit, :after, :refresh_dependents)
-    Api::V3::QualContextProperty.set_callback(:commit, :after, :refresh_dependents)
-    Api::V3::QualCountryProperty.set_callback(:commit, :after, :refresh_dependents)
-    Api::V3::QualCommodityProperty.set_callback(:commit, :after, :refresh_dependents)
-    Api::V3::QuantContextProperty.set_callback(:commit, :after, :refresh_dependents)
-    Api::V3::QuantCountryProperty.set_callback(:commit, :after, :refresh_dependents)
-    Api::V3::QuantCommodityProperty.set_callback(:commit, :after, :refresh_dependents)
+    Api::V3::RefreshDependencies.instance.classes_with_dependents.each do |class_with_dependents|
+      class_with_dependents.set_callback(:create, :after, :refresh_dependents_after_create)
+      class_with_dependents.set_callback(:update, :after, :refresh_dependents_after_update)
+      class_with_dependents.set_callback(:destroy, :after, :refresh_dependents_after_destroy)
+    end
   end
 
   config.before(:each) do

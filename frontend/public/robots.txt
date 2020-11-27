@@ -3,4 +3,4 @@ User-agent: *
 Disallow:
 
 # Sitemap files
-Sitemap: https://trase.earth/sitemap.xml
+Sitemap: https://supplychains.trase.earth/sitemap.xml

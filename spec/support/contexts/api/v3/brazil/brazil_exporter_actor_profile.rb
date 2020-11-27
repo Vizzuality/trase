@@ -74,13 +74,13 @@ shared_context 'api v3 brazil exporter actor profile' do
 
     qual_context_property = Api::V3::QualContextProperty.
       where(
-        context_id: api_v3_context.id,
+        context_id: api_v3_brazil_soy_context.id,
         qual_id: api_v3_zero_deforestation.id
       ).first
     unless qual_context_property
       qual_context_property = FactoryBot.create(
         :api_v3_qual_context_property,
-        context: api_v3_context,
+        context: api_v3_brazil_soy_context,
         qual: api_v3_zero_deforestation,
         tooltip_text: 'Tooltip context qual translation'
       )
@@ -117,13 +117,13 @@ shared_context 'api v3 brazil exporter actor profile' do
 
     ind_context_property = Api::V3::IndContextProperty.
       where(
-        context_id: api_v3_context.id,
+        context_id: api_v3_brazil_soy_context.id,
         ind_id: api_v3_forest_500.id
       ).first
     unless ind_context_property
       ind_context_property = FactoryBot.create(
         :api_v3_ind_context_property,
-        context: api_v3_context,
+        context: api_v3_brazil_soy_context,
         ind: api_v3_forest_500,
         tooltip_text: 'Tooltip context ind translation'
       )

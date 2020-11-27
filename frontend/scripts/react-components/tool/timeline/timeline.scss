@@ -127,8 +127,20 @@
     border-radius: 4px;
     background-color: $white;
 
+    &.-sub-national {
+      border: 2px solid $strong-pink;
+      &.-start,
+      &.-end {
+        background-color: $strong-pink;
+      }
+    }
+
     &.-active {
       background-color: $charcoal-grey-faded;
+      &.-sub-national {
+        background-color: $strong-pink;
+        color: $white;
+      }
     }
 
     &.-start,
@@ -137,6 +149,8 @@
     }
 
     .timeline-year-button {
+      display: flex;
+      align-items: center;
       padding: 6px 12px;
       height: 100%;
       width: 100%;

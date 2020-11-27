@@ -1,7 +1,7 @@
 class DatabaseExportWorker
   include Sidekiq::Worker
 
-  sidekiq_options queue: :database,
+  sidekiq_options queue: :low,
                   retry: false,
                   backtrace: true,
                   unique: :until_executed,

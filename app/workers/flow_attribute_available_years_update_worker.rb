@@ -1,6 +1,7 @@
 class FlowAttributeAvailableYearsUpdateWorker
   include Sidekiq::Worker
-  sidekiq_options queue: :database,
+
+  sidekiq_options queue: :critical,
                   retry: false,
                   backtrace: true
 

@@ -17,7 +17,6 @@
 #  fk_rails_...  (commodity_id => commodities.id) ON DELETE => cascade ON UPDATE => cascade
 #  fk_rails_...  (qual_id => quals.id) ON DELETE => cascade ON UPDATE => cascade
 #
-
 module Api
   module V3
     class QualCommodityProperty < YellowTable
@@ -38,7 +37,6 @@ module Api
       end
 
       def refresh_dependents
-        Api::V3::Readonly::CommodityAttributeProperty.refresh
         refresh_actor_basic_attributes
       end
 
@@ -56,16 +54,19 @@ module Api
       end
 
       def update_node_with_flows_actor_basic_attributes(commodity_id, qual_id)
-        contexts = Api::V3::Context.where(commodity_id: commodity_id)
-        node_quals = Api::V3::NodeQual.where(qual_id: qual_id)
-        nodes = node_quals.map(&:node)
-        node_with_flows = Api::V3::Readonly::NodeWithFlows.
+        nodes_with_flows = Api::V3::Readonly::NodeWithFlows.
+          select(:id, :context_id).
           without_unknowns.
           without_domestic.
-          where(context_id: contexts.map(&:id), id: nodes.map(&:id))
-        NodeWithFlowsRefreshActorBasicAttributesWorker.new.perform(
-          node_with_flows.map(&:id)
-        )
+          where(
+            commodity_id: commodity_id,
+            id: Api::V3::NodeQual.select(:node_id).where(qual_id: qual_id).distinct
+          )
+        nodes_with_flows.each do |node|
+          NodeWithFlowsRefreshActorBasicAttributesWorker.perform_async(
+            node.id, node.context_id
+          )
+        end
       end
     end
   end

@@ -19,7 +19,10 @@
 
 # Learn more: http://github.com/javan/whenever
 
-every 7.days, roles: [:db] do
+# We want the script to run monthly on the 1st Friday
+# that's not possible to specify via cron
+# so run it every Friday, but within the script return unless 1st Friday
+every :friday, at: '10pm', roles: [:db] do
   runner 'Api::V3::CountriesWbIndicators::ImporterService.call'
   runner 'Api::V3::CountriesComTradeIndicators::ImporterService.new.call'
 end

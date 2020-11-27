@@ -2,8 +2,11 @@ namespace :dashboards do
   namespace :attributes do
     desc 'Reloads dashboards attributes tables'
     task reload: :environment do
-      Api::V3::DashboardsAttributeGroup.skip_callback(:commit, :after, :refresh_dependents)
-      Api::V3::DashboardsAttribute.skip_callback(:commit, :after, :refresh_dependents)
+      Api::V3::RefreshDependencies.instance.classes_with_dependents.each do |class_with_dependents|
+        class_with_dependents.skip_callback(:create, :after, :refresh_dependents_after_create)
+        class_with_dependents.skip_callback(:update, :after, :refresh_dependents_after_update)
+        class_with_dependents.skip_callback(:destroy, :after, :refresh_dependents_after_destroy)
+      end
 
       Api::V3::DashboardsInd.delete_all
       Api::V3::DashboardsQual.delete_all
@@ -15,10 +18,11 @@ namespace :dashboards do
         reload_group(properties, idx)
       end
 
-      Api::V3::DashboardsAttributeGroup.set_callback(:commit, :after, :refresh_dependents)
-      Api::V3::DashboardsAttribute.set_callback(:commit, :after, :refresh_dependents)
-
-      Api::V3::Readonly::DashboardsAttribute.refresh(sync: true)
+      Api::V3::RefreshDependencies.instance.classes_with_dependents.each do |class_with_dependents|
+        class_with_dependents.set_callback(:create, :after, :refresh_dependents_after_create)
+        class_with_dependents.set_callback(:update, :after, :refresh_dependents_after_update)
+        class_with_dependents.set_callback(:destroy, :after, :refresh_dependents_after_destroy)
+      end
     end
 
     def reload_group(properties, idx)

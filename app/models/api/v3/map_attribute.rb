@@ -20,7 +20,6 @@
 #
 #  fk_rails_...  (map_attribute_group_id => map_attribute_groups.id) ON DELETE => cascade
 #
-
 module Api
   module V3
     class MapAttribute < YellowTable
@@ -61,8 +60,6 @@ module Api
                      attribute: :map_quant, scope: :map_attribute_group_id,
                      if: :new_map_quant_given?
 
-      after_commit :refresh_dependents
-
       stringy_array :dual_layer_buckets
       stringy_array :single_layer_buckets
       stringy_array :years
@@ -72,10 +69,6 @@ module Api
         [
           {name: :map_attribute_group_id, table_class: Api::V3::MapAttributeGroup}
         ]
-      end
-
-      def refresh_dependents
-        Api::V3::Readonly::MapAttribute.refresh
       end
 
       private_class_method def self.active_ids

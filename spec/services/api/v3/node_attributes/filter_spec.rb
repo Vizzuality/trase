@@ -6,7 +6,6 @@ RSpec.describe Api::V3::NodeAttributes::Filter do
 
   before(:each) do
     Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
-    Api::V3::Readonly::MapAttribute.refresh(sync: true, skip_dependencies: true)
   end
 
   let(:node_attributes) {
@@ -27,7 +26,7 @@ RSpec.describe Api::V3::NodeAttributes::Filter do
     }
     let(:filter) {
       Api::V3::NodeAttributes::Filter.new(
-        api_v3_context, 2015, 2015, [api_v3_land_conflicts_map_attribute.id]
+        api_v3_brazil_soy_context, 2015, 2015, [api_v3_land_conflicts_map_attribute.id]
       )
     }
     # buckets [6, 10, 15]
@@ -43,7 +42,6 @@ RSpec.describe Api::V3::NodeAttributes::Filter do
   context 'when multi year' do
     let!(:api_v3_land_conflicts_map_attribute_multi_year) {
       api_v3_land_conflicts_map_attribute.update_attribute(:years, [2014, 2015])
-      Api::V3::Readonly::MapAttribute.refresh(sync: true, skip_dependencies: true)
       api_v3_land_conflicts_map_attribute
     }
     let!(:api_v3_land_conflicts_value_2014) {
@@ -62,7 +60,7 @@ RSpec.describe Api::V3::NodeAttributes::Filter do
     }
     let(:filter) {
       Api::V3::NodeAttributes::Filter.new(
-        api_v3_context, 2014, 2015, [api_v3_land_conflicts_map_attribute.id]
+        api_v3_brazil_soy_context, 2014, 2015, [api_v3_land_conflicts_map_attribute.id]
       )
     }
 

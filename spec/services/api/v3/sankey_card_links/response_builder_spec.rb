@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe Api::V3::SankeyCardLinks::ResponseBuilder do
-  include_context 'api v3 brazil flows'
+  include_context 'api v3 brazil soy flows'
   include_context 'api v3 brazil beef nodes'
-  include_context 'api v3 brazil flows quals'
+  include_context 'api v3 brazil soy flow quals'
   include_context 'api v3 brazil resize by attributes'
   include_context 'api v3 brazil beef context node types'
 
@@ -37,7 +37,7 @@ RSpec.describe Api::V3::SankeyCardLinks::ResponseBuilder do
         link: "http://localhost:8081/flows?#{@query_params.to_query}"
       )
 
-      @builder = Api::V3::SankeyCardLinks::ResponseBuilder.new(level: '1')
+      @builder = Api::V3::SankeyCardLinks::ResponseBuilder.new(levels: [1])
       @builder.call
     end
 

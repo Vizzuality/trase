@@ -33,7 +33,7 @@ module Api
         end
 
         def query_all_years(quant_id, _options = {})
-          query = Api::V3::Readonly::NodesStats.
+          query = Api::V3::Readonly::NodeStats.
             select(select_clause).
             where(quant_id: quant_id)
 
@@ -48,7 +48,7 @@ module Api
               where(year: (@year_start..@year_end))
           else
             query_all_years(quant_id, options).
-              joins('INNER JOIN contexts ON contexts.id = nodes_stats_mv.context_id').
+              joins('INNER JOIN contexts ON contexts.id = node_stats_mv.context_id').
               where('year = contexts.default_year')
           end
         end
@@ -58,13 +58,13 @@ module Api
             :sanitize_sql_array,
             [
               [
-                'nodes_stats_mv.context_id',
-                'nodes_stats_mv.node_id',
-                'nodes_stats_mv.name',
-                'nodes_stats_mv.value',
-                'nodes_stats_mv.height',
-                'nodes_stats_mv.quant_id',
-                'nodes_stats_mv.geo_id'
+                'node_stats_mv.context_id',
+                'node_stats_mv.node_id',
+                'node_stats_mv.name',
+                'node_stats_mv.value',
+                'node_stats_mv.height',
+                'node_stats_mv.quant_id',
+                'node_stats_mv.geo_id'
               ].join(', ')
             ]
           )

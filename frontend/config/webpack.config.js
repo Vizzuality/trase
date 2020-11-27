@@ -54,6 +54,7 @@ module.exports = {
       NODE_ENV_DEV: process.env.NODE_ENV === 'development',
       CONSOLIDATE_INSIGHTS: process.env.CONSOLIDATE_INSIGHTS === 'true',
       ENABLE_COUNTRY_PROFILES: process.env.ENABLE_COUNTRY_PROFILES === 'true',
+      ENABLE_LOGISTIC_LAYERS_TAB: process.env.ENABLE_LOGISTIC_LAYERS_TAB === 'true',
       ENABLE_INTERSECTION_OBSERVER: process.env.ENABLE_INTERSECTION_OBSERVER === 'true',
       ENABLE_VERSIONING: process.env.ENABLE_VERSIONING === 'true',
       ENABLE_TOOL_PANEL: process.env.ENABLE_TOOL_PANEL === 'true',
@@ -63,8 +64,9 @@ module.exports = {
       ENABLE_DASHBOARDS: process.env.ENABLE_DASHBOARDS === 'true',
       DISABLE_PROFILES: process.env.DISABLE_PROFILES === 'true',
       GFW_WIDGETS_BASE_URL: JSON.stringify(process.env.GFW_WIDGETS_BASE_URL),
-      ENABLE_LOGISTICS_MAP: process.env.ENABLE_LOGISTICS_MAP === 'true',
       ENABLE_LEGACY_TOOL_SEARCH: process.env.ENABLE_LEGACY_TOOL_SEARCH === 'true',
+      UNIT_LAYERS_API_URL: JSON.stringify(process.env.UNIT_LAYERS_API_URL),
+      UNIT_LAYERS_DATA_ENV: JSON.stringify(process.env.UNIT_LAYERS_DATA_ENV),
       API_V3_URL: JSON.stringify(process.env.API_V3_URL),
       API_V2_URL: JSON.stringify(process.env.API_V2_URL),
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
@@ -77,7 +79,8 @@ module.exports = {
       TRANSIFEX_API_KEY: JSON.stringify(process.env.TRANSIFEX_API_KEY),
       HOME_VIDEO_ID: JSON.stringify(process.env.HOME_VIDEO_ID),
       NAMED_MAPS_ENV: JSON.stringify(process.env.NAMED_MAPS_ENV),
-      CARTO_ACCOUNT: JSON.stringify(process.env.CARTO_ACCOUNT)
+      CARTO_ACCOUNT: JSON.stringify(process.env.CARTO_ACCOUNT),
+      MAPBOX_TOKEN: JSON.stringify(process.env.MAPBOX_TOKEN)
     }),
     new webpack.LoaderOptionsPlugin({ options: {} })
   ],

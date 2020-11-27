@@ -1,7 +1,7 @@
 module Api
   module Public
     module Nodes
-      class DestinationsController < ApiController
+      class DestinationsController < BaseController
         include PaginationHeaders
         include PaginatedCollection
         include Nodes

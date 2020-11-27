@@ -4,19 +4,18 @@ info:
   version: "1.0"
   contact:
     name: Trase Public API
-    url: https://trase.earth/
+    url: https://supplychains.trase.earth/
     email: info@trase.earth
-  termsOfService: https://trase.earth/terms-of-use.html
+  termsOfService: https://supplychains.trase.earth/terms-of-use.html
   license:
     name: MIT License
   description: >-
-    This is a first version of the public API for [Trase](https://trase.earth/).
-
+    This is a first version of the public API for [Trase](http://supplychains.trase.earth).
 
     # Introduction
 
 
-    The Trase Public API allows to access trade flows data of forest risk commodities.
+    The Trase Public API allows access to trade flow data of the forest risk commodities hosted in Trase’s database. For a list of available commodities and country contexts please refer to the documentation on the Trase homepage: https://supplychains.trase.earth/about
 
 
     # Entities
@@ -24,61 +23,67 @@ info:
 
     The API will expose the following entities present in Trase:
 
-    1. attributes: quantitative and qualitative attributes (indicators)
+    1. attributes: quantitative and qualitative attributes associated with Trase data. These include, for example our flagship indicators for deforestation risk, along with other metrics relevant to social and environmental risk
 
-    2. commodities: forest risk commodities
+    2. commodities: the forest risk commodities covered by the Trase database
 
-    3. countries: source countries for commodities
+    3. countries: source countries for commodities covered by the Trase database
 
-    4. flows: models the list of nodes in a supply chain (path) from source to destination
+    4. flows: provides the list of nodes in a supply chain (path) from source to destination
 
-    5. nodes: entities participating in the supply chain. Each has a "node type", e.g. MUNICIPALITY, EXPORTER, but they are also grouped in the system by a more generic "role":
-      a. sources: source nodes, such as municipalities in Brazil or departments in Paraguay
-      b. traders: exporters / importers of commodities
-      c. destinations: destination nodes, such as importing countries
-    6. node types: the roles of nodes at particular positions in supply chains per country / commodity combination
+    5. nodes: provides entities participating in the supply chain. Each has a "node type" (see below), e.g. MUNICIPALITY, EXPORTER, but they are also grouped in the system by a more generic "role" as follows:
+
+        a. sources: source nodes, such as municipalities in Brazil or departments in Paraguay
+
+        b. traders: exporters or importers of commodities
+
+        c. destinations: destination nodes, such as importing countries
+    6. node types: the types of nodes at particular positions in supply chains per country / commodity combination
 
 
     # Discovering node identifiers
 
 
-    We assume one of the typical scenarios is one where the point of entry into the data will be a source, an exporter, an importer or a destination. All of these entities are nodes, but int Trase we group them by "role" in the supply chain.
+    A typical scenario for API use is likely to be one where the point of entry into the data will be a commodity source, an exporter, an importer or a destination. All of these entities are nodes, but in Trase we group them by "role" in the supply chain.
 
 
-    In the first step, users would use the sources / exporters / importers / destinations endpoints, which allow to discover the identifiers of entities by searching by name and existing natural identifiers (e.g. iso code). For now we need to work around the fact that nodes in the system don't have standardised identifiers, which would allow to skip this step.
+    As a first step, users would therefore use the sources / exporters / importers / destinations endpoints, which allow discovery of the identifiers of entities by searching by name and existing natural identifiers (e.g. ISO code). At this stage, nodes in the Trase system do not have standardised identifiers, so this first step is necessary to allow cross-referencing of nodes against the points of interest from a user-perspective.
 
 
-    Those endpoints will also allow to discover the availability of indicators. Then in the next step users can use those identifiers to pull data for a particular node.
+    Accessing information via these endpoints will also allow the user to discover the availability of indicators associated with these nodes. In the following step, users can use those identifiers to pull data for a particular node.
 
 
     # Retrieving attribute values
 
 
-    It is possible to retrieve full flows data using the flows endpoint.
+    It is possible to retrieve full flow data using the flows endpoint.
 
 
-    It is also possible to retrieve data filtered by a particular node, which includes both values of attributes for flows in which the node participates (flow attributes), as well as values of some attributes which are not calculated from flows (node attributes).
+    It is also possible to retrieve data filtered by a particular node, which includes both values of attributes for flows in which the node participates (flow attributes), as well as values of some attributes which are not calculated from flows but are specific to the nodes themselves (node attributes).
 
 
     # Sample usage - retrieving flow data for country / commodity
 
 
-    Use the commodities endpoint to discover identifiers of available commodities. You can also at the same time retrieve ids of countries from which the commodities are sourced.
+    Use the commodities endpoint to discover identifiers of available commodities. At the same time, you can also retrieve ids of countries from which the commodities are sourced.
 
 
     /api/public/commodities?include=countries
 
 
-    Countries can be retireved using the countries endpoint.
+    Countries can be retrieved using the countries endpoint.
+    
+    
+    /api/public/countries?include=commodities
 
 
-    Now using the attributes endpoint, find out what sttributes are available for Brazil beef:
+    Now by using the attributes endpoint, it is possible to find out what attributes are available for Brazil beef:
 
 
     /api/public/attributes?commodity=BEEF&country=BR
 
 
-    Volume data is available for years 2015-2017. Request flows data for 2016-2017:
+    Volume data is available for years 2015-2017 and it is possible to select particular years using the API. For example, to request data for 2016-2017:
 
 
     /api/public/flows?commodity=BEEF&country=BR&start_year=2016&end_year=2017&page=1
@@ -96,10 +101,13 @@ info:
     /api/public/nodes/sources?country=BR&commodity=BEEF&name=SORRISO
 
 
-    Data is available for years 2003-2017. Request data for 2017:
+    Data is available for years 2003-2017. Request data for 2017 using the id number of the node of interest (e.g. the id of SORRISO is 11113):
 
 
-    /api/public/nodes/{id of SORRISO}/data?year=2017
+    /api/public/nodes/11113/data?year=2017
+
+servers:
+  - url: https://supplychains.trase.earth/api/public
 paths:
   /countries:
     get:
@@ -111,7 +119,14 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/country_with_commodities"
+                  allOf:
+                    - $ref: "#/components/schemas/country"
+                    - type: object
+                      properties:
+                        commodities:
+                          type: array
+                          items:
+                            $ref: "#/components/schemas/commodity"
             application/json:
               examples:
                 response:
@@ -130,11 +145,7 @@ paths:
         List of all sourcing countries in the system. Optionally include
         commodities sourced from these countries.
       parameters:
-        - in: query
-          name: commodities_ids
-          description: Comma-separated list of numeric commodity ids.
-          schema:
-            type: string
+        - $ref: "#/components/parameters/commodities_ids"
         - in: query
           name: include
           description: Comma-separated list of nested associations to include, e.g.
@@ -151,7 +162,14 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/commodity_with_countries"
+                  allOf:
+                    - $ref: "#/components/schemas/commodity"
+                    - type: object
+                      properties:
+                        countries:
+                          type: array
+                          items:
+                            $ref: "#/components/schemas/country"
             application/json:
               examples:
                 response:
@@ -184,11 +202,7 @@ paths:
       description: List of all commodities in the system. Optionally include countries from
         which commodities are sourced.
       parameters:
-        - in: query
-          name: countries_ids
-          description: Comma-separated list of numeric country ids
-          schema:
-            type: string
+        - $ref: "#/components/parameters/countries_ids"
         - in: query
           name: include
           description: 'Comma-separated list of nested associations to include, eg:
@@ -209,7 +223,9 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: "#/components/schemas/place"
+                      allOf:
+                        - $ref: "#/components/schemas/node_with_availability"
+                        - $ref: "#/components/schemas/node_geo_id"
                 required:
                   - data
       parameters:
@@ -235,7 +251,10 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: "#/components/schemas/place"
+                      allOf:
+                        - $ref: "#/components/schemas/node_with_availability"
+                        - $ref: "#/components/schemas/node_geo_id"
+                        - $ref: "#/components/schemas/destination_node"
                 required:
                   - data
       description: "List of commodity destination places, which can be nodes of different node type (possible to filter down by node type) depending on the supply chain (path) definition in a given country - commodity combination."
@@ -261,7 +280,9 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: "#/components/schemas/trader"
+                      allOf:
+                        - $ref: "#/components/schemas/node_with_availability"
+                        - $ref: "#/components/schemas/exporter_node"
                 required:
                   - data
       description: "List of commodity exporting traders, which can be nodes of different node type (possible to filter down by node type) depending on the supply chain (path) definition in a given country - commodity combination."
@@ -286,7 +307,9 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: "#/components/schemas/trader"
+                      allOf:
+                        - $ref: "#/components/schemas/node_with_availability"
+                        - $ref: "#/components/schemas/importer_node"
                 required:
                   - data
       description: "List of commodity importing traders, which can be nodes of different node type (possible to filter down by node type) depending on the supply chain (path) definition in a given country - commodity combination."
@@ -311,7 +334,14 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: "#/components/schemas/attribute_with_availability"
+                      allOf:
+                        - $ref: "#/components/schemas/attribute"
+                        - type: object
+                          properties:
+                            availability:
+                              $ref: "#/components/schemas/availability"
+                          required:
+                            - availability
                 required:
                   - data
             application/json:
@@ -747,17 +777,12 @@ paths:
                         - node_types
                 required:
                   - data
-      description: "This endpoint will allow users to understand the structure of flow
-        paths in different country / commodity combinations. It will return an
-        ordered list of objects with the following information: node type id,
-        node type name, role."
+      description: "This endpoint will allow users to understand the structure of flow paths in different country / commodity combinations. It will return an ordered list of objects with the following information: node type id, node type name, role."
+      summary: List of node types as they appear in flow paths
       parameters:
         - $ref: "#/components/parameters/country_opt"
         - $ref: "#/components/parameters/commodity_opt"
-      summary: List of node types as they appear in flow paths
 
-servers:
-  - url: https://trase.earth/api/public
 components:
   parameters:
     page:
@@ -801,6 +826,30 @@ components:
       required: true
       schema:
         type: string
+    commodities_ids:
+      in: query
+      name: commodities_ids
+      description: Comma-separated list of numeric commodity ids.
+      schema:
+        type: string
+    countries_ids:
+      in: query
+      name: countries_ids
+      description: Comma-separated list of numeric country ids.
+      schema:
+        type: string
+    path_nodes_ids:
+      in: query
+      name: path_nodes_ids
+      description: Comma-separated list of numeric node ids to filter flows.
+      schema:
+        type: string
+    nodes_ids:
+      in: query
+      name: nodes_ids
+      description: Comma-separated list of numeric node ids to return values for. When empty, all matching nodes returned, but node type needs to be provided. TODO check if that might require introducing pagination.
+      schema:
+        type: string
     geo_id:
       in: query
       name: geo_id
@@ -811,6 +860,37 @@ components:
       name: node_type
       in: query
       description: Node type name, e.g. MUNICIPALITY
+      schema:
+        type: string
+    node_type_req:
+      name: node_type
+      in: query
+      description: Node type name, e.g. MUNICIPALITY
+      required: true
+      schema:
+        type: string
+    source_node_type_with_default:
+      name: node_type
+      in: query
+      description: Node type name, e.g. MUNICIPALITY; when not provided, default source node type used (depending on data availability in country - commodity combination)
+      schema:
+        type: string
+    exporter_node_type_with_default:
+      name: node_type
+      in: query
+      description: Node type name, e.g. EXPORTER; when not provided, default exporter node type used (depending on data availability in country - commodity combination)
+      schema:
+        type: string
+    importer_node_type_with_default:
+      name: node_type
+      in: query
+      description: Node type name, e.g. IMPORTER; when not provided, default importer node type used (depending on data availability in country - commodity combination)
+      schema:
+        type: string
+    destination_node_type_with_default:
+      name: node_type
+      in: query
+      description: Node type name, e.g. COUNTRY; when not provided, default source node type used (depending on data availability in country - commodity combination)
       schema:
         type: string
     name_prefix:
@@ -824,6 +904,12 @@ components:
       in: query
       description: Year of data
       required: true
+      schema:
+        type: integer
+    year_with_default:
+      name: year
+      in: query
+      description: Year of data, when not provided last available year
       schema:
         type: integer
     start_year_with_default:
@@ -844,6 +930,12 @@ components:
       description: Flow attribute id, when not provided defaults to trade volume
       schema:
         type: integer
+    limit:
+      in: query
+      name: limit
+      description: Number of elements to return
+      schema:
+        type: integer
 
   schemas:
     node:
@@ -855,16 +947,70 @@ components:
         name:
           type: string
           example: SORRISO
-        availability:
-          type: array
-          items:
-            $ref: "#/components/schemas/availability"
-        nodeType:
-          type: string
-          example: MUNICIPALITY
       required:
         - id
         - name
+    node_geo_id:
+      type: object
+      properties:
+        geo_id:
+          type: string
+          example: BR-5107925
+      required:
+        - geo_id
+    node_node_type:
+      type: object
+      properties:
+        node_type:
+          type: string
+          example: MUNICIPALITY
+      required:
+        - node_type
+    source_node:
+      allOf:
+        - $ref: "#/components/schemas/node"
+        - $ref: "#/components/schemas/node_node_type"
+    exporter_node:
+      allOf:
+        - $ref: "#/components/schemas/node"
+        - $ref: "#/components/schemas/node_node_type"
+        - type: object
+          properties:
+            name:
+              example: CARGILL
+            node_type:
+              example: EXPORTER
+    importer_node:
+      allOf:
+        - $ref: "#/components/schemas/node"
+        - $ref: "#/components/schemas/node_node_type"
+        - type: object
+          properties:
+            name:
+              example: CARGILL
+            node_type:
+              example: IMPORTER
+    destination_node:
+      allOf:
+        - $ref: "#/components/schemas/node"
+        - $ref: "#/components/schemas/node_node_type"
+        - type: object
+          properties:
+            name:
+              example: CHINA
+            node_type:
+              example: COUNTRY
+    node_with_availability:
+      allOf:
+        - $ref: "#/components/schemas/source_node"
+        - type: object
+          properties:
+            availability:
+              type: array
+              items:
+                $ref: "#/components/schemas/availability"
+          required:
+            - availability
     country:
       type: object
       description: Single country record.
@@ -884,15 +1030,6 @@ components:
         - id
         - name
         - iso
-    country_with_commodities:
-      allOf:
-        - $ref: "#/components/schemas/country"
-        - type: object
-          properties:
-            commodities:
-              type: array
-              items:
-                $ref: "#/components/schemas/commodity"
     commodity:
       type: object
       description: Single commodity record
@@ -906,15 +1043,6 @@ components:
       required:
         - id
         - name
-    commodity_with_countries:
-      allOf:
-        - $ref: "#/components/schemas/commodity"
-        - type: object
-          properties:
-            countries:
-              type: array
-              items:
-                $ref: "#/components/schemas/country"
     availability:
       type: object
       properties:
@@ -929,16 +1057,6 @@ components:
           items:
             type: integer
       description: Years of data available for country / commodity combination
-    place:
-      allOf:
-        - $ref: "#/components/schemas/node"
-        - type: object
-          properties:
-            geoId:
-              type: string
-    trader:
-      allOf:
-        - $ref: "#/components/schemas/node"
     attribute:
       type: object
       description: Attribute (indicator)
@@ -958,15 +1076,6 @@ components:
       required:
         - id
         - display_name
-    attribute_with_availability:
-      allOf:
-        - $ref: "#/components/schemas/attribute"
-        - type: object
-          properties:
-            availability:
-              $ref: "#/components/schemas/availability"
-          required:
-            - availability
     node_type:
       type: object
       description: Node type
@@ -976,10 +1085,11 @@ components:
           example: 1
         name:
           type: string
+          example: MUNICIPALITY
         role:
           type: string
+          example: source
       required:
         - id
         - name
         - role
-

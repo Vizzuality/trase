@@ -6,7 +6,6 @@
 #  dashboard_template_id :integer
 #  commodity_id          :integer
 #
-
 module Api
   module V3
     class DashboardTemplateCommodity < YellowTable

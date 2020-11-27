@@ -1,12 +1,11 @@
 module Api
   module Public
-    class AttributesController < ApiController
+    class AttributesController < BaseController
       skip_before_action :load_context
-      before_action :set_filter_params, only: :index
 
       def index
         @result = Api::Public::Attributes::ResponseBuilder.new(
-          @filter_params
+          filter_params
         ).call
 
         render json: {data: @result}
@@ -14,8 +13,8 @@ module Api
 
       private
 
-      def set_filter_params
-        @filter_params = {
+      def filter_params
+        {
           country: params[:country],
           commodity: params[:commodity]
         }

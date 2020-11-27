@@ -1,6 +1,6 @@
 module Api
   module Public
-    class NodesController < ApiController
+    class NodesController < BaseController
       skip_before_action :load_context
 
       def data
@@ -21,6 +21,10 @@ module Api
           id: params[:id],
           year: params[:year]
         }
+      end
+
+      def tracking_params
+        {nodes_ids: [params[:id]], start_year: params[:year]}
       end
     end
   end

@@ -2,12 +2,11 @@ import React, { useEffect, useMemo, Suspense } from 'react';
 import PropTypes from 'prop-types';
 import EventManager from 'utils/eventManager';
 import ColumnsSelectorGroupContainer from 'react-components/tool/columns-selector-group/columns-selector-group.container';
-import MapContainer from 'react-components/tool/map/map.container';
 import ModalContainer from 'react-components/tool/story-modal/story-modal.container';
 import SplittedView from 'react-components/tool/splitted-view';
+import MapBoxMap from 'react-components/tool/map/map';
 import Timeline from 'react-components/tool/timeline';
 import ToolBar from 'react-components/shared/tool-bar';
-import MapLayout from 'react-components/tool/map-layout';
 import UrlSerializer from 'react-components/shared/url-serializer';
 import useWindowSize from 'utils/hooks/useWindowSize';
 import NotSupportedComponent from 'react-components/mobile/not-supported.component';
@@ -31,7 +30,7 @@ const evManager = new EventManager();
 const renderVainillaComponents = () => (
   <>
     <ModalContainer />
-    <MapContainer />
+    {/* <MapContainer /> */}
   </>
 );
 
@@ -98,7 +97,7 @@ const Tool = props => {
             <ToolBar />
             <SplittedView
               sidebarOpen={mapSidebarOpen}
-              leftSlot={<MapLayout />}
+              leftSlot={<MapBoxMap />}
               rightSlot={section === 'data-view' ? renderDataView() : renderSankeyView()}
             />
           </div>

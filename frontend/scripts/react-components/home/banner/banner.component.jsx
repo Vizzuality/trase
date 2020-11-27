@@ -1,16 +1,26 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { useTransition, animated, config } from 'react-spring';
-
+import { COLORS } from 'constants';
 import './banner-styles.scss';
 
 const slides = [
   {
     id: 0,
-    imageName: 'banner2x_01.png'
+    text: 'Trace finance is now live',
+    link: 'https://trase.finance/',
+    textColor: COLORS.charcoalGrey,
+    textWidth: '70%',
+    linkColor: COLORS.strongPink,
+    imageName: 'trase_finance_banner.gif'
   },
   {
     id: 1,
-    imageName: 'banner2x_02.png'
+    text: "Trase is featured in the BBC documentary 'Extinction: The Facts'",
+    link:
+      'https://medium.com/trase/extinction-the-facts-trase-featured-in-new-bbc-documentary-788073206fa9',
+    textColor: COLORS.white,
+    linkColor: COLORS.white,
+    imageName: 'banner2x_bbc.png'
   }
 ];
 
@@ -26,13 +36,9 @@ function Banner() {
 
   useEffect(() => {
     let mounted = true; // React state update on an unmounted component error
-    setBackgroundInterval(
-      setInterval(() => {
-        if (mounted) {
-          set(state => (state + 1) % 2);
-        }
-      }, 6000)
-    );
+    if (slides.length > 1) {
+      setBackgroundInterval(setInterval(() => set(state => (state + 1) % 2), 6000));
+    }
     return function cleanup() {
       mounted = false;
       clearInterval(backgroundInterval);
@@ -53,14 +59,23 @@ function Banner() {
             }}
           >
             <a
-              title="New Trase yearbook 2020"
-              href="https://insights.trase.earth/yearbook/summary/"
+              title={item.text}
+              href={item.link}
               target="_blank"
               rel="noopener noreferrer"
               className="banner-content"
             >
-              <div className="banner-title">The new Trase Yearbook 2020 is now available</div>
-              <div className="banner-link">Open yearbook</div>
+              <div
+                style={{
+                  color: item.textColor,
+                  maxWidth: item.textWidth || null
+                }}
+                className="banner-title"
+              >{item.text}</div>
+              <div
+                style={{ color: item.linkColor }}
+                className="banner-link"
+              >See more</div>
             </a>
           </animated.div>
         </Fragment>

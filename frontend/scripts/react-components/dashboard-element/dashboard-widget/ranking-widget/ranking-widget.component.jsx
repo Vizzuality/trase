@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { DEFAULT_DASHBOARD_UNIT_FORMAT } from 'constants';
 import Link from 'redux-first-router-link';
 import { format } from 'd3-format';
 import capitalize from 'lodash/capitalize';
@@ -8,6 +7,7 @@ import Paginate from 'react-components/shared/paginate';
 import Text from 'react-components/shared/text';
 import Heading from 'react-components/shared/heading';
 import Ellipsis from 'react-components/shared/ellipsis';
+import formatDynamicSentenceValue from 'utils/formatDynamicSentenceValue';
 
 import 'react-components/dashboard-element/dashboard-widget/ranking-widget/ranking-widget-styles.scss';
 
@@ -66,7 +66,6 @@ function RankingWidget(props) {
   // property is snake_case
   // eslint-disable-next-line
   const totalValue = meta.aggregates?.total_value;
-  const formatTotal = format(DEFAULT_DASHBOARD_UNIT_FORMAT);
 
   const textColor = {
     dark: 'white',
@@ -97,7 +96,7 @@ function RankingWidget(props) {
                 </div>
                 <Text className="item-value" color={textColor} variant="mono" size="md">
                   {formatValue(item.x0)} {config.xAxisLabel && config.xAxisLabel.suffix} /{' '}
-                  {formatTotal(totalValue.x0)} {config.xAxisLabel && config.xAxisLabel.suffix}
+                  {formatDynamicSentenceValue(totalValue.x0, config.xAxisLabel && config.xAxisLabel.suffix)}
                 </Text>
               </div>
             </li>

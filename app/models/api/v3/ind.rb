@@ -10,7 +10,6 @@
 #
 #  inds_name_key  (name) UNIQUE
 #
-
 module Api
   module V3
     class Ind < BlueTable

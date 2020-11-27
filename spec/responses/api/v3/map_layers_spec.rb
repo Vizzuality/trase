@@ -6,15 +6,11 @@ RSpec.describe 'Map layers', type: :request do
 
   before(:each) do
     Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
-    Api::V3::Readonly::MapAttribute.refresh(sync: true, skip_dependencies: true)
-    Api::V3::Readonly::ContextAttributeProperty.refresh(sync: true, skip_dependencies: true)
-    Api::V3::Readonly::CountryAttributeProperty.refresh(sync: true, skip_dependencies: true)
-    Api::V3::Readonly::CommodityAttributeProperty.refresh(sync: true, skip_dependencies: true)
   end
 
   describe 'GET /api/v3/contexts/:context_id/map_layers' do
     it 'requires start_year' do
-      get "/api/v3/contexts/#{api_v3_context.id}/map_layers"
+      get "/api/v3/contexts/#{api_v3_brazil_soy_context.id}/map_layers"
 
       expect(@response).to have_http_status(:bad_request)
       expect(JSON.parse(@response.body)).to eq(
@@ -23,7 +19,7 @@ RSpec.describe 'Map layers', type: :request do
     end
 
     it 'has the correct response structure' do
-      get "/api/v3/contexts/#{api_v3_context.id}/map_layers?start_year=2014"
+      get "/api/v3/contexts/#{api_v3_brazil_soy_context.id}/map_layers?start_year=2014"
 
       expect(@response).to have_http_status(:ok)
       expect(@response).to match_response_schema('v3_map_layers')

@@ -48,7 +48,7 @@ class LineComponent extends React.PureComponent {
             return this.renderSpinner();
           }
 
-          const { lines, unit, includedYears } = data[chartUrl];
+          const { lines, unit, includedYears, multi_unit: multiUnit = false } = data[chartUrl];
 
           if (!lines) {
             return null;
@@ -68,6 +68,7 @@ class LineComponent extends React.PureComponent {
                   <div className="table-container page-break-inside-avoid">
                     <LineChart
                       testId={testId}
+                      multiUnit={multiUnit}
                       lines={lines}
                       xValues={includedYears}
                       unit={unit}

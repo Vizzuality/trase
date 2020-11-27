@@ -4,9 +4,12 @@ import axios from 'axios';
 export const NEWSLETTER__SET_SUBSCRIPTION_MESSAGE = 'NEWSLETTER__SET_SUBSCRIPTION_MESSAGE';
 export const NEWSLETTER__RESET_NEWSLETTER = 'NEWSLETTER__RESET_NEWSLETTER';
 
-export const sendSubscriptionEmail = email => dispatch => {
+export const sendSubscriptionEmail = ({ email, firstname, lastname, organisation }) => dispatch => {
   const body = new FormData();
   body.append('email', email);
+  body.append('firstname', firstname);
+  body.append('lastname', lastname);
+  body.append('organisation', organisation);
 
   const url = getURLFromParams(POST_SUBSCRIBE_NEWSLETTER_URL);
   return axios

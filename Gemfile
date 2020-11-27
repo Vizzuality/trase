@@ -2,11 +2,11 @@ source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.2.4.3'
+gem 'rails', '~> 5.2.4.4'
  # Use pg as the database for Active Record
 gem 'pg', '~> 0.18'
 # Use Puma as the app server
-gem 'puma', '~> 4.3'
+gem 'puma', '~> 5.0'
 # Use SCSS for stylesheets
 gem 'sassc-rails', '~> 2.1.2'
 gem 'sprockets', '< 4'
@@ -55,9 +55,10 @@ gem 'pg_search'
 gem 'rack', '~> 2.2.3' # issue with sidekiq web in version 2.1.1, still doesn't work on sandbox in version 2.1.2
 gem 'rack-cors', '~> 1.1'
 gem 'scenic'
-gem 'sidekiq', '~> 6.0.7'
+gem 'sidekiq', '~> 6.1.2'
 gem 'sidekiq-unique-jobs'
 gem 'sitemap_generator'
+gem 'staccato'
 gem 'twitter', '~> 7.0'
 gem 'zip_tricks'
 gem 'whenever', require: false
@@ -76,7 +77,7 @@ end
 group :development do
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
   # gem 'web-console', '>= 3.3.0'
-  gem 'listen', '~> 3.2.1'
+  gem 'listen', '~> 3.3.1'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
@@ -87,10 +88,10 @@ group :development do
   gem 'capistrano-yarn'
   gem 'capistrano-nvm'
   gem 'capistrano-passenger'
-  gem 'capistrano-rails', '~> 1.5', require: false
+  gem 'capistrano-rails', '~> 1.6', require: false
   gem 'capistrano-rvm'
   gem 'ed25519', '~> 1.2'
-  gem 'rubocop', '~> 0.88.0', require: false
+  gem 'rubocop', '~> 0.93.1', require: false
   gem 'rubocop-performance', require: false
 end
 

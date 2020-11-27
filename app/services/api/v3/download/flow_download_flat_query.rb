@@ -47,7 +47,7 @@ module Api
           ] + @path_columns +
             [
               "'#{commodity_type}'::TEXT AS \"TYPE\"",
-              'download_attributes_mv.display_name AS "INDICATOR"',
+              'download_attributes_v.display_name AS "INDICATOR"',
               'total AS "TOTAL"'
             ]
         end

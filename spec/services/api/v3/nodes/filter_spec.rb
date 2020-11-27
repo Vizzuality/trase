@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Api::V3::Nodes::Filter do
-  include_context 'api v3 brazil flows quants'
+  include_context 'api v3 brazil soy flow quants'
 
   before(:each) do
     Api::V3::Readonly::FlowNode.refresh(sync: true)
@@ -9,7 +9,7 @@ RSpec.describe Api::V3::Nodes::Filter do
   end
 
   context 'when no params' do
-    let(:result) { Api::V3::Nodes::Filter.new(api_v3_context, {}).call }
+    let(:result) { Api::V3::Nodes::Filter.new(api_v3_brazil_soy_context, {}).call }
 
     it 'returns all nodes' do
       expect(result.size).to eq(Api::V3::Node.count)
@@ -19,7 +19,7 @@ RSpec.describe Api::V3::Nodes::Filter do
   context 'when filtered by node type' do
     let(:result) {
       Api::V3::Nodes::Filter.new(
-        api_v3_context, {node_types_ids: [api_v3_municipality_node_type.id]}
+        api_v3_brazil_soy_context, {node_types_ids: [api_v3_municipality_node_type.id]}
       ).call
     }
 
@@ -35,7 +35,7 @@ RSpec.describe Api::V3::Nodes::Filter do
   context 'when filtered by nodes' do
     let(:result) {
       Api::V3::Nodes::Filter.new(
-        api_v3_context, {nodes_ids: [api_v3_municipality_node.id]}
+        api_v3_brazil_soy_context, {nodes_ids: [api_v3_municipality_node.id]}
       ).call
     }
 

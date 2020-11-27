@@ -6,13 +6,15 @@ module Api
           value: {
             short_name: :value,
             name: 'Value of agricultural %{trade_flow}s',
-            prefix: '$',
+            unit: '$',
+            unit_position: 'prefix',
             tooltip: 'Value of agricultural %{trade_flow}s ($)'
           },
           quantity: {
             short_name: :quantity,
             name: 'Netweight',
-            suffix: 'kg',
+            unit: 'kg',
+            unit_position: 'suffix',
             tooltip: 'Netweight (kg)'
           }
         }.freeze
