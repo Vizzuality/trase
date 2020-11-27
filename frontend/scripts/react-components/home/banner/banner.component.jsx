@@ -36,7 +36,7 @@ function Banner() {
 
   useEffect(() => {
     let mounted = true; // React state update on an unmounted component error
-    if (slides.length > 1) {
+    if (slides.length > 1 && mounted) {
       setBackgroundInterval(setInterval(() => set(state => (state + 1) % 2), 6000));
     }
     return function cleanup() {
