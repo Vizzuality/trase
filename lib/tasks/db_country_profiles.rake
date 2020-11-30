@@ -115,18 +115,18 @@ namespace :db do
       else
         find_or_create_chart_quant(
           country_chart,
-          'AGRICULTURAL_EXPORTS', # TODO
+          'AGRICULTURAL_EXPORT_VALUE',
           {identifier: 'agricultural_exports'}
         )
       end
       find_or_create_chart_qual(
         country_chart,
-        'NYDF', # TODO
+        'NYDF_ENDORSER',
         {identifier: 'nydf'}
       )
       find_or_create_chart_qual(
         country_chart,
-        'AMSTERDAM', # TODO
+        'ADP_SIGNATORY',
         {identifier: 'amsterdam'}
       )
     end
