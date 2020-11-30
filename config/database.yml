@@ -6,7 +6,7 @@ default: &default
   port: <%= ENV.fetch("POSTGRES_PORT") { "5432" } %>
   password: <%= ENV.fetch("POSTGRES_PASSWORD") {} %>
   database: <%= ENV.fetch("POSTGRES_DATABASE") { "trase_dev" } %>
-  pool: <%= ENV['RAILS_MAX_THREADS'] || 5 %>
+  pool: <%= 2* (ENV['RAILS_MAX_THREADS'] || 5) %>
 
 development:
   <<: *default
