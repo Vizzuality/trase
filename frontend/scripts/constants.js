@@ -294,6 +294,10 @@ export const PROFILE_TYPES = {
   traders: 'companies'
 };
 
+export const NODE_TYPES = {
+  countryOfProduction: 'COUNTRY OF PRODUCTION'
+};
+
 export const DEFAULT_DASHBOARD_UNIT_FORMAT = '.4~s';
 
 export const NODE_TYPE_PANELS = {
