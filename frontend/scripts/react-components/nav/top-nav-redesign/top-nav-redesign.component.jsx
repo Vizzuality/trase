@@ -111,7 +111,7 @@ class TopNavRedesign extends React.PureComponent {
   }
 
   renderDesktopMenu() {
-    const { links, printable, showLogo, className, page } = this.props;
+    const { links, printable, showLogo, page } = this.props;
     const { menuOpen } = this.state;
     const allLinks = [];
 
@@ -126,6 +126,8 @@ class TopNavRedesign extends React.PureComponent {
     }
 
     allLinks.push(...links);
+
+    const SearchLabel = () => <span className="search-text">SEARCH</span>;
 
     return (
       <div className="nav-menu -desktop-menu">
@@ -155,11 +157,16 @@ class TopNavRedesign extends React.PureComponent {
             />
           </ul>
           <ul className="top-nav-item-list">
-            <li className="top-nav-item">
-              <LocaleSelector />
+            <li className="top-nav-item search-container">
+              <span className="search-icon">
+                {page === 'tool' ?
+                  <ToolSearch labelComponent={SearchLabel} /> :
+                  <Search className="top-nav-search" labelComponent={SearchLabel} />
+                }
+              </span>
             </li>
             <li className="top-nav-item">
-              {page === 'tool' ? <ToolSearch /> : <Search className="top-nav-search" />}
+              <LocaleSelector />
             </li>
             {printable && (
               <li className="top-nav-item">

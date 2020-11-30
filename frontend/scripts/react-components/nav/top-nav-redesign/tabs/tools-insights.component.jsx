@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Trail } from 'react-spring/renderprops';
 import { NavLink } from 'redux-first-router-link';
-import NavLinks from 'react-components/nav/nav-links.component';
+import Icon from 'react-components/shared/icon';
 
 import InsightsCard from '../cards/insights-card.component';
 
@@ -41,25 +41,31 @@ const ToolsInsights = () => {
   return (
     <div className="nav-tab-container -insights">
       <div className="-navigation-block">
-        <ul>
+        <ul className="sites-menu">
           <li>
-            <NavLink exact strict to={{ type: 'home' }}>
+            <a
+              href="#" // TODO: Update when trase new home is live
+            >
               Home
+            </a>
+          </li>
+          <li>
+            <NavLink
+              exact
+              strict
+              to={{ type: 'home' }}
+              onMouseOver={() => setActiveCard(0)}
+              onFocus={() => setActiveCard(0)}
+              onMouseLeave={() => setActiveCard(null)}
+            >
+              Supply Chain
             </NavLink>
           </li>
           <li>
             <a
-              href="#"
-              onMouseOver={() => setActiveCard(0)}
-              onMouseLeave={() => setActiveCard(null)}
-            >
-              Supply Chain
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
+              href="https://trase.finance/"
               onMouseOver={() => setActiveCard(1)}
+              onFocus={() => setActiveCard(1)}
               onMouseLeave={() => setActiveCard(null)}
             >
               Finance
@@ -67,15 +73,26 @@ const ToolsInsights = () => {
           </li>
           <li>
             <a
-              href="#"
+              href="https://insights.trase.earth/insights"
               onMouseOver={() => setActiveCard(2)}
+              onFocus={() => setActiveCard(2)}
               onMouseLeave={() => setActiveCard(null)}
             >
               Insights
             </a>
           </li>
         </ul>
-        <span className="scroll-indicator">scroll</span>
+        <span className="scroll-indicator">
+          <span>scroll</span>
+          <Icon icon="icon-scroll-arrow" />
+        </span>
+        <ul className="about-menu">
+          <li className="about-menu-item">
+            <NavLink exact strict to={{ type: 'about' }}>
+              About
+            </NavLink>
+          </li>
+        </ul>
       </div>
       <div className="-tab-contents">
         <div className="tab-contents-cards">

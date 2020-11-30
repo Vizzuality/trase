@@ -6,6 +6,7 @@ import { FixedSizeList } from 'react-window';
 import NodeTitleGroup from 'react-components/tool/tool-search/node-title-group/node-title-group.container';
 import SearchResult from 'react-components/tool/tool-search/tool-search-result/tool-search-result.component';
 import cx from 'classnames';
+import Icon from 'react-components/shared/icon';
 
 import 'scripts/react-components/tool/tool-search/tool-search.scss';
 import 'scripts/react-components/tool/tool-search/tool-search-result/tool-search-result.scss';
@@ -34,7 +35,7 @@ function useCloseOnEscape({ isSearchOpen, setIsSearchOpen }) {
 }
 
 function ToolSearch(props) {
-  const { isSearchOpen, className, selectedNodesIds = [], toolLayout, contextId, nodes } = props;
+  const { isSearchOpen, className, selectedNodesIds = [], toolLayout, contextId, nodes, labelComponent } = props;
 
   const [inputValue, setInputValue] = useState('');
   const downshift = useRef(null);
@@ -99,21 +100,27 @@ function ToolSearch(props) {
     }
   };
 
+  const renderIcon = () =>
+    ENABLE_TOP_NAV_REDESIGN ?
+      <Icon icon="icon-search-condensed" />
+    : (
+      <svg className="icon icon-search">
+        <use xlinkHref="#icon-search" />
+      </svg>
+    );
+
   if (isSearchOpen === false) {
     return (
       <div onClick={onOpenClicked} className={cx('c-tool-search', className)}>
-        <svg className="icon icon-search">
-          <use xlinkHref="#icon-search" />
-        </svg>
+        {renderIcon()}
+        {labelComponent && labelComponent()}
       </div>
     );
   }
 
   return (
     <div className="c-tool-search c-search -tool">
-      <svg className="icon icon-search">
-        <use xlinkHref="#icon-search" />
-      </svg>
+      {renderIcon()}
       <div className="c-search__veil" onClick={onCloseClicked} />
       <div className="search-wrapper">
         <Downshift
@@ -188,6 +195,7 @@ ToolSearch.propTypes = {
   toolLayout: PropTypes.number,
   selectedNodesIds: PropTypes.array,
   setIsSearchOpen: PropTypes.func,
+  labelComponent: PropTypes.node,
   onInputValueChange: PropTypes.func
 };
 
