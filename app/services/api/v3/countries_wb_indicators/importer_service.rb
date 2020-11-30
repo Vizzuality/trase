@@ -6,7 +6,7 @@ module Api
       class ImporterService
         def self.call
           # This checks if it's the first week of the month
-          return unless Date.today.day <= 7 || Rails.env.test? || Rails.env.development?
+          return unless Date.today.day <= 7 || Rails.env.test? || Rails.env.development? || Rails.env.production?
 
           start_year = Api::V3::Flow.minimum(:year)
           end_year = Api::V3::Flow.maximum(:year)

@@ -16,7 +16,7 @@ module Api
 
         def call
           # This checks if it's the first week of the month
-          return unless Date.today.day <= 7 || Rails.env.test? || Rails.env.development?
+          return unless Date.today.day <= 7 || Rails.env.test? || Rails.env.development? || Rails.env.production?
 
           world_request_no = @world_request_queue.length
           partner_request_no = @partner_request_queue.length
