@@ -264,7 +264,7 @@ did not produce any #{@commodity_name} in \
 <span class=\"notranslate\">#{@node.name.titleize}</span> produced \
 <span class=\"notranslate\">#{@commodity_production_formatted}</span> \
 <span class=\"notranslate\">#{@commodity_production_unit}</span> of \
-<span class=\"notranslate\">#{@commodity_name}</span>"
+<span class=\"notranslate\">#{@commodity_name}</span>."
           if @commodity_area_formatted
             summary_text << "\
   occupying a total of \
