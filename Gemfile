@@ -32,7 +32,7 @@ gem 'jbuilder', '~> 2.10'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
 
-gem 'active_model_serializers', '~> 0.10.10'
+gem 'active_model_serializers', '~> 0.10.11'
 gem 'activeadmin', '~> 1.4.3'
 gem 'activeadmin_addons'
 gem 'activeadmin_simplemde' # this depends on AA 1
