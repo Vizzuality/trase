@@ -109,13 +109,18 @@ module Api
           actor_basic_attributes_for_year =
             Api::V3::Actors::BasicAttributes.new(context, self, year).call
 
-          update_attribute(
-            :actor_basic_attributes,
-            {year => actor_basic_attributes_for_year}
-          )
+          Api::V3::Readonly::NodeWithFlows.
+            where(id: id, context_id: context_id).
+            update_all(
+              actor_basic_attributes: {year => actor_basic_attributes_for_year}
+            )
         rescue ActiveRecord::RecordNotFound
           # this means configuration or data is missing, nothing to see
-          update_attribute(:actor_basic_attributes, nil)
+          Api::V3::Readonly::NodeWithFlows.
+            where(id: id, context_id: context_id).
+            update_all(
+              actor_basic_attributes: nil
+            )
         rescue
           # this means something is wrong and should be fixed
           raise # re-raise same error
