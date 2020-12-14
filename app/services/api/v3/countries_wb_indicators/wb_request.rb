@@ -19,13 +19,7 @@ module Api
           last_updated = indicators_response[:last_updated]
           return unless need_refreshing?(@indicator_name, last_updated)
 
-          indicators = indicators_response[:indicators]
-          indicators =
-            add_rank_to_indicators(indicators, (@start_year..@end_year))
-          indicators =
-            indicators_by_countries(indicators, trase_countries_iso2)
-
-          create_or_update_indicators(indicators)
+          refresh_indicators(indicators_response[:indicators])
         end
 
         private
@@ -51,53 +45,40 @@ module Api
           false
         end
 
-        def add_rank_to_indicators(indicators, years)
-          years.each do |year|
-            indicators_to_rank = indicators.
-              select { |indicator| indicator[:year] == year }.
-              sort_by { |indicator| indicator[:value] }.
-              reverse
-            indicators_to_rank.each_with_index.map do |indicator, index|
-              indicator[:rank] = index + 1
-              indicator
-            end
-          end
-          indicators
-        end
-
-        def indicators_by_countries(indicators, trase_countries_iso2)
-          indicators.select do |indicator|
-            country = country_codes.lookup_by_iso3(indicator[:iso_code])
-            iso2 = country && country[:iso2]
-            iso2 && trase_countries_iso2.include?(iso2)
-          end
-        end
-
-        def trase_countries_iso2
-          node_type = Api::V3::NodeType.select(:id).
-            where(name: NodeTypeName::COUNTRY)
-          country_nodes_iso2 = Api::V3::Node.
-            select(:geo_id).distinct.
-            where(node_type_id: node_type).
-            map(&:geo_id).compact
-          countries_iso2 = Api::V3::Country.all.map(&:iso2)
-          country_nodes_iso2 | countries_iso2
-        end
-
-        def create_or_update_indicators(indicators)
-          indicators.each do |indicator|
-            iso3 = indicator[:iso_code]
-            country = country_codes.lookup_by_iso3(iso3)
-            existing_indicator =
-              Api::V3::CountriesWbIndicator.find_or_initialize_by(
+        def refresh_indicators(indicators)
+          (@start_year..@end_year).each do |year|
+            indicators_to_update = indicators.select { |indicator| indicator[:year] == year }
+            indicators_to_update = filter_countries(indicators_to_update)
+            indicators_to_update = calculate_ranks(indicators_to_update)
+            Api::V3::CountriesWbIndicator.where(name: @indicator_name, year: year).delete_all
+            indicators_to_update.each do |indicator|
+              iso3 = indicator[:iso_code]
+              country = country_codes.lookup_by_iso3(iso3)
+              Api::V3::CountriesWbIndicator.create(
                 iso3: iso3,
                 iso2: country[:iso2],
                 name: indicator[:name],
-                year: indicator[:year]
+                year: indicator[:year],
+                value: indicator[:value],
+                rank: indicator[:rank]
               )
-            existing_indicator.value = indicator[:value]
-            existing_indicator.rank = indicator[:rank]
-            existing_indicator.save!
+            end
+          end
+        end
+
+        # reject values for regions and groupings
+        def filter_countries(indicators)
+          indicators.reject { |indicator| country_codes.lookup_by_iso3(indicator[:iso_code]).nil? }
+        end
+
+        # rank by value
+        def calculate_ranks(indicators)
+          sorted = indicators.
+            sort_by { |indicator| indicator[:value] }.
+            reverse
+          sorted.each_with_index.map do |indicator, index|
+            indicator[:rank] = index + 1
+            indicator
           end
         end
 
