@@ -117,9 +117,9 @@ module Api
 
         def overview(land_area_rank, population_rank, gdp_rank)
           summary = "#{@node.name} is the world's"
-          summary << " #{land_area_rank} largest country by land mass"
-          summary << ", #{population_rank} largest by population size"
-          summary << " and is the world's #{gdp_rank} largest economy (by GDP)."
+          summary << " #{land_area_rank&.ordinalize} largest country by land mass"
+          summary << ", #{population_rank&.ordinalize} largest by population size"
+          summary << " and is the world's #{gdp_rank&.ordinalize} largest economy (by GDP)."
         end
 
         def land_summary(land_area, forested_land_area, agricultural_land_area)
