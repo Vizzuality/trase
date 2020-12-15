@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import camelCase from 'lodash/camelCase';
 import TopDestinationsChart from 'react-components/profile/profile-components/top-destinations-chart.component';
 import TopDestinationsMap from 'react-components/profile/profile-components/top-destinations-map.component';
 import {
@@ -20,7 +21,7 @@ class TopDestinationsWidget extends React.PureComponent {
 
     const tabs = [...data.tabs].reverse();
     const activeTab = tabs[activeTabIndex];
-    const linesData = data[activeTab];
+    const linesData = data[camelCase(activeTab)];
     const { includedYears, buckets, legendTitle } = data;
     const { lines, style, unit } = linesData;
 
