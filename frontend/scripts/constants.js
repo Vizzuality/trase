@@ -2,6 +2,7 @@
 export const NUM_DECIMALS = {
   // resize by
   'trade volume': 0,
+  'volume': 0,
   'land use': 0,
   'financial flow': 0,
   'territorial deforestation': 0,
