@@ -269,8 +269,9 @@ did not produce any #{@commodity_name} in \
             summary_text << "\
   occupying a total of \
   <span class=\"notranslate\">#{@commodity_area_formatted}</span> \
-  <span class=\"notranslate\">#{@commodity_area_unit}</span> of land."
+  <span class=\"notranslate\">#{@commodity_area_unit}</span> of land"
           end
+          summary_text << "."
 
           summary_text
         end
