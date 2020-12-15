@@ -49,10 +49,19 @@ class TopDestinationsMap extends React.PureComponent {
     return `${testId}-polygon`;
   };
 
+  getActiveTabName() {
+    const { activeTab } = this.props;
+    const ACTIVE_TAB_NAME_CHANGES = {
+      'WOOD SUPPLIER' : 'CONCESSION'
+    };
+    return ACTIVE_TAB_NAME_CHANGES[activeTab.toUpperCase()] || activeTab.toUpperCase();
+  }
+
   getTopoJsonRoot() {
     const { activeTab, countryName } = this.props;
     if (activeTab) {
-      return countryName && `${countryName.toUpperCase()}_${activeTab.toUpperCase()}`;
+      const activeTabName = this.getActiveTabName();
+      return countryName && `${countryName.toUpperCase()}_${activeTabName}`;
     }
     return 'world';
   }
@@ -60,9 +69,9 @@ class TopDestinationsMap extends React.PureComponent {
   getTopoJsonLink() {
     const { activeTab, countryName } = this.props;
     if (activeTab) {
+      const activeTabName = this.getActiveTabName();
       return (
-        countryName &&
-        `./vector_layers/${countryName.toUpperCase()}_${activeTab.toUpperCase()}.topo.json`
+        countryName && `./vector_layers/${countryName.toUpperCase()}_${activeTabName}.topo.json`
       );
     }
     return './vector_layers/WORLD.topo.json';

@@ -81,15 +81,16 @@ RSpec.describe Api::V3::Places::BasicAttributes do
       end
 
       it 'check header commodity area parameters' do
+        commodity_name = api_v3_brazil_soy_context.commodity.name.downcase
         expect(header_attributes[:commodity_area][:value]).to eql(
           attrs[:value]
         )
         expect(header_attributes[:commodity_area][:name]).to eql(
-          "#{api_v3_brazil_soy_context.commodity.name.downcase} land"
+          "#{commodity_name} land"
         )
         expect(header_attributes[:commodity_area][:unit]).to eql('ha')
         expect(header_attributes[:commodity_area][:tooltip]).to eql(
-          'Area of land used to grow soybeans'
+          "Area of land used to grow #{commodity_name}"
         )
       end
     end

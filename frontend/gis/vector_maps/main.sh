@@ -38,3 +38,6 @@ ${BIN}/mapshaper tmp/ARGENTINA_DEPARTMENT.json -simplify rdp 30% planar keep-sha
 
 ${BIN}/cartodb -u p2cs-sei -f geojson 'SELECT the_geom, biome_name as name, geocode as geoid FROM ar_biomes_20191113' > tmp/ARGENTINA_BIOME.json
 ${BIN}/mapshaper tmp/ARGENTINA_BIOME.json -simplify rdp 30% planar keep-shapes -o public/vector_layers/ARGENTINA_BIOME.topo.json format=topojson
+
+${BIN}/cartodb -u p2cs-sei -f geojson 'SELECT the_geom, supplier, geoid FROM id_wood_pulp_concessions' > tmp/INDONESIA_CONCESSION.json
+${BIN}/mapshaper tmp/INDONESIA_CONCESSION.json -simplify rdp 30% planar keep-shapes -o public/vector_layers/INDONESIA_CONCESSION.topo.json format=topojson

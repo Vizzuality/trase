@@ -1,7 +1,7 @@
 {
   "name": "trase-frontend",
   "version": "1.2.0",
-  "description": "Frontend for trase.earth",
+  "description": "Frontend for supplychains.trase.earth",
   "scripts": {
     "start": "webpack-dev-server --config config/webpack.config.dev.js",
     "start:staging": "webpack-dev-server --config config/webpack.config.staging.js",
@@ -153,6 +153,7 @@
     "lodash": "^4.17.15",
     "luma.gl": "7.3.2",
     "node-sass": "^4.13.1",
+    "pluralize": "^8.0.0",
     "plyr": "^3.5.6",
     "promise.prototype.finally": "^3.1.2",
     "prop-types": "^15.7.2",

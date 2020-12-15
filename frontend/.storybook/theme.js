@@ -32,6 +32,6 @@ export default create({
   inputBorderRadius: 4,
 
   brandTitle: 'Trase',
-  brandUrl: 'https://trase.earth',
-  brandImage: 'https://trase.earth/images/logos/logo-trase-nav.png'
+  brandUrl: 'https://supplychains.trase.earth',
+  brandImage: 'https://supplychains.trase.earth/images/logos/logo-trase-nav.png'
 });

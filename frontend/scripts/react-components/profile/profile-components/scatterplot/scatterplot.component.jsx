@@ -23,7 +23,7 @@ class Scatterplot extends Component {
       top: 20,
       right: 13,
       bottom: 30,
-      left: 29
+      left: 39
     };
     this.state = {
       selectedTabIndex: props.xDimensionSelectedIndex || 0

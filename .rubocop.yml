@@ -11,6 +11,7 @@ AllCops:
     - 'config/initializers/*'
     - 'config/*'
     - 'frontend/node_modules/**/*'
+  NewCops: enable
 
 Bundler/OrderedGems:
   Enabled: false

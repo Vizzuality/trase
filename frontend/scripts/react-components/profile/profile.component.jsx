@@ -52,7 +52,6 @@ const Profile = props => {
     updateQueryParams,
     openModal
   } = props;
-
   // if requestIdleCallback is not supported (Edge, IE) we render the iframe immediately
   const [renderIframes, setRenderIframes] = useState(
     typeof window.requestIdleCallback === 'undefined'
@@ -255,6 +254,9 @@ const Profile = props => {
   };
 
   const ready = !loadingMetadata && !errorMetadata;
+  // We only want to show the links if we have a context
+  const showLinks = ready && context;
+
   return (
     <div className={`l-profile-${profileType}`}>
       {printMode && (
@@ -300,11 +302,12 @@ const Profile = props => {
             />
           </Suspense>
         )}
-      {ready && profileType !== 'country' && (
+      {showLinks && (
         <LinksWidget
           year={year}
           nodeId={nodeId}
           profileType={profileType}
+          activity={profileMetadata?.activity}
           contextId={context?.id}
           countryId={context?.countryId}
           commodityId={context?.commodityId || commodityId}

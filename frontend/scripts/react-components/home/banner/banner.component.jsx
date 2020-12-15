@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { useTransition, animated, config } from 'react-spring';
 import { COLORS } from 'constants';
 import './banner-styles.scss';
@@ -35,13 +35,15 @@ function Banner() {
   });
 
   useEffect(() => {
-    if (slides.length > 1) {
+    let mounted = true; // React state update on an unmounted component error
+    if (slides.length > 1 && mounted) {
       setBackgroundInterval(setInterval(() => set(state => (state + 1) % 2), 6000));
     }
     return function cleanup() {
+      mounted = false;
       clearInterval(backgroundInterval);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -80,6 +82,6 @@ function Banner() {
       ))}
     </div>
   );
-};
+}
 
 export default Banner;

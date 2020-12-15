@@ -12,15 +12,15 @@ import './button-links.scss';
 
 const links = [
   {
-    heading: 'DATA',
+    heading: 'WORLD IMPACT',
     section: 'data-view',
     subtitle: 'GO TO DATA VIEW',
-    img: '/images/profiles/profile-main-option-1.svg',
+    img: '/images/profiles/profile-main-option-4.svg',
     layout: TOOL_LAYOUT.right,
     className: 'data-view-image'
   },
   {
-    heading: 'LOCATION IMPACT',
+    heading: 'LOCATION',
     subtitle: 'GO TO MAP',
     img: '/images/profiles/profile-main-option-2.svg',
     layout: TOOL_LAYOUT.left
@@ -29,11 +29,13 @@ const links = [
     heading: 'CONNECTIONS',
     subtitle: 'GO TO SUPPLY CHAIN',
     img: '/images/profiles/profile-main-option-3.svg',
-    layout: TOOL_LAYOUT.right
+    layout: TOOL_LAYOUT.splitted
   }
 ];
+
 function ButtonLinks(props) {
   const { year, nodeId, countryId, commodityId, nodeType, name } = props;
+
   return (
     <div className="c-button-links">
       <div className="row button-links-row">
@@ -82,8 +84,8 @@ function ButtonLinks(props) {
 ButtonLinks.propTypes = {
   name: PropTypes.string.isRequired,
   countryId: PropTypes.number,
-  commodityId: PropTypes.number,
-  nodeType: PropTypes.string.isRequired,
+  commodityId: PropTypes.number.isRequired,
+  nodeType: PropTypes.string,
   year: PropTypes.number.isRequired,
   nodeId: PropTypes.number.isRequired
 };

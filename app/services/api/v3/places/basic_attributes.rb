@@ -201,7 +201,7 @@ module Api
             value: @commodity_area_formatted,
             name: "#{@commodity_name} land",
             unit: 'ha',
-            tooltip: 'Area of land used to grow soybeans'
+            tooltip: "Area of land used to grow #{@commodity_name}"
           }
 
           commodity_attributes
@@ -260,14 +260,20 @@ did not produce any #{@commodity_name} in \
 <span class=\"notranslate\">#{@year}</span>."
           end
 
-          "In <span class=\"notranslate\">#{@year}</span>, \
+          summary_text = "In <span class=\"notranslate\">#{@year}</span>, \
 <span class=\"notranslate\">#{@node.name.titleize}</span> produced \
 <span class=\"notranslate\">#{@commodity_production_formatted}</span> \
 <span class=\"notranslate\">#{@commodity_production_unit}</span> of \
-<span class=\"notranslate\">#{@commodity_name}</span> \
-occupying a total of \
-<span class=\"notranslate\">#{@commodity_area_formatted}</span> \
-<span class=\"notranslate\">#{@commodity_area_unit}</span> of land."
+<span class=\"notranslate\">#{@commodity_name}</span>"
+          if @commodity_area_formatted
+            summary_text << "\
+  occupying a total of \
+  <span class=\"notranslate\">#{@commodity_area_formatted}</span> \
+  <span class=\"notranslate\">#{@commodity_area_unit}</span> of land"
+          end
+          summary_text << "."
+
+          summary_text
         end
 
         # rubocop:disable Metrics/AbcSize

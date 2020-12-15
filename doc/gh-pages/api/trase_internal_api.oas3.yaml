@@ -4,9 +4,9 @@ info:
   version: "3.0"
   contact:
     name: Trase Public API
-    url: https://trase.earth/
+    url: https://supplychains.trase.earth/
     email: info@trase.earth
-  termsOfService: https://trase.earth/terms-of-use.html
+  termsOfService: https://supplychains.trase.earth/terms-of-use.html
   license:
     name: MIT License
   description: Trase Internal API V3
@@ -1896,7 +1896,7 @@ paths:
                       info:
                         $ref: "#/components/schemas/DashboardsMetaInfoNodeValues"
 servers:
-  - url: https://trase.earth/api/v3
+  - url: https://supplychains.trase.earth/api/v3
 components:
   parameters:
     country_id_query_param:
