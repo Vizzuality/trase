@@ -22,9 +22,11 @@ $padding-wrap-desktop: 120px;
 // typography
 $font-family-1: 'DecimaMonoPro', 'Courier New', sans-serif;
 $font-family-2: 'Merriweather', serif;
+$font-family-3: 'DM Sans', sans-serif;
 
 $font-weight-light: 300;
 $font-weight-regular: 400;
+$font-weight-medium: 500;
 $font-weight-bold: 700;
 
 $font-size-small: 10px;
@@ -38,9 +40,11 @@ $font-size-x-big: 32px;
 $font-size-huge: 48px;
 
 // Line height
-$line-height-regular: 16px;
+$line-height-regular: 16px; // 1
+$line-height-x-regular: 17.6px; // 1.1
 $line-height-md: 20px;
 $line-height-lg: 31px;
+$line-height-xl: 35.2px; // 2.2
 
 // List style
 $list-style-image-path: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='-1 -1 2 2'><circle fill='#3444C' r='1' /></svg>";
@@ -99,7 +103,7 @@ $medium-pink-faded: lighten($medium-pink, 20%);
 $manilla: #ffeb8b;
 $egg-shell: #fff0c2;
 $orange: #ffa500;
-$tab-red: #C60006;
+$tab-red: #c60006;
 
 // gray colors
 $gray: #dfdfdf;
@@ -117,6 +121,13 @@ $elephant: #6f7b80; // barely used
 $metal-grey: #ebebeb; // barely used
 $yet-another-gray: #999999; // barely used
 $carbon-gray: #333; // barely used
+
+// Redesign colors
+$orange-500: #ff615f;
+$gray-700: #12282e;
+$gray-500: #1f434e;
+$gray-400: #5d767d;
+$gray-200: #dadada;
 
 // Miscellaneous
 $box-shadow: 0 1px 3px 0 rgba($black, 0.1), 0 1px 2px 0 rgba($black, 0.2);

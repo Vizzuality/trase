@@ -1,0 +1,337 @@
+@import 'styles/settings';
+
+$desktop-nav-min-width: 1060px;
+$desktop-nav-sides-margin: 20px;
+
+$navMenuPadding: 20px;
+$menuOffset: 15vh;
+
+.c-nav {
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  height: $nav-height;
+  // background: transparent; TODO: Use transparent when the new background is ready
+  background: $light-gray;
+  font-family: $font-family-3;
+  z-index: $z-nav;
+  transition: all 150ms ease-in;
+
+  .locale-selector-selected-item,
+  .locale-selector-menu-item {
+    color: rgba($gray-500, 0.5);
+    font-size: $font-size-x-regular;
+    text-transform: uppercase;
+  }
+
+  .locale-selector-selected-item:after {
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 4px solid rgba($gray-500, 0.5);
+  }
+
+  // **
+  // Selectors depending on if header should have a background or not
+
+  &.-has-background {
+    background-color: $white;
+    .nav-menu {
+      border-bottom: 1px solid $gray-200;
+    }
+    .top-nav-link {
+      color: rgba($gray-500, 0.5);
+    }
+  }
+
+  &:not(.-has-background) {
+    .top-nav-search .icon-search,
+    .top-nav-link,
+    .locale-selector-selected-item {
+      color: $gray-500;
+      font-family: $font-family-3;
+      font-size: $font-size-x-regular;
+      font-weight: $font-weight-bold;
+    }
+    .locale-selector-selected-item:after {
+      border-top: 4px solid $gray-500;
+    }
+  }
+
+  // **
+
+  .top-nav-search .icon-search {
+    margin: 0 10px 0 10px;
+    width: 24px;
+    height: 24px;
+  }
+
+  .nav-menu {
+    padding: 0 $navMenuPadding;
+  }
+
+  .nav-menu-main-navigation {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    .top-nav-item {
+      padding: 0 10px;
+    }
+
+    .top-nav-link {
+      font-size: $font-size-xx-regular;
+      font-weight: $font-weight-medium;
+      transform: opacity 150ms ease-in;
+      color: $gray-500;
+
+      &:hover {
+        color: $orange-500;
+      }
+    }
+  }
+
+  .search-icon {
+    display: inline-block;
+    padding-top: 5px;
+  }
+
+  .search-text {
+    display: inline-block;
+    transform: translateY(-5px);
+    color: $gray-500;
+    font-family: $font-family-3;
+    font-size: $font-size-x-regular;
+    font-weight: $font-weight-bold;
+  }
+
+  .top-nav-item-list {
+    display: flex;
+    margin: 0 0 0 40px;
+    .top-nav-item {
+      margin-right: 20px;
+    }
+  }
+
+  .c-locale-selector {
+    transform: translateY(-1px);
+  }
+
+  .top-nav-item-collapse {
+    display: block;
+    padding: 12px 0px;
+    font-size: $font-size-xx-regular;
+    font-weight: $font-weight-bold;
+    letter-spacing: 0.5px;
+
+    .c-locale-selector {
+      display: block;
+
+      .locale-selector-selected-item {
+        width: auto;
+
+        &::after {
+          border-top-color: $strong-pink;
+        }
+      }
+
+      .locale-selector-menu {
+        min-width: auto;
+      }
+    }
+  }
+
+
+  .nav-tabs-container {
+    position: relative;
+    max-height: calc(100vh - 60px);
+    .-backdrop {
+      background: rgba($black, 0.3);
+      position: absolute;
+      height: 100vh;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      z-index: -1;
+    }
+  }
+
+  .-desktop-menu {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    flex-flow: row;
+    z-index: 1;
+    height: 100%;
+  }
+
+  .left-section {
+    display: flex;
+    justify-content: space-between;
+    flex-flow: row;
+    align-items: center;
+    > :first-child {
+      margin-right: 24px;
+    }
+  }
+
+  .right-section {
+    display: flex;
+    justify-content: space-between;
+    flex-flow: row;
+    align-items: center;
+  }
+
+  .top-nav-toggle-btn {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    > svg {
+      width: inherit;
+      height: inherit;
+      margin: 0;
+      max-height: none;
+    }
+  }
+
+  .top-nav-logo {
+    width: 113px;
+  }
+
+  .nav-tab-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 40px 20px;
+    background-color: $white;
+
+    .-navigation-block {
+      flex: 1;
+
+      display: flex;
+      max-width: 300px;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 16px;
+
+      .scroll-indicator {
+        display: flex;
+        position: relative;
+        margin-top: 2rem;
+        color: $orange-500;
+        font-weight: $font-weight-bold;
+        text-transform: uppercase;
+        font-size: $font-size-regular;
+
+        .icon {
+          vertical-align: top;
+          margin-left: 1rem;
+          width: auto;
+        }
+
+        @media screen and (min-width: 1200px){
+          display: none;
+        }
+
+      }
+
+      .sites-menu {
+        font-size: $font-size-regular;
+
+        a {
+          color: $gray-700;
+          font-weight: $font-weight-bold;
+          font-size: $font-size-x-big;
+          line-height: $line-height-x-regular;
+
+          &:hover {
+            color: $orange-500;
+          }
+        }
+      }
+
+      .about-menu {
+        font-size: $font-size-regular;
+
+        a {
+          color: $gray-700;
+          font-weight: $font-weight-bold;
+          font-size: $font-size-xxx-regular;
+          line-height: $line-height-lg;
+
+          &:hover {
+            color: $orange-500;
+          }
+        }
+      }
+
+      li {
+        line-height: $line-height-xl;
+      }
+    }
+
+    .-tab-contents {
+      flex: 0 0 70%;
+      padding: 15px 0;
+      overflow-y: scroll;
+      // -ms-overflow-style: none; /* Internet Explorer 10+ */
+      // scrollbar-width: none; /* Firefox */
+      // &::-webkit-scrollbar {
+      //   display: none; /* Safari and Chrome */
+      // }
+
+      .tab-contents-cards {
+        display: flex;
+        flex-flow: row;
+        justify-content: space-between;
+      }
+    }
+  }
+
+  .top-nav-card {
+    flex: 0 0 260px;
+    height: calc(100vh - 190px);
+    max-height: 400px; // set max height so on larger screens cards don't go crazy long
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
+    overflow: hidden;
+    box-shadow: 0px 5px 9px 0 rgba(0, 0, 0, 0.23);
+    background: linear-gradient(#b9fde7, #fff 80%);
+    border-bottom: 4px solid $gray-400;
+
+    &:nth-child(even) {
+      margin: 0 25px;
+    }
+
+    .card-image {
+      flex: 1;
+      height: 240px;
+      width: 100%;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      transform: translateX(90px);
+    }
+
+    .card-contents {
+      display: flex;
+      justify-content: center;
+      flex-flow: column;
+      padding: 15px;
+      background: $white;
+    }
+
+    .card-summary {
+      font-family: $font-family-1;
+      font-size: $font-size-xx-regular;
+      color: $gray-400;
+      height: 46px;
+      text-overflow: ellipsis;
+    }
+
+    // For now, just override our heading class with this value
+    // As we migrate things forward we need a designer to review font sizes
+    .c-heading {
+      font-size: $font-size-x-big;
+      margin: 0 0 10px 0;
+    }
+  }
+}

@@ -6,6 +6,7 @@ import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
 import kebabCase from 'lodash/kebabCase';
 import GlobalSearchResult from 'react-components/nav/global-search/global-search-result/global-search-result.component';
+import Icon from 'react-components/shared/icon';
 
 import 'react-components/nav/global-search/global-search.scss';
 import 'react-components/nav/global-search/global-search-result/global-search-result.scss';
@@ -82,16 +83,15 @@ export default class GlobalSearch extends Component {
   }, SEARCH_DEBOUNCE_RATE_IN_MS);
 
   render() {
-    const { isLoading, className, searchResults = [], searchTerm } = this.props;
+    const { isLoading, className, searchResults = [], searchTerm, labelComponent } = this.props;
     const { isSearchOpen, inputValue } = this.state;
     const noResults = !searchResults.length && !isLoading && !isEmpty(searchTerm);
 
     if (!isSearchOpen) {
       return (
         <div onClick={this.onOpenClicked} className={className} data-test="global-search-toggle">
-          <svg className="icon icon-search">
-            <use xlinkHref="#icon-search" />
-          </svg>
+          <Icon icon={ENABLE_TOP_NAV_REDESIGN ? "icon-search-condensed" : "icon-search"} />
+          {labelComponent && labelComponent()}
         </div>
       );
     }
@@ -190,5 +190,6 @@ GlobalSearch.propTypes = {
   onInputValueChange: PropTypes.func,
   onItemSelected: PropTypes.func,
   searchResults: PropTypes.array,
-  searchTerm: PropTypes.string
+  searchTerm: PropTypes.string,
+  labelComponent: PropTypes.node
 };
