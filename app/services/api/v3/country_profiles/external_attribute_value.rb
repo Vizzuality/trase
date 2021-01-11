@@ -42,11 +42,12 @@ module Api
             return nil
           end
 
-          row = Api::V3::CountriesWbIndicator.find_by(
-            iso2: @iso2,
-            year: @year,
-            name: attribute[:wb_name]
-          )
+          row = Api::V3::CountriesWbIndicator.
+            where(iso2: @iso2, name: attribute[:wb_name]).
+            where('year <= ?', @year).
+            order('year DESC').
+            limit(1).
+            first
           return nil unless row
 
           row.send(property)
