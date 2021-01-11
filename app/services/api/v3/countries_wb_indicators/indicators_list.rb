@@ -27,6 +27,14 @@ module Api
             unit_position: 'suffix',
             tooltip: 'Land area (sq. km)'
           },
+          surface_area: {
+            short_name: :surface_area,
+            wb_name: 'AG.SRF.TOTL.K2',
+            name: 'Surface area',
+            unit: 'km2',
+            unit_position: 'suffix',
+            tooltip: 'Surface area (sq. km)'
+          },
           agricultural_land_area: {
             short_name: :agricultural_land_area,
             wb_name: 'AG.LND.AGRI.K2',
