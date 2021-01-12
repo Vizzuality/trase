@@ -30,13 +30,18 @@
 
   .footer-menu-item {
     margin-left: 30px;
+    margin-bottom: 15px;
+  }
+
+  .sign-up {
+    flex: 1;
   }
 
   .sign-up-title {
-    flex: 1;
     font-size: $font-size-medium;
     font-weight: $font-weight-bold;
     color: $green-200;
+    margin-bottom: 15px;
   }
 
   .logo-list {

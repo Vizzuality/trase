@@ -60,23 +60,13 @@ class NewsletterForm extends React.PureComponent {
   }
 
   render() {
-    const { message } = this.props;
+    const { message, variant } = this.props;
     const { email } = this.state.form;
-
-    return (
-      <div className={cx('c-newsletter align-middle align-right', { sent: message })}>
-        <div className="newsletter row">
-          <div className="column">
-            <Heading variant="mono" color="pink" size="sm">STAY INFORMED</Heading>
-            <p className="newsletter-text">Sign up to stay informed about Trase Earth, and other Trase developments and discoveries.</p>
-          </div>
-          {message && (
-            <p className="subscription-success">
-              {message}
-            </p>
-          )}
-          {!message && (
-            <form ref={this.getFormRef} className="column small-12 medium-6 large-4">
+    const renderForm = (simple) => (
+      <>
+        {message && <p className="subscription-success">{message}</p>}
+        {!message && (
+          <form ref={this.getFormRef} className={simple ? 'c-newsletter v-simple' : 'column small-12 medium-6 large-4'}>
             <div className="newsletter-input-container">
               <input
                 onInput={e => this.onFormInput(e, 'firstname')}
@@ -87,12 +77,14 @@ class NewsletterForm extends React.PureComponent {
                 required
                 className={cx({
                   'newsletter-input': true,
-                  'error': this.elementHasError('firstname')
+                  error: this.elementHasError('firstname')
                 })}
               />
             </div>
 
-            {this.elementHasError('firstname') && <p className="error-message">First name is required</p>}
+            {this.elementHasError('firstname') && (
+              <p className="error-message">First name is required</p>
+            )}
 
             <div className="newsletter-input-container">
               <input
@@ -104,12 +96,14 @@ class NewsletterForm extends React.PureComponent {
                 required
                 className={cx({
                   'newsletter-input': true,
-                  'error': this.elementHasError('lastname')
+                  error: this.elementHasError('lastname')
                 })}
               />
             </div>
 
-            {this.elementHasError('lastname') && <p className="error-message">Last name is required</p>}
+            {this.elementHasError('lastname') && (
+              <p className="error-message">Last name is required</p>
+            )}
 
             <div className="newsletter-input-container">
               <input
@@ -121,24 +115,26 @@ class NewsletterForm extends React.PureComponent {
                 required
                 className={cx({
                   'newsletter-input': true,
-                  'error': this.elementHasError('organisation')
+                  error: this.elementHasError('organisation')
                 })}
               />
             </div>
 
-            {this.elementHasError('organisation') && <p className="error-message">Organisation is required</p>}
+            {this.elementHasError('organisation') && (
+              <p className="error-message">Organisation is required</p>
+            )}
 
             <div className="newsletter-input-container">
               <input
                 onInput={e => this.onFormInput(e, 'email')}
                 type="email"
                 name="email"
-                placeholder="Sign up here to receive updates"
+                placeholder={simple ?  'Email' : 'Sign up here to receive updates'}
                 id="newsletter-email"
                 required
                 className={cx({
                   'newsletter-input': true,
-                  'error': this.elementHasError('email')
+                  error: this.elementHasError('email')
                 })}
               />
               <Button onClick={this.onClickSubmit} color="charcoal" weight="bold">
@@ -146,9 +142,11 @@ class NewsletterForm extends React.PureComponent {
               </Button>
             </div>
 
-            {this.elementHasError('email') && <p className="error-message">Please provide a valid email address</p>}
+            {this.elementHasError('email') && (
+              <p className="error-message">Please provide a valid email address</p>
+            )}
 
-            <div className={cx("conditions", { visible: !message && email }) }>
+            <div className={cx('conditions', { visible: !message && email })}>
               <Text lineHeight="lg">
                 After subscribing I consent that my email address will be used in order for us to
                 send you the Trase newsletter. Please see our{' '}
@@ -162,6 +160,26 @@ class NewsletterForm extends React.PureComponent {
             </div>
           </form>
         )}
+      </>
+    );
+
+    if (variant === 'simple') {
+      return renderForm(true);
+    }
+
+    return (
+      <div className={cx('c-newsletter align-middle align-right', { sent: message })}>
+        <div className="newsletter row">
+          <div className="column">
+            <Heading variant="mono" color="pink" size="sm">
+              STAY INFORMED
+            </Heading>
+            <p className="newsletter-text">
+              Sign up to stay informed about Trase Earth, and other Trase developments and
+              discoveries.
+            </p>
+          </div>
+          {renderForm()}
         </div>
       </div>
     );
@@ -171,7 +189,8 @@ class NewsletterForm extends React.PureComponent {
 NewsletterForm.propTypes = {
   submitForm: PropTypes.func.isRequired,
   resetForm: PropTypes.func.isRequired,
-  message: PropTypes.string
+  message: PropTypes.string,
+  variant: PropTypes.string
 };
 
 export default NewsletterForm;

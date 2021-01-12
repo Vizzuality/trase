@@ -2,6 +2,7 @@ import React from 'react';
 import cx from 'classnames';
 import Link from 'redux-first-router-link';
 import Img from 'react-components/shared/img';
+import NewsletterForm from 'react-components/shared/newsletter/newsletter.container';
 
 import './footer.scss';
 
@@ -204,11 +205,14 @@ const Footer = () => {
     );
   }
 
-  const renderFooterHigh = () =>(
+  const renderFooterHigh = () => (
     <div className="footer-high row">
       {renderMainFooter()}
       {renderLinkMenu()}
-      <div className="sign-up-title">Sign up for our Newsletter</div>
+      <div className="sign-up">
+        <div className="sign-up-title">Sign up for our Newsletter</div>
+        <NewsletterForm variant="simple" />
+      </div>
     </div>
   );
 
