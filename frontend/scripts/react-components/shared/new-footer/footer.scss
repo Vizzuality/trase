@@ -1,0 +1,135 @@
+@import 'styles/settings';
+
+.c-footer {
+  position: relative;
+  z-index: $z-above;
+  padding: 48px 0 56px;
+  bottom: 0;
+  background-color: $gray-300;
+
+  .section-separator {
+    border-top: 1px solid $gray-200;
+    margin: 30px 0;
+  }
+
+  .logo-list {
+    display: flex;
+  }
+
+  .logo-container {
+    height: 38px;
+    width: 210px;
+    margin-bottom: 20px;
+    fill: $green-200;
+
+    @media screen and (max-width: $breakpoint-foundation-small) {
+      height: 34px;
+    }
+  }
+
+  .sign-up {
+    color: $green-200;
+  }
+
+  .partnership-text {
+    display: flex;
+    color: $green-200;
+
+    :first-child {
+      margin-right: 1em;
+    }
+  }
+
+  .contain-logos-footer {
+    display: flex;
+  }
+
+  .logo-list-container {
+    @media screen and (min-width: 880px) {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    @media screen and (min-width: $breakpoint-foundation-medium) {
+      display: block;
+    }
+  }
+
+  .link-list-container {
+    color: $green-200;
+    svg {
+      fill: $green-200;
+    }
+  }
+
+  .logo-list {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 75px;
+    flex-wrap: wrap;
+
+    &:not(:first-of-type) {
+      margin: 16px 0 0;
+    }
+
+    @media screen and (min-width: 880px) {
+      &:not(:first-child) {
+        margin: 0 0 0 35px;
+      }
+    }
+
+    @media screen and (min-width: $breakpoint-foundation-medium) {
+      justify-content: flex-start;
+
+      &:not(:first-child) {
+        margin: 16px 0 0;
+      }
+    }
+
+    .logo-item {
+      display: inline-block;
+
+      &:not(:first-child) {
+        margin: 0 0 0 45px;
+      }
+
+      @media screen and (min-width: 880px) {
+        &:not(:first-child) {
+          margin: 0 0 0 35px;
+        }
+      }
+
+      @media screen and (min-width: $breakpoint-foundation-medium) {
+        &:not(:first-child) {
+          margin: 0 0 0 45px;
+        }
+      }
+    }
+  }
+
+  .contain-link-list {
+    margin-top: 54px;
+    overflow: hidden;
+
+    .links-list {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+
+      .separator {
+        display: inline-flex;
+        align-items: center;
+        margin: 0 8px;
+
+        color: $charcoal-grey;
+      }
+
+      .link-item {
+        flex-shrink: 0;
+      }
+    }
+  }
+}
