@@ -20,20 +20,33 @@
   }
 
   .main-footer {
-    flex: 2;
+    flex: 1.6;
   }
 
   .footer-menu {
     flex: 2;
+    display: flex;
   }
 
-  .sign-up {
-    color: $green-200;
+  .footer-menu-item {
+    margin-left: 30px;
+  }
+
+  .sign-up-title {
     flex: 1;
+    font-size: $font-size-medium;
+    font-weight: $font-weight-bold;
+    color: $green-200;
   }
 
   .logo-list {
     display: flex;
+  }
+
+  .logo-item {
+    &:not(:first-child) {
+      margin-left: 24px;
+    }
   }
 
   .logo-container {
@@ -60,6 +73,9 @@
 
     :first-child {
       margin-right: 1em;
+    }
+
+    > div {
       max-width: 194px;
     }
   }
@@ -127,6 +143,22 @@
   .privacy-menu-link {
     color: $green-200;
     font-size: $font-size-regular;
+  }
+
+  .menu-title {
+    color: $white;
+    font-weight: $font-weight-bold;
+    font-size: $font-size-medium;
+    line-height: $line-height-md;
+    margin-bottom: 15px;
+  }
+
+  .menu-link {
+    display: block;
+    color: $white;
+    font-size: $font-size-regular;
+    line-height: $line-height-md;
+    margin-bottom: 5px;
   }
 
   .logo-list {

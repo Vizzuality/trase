@@ -48,62 +48,171 @@ const donors = [
   }
 ];
 
-const Footer = () => (
-  <div className="c-footer">
-    <div className="footer-high row">
-      <div className="contain-logos-footer">
-        <div className="main-footer">
-          <div className="logo-container">
-            <Img src="/images/logos/new-logo-trase.svg" alt="TRASE" />
-          </div>
-          <ul className="logo-list">
-            {partners.map(logo => (
-              <li key={logo.className} className={cx('logo-item', logo.className)}>
-                <a href={logo.href} target="_blank" rel="noopener noreferrer">
-                  <Img src={logo.image} alt={logo.alt} />
-                </a>
-              </li>
-            ))}
-          </ul>
-          <div className="partnership-text">
-            <div>A partnership between Global Canopy and the Stockholm Environment Institute.</div>
-            <div>
-              In collaboration with
-              <a
-                className="partnership-link"
-                href="http://www.vizzuality.com/"
-                target="_blank"
-                alt="vizzuality"
-                rel="noopener noreferrer"
-              >
-                Vizzuality
-              </a>
-              ,{' '}
-              <a
-                className="partnership-link"
-                href="http://www.efi.int/portal/"
-                target="_blank"
-                alt="vizzuality"
-                rel="noopener noreferrer"
-              >
-                EFI
-              </a>
-              , and many other organizations and individuals. Find out more{' '}
-              <Link
-                className="partnership-link"
-                to={{ type: 'about', payload: { section: 'partners' } }}
-              >
-                here
-              </Link>
-              .
-            </div>
-          </div>
+const Footer = () => {
+  const renderMainFooter = () => (
+    <div className="main-footer">
+      <div className="logo-container">
+        <Img src="/images/logos/new-logo-trase.svg" alt="TRASE" />
+      </div>
+      <ul className="logo-list">
+        {partners.map(logo => (
+          <li key={logo.className} className={cx('logo-item', logo.className)}>
+            <a href={logo.href} target="_blank" rel="noopener noreferrer">
+              <Img src={logo.image} alt={logo.alt} />
+            </a>
+          </li>
+        ))}
+      </ul>
+      <div className="partnership-text">
+        <div>A partnership between Global Canopy and the Stockholm Environment Institute.</div>
+        <div>
+          In collaboration with{' '}
+          <a
+            className="partnership-link"
+            href="http://www.vizzuality.com/"
+            target="_blank"
+            alt="vizzuality"
+            rel="noopener noreferrer"
+          >
+            Vizzuality
+          </a>
+          ,{' '}
+          <a
+            className="partnership-link"
+            href="http://www.efi.int/portal/"
+            target="_blank"
+            alt="vizzuality"
+            rel="noopener noreferrer"
+          >
+            EFI
+          </a>
+          , and many other organizations and individuals. Find out more{' '}
+          <Link
+            className="partnership-link"
+            to={{ type: 'about', payload: { section: 'partners' } }}
+          >
+            here
+          </Link>
+          .
         </div>
-        <div className="footer-menu">Menu</div>
-        <div className="sign-up">Sign up for our Newsletter</div>
       </div>
     </div>
-    <div className="section-separator" />
+  );
+
+  const renderLinkMenu = () => {
+    const menuItems = [
+      {
+        title: 'Home',
+        items: [
+          {
+            title: 'About',
+            link: 'about'
+          }
+        ]
+      },
+      {
+        title: 'Supply Chains',
+        items: [
+          {
+            title: 'Data Tools',
+            link: 'tool'
+          },
+          {
+            title: 'Profiles',
+            link: 'profiles'
+          },
+          {
+            title: 'Logistics Maps',
+            link: 'logistics maps'
+          },
+          {
+            title: 'Downloads',
+            link: 'downloads'
+          }
+        ]
+      },
+      {
+        title: 'Finance',
+        items: [
+          {
+            title: 'Explore',
+            href: 'https://trase.finance/explore'
+          },
+          {
+            title: 'Search',
+            href: 'https://trase.finance/search'
+          },
+          {
+            title: 'Watchlists',
+            href: 'https://trase.finance/watchlists'
+          },
+          {
+            title: 'Methodology',
+            href: 'https://trase.finance/methodology'
+          },
+          {
+            title: 'FAQs',
+            href: 'https://trase.finance/faqs'
+          }
+        ]
+      },
+      {
+        title: 'Insights',
+        items: [
+          {
+            title: 'Yearbook',
+            href: 'https://insights.trase.earth/yearbook'
+          },
+          {
+            title: 'Collections',
+            href: 'https://insights.trase.earth/collections'
+          },
+          {
+            title: 'Publications',
+            href: 'https://insights.trase.earth/publications'
+          }
+        ]
+      }
+    ];
+
+    const renderTitle = (title) => (
+      <div className="menu-title">{title}</div>
+    );
+
+    const renderItems = items =>
+      items.map(i =>
+        i.link ? (
+          <Link className="menu-link" to={{ type: i.link }}>
+            {i.title}
+          </Link>
+        ) : (
+          <a target="_blank" className="menu-link" href={i.href} alt={i.title}>
+            {i.title}
+          </a>
+        )
+      );
+
+    return (
+      <div className="footer-menu">
+        {menuItems.map(i => (
+         <div className="footer-menu-item">
+           {renderTitle(i.title)}
+           {renderItems(i.items)}
+         </div>
+        ))}
+      </div>
+    );
+  }
+
+  const renderFooterHigh = () =>(
+    <div className="footer-high row">
+      {renderMainFooter()}
+      {renderLinkMenu()}
+      <div className="sign-up-title">Sign up for our Newsletter</div>
+    </div>
+  );
+
+  const renderFooterLow = () => (
     <div className="footer-low-container row">
       <div className="footer-low">
         <div className="link-list-container">
@@ -172,7 +281,15 @@ const Footer = () => (
         </div>
       </div>
     </div>
-  </div>
-);
+  );
+
+  return (
+    <div className="c-footer">
+      {renderFooterHigh()}
+      <div className="section-separator" />
+      {renderFooterLow()}
+    </div>
+  );
+}
 
 export default Footer;
