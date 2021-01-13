@@ -107,4 +107,37 @@
       font-weight: $font-weight-regular;
     }
   }
+
+  &.v-simple  {
+    padding: 0;
+    background: transparent;
+
+    .newsletter-input-container {
+      border-radius: 0;
+    }
+
+    .newsletter-input {
+      flex: auto;
+      height: 100%;
+      font-family: $font-family-3;
+      font-size: 13px;
+      letter-spacing: -0.8px;
+      text-align: left;
+      border: 0;
+      border-radius: 0;
+      border-left: 3px solid $green-200;
+      background-color: rgba($green-200, 0.1);
+      color: $green-200;
+      padding: 1px 10px 0;
+
+      &.error {
+        border: 1px solid $strong-pink;
+      }
+
+      &::placeholder {
+        text-transform: capitalize;
+        color: rgba($green-200, 0.8);
+      }
+    }
+  }
 }

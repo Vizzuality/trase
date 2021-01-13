@@ -5,6 +5,7 @@ import CookieBanner from 'react-components/shared/cookie-banner';
 import FullScreenButton from 'react-components/shared/full-screen-button';
 import Feedback from 'react-components/shared/feedback';
 import Footer from 'react-components/shared/footer/footer.component';
+import NewFooter from 'react-components/shared/new-footer/footer.component';
 
 import isIe from 'utils/isIe';
 import isIframe from 'utils/isIframe';
@@ -58,7 +59,11 @@ function App() {
 
       {footer && (
         <footer>
-          <Footer />
+          {ENABLE_FOOTER_REDESIGN ?
+            <NewFooter />
+            :
+            <Footer />
+          }
         </footer>
       )}
       <div id="recharts-tooltip-portal" />

@@ -81,7 +81,8 @@ module.exports = {
       NAMED_MAPS_ENV: JSON.stringify(process.env.NAMED_MAPS_ENV),
       CARTO_ACCOUNT: JSON.stringify(process.env.CARTO_ACCOUNT),
       MAPBOX_TOKEN: JSON.stringify(process.env.MAPBOX_TOKEN),
-      ENABLE_TOP_NAV_REDESIGN: JSON.stringify(process.env.ENABLE_TOP_NAV_REDESIGN === 'true')
+      ENABLE_TOP_NAV_REDESIGN: JSON.stringify(process.env.ENABLE_TOP_NAV_REDESIGN === 'true'),
+      ENABLE_FOOTER_REDESIGN: JSON.stringify(process.env.ENABLE_FOOTER_REDESIGN === 'true')
     }),
     new webpack.LoaderOptionsPlugin({ options: {} })
   ],
