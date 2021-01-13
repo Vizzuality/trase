@@ -76,8 +76,8 @@
       color: $green-200;
     }
 
-    :first-child {
-      margin-right: 1em;
+    > :first-child {
+      margin-right: 10px;
     }
 
     > div {
