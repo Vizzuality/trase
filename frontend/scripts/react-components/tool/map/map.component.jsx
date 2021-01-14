@@ -108,8 +108,35 @@ function MapBoxMap(props) {
   // Set Map Attribution
   useSetMapAttribution(loaded, setMapAttribution);
 
+  const [containerDimensions, setContainerDimensions] = useState({ width: 320, height: 500 });
+  useEffect(() => {
+    if (toolLayout !== TOOL_LAYOUT.right) {
+      // We need to wait for the size to change
+      const timeout = setTimeout(() => {
+        const currentContainerDimensions = mapContainerRef.current?.getBoundingClientRect();
+        let { height } = currentContainerDimensions;
+        const { width } = currentContainerDimensions;
+        const LEGEND_SIZE = 200;
+        if (TOOL_LAYOUT.splitted && height > LEGEND_SIZE) {
+          height -= LEGEND_SIZE;
+        }
+        setContainerDimensions({ width, height });
+      }, 1000);
+      return () => clearTimeout(timeout);
+    }
+    return undefined;
+  }, [mapContainerRef, toolLayout]);
+
   // Set Fit To Bounds
-  useFitToBounds(map, selectedGeoNodes, sourceLayer, unitLayers);
+  useFitToBounds({
+    map,
+    selectedGeoNodes,
+    sourceLayer,
+    unitLayers,
+    setViewport,
+    viewport,
+    containerDimensions
+  });
 
   // Set Choropleth
   useChoroplethFeatureState(
