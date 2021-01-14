@@ -140,7 +140,7 @@ class Scatterplot extends Component {
       this.yAxisGroup
         .append('g')
         .attr('class', 'axis--label')
-        .attr('transform', `translate(-30,-10)`)
+        .attr('transform', `translate(-26,-10)`)
         .append('text')
         .attr('class', 'axis--label-text')
         .html(yDimensionUnit);

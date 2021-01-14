@@ -43,9 +43,7 @@ const ToolsInsights = () => {
       <div className="-navigation-block">
         <ul className="sites-menu">
           <li>
-            <a
-              href="#" // TODO: Update when trase new home is live
-            >
+            <a href="https://trase.earth" rel="noopener noreferrer">
               Home
             </a>
           </li>
