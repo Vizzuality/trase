@@ -75,11 +75,15 @@ export function useChoroplethFeatureState(
   }, [choropleth, map, unitLayers, sourceLayer, linkedGeoIds, baseLayerInfo, darkBasemap]);
 }
 
-export function useFitToBounds(map, selectedGeoNodes) {
+export function useFitToBounds(map, selectedGeoNodes, sourceLayer, unitLayers) {
   useEffect(() => {
     const fitToBounds = () => {
       const selectedGeoNodesIds = selectedGeoNodes.map(n => n.geoId);
-      const features = map.queryRenderedFeatures().filter(f => selectedGeoNodesIds.includes(f.id));
+      const selectedUnitLayer = unitLayers.find(u => u.id.startsWith(sourceLayer.toLowerCase()));
+      if (!selectedUnitLayer) return;
+      const features = map
+        .querySourceFeatures(selectedUnitLayer.id, { sourceLayer })
+        .filter(f => selectedGeoNodesIds.includes(f.id));
       if (features?.length) {
         const bounds = bbox({ type: 'FeatureCollection', features });
         // Padding bottom is more because of the legend
@@ -88,6 +92,7 @@ export function useFitToBounds(map, selectedGeoNodes) {
     };
 
     if (map && selectedGeoNodes) {
+      console.log('s', selectedGeoNodes, sourceLayer, unitLayers);
       fitToBounds();
     }
   }, [map, selectedGeoNodes]);
@@ -106,7 +111,15 @@ export function useSetMapAttribution(loaded, setMapAttribution) {
 }
 
 // Highlight nodes hovered on Sankey
-export function useHighlightHoveredSankeyNodes({map, loaded, hoveredGeo, highlightedGeoNodes, layerIds, sourceLayer, clearHoveredFeatureState}) {
+export function useHighlightHoveredSankeyNodes({
+  map,
+  loaded,
+  hoveredGeo,
+  highlightedGeoNodes,
+  layerIds,
+  sourceLayer,
+  clearHoveredFeatureState
+}) {
   useEffect(() => {
     if (map && loaded && highlightedGeoNodes) {
       clearHoveredFeatureState('hover');
@@ -124,7 +137,14 @@ export function useHighlightHoveredSankeyNodes({map, loaded, hoveredGeo, highlig
 }
 
 // Set selected feature state
-export function useSetSelectedFeatureState({ selectedGeoNodes, map, loaded, sourceLayer, layerIds, selectedGeos }) {
+export function useSetSelectedFeatureState({
+  selectedGeoNodes,
+  map,
+  loaded,
+  sourceLayer,
+  layerIds,
+  selectedGeos
+}) {
   useEffect(() => {
     const unselectNodes = () => {
       selectedGeos.last.forEach(lastSelectedGeo => {

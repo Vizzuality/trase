@@ -24,7 +24,7 @@ import {
   useSetSelectedFeatureState,
   useHighlightHoveredSankeyNodes
 } from './map.hooks';
-import { handleHover, handleClick } from './map-interaction.utils'
+import { handleHover, handleClick } from './map-interaction.utils';
 import 'react-components/tool/map/map.scss';
 
 const selectedGeos = {
@@ -109,7 +109,7 @@ function MapBoxMap(props) {
   useSetMapAttribution(loaded, setMapAttribution);
 
   // Set Fit To Bounds
-  useFitToBounds(map, selectedGeoNodes);
+  useFitToBounds(map, selectedGeoNodes, sourceLayer, unitLayers);
 
   // Set Choropleth
   useChoroplethFeatureState(
@@ -138,7 +138,15 @@ function MapBoxMap(props) {
   }, [layerIds, map, hoveredGeo]);
 
   // Highlight nodes hovered on Sankey
-  useHighlightHoveredSankeyNodes({map, loaded, hoveredGeo, highlightedGeoNodes, layerIds, sourceLayer, clearHoveredFeatureState});
+  useHighlightHoveredSankeyNodes({
+    map,
+    loaded,
+    hoveredGeo,
+    highlightedGeoNodes,
+    layerIds,
+    sourceLayer,
+    clearHoveredFeatureState
+  });
 
   // Set and remove selected feature-state
   useSetSelectedFeatureState({
@@ -165,24 +173,16 @@ function MapBoxMap(props) {
       logisticLayers,
       onPolygonHighlighted,
       INDONESIA_MILL_LAYER_ID
-    }
-  );
+    });
   const onClick = event => handleClick({ event, onPolygonClicked, sourceLayer });
 
   // Get Layers
   let layers = [baseLayer].concat(contextualLayers).concat(logisticLayers);
   if (unitLayers) {
     layers = layers.concat(
-      flatMap(unitLayers, u =>
-        getUnitLayerStyle(
-          u,
-          sourceLayer,
-          darkBasemap,
-          getGeoIdName(u.id)
-        )
-      )
+      flatMap(unitLayers, u => getUnitLayerStyle(u, sourceLayer, darkBasemap, getGeoIdName(u.id)))
     );
-  };
+  }
 
   const orderedLayers = layers.map(l => ({ ...l, zIndex: layerOrder[l.id] }));
   const minimized = toolLayout === TOOL_LAYOUT.right;
