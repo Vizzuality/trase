@@ -38,7 +38,9 @@ class Scatterplot extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const shouldRebuild =
-      prevProps.year !== this.props.year || prevProps.width !== this.props.width || prevState.selectedTabIndex !== this.state.selectedTabIndex;
+      prevProps.year !== this.props.year ||
+      prevProps.width !== this.props.width ||
+      prevState.selectedTabIndex !== this.state.selectedTabIndex;
 
     if (shouldRebuild) {
       this.build();
@@ -46,9 +48,17 @@ class Scatterplot extends Component {
   }
 
   build() {
-    const { data, showTooltipCallback, hideTooltipCallback, testId, xDimension, yDimension } = this.props;
+    const {
+      data,
+      showTooltipCallback,
+      hideTooltipCallback,
+      testId,
+      xDimension,
+      yDimension
+    } = this.props;
     const { selectedTabIndex } = this.state;
-    const xDimensionUnit = xDimension && xDimension[selectedTabIndex] && xDimension[selectedTabIndex].unit;
+    const xDimensionUnit =
+      xDimension && xDimension[selectedTabIndex] && xDimension[selectedTabIndex].unit;
     const yDimensionUnit = yDimension && yDimension.unit;
 
     const parentWidth = this.props.width;
@@ -76,7 +86,7 @@ class Scatterplot extends Component {
         }
 
         return abbreviateNumber(value, 3);
-      })
+      });
 
     this.yAxis = d3_axis_left(this.y)
       .ticks(7)
@@ -104,7 +114,7 @@ class Scatterplot extends Component {
       this.xAxisGroup
         .append('g')
         .attr('class', 'axis--label')
-        .attr('transform', `translate(10,30)`)
+        .attr('transform', `translate(${width},30)`)
         .append('text')
         .attr('class', 'axis--label-text')
         .html(xDimensionUnit);
@@ -122,9 +132,7 @@ class Scatterplot extends Component {
 
     // Y-AXIS
 
-    this.yAxisGroup = this.svg
-      .append('g')
-      .attr('class', 'axis axis--y')
+    this.yAxisGroup = this.svg.append('g').attr('class', 'axis axis--y');
 
     this.yAxisGroup.call(this.yAxis);
 
@@ -132,7 +140,7 @@ class Scatterplot extends Component {
       this.yAxisGroup
         .append('g')
         .attr('class', 'axis--label')
-        .attr('transform', `translate(-10,0)`)
+        .attr('transform', `translate(-26,-10)`)
         .append('text')
         .attr('class', 'axis--label-text')
         .html(yDimensionUnit);

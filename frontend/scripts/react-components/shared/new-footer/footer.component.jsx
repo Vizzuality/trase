@@ -6,7 +6,6 @@ import NewsletterForm from 'react-components/shared/newsletter/newsletter.contai
 
 import './footer.scss';
 
-
 const partners = [
   {
     className: 'gcp-logo',
@@ -176,9 +175,7 @@ const Footer = () => {
       }
     ];
 
-    const renderTitle = (title) => (
-      <div className="menu-title">{title}</div>
-    );
+    const renderTitle = title => <div className="menu-title">{title}</div>;
 
     const renderItems = items =>
       items.map(i =>
@@ -187,7 +184,13 @@ const Footer = () => {
             {i.title}
           </Link>
         ) : (
-          <a target="_blank" className="menu-link" href={i.href} alt={i.title}>
+          <a
+            target="_blank"
+            className="menu-link"
+            rel="noopener noreferrer"
+            href={i.href}
+            alt={i.title}
+          >
             {i.title}
           </a>
         )
@@ -196,14 +199,14 @@ const Footer = () => {
     return (
       <div className="footer-menu">
         {menuItems.map(i => (
-         <div className="footer-menu-item">
-           {renderTitle(i.title)}
-           {renderItems(i.items)}
-         </div>
+          <div className="footer-menu-item">
+            {renderTitle(i.title)}
+            {renderItems(i.items)}
+          </div>
         ))}
       </div>
     );
-  }
+  };
 
   const renderFooterHigh = () => (
     <div className="footer-high row">
@@ -222,7 +225,11 @@ const Footer = () => {
         <div className="link-list-container">
           <ul className="social-links-list">
             <li className="social-link-item">
-              <a className="social-link" href="https://twitter.com/traseearth">
+              <a
+                className="social-link"
+                rel="noopener noreferrer"
+                href="https://twitter.com/traseearth"
+              >
                 <Img src="/images/footer/social/twitter.svg" alt="twitter link" />
               </a>
             </li>
@@ -230,6 +237,7 @@ const Footer = () => {
               <a
                 className="social-link"
                 href="https://www.linkedin.com/company/trase-transparency-for-sustainable-economies"
+                rel="noopener noreferrer"
               >
                 <Img src="/images/footer/social/linkedin.svg" alt="linkedin link" />
               </a>
@@ -266,7 +274,11 @@ const Footer = () => {
             </>
             <li className="separator"> · </li>
             <li className="link-item">
-              <a className="privacy-menu-link" href="mailto:info@trase.earth">
+              <a
+                className="privacy-menu-link"
+                rel="noopener noreferrer"
+                href="mailto:info@trase.earth"
+              >
                 Contact us
               </a>
             </li>
@@ -294,6 +306,6 @@ const Footer = () => {
       {renderFooterLow()}
     </div>
   );
-}
+};
 
 export default Footer;
