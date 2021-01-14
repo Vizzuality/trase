@@ -29,7 +29,7 @@
   }
 
   .main-footer {
-    flex: 1.6;
+    flex: 1.3;
 
     margin: 0 30px 30px;
 
@@ -80,34 +80,22 @@
     }
   }
 
-  .logo-container {
-    height: 38px;
-    width: 210px;
-    margin-bottom: 30px;
-    fill: $green-200;
-
-    @media screen and (max-width: $breakpoint-foundation-small) {
-      height: 34px;
-    }
-  }
-
   .partnership-text {
-    display: flex;
     color: $green-200;
     font-size: $font-size-regular;
     line-height: $line-height-md;
 
+    &.presentation {
+      margin-bottom: 30px;
+    }
+
+    > * {
+      display: inline;
+    }
 
     .partnership-link {
       color: $green-200;
-    }
-
-    > :first-child {
-      margin-right: 10px;
-    }
-
-    > div {
-      max-width: 194px;
+      text-decoration: underline;
     }
   }
 

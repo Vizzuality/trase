@@ -9,6 +9,7 @@ import cx from 'classnames';
 import Heading from 'react-components/shared/heading/heading.component';
 
 import 'react-components/shared/newsletter/newsletter.scss';
+import { startCase } from 'lodash';
 
 class NewsletterForm extends React.PureComponent {
   constructor(props) {
@@ -19,7 +20,8 @@ class NewsletterForm extends React.PureComponent {
         email: '',
         firstname: '',
         lastname: '',
-        organisation: ''
+        organisation: '',
+        country: ''
       }
     };
     this.onClickSubmit = this.onClickSubmit.bind(this);
@@ -62,74 +64,52 @@ class NewsletterForm extends React.PureComponent {
   render() {
     const { message, variant } = this.props;
     const { email } = this.state.form;
-    const renderForm = (simple) => (
-      <>
-        {message && <p className="subscription-success">{message}</p>}
-        {!message && (
-          <form ref={this.getFormRef} className={simple ? 'c-newsletter v-simple' : 'column small-12 medium-6 large-4'}>
+    const footer = variant === 'footer';
+    const renderSubmitButton = () =>
+      footer ? (
+        <Button
+          onClick={this.onClickSubmit}
+          color="green"
+          variant="circle"
+          className="footer-submit-button"
+        />
+      ) : (
+        <Button onClick={this.onClickSubmit} color="charcoal" weight="bold">
+          Subscribe
+        </Button>
+      );
+
+    const renderFormInput = (field, placeholder) => {
+      const fields = {
+        default: (
+          <>
             <div className="newsletter-input-container">
               <input
-                onInput={e => this.onFormInput(e, 'firstname')}
+                onInput={e => this.onFormInput(e, field)}
                 type="text"
-                name="firstname"
-                placeholder="first name"
-                id="newsletter-firstname"
+                name={field}
+                placeholder={placeholder || field}
+                id={`newsletter-${field}`}
                 required
                 className={cx({
                   'newsletter-input': true,
-                  error: this.elementHasError('firstname')
+                  error: this.elementHasError(field)
                 })}
               />
             </div>
-
-            {this.elementHasError('firstname') && (
-              <p className="error-message">First name is required</p>
+            {this.elementHasError(field) && (
+              <p className="error-message">{startCase(field)} is required</p>
             )}
-
-            <div className="newsletter-input-container">
-              <input
-                onInput={e => this.onFormInput(e, 'lastname')}
-                type="text"
-                name="lastname"
-                placeholder="last name"
-                id="newsletter-lastname"
-                required
-                className={cx({
-                  'newsletter-input': true,
-                  error: this.elementHasError('lastname')
-                })}
-              />
-            </div>
-
-            {this.elementHasError('lastname') && (
-              <p className="error-message">Last name is required</p>
-            )}
-
-            <div className="newsletter-input-container">
-              <input
-                onInput={e => this.onFormInput(e, 'organisation')}
-                type="text"
-                name="organisation"
-                placeholder="organisation"
-                id="newsletter-organisation"
-                required
-                className={cx({
-                  'newsletter-input': true,
-                  error: this.elementHasError('organisation')
-                })}
-              />
-            </div>
-
-            {this.elementHasError('organisation') && (
-              <p className="error-message">Organisation is required</p>
-            )}
-
+          </>
+        ),
+        email: (
+          <>
             <div className="newsletter-input-container">
               <input
                 onInput={e => this.onFormInput(e, 'email')}
                 type="email"
                 name="email"
-                placeholder={simple ?  'Email' : 'Sign up here to receive updates'}
+                placeholder={placeholder || 'Sign up here to receive updates'}
                 id="newsletter-email"
                 required
                 className={cx({
@@ -137,34 +117,70 @@ class NewsletterForm extends React.PureComponent {
                   error: this.elementHasError('email')
                 })}
               />
-              <Button onClick={this.onClickSubmit} color="charcoal" weight="bold">
-                Subscribe
-              </Button>
+              {!footer && renderSubmitButton()}
             </div>
-
             {this.elementHasError('email') && (
               <p className="error-message">Please provide a valid email address</p>
             )}
+          </>
+        )
+      };
+      return fields[field] || fields.default;
+    };
 
-            <div className={cx('conditions', { visible: !message && email })}>
-              <Text lineHeight="lg">
-                After subscribing I consent that my email address will be used in order for us to
-                send you the Trase newsletter. Please see our{' '}
-                <Link to="/about/privacy-policy">
-                  <Text as="span" className="conditions-link">
-                    privacy policy
+    const renderForm = () => (
+      <>
+        {message && <p className="subscription-success">{message}</p>}
+        {!message && (
+          <form
+            ref={this.getFormRef}
+            className={footer ? 'c-newsletter v-footer' : 'column small-12 medium-6 large-4'}
+          >
+            {footer ? (
+              <>
+                {renderFormInput('email', 'Enter your email...')}
+                {renderFormInput('firstname', 'Enter your name...')}
+                {renderFormInput('organisation', 'Your organization...')}
+                {renderFormInput('country', 'Your country...')}
+                <div className="footer-conditions">
+                  <Text size="xs" as="div" color="white">
+                    You can unsuscribe at any time.
+                    <Link to="/about/privacy-policy">
+                      <Text as="div" size="xs" color="white" className="link-text">
+                        Learn about our privacy policies
+                      </Text>
+                    </Link>{' '}
                   </Text>
-                </Link>{' '}
-                for more details on the use of your information
-              </Text>
-            </div>
+                  {renderSubmitButton()}
+                </div>
+              </>
+            ) : (
+              <>
+                {renderFormInput('firstname')}
+                {renderFormInput('lastname')}
+                {renderFormInput('organisation')}
+                {renderFormInput('email')}
+                <div className={cx('conditions', { visible: !message && email })}>
+                  <Text lineHeight="lg">
+                    After subscribing I consent that my email address will be used in order for us
+                    to send you the Trase newsletter. Please see our{' '}
+                    <Link to="/about/privacy-policy">
+                      <Text as="span" className="conditions-link">
+                        privacy policy
+                      </Text>
+                    </Link>{' '}
+                    for more details on the use of your information
+                  </Text>
+                </div>
+              </>
+            )}
           </form>
         )}
       </>
     );
 
-    if (variant === 'simple') {
-      return renderForm(true);
+    if (variant === 'footer') {
+      return renderForm();
     }
 
     return (
