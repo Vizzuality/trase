@@ -24,7 +24,7 @@ import {
   useSetSelectedFeatureState,
   useHighlightHoveredSankeyNodes
 } from './map.hooks';
-import { handleHover, handleClick } from './map-interaction.utils'
+import { handleHover, handleClick } from './map-interaction.utils';
 import 'react-components/tool/map/map.scss';
 
 const selectedGeos = {
@@ -108,8 +108,35 @@ function MapBoxMap(props) {
   // Set Map Attribution
   useSetMapAttribution(loaded, setMapAttribution);
 
+  const [containerDimensions, setContainerDimensions] = useState({ width: 320, height: 500 });
+  useEffect(() => {
+    if (toolLayout !== TOOL_LAYOUT.right) {
+      // We need to wait for the size to change
+      const timeout = setTimeout(() => {
+        const currentContainerDimensions = mapContainerRef.current?.getBoundingClientRect();
+        let { height } = currentContainerDimensions;
+        const { width } = currentContainerDimensions;
+        const LEGEND_SIZE = 200;
+        if (TOOL_LAYOUT.splitted && height > LEGEND_SIZE) {
+          height -= LEGEND_SIZE;
+        }
+        setContainerDimensions({ width, height });
+      }, 1000);
+      return () => clearTimeout(timeout);
+    }
+    return undefined;
+  }, [mapContainerRef, toolLayout]);
+
   // Set Fit To Bounds
-  useFitToBounds(map, selectedGeoNodes);
+  useFitToBounds({
+    map,
+    selectedGeoNodes,
+    sourceLayer,
+    unitLayers,
+    setViewport,
+    viewport,
+    containerDimensions
+  });
 
   // Set Choropleth
   useChoroplethFeatureState(
@@ -138,7 +165,15 @@ function MapBoxMap(props) {
   }, [layerIds, map, hoveredGeo]);
 
   // Highlight nodes hovered on Sankey
-  useHighlightHoveredSankeyNodes({map, loaded, hoveredGeo, highlightedGeoNodes, layerIds, sourceLayer, clearHoveredFeatureState});
+  useHighlightHoveredSankeyNodes({
+    map,
+    loaded,
+    hoveredGeo,
+    highlightedGeoNodes,
+    layerIds,
+    sourceLayer,
+    clearHoveredFeatureState
+  });
 
   // Set and remove selected feature-state
   useSetSelectedFeatureState({
@@ -165,24 +200,16 @@ function MapBoxMap(props) {
       logisticLayers,
       onPolygonHighlighted,
       INDONESIA_MILL_LAYER_ID
-    }
-  );
+    });
   const onClick = event => handleClick({ event, onPolygonClicked, sourceLayer });
 
   // Get Layers
   let layers = [baseLayer].concat(contextualLayers).concat(logisticLayers);
   if (unitLayers) {
     layers = layers.concat(
-      flatMap(unitLayers, u =>
-        getUnitLayerStyle(
-          u,
-          sourceLayer,
-          darkBasemap,
-          getGeoIdName(u.id)
-        )
-      )
+      flatMap(unitLayers, u => getUnitLayerStyle(u, sourceLayer, darkBasemap, getGeoIdName(u.id)))
     );
-  };
+  }
 
   const orderedLayers = layers.map(l => ({ ...l, zIndex: layerOrder[l.id] }));
   const minimized = toolLayout === TOOL_LAYOUT.right;
