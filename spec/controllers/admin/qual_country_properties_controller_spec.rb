@@ -53,6 +53,11 @@ RSpec.describe Admin::QualCountryPropertiesController, type: :controller do
       post :create, params: {api_v3_qual_country_property: new_valid_attributes}
     end
 
+    it 'is successful when valid attributes' do
+      post :create, params: {api_v3_qual_country_property: new_valid_attributes}
+      expect(response).not_to render_template(:new)
+    end
+
     it 'fails if qual is not provided' do
       post :create, params: {api_v3_qual_country_property: no_qual_provided}
       expect(response).to render_template(:new)

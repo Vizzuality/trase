@@ -53,7 +53,7 @@ RSpec.describe Admin::QualCommodityPropertiesController, type: :controller do
       post :create, params: {api_v3_qual_commodity_property: new_valid_attributes}
     end
 
-    def 'is successful when valid attributes' do
+    it 'is successful when valid attributes' do
       post :create, params: {api_v3_qual_commodity_property: new_valid_attributes}
       expect(response).not_to render_template(:new)
     end

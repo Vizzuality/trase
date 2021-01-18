@@ -13,6 +13,9 @@
 #  tooltip_text_by_context_id                                      :jsonb
 #  tooltip_text_by_country_id                                      :jsonb
 #  tooltip_text_by_commodity_id                                    :jsonb
+#  display_name_by_context_id                                      :jsonb
+#  display_name_by_country_id                                      :jsonb
+#  display_name_by_commodity_id                                    :jsonb
 #
 # Indexes
 #

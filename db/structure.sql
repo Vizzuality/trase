@@ -208,7 +208,10 @@ INSERT INTO attributes (
   tooltip_text,
   tooltip_text_by_context_id,
   tooltip_text_by_commodity_id,
-  tooltip_text_by_country_id
+  tooltip_text_by_country_id,
+  display_name_by_context_id,
+  display_name_by_commodity_id,
+  display_name_by_country_id
 )
 SELECT
   original_id,
@@ -220,7 +223,10 @@ SELECT
   tooltip_text,
   tooltip_text_by_context_id,
   tooltip_text_by_commodity_id,
-  tooltip_text_by_country_id
+  tooltip_text_by_country_id,
+  display_name_by_context_id,
+  display_name_by_commodity_id,
+  display_name_by_country_id
 FROM attributes_v
 
 EXCEPT
@@ -235,7 +241,10 @@ SELECT
   tooltip_text,
   tooltip_text_by_context_id,
   tooltip_text_by_commodity_id,
-  tooltip_text_by_country_id
+  tooltip_text_by_country_id,
+  display_name_by_context_id,
+  display_name_by_commodity_id,
+  display_name_by_country_id
 FROM attributes
 ON CONFLICT (name, original_type) DO UPDATE SET
   original_id = excluded.original_id,
@@ -245,7 +254,10 @@ ON CONFLICT (name, original_type) DO UPDATE SET
   tooltip_text = excluded.tooltip_text,
   tooltip_text_by_context_id = excluded.tooltip_text_by_context_id,
   tooltip_text_by_commodity_id = excluded.tooltip_text_by_commodity_id,
-  tooltip_text_by_country_id = excluded.tooltip_text_by_country_id;
+  tooltip_text_by_country_id = excluded.tooltip_text_by_country_id,
+  display_name_by_context_id = excluded.display_name_by_context_id,
+  display_name_by_commodity_id = excluded.display_name_by_commodity_id,
+  display_name_by_country_id = excluded.display_name_by_country_id;
 
 DELETE FROM attributes
 USING (
@@ -259,7 +271,10 @@ USING (
     tooltip_text,
     tooltip_text_by_context_id,
     tooltip_text_by_commodity_id,
-    tooltip_text_by_country_id
+    tooltip_text_by_country_id,
+    display_name_by_context_id,
+    display_name_by_commodity_id,
+    display_name_by_country_id
   FROM attributes
 
   EXCEPT
@@ -274,7 +289,10 @@ USING (
     tooltip_text,
     tooltip_text_by_context_id,
     tooltip_text_by_commodity_id,
-    tooltip_text_by_country_id
+    tooltip_text_by_country_id,
+    display_name_by_context_id,
+    display_name_by_commodity_id,
+    display_name_by_country_id
   FROM attributes_v
 ) s
 WHERE attributes.name = s.name AND attributes.original_type = s.original_type;
@@ -642,6 +660,9 @@ CREATE TABLE public.attributes (
     tooltip_text_by_context_id jsonb,
     tooltip_text_by_country_id jsonb,
     tooltip_text_by_commodity_id jsonb,
+    display_name_by_context_id jsonb,
+    display_name_by_country_id jsonb,
+    display_name_by_commodity_id jsonb,
     CONSTRAINT attributes_original_type_check CHECK ((original_type = ANY (ARRAY['Ind'::text, 'Qual'::text, 'Quant'::text])))
 );
 
@@ -1350,7 +1371,10 @@ CREATE VIEW public.attributes_v AS
     s.tooltip_text,
     s.tooltip_text_by_context_id,
     s.tooltip_text_by_country_id,
-    s.tooltip_text_by_commodity_id
+    s.tooltip_text_by_commodity_id,
+    s.display_name_by_context_id,
+    s.display_name_by_country_id,
+    s.display_name_by_commodity_id
    FROM ( SELECT quants.id AS original_id,
             'Quant'::text AS original_type,
             quants.name,
@@ -1360,19 +1384,25 @@ CREATE VIEW public.attributes_v AS
             qp.tooltip_text,
             context_p.tooltip_text_by_context_id,
             country_p.tooltip_text_by_country_id,
-            commodity_p.tooltip_text_by_commodity_id
+            commodity_p.tooltip_text_by_commodity_id,
+            context_p.display_name_by_context_id,
+            country_p.display_name_by_country_id,
+            commodity_p.display_name_by_commodity_id
            FROM ((((public.quants
              LEFT JOIN public.quant_properties qp ON ((qp.quant_id = quants.id)))
              LEFT JOIN ( SELECT quant_context_properties.quant_id,
-                    jsonb_object_agg(quant_context_properties.context_id, quant_context_properties.tooltip_text) AS tooltip_text_by_context_id
+                    jsonb_object_agg(quant_context_properties.context_id, quant_context_properties.tooltip_text) AS tooltip_text_by_context_id,
+                    jsonb_object_agg(quant_context_properties.context_id, quant_context_properties.display_name) AS display_name_by_context_id
                    FROM public.quant_context_properties
                   GROUP BY quant_context_properties.quant_id) context_p ON ((quants.id = context_p.quant_id)))
              LEFT JOIN ( SELECT quant_country_properties.quant_id,
-                    jsonb_object_agg(quant_country_properties.country_id, quant_country_properties.tooltip_text) AS tooltip_text_by_country_id
+                    jsonb_object_agg(quant_country_properties.country_id, quant_country_properties.tooltip_text) AS tooltip_text_by_country_id,
+                    jsonb_object_agg(quant_country_properties.country_id, quant_country_properties.display_name) AS display_name_by_country_id
                    FROM public.quant_country_properties
                   GROUP BY quant_country_properties.quant_id) country_p ON ((quants.id = country_p.quant_id)))
              LEFT JOIN ( SELECT quant_commodity_properties.quant_id,
-                    jsonb_object_agg(quant_commodity_properties.commodity_id, quant_commodity_properties.tooltip_text) AS tooltip_text_by_commodity_id
+                    jsonb_object_agg(quant_commodity_properties.commodity_id, quant_commodity_properties.tooltip_text) AS tooltip_text_by_commodity_id,
+                    jsonb_object_agg(quant_commodity_properties.commodity_id, quant_commodity_properties.display_name) AS display_name_by_commodity_id
                    FROM public.quant_commodity_properties
                   GROUP BY quant_commodity_properties.quant_id) commodity_p ON ((quants.id = commodity_p.quant_id)))
         UNION ALL
@@ -1385,19 +1415,25 @@ CREATE VIEW public.attributes_v AS
             ip.tooltip_text,
             context_p.tooltip_text_by_context_id,
             country_p.tooltip_text_by_country_id,
-            commodity_p.tooltip_text_by_commodity_id
+            commodity_p.tooltip_text_by_commodity_id,
+            context_p.display_name_by_context_id,
+            country_p.display_name_by_country_id,
+            commodity_p.display_name_by_commodity_id
            FROM ((((public.inds
              LEFT JOIN public.ind_properties ip ON ((ip.ind_id = inds.id)))
              LEFT JOIN ( SELECT ind_context_properties.ind_id,
-                    jsonb_object_agg(ind_context_properties.context_id, ind_context_properties.tooltip_text) AS tooltip_text_by_context_id
+                    jsonb_object_agg(ind_context_properties.context_id, ind_context_properties.tooltip_text) AS tooltip_text_by_context_id,
+                    jsonb_object_agg(ind_context_properties.context_id, ind_context_properties.display_name) AS display_name_by_context_id
                    FROM public.ind_context_properties
                   GROUP BY ind_context_properties.ind_id) context_p ON ((inds.id = context_p.ind_id)))
              LEFT JOIN ( SELECT ind_country_properties.ind_id,
-                    jsonb_object_agg(ind_country_properties.country_id, ind_country_properties.tooltip_text) AS tooltip_text_by_country_id
+                    jsonb_object_agg(ind_country_properties.country_id, ind_country_properties.tooltip_text) AS tooltip_text_by_country_id,
+                    jsonb_object_agg(ind_country_properties.country_id, ind_country_properties.display_name) AS display_name_by_country_id
                    FROM public.ind_country_properties
                   GROUP BY ind_country_properties.ind_id) country_p ON ((inds.id = country_p.ind_id)))
              LEFT JOIN ( SELECT ind_commodity_properties.ind_id,
-                    jsonb_object_agg(ind_commodity_properties.commodity_id, ind_commodity_properties.tooltip_text) AS tooltip_text_by_commodity_id
+                    jsonb_object_agg(ind_commodity_properties.commodity_id, ind_commodity_properties.tooltip_text) AS tooltip_text_by_commodity_id,
+                    jsonb_object_agg(ind_commodity_properties.commodity_id, ind_commodity_properties.display_name) AS display_name_by_commodity_id
                    FROM public.ind_commodity_properties
                   GROUP BY ind_commodity_properties.ind_id) commodity_p ON ((inds.id = commodity_p.ind_id)))
         UNION ALL
@@ -1410,19 +1446,25 @@ CREATE VIEW public.attributes_v AS
             qp.tooltip_text,
             context_p.tooltip_text_by_context_id,
             country_p.tooltip_text_by_country_id,
-            commodity_p.tooltip_text_by_commodity_id
+            commodity_p.tooltip_text_by_commodity_id,
+            context_p.display_name_by_context_id,
+            country_p.display_name_by_country_id,
+            commodity_p.display_name_by_commodity_id
            FROM ((((public.quals
              LEFT JOIN public.qual_properties qp ON ((qp.qual_id = quals.id)))
              LEFT JOIN ( SELECT qual_context_properties.qual_id,
-                    jsonb_object_agg(qual_context_properties.context_id, qual_context_properties.tooltip_text) AS tooltip_text_by_context_id
+                    jsonb_object_agg(qual_context_properties.context_id, qual_context_properties.tooltip_text) AS tooltip_text_by_context_id,
+                    jsonb_object_agg(qual_context_properties.context_id, qual_context_properties.display_name) AS display_name_by_context_id
                    FROM public.qual_context_properties
                   GROUP BY qual_context_properties.qual_id) context_p ON ((quals.id = context_p.qual_id)))
              LEFT JOIN ( SELECT qual_country_properties.qual_id,
-                    jsonb_object_agg(qual_country_properties.country_id, qual_country_properties.tooltip_text) AS tooltip_text_by_country_id
+                    jsonb_object_agg(qual_country_properties.country_id, qual_country_properties.tooltip_text) AS tooltip_text_by_country_id,
+                    jsonb_object_agg(qual_country_properties.country_id, qual_country_properties.display_name) AS display_name_by_country_id
                    FROM public.qual_country_properties
                   GROUP BY qual_country_properties.qual_id) country_p ON ((quals.id = country_p.qual_id)))
              LEFT JOIN ( SELECT qual_commodity_properties.qual_id,
-                    jsonb_object_agg(qual_commodity_properties.commodity_id, qual_commodity_properties.tooltip_text) AS tooltip_text_by_commodity_id
+                    jsonb_object_agg(qual_commodity_properties.commodity_id, qual_commodity_properties.tooltip_text) AS tooltip_text_by_commodity_id,
+                    jsonb_object_agg(qual_commodity_properties.commodity_id, qual_commodity_properties.display_name) AS display_name_by_commodity_id
                    FROM public.qual_commodity_properties
                   GROUP BY qual_commodity_properties.qual_id) commodity_p ON ((quals.id = commodity_p.qual_id)))) s;
 
@@ -12961,6 +13003,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200819083051'),
 ('20200903085354'),
 ('20201007085611'),
-('20210118102600');
+('20210118102600'),
+('20210118140021');
 
 
