@@ -51,7 +51,8 @@ shared_context 'api v3 brazil municipality place profile' do
         :api_v3_quant_context_property,
         context: api_v3_brazil_soy_context,
         quant: api_v3_area,
-        tooltip_text: 'Tooltip context quant translation'
+        display_name: 'Brazil soy area',
+        tooltip_text: 'Brazil soy area tooltip'
       )
     end
     quant_context_property
@@ -114,7 +115,8 @@ shared_context 'api v3 brazil municipality place profile' do
         :api_v3_quant_context_property,
         context: api_v3_brazil_soy_context,
         quant: api_v3_soy_tn,
-        tooltip_text: 'Tooltip context quant translation'
+        display_name: 'Brazil soy commodity production',
+        tooltip_text: 'Brazil soy commodity production tooltip'
       )
     end
     quant_context_property

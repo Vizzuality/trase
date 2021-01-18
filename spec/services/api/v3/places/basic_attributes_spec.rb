@@ -52,7 +52,7 @@ RSpec.describe Api::V3::Places::BasicAttributes do
         expect(attrs[:area]).not_to eql nil
         expect(header_attributes[:area][:value]).to eql(attrs[:area])
         expect(header_attributes[:area][:name]).to eql(
-          area.display_name
+          api_v3_place_basic_attributes_area_property.display_name
         )
         expect(header_attributes[:area][:unit]).to eql(
           area.unit
@@ -70,7 +70,7 @@ RSpec.describe Api::V3::Places::BasicAttributes do
           attrs[:commodity_production]
         )
         expect(header_attributes[:commodity_production][:name]).to eql(
-          commodity_production.display_name
+          api_v3_place_basic_attributes_commodity_production_property.display_name
         )
         expect(header_attributes[:commodity_production][:unit]).to eql(
           commodity_production.unit

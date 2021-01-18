@@ -12,8 +12,8 @@ RSpec.describe Api::V3::CountryProfilesController, type: :controller do
   }
 
   before(:each) do
-    allow(Api::V3::Profiles::GetTooltipPerAttribute).to(
-      receive(:call).and_return('TOOLTIP')
+    allow(Api::V3::AttributeNameAndTooltip).to(
+      receive(:call).and_return(Api::V3::AttributeNameAndTooltip::NameAndTooltip.new('NAME', 'TOOLTIP'))
     )
     Api::V3::Readonly::FlowNode.refresh(sync: true)
     Api::V3::Readonly::NodeWithFlowsPerYear.refresh(sync: true)

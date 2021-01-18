@@ -6,8 +6,8 @@ module Api
         include ActiveSupport::Configurable
         include Api::V3::Profiles::AttributesInitializer
 
-        config_accessor :get_tooltip do
-          Api::V3::Profiles::GetTooltipPerAttribute
+        config_accessor :get_name_and_tooltip do
+          Api::V3::AttributeNameAndTooltip
         end
 
         # @param node [Api::V3::Readonly::NodeWithFlows]
@@ -51,13 +51,15 @@ module Api
           end
           included_columns =
             chart_config.chart_attributes.map do |chart_attribute|
+              name_and_tooltip = get_name_and_tooltip.call(
+                attribute: chart_attribute.readonly_attribute,
+                context: @context,
+                defaults: Api::V3::AttributeNameAndTooltip::NameAndTooltip.new(chart_attribute.display_name, chart_attribute.tooltip_text)
+              )
               {
-                name: chart_attribute.display_name,
+                name: name_and_tooltip.display_name,
                 unit: chart_attribute.unit,
-                tooltip: get_tooltip.call(
-                  ro_chart_attribute: chart_attribute,
-                  context: @context
-                )
+                tooltip: name_and_tooltip.tooltip_text
               }
             end
           rows = [

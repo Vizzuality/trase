@@ -127,7 +127,7 @@ RSpec.describe Api::V3::Actors::BasicAttributes do
           attrs[:zero_deforestation]
         )
         expect(header_attributes[:zero_deforestation][:name]).to eql(
-          zero_deforestation.display_name
+          api_v3_exporter_basic_attributes_zero_deforestation_property.display_name
         )
         expect(header_attributes[:zero_deforestation][:unit]).to eql nil #Qual
         expect(header_attributes[:zero_deforestation][:tooltip]).to eql(
@@ -139,7 +139,7 @@ RSpec.describe Api::V3::Actors::BasicAttributes do
         forest_500 = chart_attributes.find_by(identifier: 'forest_500')
         expect(attrs[:forest_500]).not_to eql nil
         expect(header_attributes[:forest_500][:name]).to eql(
-          forest_500.display_name
+          api_v3_exporter_basic_attributes_forest_500_property.display_name
         )
         expect(header_attributes[:forest_500][:unit]).to eql(forest_500.unit)
         expect(header_attributes[:forest_500][:tooltip]).to eql(

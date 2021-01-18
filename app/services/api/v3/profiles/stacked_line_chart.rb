@@ -5,8 +5,8 @@ module Api
         include ActiveSupport::Configurable
         include Api::V3::Profiles::AttributesInitializer
 
-        config_accessor :get_tooltip do
-          Api::V3::Profiles::GetTooltipPerAttribute
+        config_accessor :get_name_and_tooltip do
+          Api::V3::AttributeNameAndTooltip
         end
 
         # @param context [Api::V3::Context]
@@ -95,13 +95,15 @@ module Api
         def format_values(values, years)
           @chart_config.chart_attributes.map.with_index do |chart_attribute, idx|
             attribute = @chart_config.attributes[idx]
+            name_and_tooltip = get_name_and_tooltip.call(
+              attribute: chart_attribute.readonly_attribute,
+              context: @context,
+              defaults: Api::V3::AttributeNameAndTooltip::NameAndTooltip.new(chart_attribute.display_name, chart_attribute.tooltip_text)
+            )
             {
-              name: chart_attribute.display_name,
+              name: name_and_tooltip.display_name,
               legend_name: chart_attribute.legend_name,
-              legend_tooltip: get_tooltip.call(
-                ro_chart_attribute: chart_attribute,
-                context: @context
-              ),
+              legend_tooltip: name_and_tooltip.tooltip_text,
               unit: attribute.unit,
               type: chart_attribute.display_type,
               style: chart_attribute.display_style,
