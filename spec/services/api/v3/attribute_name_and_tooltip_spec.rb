@@ -1,7 +1,8 @@
 require 'rails_helper'
 
-RSpec.describe Api::V3::Profiles::GetTooltipPerAttribute, :service do
+RSpec.describe Api::V3::AttributeNameAndTooltip, :service do
   include_context 'minimal config for tooltips'
+  Sidekiq::Testing.inline!
 
   describe :call do
     before(:each) do
@@ -13,9 +14,10 @@ RSpec.describe Api::V3::Profiles::GetTooltipPerAttribute, :service do
     }
 
     subject do
-      Api::V3::Profiles::GetTooltipPerAttribute.call(
+      Api::V3::AttributeNameAndTooltip.call(
         context: context,
-        ro_chart_attribute: ro_chart_attribute
+        attribute: ro_chart_attribute.readonly_attribute,
+        defaults: Api::V3::AttributeNameAndTooltip::NameAndTooltip.new(ro_chart_attribute.display_name, ro_chart_attribute.tooltip_text)
       )
     end
 
@@ -37,22 +39,22 @@ RSpec.describe Api::V3::Profiles::GetTooltipPerAttribute, :service do
       it 'returns context specific tooltip if there is one for that context and attribute' do
         ind_context_property
         ind_country_property
-        expect(subject).to eq(context_tooltip_text)
+        expect(subject.tooltip_text).to eq(context_tooltip_text)
       end
 
       it 'returns country specific tooltip if there is no context one' do
         ind_country_property
         ind_commodity_property
-        expect(subject).to eq(country_tooltip_text)
+        expect(subject.tooltip_text).to eq(country_tooltip_text)
       end
 
       it 'returns commodity specific tooltip if there is no context nor country one' do
         ind_commodity_property
-        expect(subject).to eq(commodity_tooltip_text)
+        expect(subject.tooltip_text).to eq(commodity_tooltip_text)
       end
 
       it 'returns the tooltip defined in (ind|quant|qual)_property' do
-        expect(subject).to eq(ro_chart_attribute.tooltip_text)
+        expect(subject.tooltip_text).to eq(ro_chart_attribute.tooltip_text)
       end
     end
 
@@ -74,22 +76,22 @@ RSpec.describe Api::V3::Profiles::GetTooltipPerAttribute, :service do
       it 'returns context specific tooltip if there is one for that context and attribute' do
         quant_context_property
         quant_country_property
-        expect(subject).to eq(context_tooltip_text)
+        expect(subject.tooltip_text).to eq(context_tooltip_text)
       end
 
       it 'returns country specific tooltip if there is no context one' do
         quant_country_property
         quant_commodity_property
-        expect(subject).to eq(country_tooltip_text)
+        expect(subject.tooltip_text).to eq(country_tooltip_text)
       end
 
       it 'returns commodity specific tooltip if there is no context nor country one' do
         quant_commodity_property
-        expect(subject).to eq(commodity_tooltip_text)
+        expect(subject.tooltip_text).to eq(commodity_tooltip_text)
       end
 
       it 'returns the tooltip defined in (ind|quant|qual)_property' do
-        expect(subject).to eq(ro_chart_attribute.tooltip_text)
+        expect(subject.tooltip_text).to eq(ro_chart_attribute.tooltip_text)
       end
     end
 
@@ -111,22 +113,22 @@ RSpec.describe Api::V3::Profiles::GetTooltipPerAttribute, :service do
       it 'returns context specific tooltip if there is one for that context and attribute' do
         qual_context_property
         qual_country_property
-        expect(subject).to eq(context_tooltip_text)
+        expect(subject.tooltip_text).to eq(context_tooltip_text)
       end
 
       it 'returns country specific tooltip if there is no context one' do
         qual_country_property
         qual_commodity_property
-        expect(subject).to eq(country_tooltip_text)
+        expect(subject.tooltip_text).to eq(country_tooltip_text)
       end
 
       it 'returns commodity specific tooltip if there is no context nor country one' do
         qual_commodity_property
-        expect(subject).to eq(commodity_tooltip_text)
+        expect(subject.tooltip_text).to eq(commodity_tooltip_text)
       end
 
       it 'returns the tooltip defined in (ind|quant|qual)_property' do
-        expect(subject).to eq(ro_chart_attribute.tooltip_text)
+        expect(subject.tooltip_text).to eq(ro_chart_attribute.tooltip_text)
       end
     end
   end
