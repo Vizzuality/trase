@@ -3,5 +3,6 @@ FactoryBot.define do
     association :ind, factory: :api_v3_ind
     association :country, factory: :api_v3_country
     tooltip_text { 'Country specific tooltip text for IND' }
+    display_name { 'Country specific display name for IND' }
   end
 end

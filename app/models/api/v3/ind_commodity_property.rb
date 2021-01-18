@@ -2,10 +2,11 @@
 #
 # Table name: ind_commodity_properties
 #
-#  id                                                                                                                                                                                                                          :bigint(8)        not null, primary key
-#  tooltip_text(Commodity-specific tooltips are the third-most specific tooltips that can be defined after context and country-specific tooltips; in absence of a commodity-specific tooltip, a generic tooltip will be used.) :text             not null
-#  commodity_id(Reference to commodity)                                                                                                                                                                                        :bigint(8)        not null
-#  ind_id(Reference to ind)                                                                                                                                                                                                    :bigint(8)        not null
+#  id                                                                                                                                                                                                                            :bigint(8)        not null, primary key
+#  tooltip_text(Commodity-specific tooltips are the third-most specific tooltips that can be defined after context and country-specific tooltips; in absence of a commodity-specific tooltip, a generic tooltip will be used.)   :text             not null
+#  commodity_id(Reference to commodity)                                                                                                                                                                                          :bigint(8)        not null
+#  ind_id(Reference to ind)                                                                                                                                                                                                      :bigint(8)        not null
+#  display_name(Commodity-specific display names are the third-most specific that can be defined after context and country-specific display names; in absence of a commodity-specific display name, a generic one will be used.) :text             not null
 #
 # Indexes
 #
@@ -26,6 +27,7 @@ module Api
       validates :commodity, presence: true
       validates :ind, presence: true, uniqueness: {scope: :commodity}
       validates :tooltip_text, presence: true
+      validates :display_name, presence: true
 
       after_commit :refresh_dependents
 

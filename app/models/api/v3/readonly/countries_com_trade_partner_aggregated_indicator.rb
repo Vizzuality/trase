@@ -7,7 +7,7 @@
 #  commodity_id :integer
 #  year         :integer
 #  iso2         :text
-#  iso3         :text
+#  partner_iso2 :text
 #  activity     :text
 #
 module Api

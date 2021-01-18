@@ -82,7 +82,8 @@ shared_context 'api v3 brazil exporter actor profile' do
         :api_v3_qual_context_property,
         context: api_v3_brazil_soy_context,
         qual: api_v3_zero_deforestation,
-        tooltip_text: 'Tooltip context qual translation'
+        display_name: 'Brazil soy zero deforestation',
+        tooltip_text: 'Brazil soy zero deforestation tooltip'
       )
     end
     qual_context_property
@@ -125,7 +126,8 @@ shared_context 'api v3 brazil exporter actor profile' do
         :api_v3_ind_context_property,
         context: api_v3_brazil_soy_context,
         ind: api_v3_forest_500,
-        tooltip_text: 'Tooltip context ind translation'
+        display_name: 'Brazil soy forest 500',
+        tooltip_text: 'Brazil soy forest 500 tooltip'
       )
     end
     ind_context_property

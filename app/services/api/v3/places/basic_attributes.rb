@@ -5,8 +5,8 @@ module Api
         include ActiveSupport::Configurable
         include Api::V3::Profiles::AttributesInitializer
 
-        config_accessor :get_tooltip do
-          Api::V3::Profiles::GetTooltipPerAttribute
+        config_accessor :get_name_and_tooltip do
+          Api::V3::AttributeNameAndTooltip
         end
 
         # @param context [Api::V3::Context]
@@ -209,14 +209,16 @@ module Api
 
         def header_attributes(attribute_name)
           attribute = @chart_config.named_chart_attribute(attribute_name)
+          name_and_tooltip = get_name_and_tooltip.call(
+            attribute: attribute.readonly_attribute,
+            context: @context,
+            defaults: Api::V3::AttributeNameAndTooltip::NameAndTooltip.new(attribute.display_name, attribute.tooltip_text)
+          )
           {
             value: instance_variable_get("@#{attribute_name}"),
-            name: attribute.display_name,
+            name: name_and_tooltip.display_name,
             unit: attribute.unit,
-            tooltip: get_tooltip.call(
-              ro_chart_attribute: attribute,
-              context: @context
-            )
+            tooltip: name_and_tooltip.tooltip_text
           }
         end
 

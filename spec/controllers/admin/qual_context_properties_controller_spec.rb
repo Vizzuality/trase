@@ -14,64 +14,48 @@ RSpec.describe Admin::QualContextPropertiesController, type: :controller do
     let(:context_2) { FactoryBot.create(:api_v3_context) }
 
     let(:tooltip_text) { 'Tooltip text' }
+    let(:display_name) { 'Display name' }
+
+    let(:old_valid_attributes) {
+      FactoryBot.attributes_for(
+        :api_v3_qual_context_property,
+        qual_id: qual_2.id,
+        context_id: context_2.id,
+        tooltip_text: tooltip_text,
+        display_name: display_name
+      )
+    }
+
+    let(:new_valid_attributes) {
+      FactoryBot.attributes_for(
+        :api_v3_qual_context_property,
+        qual_id: qual.id,
+        context_id: context.id,
+        tooltip_text: tooltip_text,
+        display_name: display_name
+      )
+    }
 
     let!(:qual_context_property) {
-      FactoryBot.create(
-        :api_v3_qual_context_property,
-        qual_id: qual_2.id,
-        context_id: context_2.id,
-        tooltip_text: tooltip_text
-      )
+      FactoryBot.create(:api_v3_qual_context_property, old_valid_attributes)
     }
 
-    let(:duplicate) {
-      FactoryBot.attributes_for(
-        :api_v3_qual_context_property,
-        qual_id: qual_2.id,
-        context_id: context_2.id,
-        tooltip_text: tooltip_text
-      )
-    }
+    let(:duplicate) { old_valid_attributes }
 
-    let(:valid_attributes) {
-      FactoryBot.attributes_for(
-        :api_v3_qual_context_property,
-        qual_id: qual.id,
-        context_id: context.id,
-        tooltip_text: tooltip_text
-      )
-    }
+    let(:no_qual_provided) { new_valid_attributes.except(:qual_id) }
 
-    let(:no_qual_provided) {
-      FactoryBot.attributes_for(
-        :api_v3_qual_context_property,
-        qual_id: nil,
-        context_id: context.id,
-        tooltip_text: tooltip_text
-      )
-    }
+    let(:no_context_provided) { new_valid_attributes.except(:context_id) }
 
-    let(:no_context_provided) {
-      FactoryBot.attributes_for(
-        :api_v3_qual_context_property,
-        qual_id: qual.id,
-        context_id: nil,
-        tooltip_text: tooltip_text
-      )
-    }
-
-    let(:no_tooltip_provided) {
-      FactoryBot.attributes_for(
-        :api_v3_qual_context_property,
-        qual_id: qual.id,
-        context_id: context.id,
-        tooltip_text: nil
-      )
-    }
+    let(:no_tooltip_provided) { new_valid_attributes.except(:tooltip_text) }
 
     it 'clears cache' do
       expect(controller).to receive(:clear_cache_for_regexp)
-      post :create, params: {api_v3_qual_context_property: valid_attributes}
+      post :create, params: {api_v3_qual_context_property: new_valid_attributes}
+    end
+
+    it 'is successful when valid attributes' do
+      post :create, params: {api_v3_qual_context_property: new_valid_attributes}
+      expect(response).not_to render_template(:new)
     end
 
     it 'fails if qual is not provided' do
