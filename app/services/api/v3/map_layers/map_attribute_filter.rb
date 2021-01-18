@@ -4,12 +4,8 @@ module Api
       class MapAttributeFilter
         include ActiveSupport::Configurable
 
-        config_accessor :get_tooltip do
-          Api::V3::Profiles::GetTooltipPerAttribute
-        end
-
-        config_accessor :prepare_map_attribute do
-          Api::V3::MapLayers::MapAttributeNormalizer
+        config_accessor :get_name_and_tooltip do
+          AttributeNameAndTooltip
         end
 
         # @param context [Api::V3::Context]
@@ -53,14 +49,15 @@ attribute_type) AS single_layer_buckets",
         private
 
         def get_map_attribute_with_correct_tooltip(map_attribute)
-          prepared_map_attribute = prepare_map_attribute.call(map_attribute)
           # rubocop:disable Style/EachWithObject
           map_attribute.attributes.inject({}) do |new_hash, (k, v)|
             new_hash[k] = v
-            new_hash['description'] = get_tooltip.call(
-              ro_chart_attribute: prepared_map_attribute,
-              context: @context
+            name_and_tooltip = get_name_and_tooltip.call(
+              attribute: map_attribute.readonly_attribute,
+              context: @context,
+              defaults: Api::V3::AttributeNameAndTooltip::NameAndTooltip.new(map_attribute.name, map_attribute.description)
             )
+            new_hash['description'] = name_and_tooltip.tooltip_text
             new_hash
           end
           # rubocop:enable Style/EachWithObject
