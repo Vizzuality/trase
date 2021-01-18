@@ -40,6 +40,8 @@ tables:
         comment: Reference to ind
       - name: tooltip_text
         comment: Context-specific tooltips are the most specific tooltips that can be defined; in absence of a context-specific tooltip, a country-specific tooltip will be used (if any).
+      - name: display_name
+        comment: Context-specific display names are the most specific that can be defined; in absence of a context-specific display name, a country-specific tooltip will be used (if any).
   - name: dashboards_commodities
     comment: 'Materialized table used for listing commodities in tool search panels'
     columns:
@@ -103,6 +105,8 @@ tables:
         comment: Reference to quant
       - name: tooltip_text
         comment: Context-specific tooltips are the most specific tooltips that can be defined; in absence of a context-specific tooltip, a country-specific tooltip will be used (if any).
+      - name: display_name
+        comment: Context-specific display names are the most specific that can be defined; in absence of a context-specific display name, a country-specific tooltip will be used (if any).
   - name: qual_context_properties
     comment: Context specific properties for qual (like tooltip text)
     columns:
@@ -112,6 +116,8 @@ tables:
         comment: Reference to qual
       - name: tooltip_text
         comment: Context-specific tooltips are the most specific tooltips that can be defined; in absence of a context-specific tooltip, a country-specific tooltip will be used (if any).
+      - name: display_name
+        comment: Context-specific display names are the most specific that can be defined; in absence of a context-specific display name, a country-specific tooltip will be used (if any).
   - name: ind_commodity_properties
     comment: Commodity specific properties for ind
     columns:
@@ -121,6 +127,8 @@ tables:
         comment: Reference to ind
       - name: tooltip_text
         comment: Commodity-specific tooltips are the third-most specific tooltips that can be defined after context and country-specific tooltips; in absence of a commodity-specific tooltip, a generic tooltip will be used.
+      - name: display_name
+        comment: Commodity-specific display names are the third-most specific that can be defined after context and country-specific display names; in absence of a commodity-specific display name, a generic one will be used.
   - name: quant_commodity_properties
     comment: Commodity specific properties for quant
     columns:
@@ -130,6 +138,8 @@ tables:
         comment: Reference to quant
       - name: tooltip_text
         comment: Commodity-specific tooltips are the third-most specific tooltips that can be defined after context and country-specific tooltips; in absence of a commodity-specific tooltip, a generic tooltip will be used.
+      - name: display_name
+        comment: Commodity-specific display names are the third-most specific that can be defined after context and country-specific display names; in absence of a commodity-specific display name, a generic one will be used.
   - name: qual_commodity_properties
     comment: Commodity specific properties for qual
     columns:
@@ -139,6 +149,8 @@ tables:
         comment: Reference to qual
       - name: tooltip_text
         comment: Commodity-specific tooltips are the third-most specific tooltips that can be defined after context and country-specific tooltips; in absence of a commodity-specific tooltip, a generic tooltip will be used.
+      - name: display_name
+        comment: Commodity-specific display names are the third-most specific that can be defined after context and country-specific display names; in absence of a commodity-specific display name, a generic one will be used.
   - name: ind_country_properties
     comment: Country specific properties for ind
     columns:
@@ -148,6 +160,8 @@ tables:
         comment: Reference to ind
       - name: tooltip_text
         comment: Country-specific tooltips are the second-most specific tooltips that can be defined after context-specific tooltips; in absence of a country-specific tooltip, a commodity-specific tooltip will be used (if any).
+      - name: display_name
+        comment: Country-specific display names are the second-most specific that can be defined after context-specific display names; in absence of a country-specific display name, a commodity-specific one will be used (if any).
   - name: quant_country_properties
     comment: Country specific properties for quant
     columns:
@@ -157,6 +171,8 @@ tables:
         comment: Reference to quant
       - name: tooltip_text
         comment: Country-specific tooltips are the second-most specific tooltips that can be defined after context-specific tooltips; in absence of a country-specific tooltip, a commodity-specific tooltip will be used (if any).
+      - name: display_name
+        comment: Country-specific display names are the second-most specific that can be defined after context-specific display names; in absence of a country-specific display name, a commodity-specific one will be used (if any).
   - name: qual_country_properties
     comment: Country specific properties for qual
     columns:
@@ -166,6 +182,8 @@ tables:
         comment: Reference to qual
       - name: tooltip_text
         comment: Country-specific tooltips are the second-most specific tooltips that can be defined after context-specific tooltips; in absence of a country-specific tooltip, a commodity-specific tooltip will be used (if any).
+      - name: display_name
+        comment: Country-specific display names are the second-most specific that can be defined after context-specific display names; in absence of a country-specific display name, a commodity-specific one will be used (if any).
   - name: chart_node_types
     comment: Node types to display in a chart.
     columns:

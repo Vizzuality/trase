@@ -703,7 +703,8 @@ CREATE TABLE public.ind_commodity_properties (
     commodity_id bigint NOT NULL,
     ind_id bigint NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    display_name text NOT NULL
 );
 
 
@@ -736,6 +737,13 @@ COMMENT ON COLUMN public.ind_commodity_properties.ind_id IS 'Reference to ind';
 
 
 --
+-- Name: COLUMN ind_commodity_properties.display_name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_commodity_properties.display_name IS 'Commodity-specific display names are the third-most specific that can be defined after context and country-specific display names; in absence of a commodity-specific display name, a generic one will be used.';
+
+
+--
 -- Name: ind_context_properties; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -745,7 +753,8 @@ CREATE TABLE public.ind_context_properties (
     context_id bigint NOT NULL,
     ind_id bigint NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    display_name text NOT NULL
 );
 
 
@@ -778,6 +787,13 @@ COMMENT ON COLUMN public.ind_context_properties.ind_id IS 'Reference to ind';
 
 
 --
+-- Name: COLUMN ind_context_properties.display_name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_context_properties.display_name IS 'Context-specific display names are the most specific that can be defined; in absence of a context-specific display name, a country-specific tooltip will be used (if any).';
+
+
+--
 -- Name: ind_country_properties; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -787,7 +803,8 @@ CREATE TABLE public.ind_country_properties (
     country_id bigint NOT NULL,
     ind_id bigint NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    display_name text NOT NULL
 );
 
 
@@ -817,6 +834,13 @@ COMMENT ON COLUMN public.ind_country_properties.country_id IS 'Reference to coun
 --
 
 COMMENT ON COLUMN public.ind_country_properties.ind_id IS 'Reference to ind';
+
+
+--
+-- Name: COLUMN ind_country_properties.display_name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_country_properties.display_name IS 'Country-specific display names are the second-most specific that can be defined after context-specific display names; in absence of a country-specific display name, a commodity-specific one will be used (if any).';
 
 
 --
@@ -899,7 +923,8 @@ CREATE TABLE public.qual_commodity_properties (
     commodity_id bigint NOT NULL,
     qual_id bigint NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    display_name text NOT NULL
 );
 
 
@@ -932,6 +957,13 @@ COMMENT ON COLUMN public.qual_commodity_properties.qual_id IS 'Reference to qual
 
 
 --
+-- Name: COLUMN qual_commodity_properties.display_name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.qual_commodity_properties.display_name IS 'Commodity-specific display names are the third-most specific that can be defined after context and country-specific display names; in absence of a commodity-specific display name, a generic one will be used.';
+
+
+--
 -- Name: qual_context_properties; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -941,7 +973,8 @@ CREATE TABLE public.qual_context_properties (
     context_id bigint NOT NULL,
     qual_id bigint NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    display_name text NOT NULL
 );
 
 
@@ -974,6 +1007,13 @@ COMMENT ON COLUMN public.qual_context_properties.qual_id IS 'Reference to qual';
 
 
 --
+-- Name: COLUMN qual_context_properties.display_name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.qual_context_properties.display_name IS 'Context-specific display names are the most specific that can be defined; in absence of a context-specific display name, a country-specific tooltip will be used (if any).';
+
+
+--
 -- Name: qual_country_properties; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -983,7 +1023,8 @@ CREATE TABLE public.qual_country_properties (
     country_id bigint NOT NULL,
     qual_id bigint NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    display_name text NOT NULL
 );
 
 
@@ -1013,6 +1054,13 @@ COMMENT ON COLUMN public.qual_country_properties.country_id IS 'Reference to cou
 --
 
 COMMENT ON COLUMN public.qual_country_properties.qual_id IS 'Reference to qual';
+
+
+--
+-- Name: COLUMN qual_country_properties.display_name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.qual_country_properties.display_name IS 'Country-specific display names are the second-most specific that can be defined after context-specific display names; in absence of a country-specific display name, a commodity-specific one will be used (if any).';
 
 
 --
@@ -1078,7 +1126,8 @@ CREATE TABLE public.quant_commodity_properties (
     commodity_id bigint NOT NULL,
     quant_id bigint NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    display_name text NOT NULL
 );
 
 
@@ -1111,6 +1160,13 @@ COMMENT ON COLUMN public.quant_commodity_properties.quant_id IS 'Reference to qu
 
 
 --
+-- Name: COLUMN quant_commodity_properties.display_name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_commodity_properties.display_name IS 'Commodity-specific display names are the third-most specific that can be defined after context and country-specific display names; in absence of a commodity-specific display name, a generic one will be used.';
+
+
+--
 -- Name: quant_context_properties; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1120,7 +1176,8 @@ CREATE TABLE public.quant_context_properties (
     context_id bigint NOT NULL,
     quant_id bigint NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    display_name text NOT NULL
 );
 
 
@@ -1153,6 +1210,13 @@ COMMENT ON COLUMN public.quant_context_properties.quant_id IS 'Reference to quan
 
 
 --
+-- Name: COLUMN quant_context_properties.display_name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_context_properties.display_name IS 'Context-specific display names are the most specific that can be defined; in absence of a context-specific display name, a country-specific tooltip will be used (if any).';
+
+
+--
 -- Name: quant_country_properties; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1162,7 +1226,8 @@ CREATE TABLE public.quant_country_properties (
     country_id bigint NOT NULL,
     quant_id bigint NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    display_name text NOT NULL
 );
 
 
@@ -1192,6 +1257,13 @@ COMMENT ON COLUMN public.quant_country_properties.country_id IS 'Reference to co
 --
 
 COMMENT ON COLUMN public.quant_country_properties.quant_id IS 'Reference to quant';
+
+
+--
+-- Name: COLUMN quant_country_properties.display_name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_country_properties.display_name IS 'Country-specific display names are the second-most specific that can be defined after context-specific display names; in absence of a country-specific display name, a commodity-specific one will be used (if any).';
 
 
 --
@@ -12888,6 +12960,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200818104523'),
 ('20200819083051'),
 ('20200903085354'),
-('20201007085611');
+('20201007085611'),
+('20210118102600');
 
 

@@ -2,10 +2,11 @@
 #
 # Table name: qual_country_properties
 #
-#  id                                                                                                                                                                                                                               :bigint(8)        not null, primary key
-#  tooltip_text(Country-specific tooltips are the second-most specific tooltips that can be defined after context-specific tooltips; in absence of a country-specific tooltip, a commodity-specific tooltip will be used (if any).) :text             not null
-#  country_id(Reference to country)                                                                                                                                                                                                 :bigint(8)        not null
-#  qual_id(Reference to qual)                                                                                                                                                                                                       :bigint(8)        not null
+#  id                                                                                                                                                                                                                                 :bigint(8)        not null, primary key
+#  tooltip_text(Country-specific tooltips are the second-most specific tooltips that can be defined after context-specific tooltips; in absence of a country-specific tooltip, a commodity-specific tooltip will be used (if any).)   :text             not null
+#  country_id(Reference to country)                                                                                                                                                                                                   :bigint(8)        not null
+#  qual_id(Reference to qual)                                                                                                                                                                                                         :bigint(8)        not null
+#  display_name(Country-specific display names are the second-most specific that can be defined after context-specific display names; in absence of a country-specific display name, a commodity-specific one will be used (if any).) :text             not null
 #
 # Indexes
 #
@@ -26,6 +27,7 @@ module Api
       validates :country, presence: true
       validates :qual, presence: true, uniqueness: {scope: :country}
       validates :tooltip_text, presence: true
+      validates :display_name, presence: true
 
       after_commit :refresh_dependents
 

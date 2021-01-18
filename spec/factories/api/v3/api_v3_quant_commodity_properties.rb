@@ -3,5 +3,6 @@ FactoryBot.define do
     association :quant, factory: :api_v3_quant
     association :commodity, factory: :api_v3_commodity
     tooltip_text { 'Commodity specific tooltip text for QUANT' }
+    display_name { 'Commodity specific display name for QUANT' }
   end
 end
