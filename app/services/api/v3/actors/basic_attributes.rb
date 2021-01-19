@@ -186,7 +186,7 @@ module Api
 <span class=\"notranslate\">#{@year}</span>."
           end
 
-          text = "<span class=\"notranslate\">#{@node.name.humanize}</span> \
+          text = "<span class=\"notranslate\">#{@node.name.upcase}</span> \
 was the \
 <span class=\"notranslate\">#{@trade_total_rank_in_country_formatted}</span>\
 largest #{profile_type} of #{@commodity_name} from \
@@ -219,7 +219,7 @@ largest #{profile_type} of #{@commodity_name} from \
           source_node_name_plural = @source_node_type.name.downcase.pluralize
 
           " As an #{profile_type}, \
-<span class=\"notranslate\">#{@node.name.humanize}</span> sources from \
+<span class=\"notranslate\">#{@node.name.upcase}</span> sources from \
 <span class=\"notranslate\">#{@source_nodes_count_formatted}</span> \
 #{source_node_name_plural}, or \
 <span class=\"notranslate\">#{@source_nodes_perc_formatted}</span> \
@@ -230,7 +230,7 @@ of the #{@commodity_name} production #{source_node_name_plural}."
           if @perc_exports_formatted
             " The main destination of the #{@commodity_name} \
 #{profile_type.first(-1)}d by \
-<span class=\"notranslate\">#{@node.name.humanize}</span> is \
+<span class=\"notranslate\">#{@node.name.upcase}</span> is \
 <span class=\"notranslate\">#{@main_destination_name.humanize}</span>, \
 accounting for \
 <span class=\"notranslate\">#{@perc_exports_formatted}</span> of the total."
