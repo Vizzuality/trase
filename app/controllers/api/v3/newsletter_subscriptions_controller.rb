@@ -10,9 +10,10 @@ module Api
           { email: params[:email] },
           {
             'FNAME' => params[:firstname],
-            'LNAME' => params[:lastname],
+            'LNAME' => (params[:lastname] && params[:lastname] != "") ? params[:lastname] : "-",
             'MMERGE3' => params[:organisation],
-            'MMERGE4' => "-"
+            'MMERGE4' => params[:country] || "-",
+            'MMERGE5' => "-"
           }
         )
         p response

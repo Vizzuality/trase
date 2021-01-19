@@ -75,6 +75,12 @@
     color: $white;
   }
 
+  &.color-green {
+    border-color: transparent;
+    background-color: $green-200;
+    color: $white;
+  }
+
   &.color-white {
     border-color: transparent;
     background-color: $white;

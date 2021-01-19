@@ -8,29 +8,22 @@ import './footer.scss';
 
 const partners = [
   {
-    className: 'gcp-logo',
-    href: 'http://globalcanopy.org/',
-    image: '/images/footer/partnership/gc@2x.png',
-    alt: 'Global Canopy Programme',
-    imageClassName: 'gcp-img'
-  },
-  {
     className: 'sei-logo',
     href: 'https://sei-international.org/',
     image: '/images/footer/partnership/sei@2x.png',
     alt: 'Stockholm Environment Institute',
     imageClassName: null
+  },
+  {
+    className: 'gcp-logo',
+    href: 'http://globalcanopy.org/',
+    image: '/images/footer/partnership/gc@2x.png',
+    alt: 'Global Canopy Programme',
+    imageClassName: 'gcp-img'
   }
 ];
 
 const donors = [
-  {
-    className: 'ggp-logo',
-    href: 'https://goodgrowthpartnership.com/',
-    image: '/images/footer/donors/ggp@2x.png',
-    alt: 'Good growth partnership',
-    imageClassName: null
-  },
   {
     className: 'moore-logo',
     href: 'https://www.moore.org/',
@@ -45,15 +38,21 @@ const donors = [
     image: '/images/footer/donors/nicfi@2x.png',
     alt: "Norway's International Climate and Forest Initiative (NICFI)",
     imageClassName: null
+  },
+  {
+    className: 'ggp-logo',
+    href: 'https://goodgrowthpartnership.com/',
+    image: '/images/footer/donors/ggp@2x.png',
+    alt: 'Good growth partnership',
+    imageClassName: null
   }
 ];
 
 const Footer = () => {
   const renderMainFooter = () => (
     <div className="main-footer">
-      <div className="logo-container">
-        <Img src="/images/logos/new-logo-trase.svg" alt="TRASE" />
-      </div>
+      <div className="partnership-text presentation">Trase is a partnership between:</div>
+
       <ul className="logo-list">
         {partners.map(logo => (
           <li key={logo.className} className={cx('logo-item', logo.className)}>
@@ -64,37 +63,11 @@ const Footer = () => {
         ))}
       </ul>
       <div className="partnership-text">
-        <div>A partnership between Global Canopy and the Stockholm Environment Institute.</div>
-        <div>
-          In collaboration with{' '}
-          <a
-            className="partnership-link"
-            href="http://www.vizzuality.com/"
-            target="_blank"
-            alt="vizzuality"
-            rel="noopener noreferrer"
-          >
-            Vizzuality
-          </a>
-          ,{' '}
-          <a
-            className="partnership-link"
-            href="http://www.efi.int/portal/"
-            target="_blank"
-            alt="vizzuality"
-            rel="noopener noreferrer"
-          >
-            EFI
-          </a>
-          , and many other organizations and individuals. Find out more{' '}
-          <Link
-            className="partnership-link"
-            to={{ type: 'about', payload: { section: 'partners' } }}
-          >
-            here
-          </Link>
-          .
-        </div>
+        <div>In close collaboration with many others. </div>
+        <Link className="partnership-link" to={{ type: 'about', payload: { section: 'partners' } }}>
+          Click for more information about our partners and founders.
+        </Link>
+        .
       </div>
     </div>
   );
@@ -214,7 +187,7 @@ const Footer = () => {
       {renderLinkMenu()}
       <div className="sign-up">
         <div className="sign-up-title">Sign up for our Newsletter</div>
-        <NewsletterForm variant="simple" />
+        <NewsletterForm variant="footer" />
       </div>
     </div>
   );
