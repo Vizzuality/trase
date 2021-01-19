@@ -59,7 +59,10 @@ function useMenuOptions(props, hoveredSelectedNode) {
       link.nodeId = hoveredSelectedNode.id;
     }
 
-    if (link.profileType) {
+    if (
+      link.profileType &&
+      (nodeType !== NODE_TYPES.countryOfProduction || ENABLE_COUNTRY_PROFILES)
+    ) {
       items.splice(2, 0, {
         id: 'profile-link',
         label: `Go To The ${
@@ -283,7 +286,7 @@ function Sankey(props) {
   const onNodeOver = (e, node) => {
     const rect = getRect(toolLayout);
     const nodeHeight = nodeHeights[node.id];
-    const otherNodeCount = otherNodes && otherNodes[node.id] && otherNodes[node.id].count
+    const otherNodeCount = otherNodes && otherNodes[node.id] && otherNodes[node.id].count;
     const tooltipPadding = 10;
     const minTooltipWidth = 180;
     const tooltip = {
@@ -329,11 +332,11 @@ function Sankey(props) {
         });
       }
     }
-
-    if (
-      selectedNodesIds.includes(node.id) ||
-      (ENABLE_COUNTRY_PROFILES && node.type === NODE_TYPES.countryOfProduction)
-    ) {
+    // Country menu can be enabled if we have country profiles or other node is selected and we can clear or expand
+    const enabledCountryMenu =
+      node.type === NODE_TYPES.countryOfProduction &&
+      (selectedNodesIds.length || ENABLE_COUNTRY_PROFILES);
+    if (selectedNodesIds.includes(node.id) || enabledCountryMenu) {
       setHoveredSelectedNode(node);
     }
 
@@ -371,7 +374,10 @@ function Sankey(props) {
         {!loading && (
           <NodeMenu
             menuPos={menuPos}
-            isVisible={selectedNodesIds.length > 0 || hoveredSelectedNode?.type === NODE_TYPES.countryOfProduction}
+            isVisible={
+              selectedNodesIds.length > 0 ||
+              hoveredSelectedNode?.type === NODE_TYPES.countryOfProduction
+            }
             options={menuOptions}
             containerRef={scrollContainerRef}
           />
@@ -387,7 +393,8 @@ function Sankey(props) {
             <Defs.GradientAnimation
               candyMode={
                 window._TRASE_CANDY_SANKEY &&
-                selectedRecolorBy && selectedRecolorBy.name === 'BIOME'
+                selectedRecolorBy &&
+                selectedRecolorBy.name === 'BIOME'
               }
             />
           </defs>
