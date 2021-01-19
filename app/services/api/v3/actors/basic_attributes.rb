@@ -180,7 +180,7 @@ module Api
 
         def summary_of_total_trade_volume(profile_type)
           if @trade_total_current_year_raw.zero?
-            return "<span class=\"notranslate\">#{@node.name.humanize}</span> \
+            return "<span class=\"notranslate\">#{@node.name.upcase}</span> \
             #{profile_type.first(-1)}d 0 tons of #{@commodity_name} from \
             #{@context.country.name} in \
 <span class=\"notranslate\">#{@year}</span>."

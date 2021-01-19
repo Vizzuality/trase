@@ -2,7 +2,6 @@ import React from 'react';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import Button from 'react-components/shared/button';
-import capitalize from 'lodash/capitalize';
 import 'react-components/profile/profile-components/summary/summary.scss';
 
 function SummaryTitle(props) {
@@ -15,10 +14,8 @@ function SummaryTitle(props) {
       })}
     >
       <h2 className="profiles-title" data-test="profiles-title">
-        {capitalize(name)}
-        {activity &&
-          <span className="profiles-activity">{` (${activity})`}</span>
-        }
+        {name}
+        {activity && <span className="profiles-activity">{` (${activity})`}</span>}
       </h2>
       <Button
         size="xs"
