@@ -23,8 +23,7 @@ function RankingWidget(props) {
   // Companies needs their title to be uppercase
   const companyWidgets = ['EXPORTER', 'IMPORTER', 'EXPORTER GROUP', 'IMPORTER GROUP'];
   const titleUpper = companyWidgets.indexOf(nodeType.toUpperCase()) > -1;
-  console.log('Node type', nodeType);
-  console.log('Title upper', titleUpper);
+
   useEffect(() => {
     setWidth(ref.current ? ref.current.offsetWidth : 0);
   }, [ref]);
