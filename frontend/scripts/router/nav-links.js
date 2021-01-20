@@ -63,7 +63,7 @@ let nav = [
     name: 'Download',
     page: 'data'
   },
-  {
+  !ENABLE_TOP_NAV_REDESIGN && {
     name: 'About',
     page: 'about'
   }

@@ -10,7 +10,8 @@
   background-color: $white;
   z-index: $z-search;
 
-  > .icon-search {
+  > .icon-search,
+    .icon-search-condensed {
     position: absolute;
     color: $charcoal-grey;
     top: 0;

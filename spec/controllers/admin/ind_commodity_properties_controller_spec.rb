@@ -14,64 +14,48 @@ RSpec.describe Admin::IndCommodityPropertiesController, type: :controller do
     let(:commodity_2) { FactoryBot.create(:api_v3_commodity) }
 
     let(:tooltip_text) { 'Tooltip text' }
+    let(:display_name) { 'Display name' }
+
+    let(:old_valid_attributes) {
+      FactoryBot.attributes_for(
+        :api_v3_ind_commodity_property,
+        ind_id: ind_2.id,
+        commodity_id: commodity_2.id,
+        tooltip_text: tooltip_text,
+        display_name: display_name
+      )
+    }
+
+    let(:new_valid_attributes) {
+      FactoryBot.attributes_for(
+        :api_v3_ind_commodity_property,
+        ind_id: ind.id,
+        commodity_id: commodity.id,
+        tooltip_text: tooltip_text,
+        display_name: display_name
+      )
+    }
 
     let!(:ind_commodity_property) {
-      FactoryBot.create(
-        :api_v3_ind_commodity_property,
-        ind_id: ind_2.id,
-        commodity_id: commodity_2.id,
-        tooltip_text: tooltip_text
-      )
+      FactoryBot.create(:api_v3_ind_commodity_property, old_valid_attributes)
     }
 
-    let(:duplicate) {
-      FactoryBot.attributes_for(
-        :api_v3_ind_commodity_property,
-        ind_id: ind_2.id,
-        commodity_id: commodity_2.id,
-        tooltip_text: tooltip_text
-      )
-    }
+    let(:duplicate) { old_valid_attributes }
 
-    let(:valid_attributes) {
-      FactoryBot.attributes_for(
-        :api_v3_ind_commodity_property,
-        ind_id: ind.id,
-        commodity_id: commodity.id,
-        tooltip_text: tooltip_text
-      )
-    }
+    let(:no_ind_provided) { new_valid_attributes.except(:ind_id) }
 
-    let(:no_ind_provided) {
-      FactoryBot.attributes_for(
-        :api_v3_ind_commodity_property,
-        ind_id: nil,
-        commodity_id: commodity.id,
-        tooltip_text: tooltip_text
-      )
-    }
+    let(:no_commodity_provided) { new_valid_attributes.except(:commodity_id) }
 
-    let(:no_commodity_provided) {
-      FactoryBot.attributes_for(
-        :api_v3_ind_commodity_property,
-        ind_id: ind.id,
-        commodity_id: nil,
-        tooltip_text: tooltip_text
-      )
-    }
-
-    let(:no_tooltip_provided) {
-      FactoryBot.attributes_for(
-        :api_v3_ind_commodity_property,
-        ind_id: ind.id,
-        commodity_id: commodity.id,
-        tooltip_text: nil
-      )
-    }
+    let(:no_tooltip_provided) { new_valid_attributes.except(:tooltip_text) }
 
     it 'clears cache' do
       expect(controller).to receive(:clear_cache_for_regexp)
-      post :create, params: {api_v3_ind_commodity_property: valid_attributes}
+      post :create, params: {api_v3_ind_commodity_property: new_valid_attributes}
+    end
+
+    it 'is successful when valid attributes' do
+      post :create, params: {api_v3_ind_commodity_property: new_valid_attributes}
+      expect(response).not_to render_template(:new)
     end
 
     it 'fails if ind is not provided' do

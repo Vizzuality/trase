@@ -36,9 +36,11 @@ class Scatterplot extends Component {
     this.build();
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     const shouldRebuild =
-      prevProps.year !== this.props.year || prevProps.width !== this.props.width;
+      prevProps.year !== this.props.year ||
+      prevProps.width !== this.props.width ||
+      prevState.selectedTabIndex !== this.state.selectedTabIndex;
 
     if (shouldRebuild) {
       this.build();
@@ -46,13 +48,25 @@ class Scatterplot extends Component {
   }
 
   build() {
-    const { data, showTooltipCallback, hideTooltipCallback, testId } = this.props;
+    const {
+      data,
+      showTooltipCallback,
+      hideTooltipCallback,
+      testId,
+      xDimension,
+      yDimension
+    } = this.props;
+    const { selectedTabIndex } = this.state;
+    const xDimensionUnit =
+      xDimension && xDimension[selectedTabIndex] && xDimension[selectedTabIndex].unit;
+    const yDimensionUnit = yDimension && yDimension.unit;
+
     const parentWidth = this.props.width;
 
     const width = parentWidth - this.margins.left - this.margins.right;
     const height = 377 - this.margins.top - this.margins.bottom;
     const allYValues = data.map(item => item.y);
-    const allXValues = data.map(item => item.x[this.state.selectedTabIndex]);
+    const allXValues = data.map(item => item.x[selectedTabIndex]);
 
     this.x = d3_scale_linear()
       .range([0, width])
@@ -88,11 +102,23 @@ class Scatterplot extends Component {
       .append('g')
       .attr('transform', `translate(${this.margins.left},${this.margins.top})`);
 
-    this.svg
+    // X-AXIS
+
+    this.xAxisGroup = this.svg
       .append('g')
       .attr('class', 'axis axis--x')
-      .attr('transform', `translate(0,${height})`)
-      .call(this.xAxis);
+      .attr('transform', `translate(0,${height})`);
+
+    this.xAxisGroup.call(this.xAxis);
+    if (xDimensionUnit) {
+      this.xAxisGroup
+        .append('g')
+        .attr('class', 'axis--label')
+        .attr('transform', `translate(${width},30)`)
+        .append('text')
+        .attr('class', 'axis--label-text')
+        .html(xDimensionUnit);
+    }
 
     this.svg
       .append('g')
@@ -104,10 +130,21 @@ class Scatterplot extends Component {
           .tickSizeOuter(0)
       );
 
-    this.svg
-      .append('g')
-      .attr('class', 'axis axis--y')
-      .call(this.yAxis);
+    // Y-AXIS
+
+    this.yAxisGroup = this.svg.append('g').attr('class', 'axis axis--y');
+
+    this.yAxisGroup.call(this.yAxis);
+
+    if (yDimensionUnit) {
+      this.yAxisGroup
+        .append('g')
+        .attr('class', 'axis--label')
+        .attr('transform', `translate(-26,-10)`)
+        .append('text')
+        .attr('class', 'axis--label-text')
+        .html(yDimensionUnit);
+    }
 
     this.svg
       .append('g')
@@ -117,6 +154,8 @@ class Scatterplot extends Component {
           .ticks(0)
           .tickSizeOuter(0)
       );
+
+    // CIRCLES
 
     this.circles = this.svg
       .selectAll('circle')

@@ -5,8 +5,8 @@ module Api
         include ActiveSupport::Configurable
         include Api::V3::Profiles::AttributesInitializer
 
-        config_accessor :get_tooltip do
-          Api::V3::Profiles::GetTooltipPerAttribute
+        config_accessor :get_name_and_tooltip do
+          Api::V3::AttributeNameAndTooltip
         end
 
         # @param context [Api::V3::Context]
@@ -74,13 +74,15 @@ module Api
             included_columns:
                 [{name: node_type_name.humanize}] +
                   @chart_config.chart_attributes.map do |ro_chart_attribute|
+                    name_and_tooltip = get_name_and_tooltip.call(
+                      attribute: ro_chart_attribute.readonly_attribute,
+                      context: @context,
+                      defaults: Api::V3::AttributeNameAndTooltip::NameAndTooltip.new(ro_chart_attribute.display_name, ro_chart_attribute.tooltip_text)
+                    )
                     {
-                      name: ro_chart_attribute.display_name,
+                      name: name_and_tooltip.display_name,
                       unit: ro_chart_attribute.unit,
-                      tooltip: get_tooltip.call(
-                        ro_chart_attribute: ro_chart_attribute,
-                        context: @context
-                      )
+                      tooltip: name_and_tooltip.tooltip_text
                     }
                   end,
             rows: rows

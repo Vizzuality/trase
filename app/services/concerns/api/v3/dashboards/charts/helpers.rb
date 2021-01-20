@@ -6,9 +6,14 @@ module Api
           private
 
           def axis_meta(attribute, type)
+            name_and_tooltip = Api::V3::AttributeNameAndTooltip.call(
+              attribute: attribute,
+              context: @context,
+              defaults: Api::V3::AttributeNameAndTooltip::NameAndTooltip.new(attribute.display_name, attribute.tooltip_text)
+            )
             {
               type: type,
-              label: attribute.display_name,
+              label: name_and_tooltip.display_name,
               prefix: '',
               format: '',
               suffix: attribute.unit

@@ -2,10 +2,11 @@
 #
 # Table name: ind_context_properties
 #
-#  id                                                                                                                                                                                      :bigint(8)        not null, primary key
-#  tooltip_text(Context-specific tooltips are the most specific tooltips that can be defined; in absence of a context-specific tooltip, a country-specific tooltip will be used (if any).) :text             not null
-#  context_id(Reference to context)                                                                                                                                                        :bigint(8)        not null
-#  ind_id(Reference to ind)                                                                                                                                                                :bigint(8)        not null
+#  id                                                                                                                                                                                       :bigint(8)        not null, primary key
+#  tooltip_text(Context-specific tooltips are the most specific tooltips that can be defined; in absence of a context-specific tooltip, a country-specific tooltip will be used (if any).)  :text             not null
+#  context_id(Reference to context)                                                                                                                                                         :bigint(8)        not null
+#  ind_id(Reference to ind)                                                                                                                                                                 :bigint(8)        not null
+#  display_name(Context-specific display names are the most specific that can be defined; in absence of a context-specific display name, a country-specific tooltip will be used (if any).) :text             not null
 #
 # Indexes
 #
@@ -26,6 +27,7 @@ module Api
       validates :context, presence: true
       validates :ind, presence: true, uniqueness: {scope: :context}
       validates :tooltip_text, presence: true
+      validates :display_name, presence: true
 
       after_commit :refresh_dependents
 

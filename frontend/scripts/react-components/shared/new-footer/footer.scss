@@ -1,0 +1,203 @@
+@import 'styles/settings';
+
+.c-new-footer {
+  position: relative;
+  z-index: $z-above;
+  padding: 48px 0 56px;
+  bottom: 0;
+  background-color: $gray-300;
+  font-family: $font-family-3;
+
+  .section-separator {
+    border-top: 1px solid $gray-200;
+    margin: 60px 0;
+  }
+
+  .footer-low {
+    display: flex;
+    width: 100%;
+    align-items: start;
+    margin: 0 30px;
+    flex-direction: column;
+
+
+    @media screen and (min-width: $breakpoint-foundation-medium) {
+      margin: 0;
+      flex-direction: row;
+      align-items: flex-end;
+    }
+  }
+
+  .main-footer {
+    flex: 1.3;
+
+    margin: 0 30px 30px;
+
+    @media screen and (min-width: $breakpoint-foundation-medium) {
+      margin: 0;
+    }
+  }
+
+  .footer-menu {
+    flex: 2;
+    display: flex;
+  }
+
+  .footer-menu-item {
+    margin-left: 30px;
+    margin-bottom: 15px;
+  }
+
+  .sign-up {
+    flex: 1;
+    margin: 0 30px;
+
+    @media screen and (min-width: $breakpoint-foundation-medium) {
+      margin: 0;
+    }
+  }
+
+  .sign-up-title {
+    font-size: $font-size-medium;
+    font-weight: $font-weight-bold;
+    color: $green-200;
+    margin-bottom: 15px;
+  }
+
+  .logo-list {
+    display: flex;
+  }
+
+  .logo-item {
+    margin: 0 0 30px 30px;
+
+    @media screen and (min-width: $breakpoint-foundation-medium) {
+      margin: 0;
+
+      &:not(:first-child) {
+        margin-left: 24px;
+      }
+    }
+  }
+
+  .partnership-text {
+    color: $green-200;
+    font-size: $font-size-regular;
+    line-height: $line-height-md;
+
+    &.presentation {
+      margin-bottom: 30px;
+    }
+
+    > * {
+      display: inline;
+    }
+
+    .partnership-link {
+      color: $green-200;
+      text-decoration: underline;
+    }
+  }
+
+  .contain-logos-footer {
+    display: flex;
+    width: 100%;
+  }
+
+  .logo-list-container {
+    @media screen and (min-width: 880px) {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    @media screen and (min-width: $breakpoint-foundation-medium) {
+      display: block;
+    }
+  }
+
+  .link-list-container {
+    flex: 1;
+    color: $green-200;
+    margin-bottom: 20px;
+
+    @media screen and (min-width: $breakpoint-foundation-medium) {
+      margin: 0;
+
+      > :first-child {
+        margin-bottom: 20px;
+      }
+    }
+  }
+
+  .donors-logos-container {
+    flex: 1;
+  }
+
+  .donors-logos {
+    display: flex;
+    margin-bottom: 10px;
+    flex-direction: column;
+    align-items: start;
+
+    @media screen and (min-width: $breakpoint-foundation-medium) {
+      flex-direction: row;
+      margin: 0;
+      align-items: flex-end;
+
+      :not(:last-child) {
+        margin-right: 75px;
+      }
+    }
+  }
+
+
+  .social-links-list {
+    display: flex;
+    color: $green-200;
+
+    :first-child {
+      margin-right: 5px;
+    }
+  }
+
+  .separator {
+    display: inline-flex;
+    align-items: center;
+    margin: 0 8px;
+  }
+
+  .links-list {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .privacy-menu-link {
+    color: $green-200;
+    font-size: $font-size-regular;
+  }
+
+  .menu-title {
+    color: $white;
+    font-weight: $font-weight-bold;
+    font-size: $font-size-medium;
+    line-height: $line-height-md;
+    margin-bottom: 15px;
+  }
+
+  .menu-link {
+    display: block;
+    color: $white;
+    font-size: $font-size-regular;
+    line-height: $line-height-md;
+    margin-bottom: 5px;
+  }
+
+  .logo-list {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+}
+

@@ -17,6 +17,13 @@ function RankingWidget(props) {
   const [page, setPage] = useState(0);
   const { data, meta, config, pageSize, variant } = props;
 
+  const {
+    info: { node_type: nodeType }
+  } = meta;
+  // Companies needs their title to be uppercase
+  const companyWidgets = ['EXPORTER', 'IMPORTER', 'EXPORTER GROUP', 'IMPORTER GROUP'];
+  const titleUpper = companyWidgets.indexOf(nodeType.toUpperCase()) > -1;
+
   useEffect(() => {
     setWidth(ref.current ? ref.current.offsetWidth : 0);
   }, [ref]);
@@ -32,7 +39,13 @@ function RankingWidget(props) {
     }[variant];
     const WIDTH_LIMIT = 498;
     const name = (
-      <Heading as="span" size={width > WIDTH_LIMIT ? 'md' : 'rg'} weight="bold" color={color}>
+      <Heading
+        transform={titleUpper ? 'uppercase' : null}
+        as="span"
+        size={width > WIDTH_LIMIT ? 'md' : 'rg'}
+        weight="bold"
+        color={color}
+      >
         <Ellipsis fontSize={width > WIDTH_LIMIT ? 'medium' : 'xxx-regular'} lineLimit={2}>
           {capitalize(item.y)}
         </Ellipsis>
@@ -96,7 +109,10 @@ function RankingWidget(props) {
                 </div>
                 <Text className="item-value" color={textColor} variant="mono" size="md">
                   {formatValue(item.x0)} {config.xAxisLabel && config.xAxisLabel.suffix} /{' '}
-                  {formatDynamicSentenceValue(totalValue.x0, config.xAxisLabel && config.xAxisLabel.suffix)}
+                  {formatDynamicSentenceValue(
+                    totalValue.x0,
+                    config.xAxisLabel && config.xAxisLabel.suffix
+                  )}
                 </Text>
               </div>
             </li>

@@ -2,6 +2,7 @@ import { CHOROPLETH_COLORS } from 'constants';
 import { useEffect } from 'react';
 import bbox from '@turf/bbox';
 import isEmpty from 'lodash/isEmpty';
+import geoViewport from '@mapbox/geo-viewport';
 
 export function useChoroplethFeatureState(
   choropleth,
@@ -75,22 +76,37 @@ export function useChoroplethFeatureState(
   }, [choropleth, map, unitLayers, sourceLayer, linkedGeoIds, baseLayerInfo, darkBasemap]);
 }
 
-export function useFitToBounds(map, selectedGeoNodes) {
+export function useFitToBounds({
+  map,
+  selectedGeoNodes,
+  sourceLayer,
+  unitLayers,
+  setViewport,
+  viewport,
+  containerDimensions
+}) {
   useEffect(() => {
     const fitToBounds = () => {
       const selectedGeoNodesIds = selectedGeoNodes.map(n => n.geoId);
-      const features = map.queryRenderedFeatures().filter(f => selectedGeoNodesIds.includes(f.id));
+      const selectedUnitLayer = unitLayers.find(u => u.id.startsWith(sourceLayer.toLowerCase()));
+      if (!selectedUnitLayer) return;
+      const features = map
+        .querySourceFeatures(selectedUnitLayer.id, { sourceLayer })
+        .filter(f => selectedGeoNodesIds.includes(f.id));
       if (features?.length) {
         const bounds = bbox({ type: 'FeatureCollection', features });
-        // Padding bottom is more because of the legend
-        map.fitBounds(bounds, { padding: { top: 10, bottom: 130, left: 10, right: 10 } });
+        const { width, height } = containerDimensions;
+        const updatedViewport = geoViewport.viewport(bounds, [width, height]);
+
+        const [longitude, latitude] = updatedViewport.center;
+        setViewport({ ...viewport, latitude, longitude, zoom: updatedViewport.zoom - 1 });
       }
     };
-
     if (map && selectedGeoNodes) {
       fitToBounds();
     }
-  }, [map, selectedGeoNodes]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [map, selectedGeoNodes, sourceLayer, unitLayers, containerDimensions, setViewport]);
 }
 
 // Set map attribution
@@ -106,7 +122,15 @@ export function useSetMapAttribution(loaded, setMapAttribution) {
 }
 
 // Highlight nodes hovered on Sankey
-export function useHighlightHoveredSankeyNodes({map, loaded, hoveredGeo, highlightedGeoNodes, layerIds, sourceLayer, clearHoveredFeatureState}) {
+export function useHighlightHoveredSankeyNodes({
+  map,
+  loaded,
+  hoveredGeo,
+  highlightedGeoNodes,
+  layerIds,
+  sourceLayer,
+  clearHoveredFeatureState
+}) {
   useEffect(() => {
     if (map && loaded && highlightedGeoNodes) {
       clearHoveredFeatureState('hover');
@@ -124,7 +148,14 @@ export function useHighlightHoveredSankeyNodes({map, loaded, hoveredGeo, highlig
 }
 
 // Set selected feature state
-export function useSetSelectedFeatureState({ selectedGeoNodes, map, loaded, sourceLayer, layerIds, selectedGeos }) {
+export function useSetSelectedFeatureState({
+  selectedGeoNodes,
+  map,
+  loaded,
+  sourceLayer,
+  layerIds,
+  selectedGeos
+}) {
   useEffect(() => {
     const unselectNodes = () => {
       selectedGeos.last.forEach(lastSelectedGeo => {

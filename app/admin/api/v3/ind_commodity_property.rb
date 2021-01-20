@@ -1,7 +1,7 @@
 ActiveAdmin.register Api::V3::IndCommodityProperty, as: 'IndCommodityProperty' do
   menu parent: 'Tooltips', priority: 3
 
-  permit_params :ind_id, :commodity_id, :tooltip_text
+  permit_params :ind_id, :commodity_id, :tooltip_text, :display_name
 
   after_action :clear_cache, only: [:create, :update, :destroy]
 
@@ -18,6 +18,8 @@ ActiveAdmin.register Api::V3::IndCommodityProperty, as: 'IndCommodityProperty' d
                   collection: Api::V3::Ind.select_options
       input :commodity, as: :select, required: true,
                         collection: Api::V3::Commodity.select_options
+      input :display_name, as: :string, required: true,
+                           hint: object.class.column_comment('display_name')
       input :tooltip_text, as: :string, required: true,
                            hint: object.class.column_comment('tooltip_text')
     end
@@ -35,12 +37,14 @@ ActiveAdmin.register Api::V3::IndCommodityProperty, as: 'IndCommodityProperty' d
     br br
     column('Ind name') { |property| property.ind&.name }
     column('Commodity') { |property| property.commodity&.name }
+    column :display_name
     column :tooltip_text
     actions
   end
 
   show do
     attributes_table do
+      row :display_name
       row :tooltip_text
       row('Commodity') { |property| property.commodity&.name }
       row('Ind') { |property| property.ind&.name }

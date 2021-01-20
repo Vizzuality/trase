@@ -48,7 +48,6 @@
   }
 
   .axis {
-
     line {
       fill: none;
       stroke: $charcoal-grey;
@@ -61,6 +60,10 @@
       line-height: 0.92;
       letter-spacing: -1px;
       fill: rgba($charcoal-grey, .6);
+    }
+
+    .axis--label-text {
+      fill: black;
     }
 
     path {

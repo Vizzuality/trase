@@ -1,7 +1,7 @@
 ActiveAdmin.register Api::V3::QualCommodityProperty, as: 'QualCommodityProperty' do
   menu parent: 'Tooltips', priority: 7
 
-  permit_params :qual_id, :commodity_id, :tooltip_text
+  permit_params :qual_id, :commodity_id, :tooltip_text, :display_name
 
   after_action :clear_cache, only: [:create, :update, :destroy]
 
@@ -18,6 +18,8 @@ ActiveAdmin.register Api::V3::QualCommodityProperty, as: 'QualCommodityProperty'
                    collection: Api::V3::Qual.select_options
       input :commodity, as: :select, required: true,
                         collection: Api::V3::Commodity.select_options
+      input :display_name, as: :string, required: true,
+                           hint: object.class.column_comment('display_name')
       input :tooltip_text, as: :string, required: true,
                            hint: object.class.column_comment('tooltip_text')
     end
@@ -35,12 +37,14 @@ ActiveAdmin.register Api::V3::QualCommodityProperty, as: 'QualCommodityProperty'
     br br
     column('Qual name') { |property| property.qual&.name }
     column('Commodity') { |property| property.commodity&.name }
+    column :display_name
     column :tooltip_text
     actions
   end
 
   show do
     attributes_table do
+      row :display_name
       row :tooltip_text
       row('Commodity') { |property| property.commodity&.name }
       row('Qual') { |property| property.qual&.name }

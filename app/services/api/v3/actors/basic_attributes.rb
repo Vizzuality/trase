@@ -5,8 +5,8 @@ module Api
         include ActiveSupport::Configurable
         include Api::V3::Profiles::AttributesInitializer
 
-        config_accessor :get_tooltip do
-          Api::V3::Profiles::GetTooltipPerAttribute
+        config_accessor :get_name_and_tooltip do
+          Api::V3::AttributeNameAndTooltip
         end
 
         # @param context [Api::V3::Context]
@@ -90,14 +90,16 @@ module Api
         end
 
         def header_attributes(attribute, chart_attribute)
+          name_and_tooltip = get_name_and_tooltip.call(
+            attribute: chart_attribute.readonly_attribute,
+            context: @context,
+            defaults: Api::V3::AttributeNameAndTooltip::NameAndTooltip.new(chart_attribute.display_name, chart_attribute.tooltip_text)
+          )
           {
             value: @values.get(attribute.simple_type, attribute.id),
-            name: chart_attribute.display_name,
+            name: name_and_tooltip.display_name,
             unit: chart_attribute.unit,
-            tooltip: get_tooltip.call(
-              ro_chart_attribute: chart_attribute,
-              context: @context
-            )
+            tooltip: name_and_tooltip.tooltip_text
           }
         end
 
@@ -178,13 +180,13 @@ module Api
 
         def summary_of_total_trade_volume(profile_type)
           if @trade_total_current_year_raw.zero?
-            return "<span class=\"notranslate\">#{@node.name.humanize}</span> \
+            return "<span class=\"notranslate\">#{@node.name.upcase}</span> \
             #{profile_type.first(-1)}d 0 tons of #{@commodity_name} from \
             #{@context.country.name} in \
 <span class=\"notranslate\">#{@year}</span>."
           end
 
-          text = "<span class=\"notranslate\">#{@node.name.humanize}</span> \
+          text = "<span class=\"notranslate\">#{@node.name.upcase}</span> \
 was the \
 <span class=\"notranslate\">#{@trade_total_rank_in_country_formatted}</span>\
 largest #{profile_type} of #{@commodity_name} from \
@@ -217,7 +219,7 @@ largest #{profile_type} of #{@commodity_name} from \
           source_node_name_plural = @source_node_type.name.downcase.pluralize
 
           " As an #{profile_type}, \
-<span class=\"notranslate\">#{@node.name.humanize}</span> sources from \
+<span class=\"notranslate\">#{@node.name.upcase}</span> sources from \
 <span class=\"notranslate\">#{@source_nodes_count_formatted}</span> \
 #{source_node_name_plural}, or \
 <span class=\"notranslate\">#{@source_nodes_perc_formatted}</span> \
@@ -228,7 +230,7 @@ of the #{@commodity_name} production #{source_node_name_plural}."
           if @perc_exports_formatted
             " The main destination of the #{@commodity_name} \
 #{profile_type.first(-1)}d by \
-<span class=\"notranslate\">#{@node.name.humanize}</span> is \
+<span class=\"notranslate\">#{@node.name.upcase}</span> is \
 <span class=\"notranslate\">#{@main_destination_name.humanize}</span>, \
 accounting for \
 <span class=\"notranslate\">#{@perc_exports_formatted}</span> of the total."

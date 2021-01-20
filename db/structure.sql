@@ -208,7 +208,10 @@ INSERT INTO attributes (
   tooltip_text,
   tooltip_text_by_context_id,
   tooltip_text_by_commodity_id,
-  tooltip_text_by_country_id
+  tooltip_text_by_country_id,
+  display_name_by_context_id,
+  display_name_by_commodity_id,
+  display_name_by_country_id
 )
 SELECT
   original_id,
@@ -220,7 +223,10 @@ SELECT
   tooltip_text,
   tooltip_text_by_context_id,
   tooltip_text_by_commodity_id,
-  tooltip_text_by_country_id
+  tooltip_text_by_country_id,
+  display_name_by_context_id,
+  display_name_by_commodity_id,
+  display_name_by_country_id
 FROM attributes_v
 
 EXCEPT
@@ -235,7 +241,10 @@ SELECT
   tooltip_text,
   tooltip_text_by_context_id,
   tooltip_text_by_commodity_id,
-  tooltip_text_by_country_id
+  tooltip_text_by_country_id,
+  display_name_by_context_id,
+  display_name_by_commodity_id,
+  display_name_by_country_id
 FROM attributes
 ON CONFLICT (name, original_type) DO UPDATE SET
   original_id = excluded.original_id,
@@ -245,7 +254,10 @@ ON CONFLICT (name, original_type) DO UPDATE SET
   tooltip_text = excluded.tooltip_text,
   tooltip_text_by_context_id = excluded.tooltip_text_by_context_id,
   tooltip_text_by_commodity_id = excluded.tooltip_text_by_commodity_id,
-  tooltip_text_by_country_id = excluded.tooltip_text_by_country_id;
+  tooltip_text_by_country_id = excluded.tooltip_text_by_country_id,
+  display_name_by_context_id = excluded.display_name_by_context_id,
+  display_name_by_commodity_id = excluded.display_name_by_commodity_id,
+  display_name_by_country_id = excluded.display_name_by_country_id;
 
 DELETE FROM attributes
 USING (
@@ -259,7 +271,10 @@ USING (
     tooltip_text,
     tooltip_text_by_context_id,
     tooltip_text_by_commodity_id,
-    tooltip_text_by_country_id
+    tooltip_text_by_country_id,
+    display_name_by_context_id,
+    display_name_by_commodity_id,
+    display_name_by_country_id
   FROM attributes
 
   EXCEPT
@@ -274,7 +289,10 @@ USING (
     tooltip_text,
     tooltip_text_by_context_id,
     tooltip_text_by_commodity_id,
-    tooltip_text_by_country_id
+    tooltip_text_by_country_id,
+    display_name_by_context_id,
+    display_name_by_commodity_id,
+    display_name_by_country_id
   FROM attributes_v
 ) s
 WHERE attributes.name = s.name AND attributes.original_type = s.original_type;
@@ -642,6 +660,9 @@ CREATE TABLE public.attributes (
     tooltip_text_by_context_id jsonb,
     tooltip_text_by_country_id jsonb,
     tooltip_text_by_commodity_id jsonb,
+    display_name_by_context_id jsonb,
+    display_name_by_country_id jsonb,
+    display_name_by_commodity_id jsonb,
     CONSTRAINT attributes_original_type_check CHECK ((original_type = ANY (ARRAY['Ind'::text, 'Qual'::text, 'Quant'::text])))
 );
 
@@ -703,7 +724,8 @@ CREATE TABLE public.ind_commodity_properties (
     commodity_id bigint NOT NULL,
     ind_id bigint NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    display_name text NOT NULL
 );
 
 
@@ -736,6 +758,13 @@ COMMENT ON COLUMN public.ind_commodity_properties.ind_id IS 'Reference to ind';
 
 
 --
+-- Name: COLUMN ind_commodity_properties.display_name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_commodity_properties.display_name IS 'Commodity-specific display names are the third-most specific that can be defined after context and country-specific display names; in absence of a commodity-specific display name, a generic one will be used.';
+
+
+--
 -- Name: ind_context_properties; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -745,7 +774,8 @@ CREATE TABLE public.ind_context_properties (
     context_id bigint NOT NULL,
     ind_id bigint NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    display_name text NOT NULL
 );
 
 
@@ -778,6 +808,13 @@ COMMENT ON COLUMN public.ind_context_properties.ind_id IS 'Reference to ind';
 
 
 --
+-- Name: COLUMN ind_context_properties.display_name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_context_properties.display_name IS 'Context-specific display names are the most specific that can be defined; in absence of a context-specific display name, a country-specific tooltip will be used (if any).';
+
+
+--
 -- Name: ind_country_properties; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -787,7 +824,8 @@ CREATE TABLE public.ind_country_properties (
     country_id bigint NOT NULL,
     ind_id bigint NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    display_name text NOT NULL
 );
 
 
@@ -817,6 +855,13 @@ COMMENT ON COLUMN public.ind_country_properties.country_id IS 'Reference to coun
 --
 
 COMMENT ON COLUMN public.ind_country_properties.ind_id IS 'Reference to ind';
+
+
+--
+-- Name: COLUMN ind_country_properties.display_name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_country_properties.display_name IS 'Country-specific display names are the second-most specific that can be defined after context-specific display names; in absence of a country-specific display name, a commodity-specific one will be used (if any).';
 
 
 --
@@ -899,7 +944,8 @@ CREATE TABLE public.qual_commodity_properties (
     commodity_id bigint NOT NULL,
     qual_id bigint NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    display_name text NOT NULL
 );
 
 
@@ -932,6 +978,13 @@ COMMENT ON COLUMN public.qual_commodity_properties.qual_id IS 'Reference to qual
 
 
 --
+-- Name: COLUMN qual_commodity_properties.display_name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.qual_commodity_properties.display_name IS 'Commodity-specific display names are the third-most specific that can be defined after context and country-specific display names; in absence of a commodity-specific display name, a generic one will be used.';
+
+
+--
 -- Name: qual_context_properties; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -941,7 +994,8 @@ CREATE TABLE public.qual_context_properties (
     context_id bigint NOT NULL,
     qual_id bigint NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    display_name text NOT NULL
 );
 
 
@@ -974,6 +1028,13 @@ COMMENT ON COLUMN public.qual_context_properties.qual_id IS 'Reference to qual';
 
 
 --
+-- Name: COLUMN qual_context_properties.display_name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.qual_context_properties.display_name IS 'Context-specific display names are the most specific that can be defined; in absence of a context-specific display name, a country-specific tooltip will be used (if any).';
+
+
+--
 -- Name: qual_country_properties; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -983,7 +1044,8 @@ CREATE TABLE public.qual_country_properties (
     country_id bigint NOT NULL,
     qual_id bigint NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    display_name text NOT NULL
 );
 
 
@@ -1013,6 +1075,13 @@ COMMENT ON COLUMN public.qual_country_properties.country_id IS 'Reference to cou
 --
 
 COMMENT ON COLUMN public.qual_country_properties.qual_id IS 'Reference to qual';
+
+
+--
+-- Name: COLUMN qual_country_properties.display_name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.qual_country_properties.display_name IS 'Country-specific display names are the second-most specific that can be defined after context-specific display names; in absence of a country-specific display name, a commodity-specific one will be used (if any).';
 
 
 --
@@ -1078,7 +1147,8 @@ CREATE TABLE public.quant_commodity_properties (
     commodity_id bigint NOT NULL,
     quant_id bigint NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    display_name text NOT NULL
 );
 
 
@@ -1111,6 +1181,13 @@ COMMENT ON COLUMN public.quant_commodity_properties.quant_id IS 'Reference to qu
 
 
 --
+-- Name: COLUMN quant_commodity_properties.display_name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_commodity_properties.display_name IS 'Commodity-specific display names are the third-most specific that can be defined after context and country-specific display names; in absence of a commodity-specific display name, a generic one will be used.';
+
+
+--
 -- Name: quant_context_properties; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1120,7 +1197,8 @@ CREATE TABLE public.quant_context_properties (
     context_id bigint NOT NULL,
     quant_id bigint NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    display_name text NOT NULL
 );
 
 
@@ -1153,6 +1231,13 @@ COMMENT ON COLUMN public.quant_context_properties.quant_id IS 'Reference to quan
 
 
 --
+-- Name: COLUMN quant_context_properties.display_name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_context_properties.display_name IS 'Context-specific display names are the most specific that can be defined; in absence of a context-specific display name, a country-specific tooltip will be used (if any).';
+
+
+--
 -- Name: quant_country_properties; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1162,7 +1247,8 @@ CREATE TABLE public.quant_country_properties (
     country_id bigint NOT NULL,
     quant_id bigint NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    display_name text NOT NULL
 );
 
 
@@ -1192,6 +1278,13 @@ COMMENT ON COLUMN public.quant_country_properties.country_id IS 'Reference to co
 --
 
 COMMENT ON COLUMN public.quant_country_properties.quant_id IS 'Reference to quant';
+
+
+--
+-- Name: COLUMN quant_country_properties.display_name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_country_properties.display_name IS 'Country-specific display names are the second-most specific that can be defined after context-specific display names; in absence of a country-specific display name, a commodity-specific one will be used (if any).';
 
 
 --
@@ -1278,7 +1371,10 @@ CREATE VIEW public.attributes_v AS
     s.tooltip_text,
     s.tooltip_text_by_context_id,
     s.tooltip_text_by_country_id,
-    s.tooltip_text_by_commodity_id
+    s.tooltip_text_by_commodity_id,
+    s.display_name_by_context_id,
+    s.display_name_by_country_id,
+    s.display_name_by_commodity_id
    FROM ( SELECT quants.id AS original_id,
             'Quant'::text AS original_type,
             quants.name,
@@ -1288,19 +1384,25 @@ CREATE VIEW public.attributes_v AS
             qp.tooltip_text,
             context_p.tooltip_text_by_context_id,
             country_p.tooltip_text_by_country_id,
-            commodity_p.tooltip_text_by_commodity_id
+            commodity_p.tooltip_text_by_commodity_id,
+            context_p.display_name_by_context_id,
+            country_p.display_name_by_country_id,
+            commodity_p.display_name_by_commodity_id
            FROM ((((public.quants
              LEFT JOIN public.quant_properties qp ON ((qp.quant_id = quants.id)))
              LEFT JOIN ( SELECT quant_context_properties.quant_id,
-                    jsonb_object_agg(quant_context_properties.context_id, quant_context_properties.tooltip_text) AS tooltip_text_by_context_id
+                    jsonb_object_agg(quant_context_properties.context_id, quant_context_properties.tooltip_text) AS tooltip_text_by_context_id,
+                    jsonb_object_agg(quant_context_properties.context_id, quant_context_properties.display_name) AS display_name_by_context_id
                    FROM public.quant_context_properties
                   GROUP BY quant_context_properties.quant_id) context_p ON ((quants.id = context_p.quant_id)))
              LEFT JOIN ( SELECT quant_country_properties.quant_id,
-                    jsonb_object_agg(quant_country_properties.country_id, quant_country_properties.tooltip_text) AS tooltip_text_by_country_id
+                    jsonb_object_agg(quant_country_properties.country_id, quant_country_properties.tooltip_text) AS tooltip_text_by_country_id,
+                    jsonb_object_agg(quant_country_properties.country_id, quant_country_properties.display_name) AS display_name_by_country_id
                    FROM public.quant_country_properties
                   GROUP BY quant_country_properties.quant_id) country_p ON ((quants.id = country_p.quant_id)))
              LEFT JOIN ( SELECT quant_commodity_properties.quant_id,
-                    jsonb_object_agg(quant_commodity_properties.commodity_id, quant_commodity_properties.tooltip_text) AS tooltip_text_by_commodity_id
+                    jsonb_object_agg(quant_commodity_properties.commodity_id, quant_commodity_properties.tooltip_text) AS tooltip_text_by_commodity_id,
+                    jsonb_object_agg(quant_commodity_properties.commodity_id, quant_commodity_properties.display_name) AS display_name_by_commodity_id
                    FROM public.quant_commodity_properties
                   GROUP BY quant_commodity_properties.quant_id) commodity_p ON ((quants.id = commodity_p.quant_id)))
         UNION ALL
@@ -1313,19 +1415,25 @@ CREATE VIEW public.attributes_v AS
             ip.tooltip_text,
             context_p.tooltip_text_by_context_id,
             country_p.tooltip_text_by_country_id,
-            commodity_p.tooltip_text_by_commodity_id
+            commodity_p.tooltip_text_by_commodity_id,
+            context_p.display_name_by_context_id,
+            country_p.display_name_by_country_id,
+            commodity_p.display_name_by_commodity_id
            FROM ((((public.inds
              LEFT JOIN public.ind_properties ip ON ((ip.ind_id = inds.id)))
              LEFT JOIN ( SELECT ind_context_properties.ind_id,
-                    jsonb_object_agg(ind_context_properties.context_id, ind_context_properties.tooltip_text) AS tooltip_text_by_context_id
+                    jsonb_object_agg(ind_context_properties.context_id, ind_context_properties.tooltip_text) AS tooltip_text_by_context_id,
+                    jsonb_object_agg(ind_context_properties.context_id, ind_context_properties.display_name) AS display_name_by_context_id
                    FROM public.ind_context_properties
                   GROUP BY ind_context_properties.ind_id) context_p ON ((inds.id = context_p.ind_id)))
              LEFT JOIN ( SELECT ind_country_properties.ind_id,
-                    jsonb_object_agg(ind_country_properties.country_id, ind_country_properties.tooltip_text) AS tooltip_text_by_country_id
+                    jsonb_object_agg(ind_country_properties.country_id, ind_country_properties.tooltip_text) AS tooltip_text_by_country_id,
+                    jsonb_object_agg(ind_country_properties.country_id, ind_country_properties.display_name) AS display_name_by_country_id
                    FROM public.ind_country_properties
                   GROUP BY ind_country_properties.ind_id) country_p ON ((inds.id = country_p.ind_id)))
              LEFT JOIN ( SELECT ind_commodity_properties.ind_id,
-                    jsonb_object_agg(ind_commodity_properties.commodity_id, ind_commodity_properties.tooltip_text) AS tooltip_text_by_commodity_id
+                    jsonb_object_agg(ind_commodity_properties.commodity_id, ind_commodity_properties.tooltip_text) AS tooltip_text_by_commodity_id,
+                    jsonb_object_agg(ind_commodity_properties.commodity_id, ind_commodity_properties.display_name) AS display_name_by_commodity_id
                    FROM public.ind_commodity_properties
                   GROUP BY ind_commodity_properties.ind_id) commodity_p ON ((inds.id = commodity_p.ind_id)))
         UNION ALL
@@ -1338,19 +1446,25 @@ CREATE VIEW public.attributes_v AS
             qp.tooltip_text,
             context_p.tooltip_text_by_context_id,
             country_p.tooltip_text_by_country_id,
-            commodity_p.tooltip_text_by_commodity_id
+            commodity_p.tooltip_text_by_commodity_id,
+            context_p.display_name_by_context_id,
+            country_p.display_name_by_country_id,
+            commodity_p.display_name_by_commodity_id
            FROM ((((public.quals
              LEFT JOIN public.qual_properties qp ON ((qp.qual_id = quals.id)))
              LEFT JOIN ( SELECT qual_context_properties.qual_id,
-                    jsonb_object_agg(qual_context_properties.context_id, qual_context_properties.tooltip_text) AS tooltip_text_by_context_id
+                    jsonb_object_agg(qual_context_properties.context_id, qual_context_properties.tooltip_text) AS tooltip_text_by_context_id,
+                    jsonb_object_agg(qual_context_properties.context_id, qual_context_properties.display_name) AS display_name_by_context_id
                    FROM public.qual_context_properties
                   GROUP BY qual_context_properties.qual_id) context_p ON ((quals.id = context_p.qual_id)))
              LEFT JOIN ( SELECT qual_country_properties.qual_id,
-                    jsonb_object_agg(qual_country_properties.country_id, qual_country_properties.tooltip_text) AS tooltip_text_by_country_id
+                    jsonb_object_agg(qual_country_properties.country_id, qual_country_properties.tooltip_text) AS tooltip_text_by_country_id,
+                    jsonb_object_agg(qual_country_properties.country_id, qual_country_properties.display_name) AS display_name_by_country_id
                    FROM public.qual_country_properties
                   GROUP BY qual_country_properties.qual_id) country_p ON ((quals.id = country_p.qual_id)))
              LEFT JOIN ( SELECT qual_commodity_properties.qual_id,
-                    jsonb_object_agg(qual_commodity_properties.commodity_id, qual_commodity_properties.tooltip_text) AS tooltip_text_by_commodity_id
+                    jsonb_object_agg(qual_commodity_properties.commodity_id, qual_commodity_properties.tooltip_text) AS tooltip_text_by_commodity_id,
+                    jsonb_object_agg(qual_commodity_properties.commodity_id, qual_commodity_properties.display_name) AS display_name_by_commodity_id
                    FROM public.qual_commodity_properties
                   GROUP BY qual_commodity_properties.qual_id) commodity_p ON ((quals.id = commodity_p.qual_id)))) s;
 
@@ -1656,6 +1770,20 @@ UNION ALL
    FROM ((public.chart_inds chi
      JOIN public.chart_attributes cha ON ((cha.id = chi.chart_attribute_id)))
      JOIN public.attributes a ON (((a.original_id = chi.ind_id) AND (a.original_type = 'Ind'::text))));
+
+
+--
+-- Name: VIEW chart_attributes_v; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON VIEW public.chart_attributes_v IS 'View which merges chart_inds, chart_quals and chart_quants with chart_attributes.';
+
+
+--
+-- Name: COLUMN chart_attributes_v.display_name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.chart_attributes_v.display_name IS 'If absent in chart_attributes this is pulled from attributes.';
 
 
 --
@@ -3132,6 +3260,20 @@ UNION ALL
 
 
 --
+-- Name: VIEW dashboards_attributes_v; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON VIEW public.dashboards_attributes_v IS 'View which merges dashboards_inds, dashboards_quals and dashboards_quants with dashboards_attributes.';
+
+
+--
+-- Name: COLUMN dashboards_attributes_v.attribute_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_attributes_v.attribute_id IS 'References the unique id in attributes.';
+
+
+--
 -- Name: dashboards_commodities; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -3145,6 +3287,34 @@ CREATE TABLE public.dashboards_commodities (
     name_tsvector tsvector,
     profile text
 );
+
+
+--
+-- Name: TABLE dashboards_commodities; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.dashboards_commodities IS 'Materialized table used for listing commodities in tool search panels';
+
+
+--
+-- Name: COLUMN dashboards_commodities.id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_commodities.id IS 'id of commodity (not unique)';
+
+
+--
+-- Name: COLUMN dashboards_commodities.country_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_commodities.country_id IS 'id of country, from which this commodity is sourced';
+
+
+--
+-- Name: COLUMN dashboards_commodities.node_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_commodities.node_id IS 'id of node, through which this commodity is sourced from this country';
 
 
 --
@@ -3342,7 +3512,7 @@ CREATE VIEW public.dashboards_companies_v AS
      JOIN public.context_node_type_properties cnt_props ON ((nodes.context_node_type_id = cnt_props.context_node_type_id)))
      LEFT JOIN public.profiles ON ((nodes.context_node_type_id = profiles.context_node_type_id)))
      JOIN public.nodes_per_context_ranked_by_volume_per_year_mv ranked_nodes ON (((nodes.context_id = ranked_nodes.context_id) AND (nodes.id = ranked_nodes.node_id))))
-  WHERE (((cnt_props.role)::text = ANY ((ARRAY['importer'::character varying, 'exporter'::character varying])::text[])) AND cnt_props.is_visible AND (NOT nodes.is_unknown) AND (NOT node_props.is_domestic_consumption) AND (upper(nodes.name) <> 'OTHER'::text));
+  WHERE (((cnt_props.role)::text = ANY (ARRAY[('importer'::character varying)::text, ('exporter'::character varying)::text])) AND cnt_props.is_visible AND (NOT nodes.is_unknown) AND (NOT node_props.is_domestic_consumption) AND (upper(nodes.name) <> 'OTHER'::text));
 
 
 --
@@ -3360,6 +3530,34 @@ CREATE TABLE public.dashboards_countries (
     name_tsvector tsvector,
     profile text
 );
+
+
+--
+-- Name: TABLE dashboards_countries; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.dashboards_countries IS 'Materialized table used for listing countries in tool search panels';
+
+
+--
+-- Name: COLUMN dashboards_countries.id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_countries.id IS 'id of sourcing country (not unique)';
+
+
+--
+-- Name: COLUMN dashboards_countries.commodity_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_countries.commodity_id IS 'id of commodity sourced from this country';
+
+
+--
+-- Name: COLUMN dashboards_countries.node_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_countries.node_id IS 'id of node, through which this commodity is sourced from this country';
 
 
 --
@@ -3401,6 +3599,34 @@ CREATE TABLE public.dashboards_destinations (
     profile text,
     rank_by_year jsonb
 );
+
+
+--
+-- Name: TABLE dashboards_destinations; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.dashboards_destinations IS 'Materialized table used for listing destinations in tool search panels';
+
+
+--
+-- Name: COLUMN dashboards_destinations.id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_destinations.id IS 'id of destination node (not unique)';
+
+
+--
+-- Name: COLUMN dashboards_destinations.country_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_destinations.country_id IS 'id of country sourcing commodity going to this node';
+
+
+--
+-- Name: COLUMN dashboards_destinations.commodity_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_destinations.commodity_id IS 'id of commodity going to this node';
 
 
 --
@@ -3449,6 +3675,34 @@ CREATE TABLE public.dashboards_exporters (
 
 
 --
+-- Name: TABLE dashboards_exporters; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.dashboards_exporters IS 'Materialized table used for listing exporters in tool search panels';
+
+
+--
+-- Name: COLUMN dashboards_exporters.id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_exporters.id IS 'id of exporter node (not unique)';
+
+
+--
+-- Name: COLUMN dashboards_exporters.country_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_exporters.country_id IS 'id of country sourcing commodity traded by this node';
+
+
+--
+-- Name: COLUMN dashboards_exporters.commodity_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_exporters.commodity_id IS 'id of commodity traded by this node';
+
+
+--
 -- Name: dashboards_exporters_v; Type: VIEW; Schema: public; Owner: -
 --
 
@@ -3491,6 +3745,34 @@ CREATE TABLE public.dashboards_importers (
     profile text,
     rank_by_year jsonb
 );
+
+
+--
+-- Name: TABLE dashboards_importers; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.dashboards_importers IS 'Materialized table used for listing importers in tool search panels';
+
+
+--
+-- Name: COLUMN dashboards_importers.id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_importers.id IS 'id of importer node (not unique)';
+
+
+--
+-- Name: COLUMN dashboards_importers.country_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_importers.country_id IS 'id of country sourcing commodity traded by this node';
+
+
+--
+-- Name: COLUMN dashboards_importers.commodity_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_importers.commodity_id IS 'id of commodity traded by this node';
 
 
 --
@@ -3593,6 +3875,34 @@ CREATE TABLE public.dashboards_sources (
     profile text,
     rank_by_year jsonb
 );
+
+
+--
+-- Name: TABLE dashboards_sources; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.dashboards_sources IS 'Materialized table used for listing sources in tool search panels';
+
+
+--
+-- Name: COLUMN dashboards_sources.id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_sources.id IS 'id of source node (not unique)';
+
+
+--
+-- Name: COLUMN dashboards_sources.country_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_sources.country_id IS 'id of country sourcing commodity coming from this node';
+
+
+--
+-- Name: COLUMN dashboards_sources.commodity_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_sources.commodity_id IS 'id of commodity coming from this node';
 
 
 --
@@ -3906,6 +4216,20 @@ UNION ALL
    FROM ((public.download_quals daq
      JOIN public.download_attributes da ON ((da.id = daq.download_attribute_id)))
      JOIN public.attributes a ON (((a.original_id = daq.qual_id) AND (a.original_type = 'Qual'::text))));
+
+
+--
+-- Name: VIEW download_attributes_v; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON VIEW public.download_attributes_v IS 'View which merges download_quals and download_quants with download_attributes.';
+
+
+--
+-- Name: COLUMN download_attributes_v.attribute_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.download_attributes_v.attribute_id IS 'References the unique id in attributes.';
 
 
 --
@@ -4905,6 +5229,62 @@ UNION ALL
      JOIN public.map_attributes ma ON ((ma.id = mai.map_attribute_id)))
      JOIN public.map_attribute_groups mag ON ((mag.id = ma.map_attribute_group_id)))
      JOIN public.attributes a ON (((a.original_id = mai.ind_id) AND (a.original_type = 'Ind'::text))));
+
+
+--
+-- Name: VIEW map_attributes_v; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON VIEW public.map_attributes_v IS 'View which merges map_inds and map_quants with map_attributes.';
+
+
+--
+-- Name: COLUMN map_attributes_v.attribute_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.map_attributes_v.attribute_id IS 'References the unique id in attributes.';
+
+
+--
+-- Name: COLUMN map_attributes_v.context_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.map_attributes_v.context_id IS 'References the context';
+
+
+--
+-- Name: COLUMN map_attributes_v.original_attribute_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.map_attributes_v.original_attribute_id IS 'The attribute''s original id';
+
+
+--
+-- Name: COLUMN map_attributes_v.name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.map_attributes_v.name IS 'Display name of the ind/quant';
+
+
+--
+-- Name: COLUMN map_attributes_v.attribute_type; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.map_attributes_v.attribute_type IS 'Type of the attribute (ind/quant)';
+
+
+--
+-- Name: COLUMN map_attributes_v.unit; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.map_attributes_v.unit IS 'Name of the attribute''s unit';
+
+
+--
+-- Name: COLUMN map_attributes_v.description; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.map_attributes_v.description IS 'Attribute''s description';
 
 
 --
@@ -8686,6 +9066,20 @@ SELECT
 
 
 --
+-- Name: VIEW recolor_by_attributes_v; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON VIEW public.recolor_by_attributes_v IS 'View which merges recolor_by_inds and recolor_by_quals with recolor_by_attributes.';
+
+
+--
+-- Name: COLUMN recolor_by_attributes_v.attribute_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.recolor_by_attributes_v.attribute_id IS 'References the unique id in attributes.';
+
+
+--
 -- Name: recolor_by_inds; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -8888,6 +9282,20 @@ CREATE VIEW public.resize_by_attributes_v AS
    FROM ((public.resize_by_quants raq
      JOIN public.resize_by_attributes ra ON ((ra.id = raq.resize_by_attribute_id)))
      JOIN public.attributes a ON (((a.original_id = raq.quant_id) AND (a.original_type = 'Quant'::text))));
+
+
+--
+-- Name: VIEW resize_by_attributes_v; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON VIEW public.resize_by_attributes_v IS 'View which merges resize_by_quants with resize_by_attributes.';
+
+
+--
+-- Name: COLUMN resize_by_attributes_v.attribute_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.resize_by_attributes_v.attribute_id IS 'References the unique id in attributes.';
 
 
 --
@@ -12594,6 +13002,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200818104523'),
 ('20200819083051'),
 ('20200903085354'),
-('20201007085611');
+('20201007085611'),
+('20210118102600'),
+('20210118140021');
 
 

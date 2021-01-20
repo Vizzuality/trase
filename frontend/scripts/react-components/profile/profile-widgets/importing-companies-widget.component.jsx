@@ -74,7 +74,7 @@ class ImportingCompaniesWidget extends React.PureComponent {
             return null;
           }
 
-          const { dimensionsX, companies } = data[GET_ACTOR_EXPORTING_COMPANIES];
+          const { dimensionsX, companies, dimensionY } = data[GET_ACTOR_EXPORTING_COMPANIES];
           const summary = data[GET_NODE_SUMMARY_URL];
           const dimensions = this.getDimensions(dimensionsX, companies);
 
@@ -104,6 +104,7 @@ class ImportingCompaniesWidget extends React.PureComponent {
                         key={index}
                         title={plot.title}
                         data={companies}
+                        yDimension={dimensionY}
                         xDimension={dimensions}
                         xDimensionSelectedIndex={index}
                         testId={`${testId}-scatterplot`}
