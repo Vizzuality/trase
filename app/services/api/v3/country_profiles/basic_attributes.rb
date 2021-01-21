@@ -119,7 +119,7 @@ module Api
 
         def overview(surface_area_rank, population_rank, gdp_rank)
           summary = "#{@node.name} is the world's"
-          summary << " #{surface_area_rank&.ordinalize} largest country by land mass"
+          summary << " #{surface_area_rank&.ordinalize} largest country by surface area"
           summary << ", #{population_rank&.ordinalize} largest by population size"
           summary << " and is the world's #{gdp_rank&.ordinalize} largest economy (by GDP)."
         end
@@ -140,11 +140,11 @@ module Api
             )
           end
           if forested_percent && agricultural_percent
-            " Forests make up #{forested_percent} of its land mass and agricultural areas, #{agricultural_percent}."
+            " Forests make up #{forested_percent} of its surface area and agricultural areas, #{agricultural_percent}."
           elsif forested_percent
-            " Forests make up #{forested_percent} of its land mass."
+            " Forests make up #{forested_percent} of its surface area."
           elsif agricultural_percent
-            " Agricultural areas make up #{agricultural_percent} of its land mass."
+            " Agricultural areas make up #{agricultural_percent} of its surface area."
           end
         end
 
