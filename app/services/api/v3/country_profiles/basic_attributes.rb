@@ -42,15 +42,15 @@ module Api
         end
 
         def summary
-          land_area_rank = @external_attribute_value.call 'wb.land_area.rank'
+          surface_area_rank = @external_attribute_value.call 'wb.surface_area.rank'
           population_rank = @external_attribute_value.call 'wb.population.rank'
           gdp_rank = @external_attribute_value.call 'wb.gdp.rank'
-          summary = overview(land_area_rank, population_rank, gdp_rank)
+          summary = overview(surface_area_rank, population_rank, gdp_rank)
 
-          land_area = @external_attribute_value.call 'wb.land_area.value'
+          surface_area = @external_attribute_value.call 'wb.surface_area.value'
           forested_land_area = @external_attribute_value.call 'wb.forested_land_area.value'
           agricultural_land_area = @external_attribute_value.call 'wb.agricultural_land_area.value'
-          summary << land_summary(land_area, forested_land_area, agricultural_land_area)
+          summary << land_summary(surface_area, forested_land_area, agricultural_land_area)
           summary << hdi
           summary << declarations
           summary
@@ -61,7 +61,7 @@ module Api
         HEADER_ATTRIBUTES = [
           'wb.population.value',
           'wb.gdp.value',
-          'wb.land_area.value',
+          'wb.surface_area.value',
           'wb.agricultural_land_area.value',
           'wb.forested_land_area.value'
         ].freeze
@@ -117,25 +117,25 @@ module Api
           {trade_flow: @activity.to_s.sub(/er$/, '')}
         end
 
-        def overview(land_area_rank, population_rank, gdp_rank)
+        def overview(surface_area_rank, population_rank, gdp_rank)
           summary = "#{@node.name} is the world's"
-          summary << " #{land_area_rank&.ordinalize} largest country by land mass"
+          summary << " #{surface_area_rank&.ordinalize} largest country by land mass"
           summary << ", #{population_rank&.ordinalize} largest by population size"
           summary << " and is the world's #{gdp_rank&.ordinalize} largest economy (by GDP)."
         end
 
-        def land_summary(land_area, forested_land_area, agricultural_land_area)
-          return '' unless land_area && (forested_land_area || agricultural_land_area)
+        def land_summary(surface_area, forested_land_area, agricultural_land_area)
+          return '' unless surface_area && (forested_land_area || agricultural_land_area)
 
           if forested_land_area
             forested_percent = helper.number_to_percentage(
-              (forested_land_area * 100.0) / land_area,
+              (forested_land_area * 100.0) / surface_area,
               precision: 0
             )
           end
           if agricultural_land_area
             agricultural_percent = helper.number_to_percentage(
-              (agricultural_land_area * 100.0) / land_area,
+              (agricultural_land_area * 100.0) / surface_area,
               precision: 0
             )
           end
