@@ -105,6 +105,10 @@ module Api
           return unless @profile_only
 
           @query = @query.where.not(profile: nil)
+          # TODO: country profiles
+          if Rails.env.production?
+            @query = @query.where.not(profile: 'country')
+          end
         end
 
         def filter_by_self

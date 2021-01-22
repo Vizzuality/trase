@@ -22,7 +22,13 @@ module Api
             :rank
           ]
           @rel = @rel.where('context_id' => context_id) if context_id
-          @rel = @rel.where('profile IS NOT NULL') if profile_only
+          if profile_only
+            @rel = @rel.where.not(profile: nil)
+            # TODO: country profiles
+            if Rails.env.production?
+              @rel = @rel.where.not(profile: 'country')
+            end
+          end
           @rel.
             search_by_name(query).
             select(select_columns).
