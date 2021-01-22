@@ -72,7 +72,7 @@ class HomeVideo extends React.PureComponent {
         }
       ]
     };
-    this.plyr.config = { noCookie: true };
+    this.plyr.config.youtube.noCookie = true;
   }
 
   addEventListeners() {
