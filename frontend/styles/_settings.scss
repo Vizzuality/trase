@@ -38,8 +38,10 @@ $font-size-medium: 20px;
 $font-size-big: 24px;
 $font-size-x-big: 32px;
 $font-size-huge: 48px;
+$font-size-x-huge: 52px;
 
 // Line height
+$line-height-regular: 16px; // 1
 $line-height-regular: 16px; // 1
 $line-height-x-regular: 17.6px; // 1.1
 $line-height-md: 20px;
@@ -128,6 +130,7 @@ $gray-700: #12282e;
 $gray-500: #1f434e;
 $gray-300: #193841;
 $gray-400: #5d767d;
+$gray-300: #B0BDC1; // gray-500 opacity 0.4
 $gray-200: #dadada;
 
 $green-200: #9AECC8;

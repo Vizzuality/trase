@@ -11,23 +11,23 @@ $menuOffset: 15vh;
   top: 0;
   width: 100vw;
   height: $nav-height;
-  // background: transparent; TODO: Use transparent when the new background is ready
-  background: $light-gray;
+  background: $white;
   font-family: $font-family-3;
   z-index: $z-nav;
   transition: all 150ms ease-in;
 
   .locale-selector-selected-item,
   .locale-selector-menu-item {
-    color: rgba($gray-500, 0.5);
+    color: $gray-300;
     font-size: $font-size-x-regular;
+    font-weight: $font-weight-bold;
     text-transform: uppercase;
   }
 
   .locale-selector-selected-item:after {
     border-left: 4px solid transparent;
     border-right: 4px solid transparent;
-    border-top: 4px solid rgba($gray-500, 0.5);
+    border-top: 4px solid $gray-300;
   }
 
   // **
@@ -35,11 +35,13 @@ $menuOffset: 15vh;
 
   &.-has-background {
     background-color: $white;
+
     .nav-menu {
       border-bottom: 1px solid $gray-200;
     }
+
     .top-nav-link {
-      color: rgba($gray-500, 0.5);
+      color: $gray-300;
     }
   }
 
@@ -47,13 +49,13 @@ $menuOffset: 15vh;
     .top-nav-search .icon-search,
     .top-nav-link,
     .locale-selector-selected-item {
-      color: $gray-500;
+      color: $gray-200;
       font-family: $font-family-3;
-      font-size: $font-size-x-regular;
+      font-size: $font-size-xxx-regular;
       font-weight: $font-weight-bold;
     }
     .locale-selector-selected-item:after {
-      border-top: 4px solid $gray-500;
+      border-top: 4px solid $gray-300;
     }
   }
 
@@ -73,18 +75,41 @@ $menuOffset: 15vh;
     display: flex;
     align-items: center;
     height: 100%;
+
     .top-nav-item {
       padding: 0 10px;
+      height: 100%;
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      height: 100%;
     }
 
     .top-nav-link {
-      font-size: $font-size-xx-regular;
+      font-size: $font-size-xxx-regular;
       font-weight: $font-weight-medium;
       transform: opacity 150ms ease-in;
-      color: $gray-500;
+      color: $gray-300;
+      display: flex;
 
-      &:hover {
-        color: $orange-500;
+      &::after {
+        display: block;
+        position: absolute;
+        content: '';
+        height: 3px;
+        width: 0;
+        bottom: 0;
+        left: 0;
+        background-color: $strong-pink;
+        transition: width 150ms ease-in;
+      }
+
+      &:hover, &.-active {
+        color: $gray-500;
+
+        &::after {
+          width: 100%;
+        }
       }
     }
   }
@@ -97,18 +122,16 @@ $menuOffset: 15vh;
   .search-text {
     display: inline-block;
     transform: translateY(-5px);
-    color: $gray-500;
+    color: $gray-300;
     font-family: $font-family-3;
-    font-size: $font-size-x-regular;
+    font-size: $font-size-xx-regular;
     font-weight: $font-weight-bold;
   }
 
   .top-nav-item-list {
     display: flex;
-    margin: 0 0 0 40px;
-    .top-nav-item {
-      margin-right: 20px;
-    }
+    justify-content: space-between;
+    width: 135px;
   }
 
   .c-locale-selector {
@@ -168,6 +191,8 @@ $menuOffset: 15vh;
     justify-content: space-between;
     flex-flow: row;
     align-items: center;
+    margin-left: 18px;
+
     > :first-child {
       margin-right: 24px;
     }
@@ -208,13 +233,13 @@ $menuOffset: 15vh;
       display: flex;
       max-width: 300px;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: flex-end;
       padding: 16px;
 
       .scroll-indicator {
         display: flex;
         position: relative;
-        margin-top: 2rem;
+        margin: 2rem 0;
         color: $orange-500;
         font-weight: $font-weight-bold;
         text-transform: uppercase;
@@ -235,11 +260,11 @@ $menuOffset: 15vh;
       .sites-menu {
         font-size: $font-size-regular;
 
-        a {
-          color: $gray-700;
+        .sites-menu-link {
+          color: $charcoal-grey;
           font-weight: $font-weight-bold;
-          font-size: $font-size-x-big;
-          line-height: $line-height-x-regular;
+          font-size: $font-size-x-huge;
+          line-height: $line-height-lg;
 
           &:hover {
             color: $orange-500;
@@ -286,7 +311,7 @@ $menuOffset: 15vh;
   }
 
   .top-nav-card {
-    flex: 0 0 260px;
+    flex: 0 0 30%;
     height: calc(100vh - 190px);
     max-height: 400px; // set max height so on larger screens cards don't go crazy long
     display: flex;
@@ -315,7 +340,7 @@ $menuOffset: 15vh;
       display: flex;
       justify-content: center;
       flex-flow: column;
-      padding: 15px;
+      padding: 40px 27px 27px;
       background: $white;
     }
 
@@ -323,15 +348,40 @@ $menuOffset: 15vh;
       font-family: $font-family-1;
       font-size: $font-size-xx-regular;
       color: $gray-400;
-      height: 46px;
+      height: 300px;
       text-overflow: ellipsis;
-    }
 
-    // For now, just override our heading class with this value
-    // As we migrate things forward we need a designer to review font sizes
-    .c-heading {
-      font-size: $font-size-x-big;
-      margin: 0 0 10px 0;
+      .card-summary-content {
+        padding: 40px 0;
+      }
+
+      .card-summary-link {
+        display: flex;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .card-summary-button-link {
+        height: 28px;
+        width: 28px;
+        background-color: $gray-400;
+        position: relative;
+        border-radius: 50%;
+
+        &:after {
+          content: "";
+          position: absolute;
+          top: 10px;
+          right: 11px;
+          width: 8px;
+          height: 8px;
+          border: 3px solid $white;
+          border-top: 0;
+          border-left: 0;
+          transform: rotate(-45deg);
+        }
+      }
     }
   }
 }

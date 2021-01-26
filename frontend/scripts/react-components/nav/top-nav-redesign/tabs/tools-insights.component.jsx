@@ -12,7 +12,8 @@ const ToolsInsights = () => {
     {
       key: 0,
       properties: {
-        title: 'Supply chain',
+        title: 'Supply chains',
+        url: 'Supply chains',
         summary:
           'Volutpat maecenas volutpat blandit aliquam etiam erat velit scelerisque. In ornare quam viverra orci',
         imageUrl: 'images/landing-redesign/supply-chain-blue.png'
@@ -22,6 +23,7 @@ const ToolsInsights = () => {
       key: 1,
       properties: {
         title: 'Finance',
+        url: 'Finance',
         summary:
           'Volutpat maecenas volutpat blandit aliquam etiam erat velit scelerisque. In ornare quam viverra orci',
         imageUrl: 'images/landing-redesign/finance-blue.png'
@@ -31,6 +33,7 @@ const ToolsInsights = () => {
       key: 2,
       properties: {
         title: 'Insights',
+        url: 'Insights',
         summary:
           'Volutpat maecenas volutpat blandit aliquam etiam erat velit scelerisque. In ornare quam viverra orci',
         imageUrl: 'images/landing-redesign/insights-blue.png'
@@ -43,8 +46,8 @@ const ToolsInsights = () => {
       <div className="-navigation-block">
         <ul className="sites-menu">
           <li>
-            <a href="https://trase.earth" rel="noopener noreferrer">
-              Home
+            <a href="https://trase.earth" rel="noopener noreferrer" className="sites-menu-link">
+              Home.
             </a>
           </li>
           <li>
@@ -52,31 +55,34 @@ const ToolsInsights = () => {
               exact
               strict
               to={{ type: 'home' }}
+              className="sites-menu-link"
               onMouseOver={() => setActiveCard(0)}
               onFocus={() => setActiveCard(0)}
               onMouseLeave={() => setActiveCard(null)}
             >
-              Supply Chain
+              Supply Chains.
             </NavLink>
           </li>
           <li>
             <a
               href="https://trase.finance/"
+              className="sites-menu-link"
               onMouseOver={() => setActiveCard(1)}
               onFocus={() => setActiveCard(1)}
               onMouseLeave={() => setActiveCard(null)}
             >
-              Finance
+              Finance.
             </a>
           </li>
           <li>
             <a
               href="https://insights.trase.earth/insights"
+              className="sites-menu-link"
               onMouseOver={() => setActiveCard(2)}
               onFocus={() => setActiveCard(2)}
               onMouseLeave={() => setActiveCard(null)}
             >
-              Insights
+              Insights.
             </a>
           </li>
         </ul>
