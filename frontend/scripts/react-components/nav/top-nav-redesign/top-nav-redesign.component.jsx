@@ -9,6 +9,8 @@ import LocaleSelector from 'react-components/nav/locale-selector/locale-selector
 import Search from 'react-components/nav/global-search/global-search.container';
 import ToolSearch from 'react-components/tool/tool-search/tool-search.container';
 import Img from 'react-components/shared/img';
+import { BREAKPOINTS } from 'constants';
+import ResizeListener from 'react-components/shared/resize-listener.component';
 
 import 'scripts/react-components/nav/top-nav-redesign/top-nav-redesign.scss';
 
@@ -110,7 +112,7 @@ class TopNavRedesign extends React.PureComponent {
     );
   }
 
-  renderDesktopMenu() {
+  renderMenu() {
     const { links, printable, showLogo, page } = this.props;
     const { menuOpen } = this.state;
     const allLinks = [];
@@ -127,116 +129,93 @@ class TopNavRedesign extends React.PureComponent {
 
     allLinks.push(...links);
 
-    const SearchLabel = () => <span className="search-text">SEARCH</span>;
+    const SearchLabel = desktop => (desktop ? null : <span className="search-text">SEARCH</span>);
 
     return (
-      <div className="nav-menu -desktop-menu">
-        <div className="left-section">
-          <button className="top-nav-toggle-btn" onClick={this.handleToggleClick}>
-            <svg className={`icon icon-${menuOpen ? 'close' : 'menu'}`}>
-              <use xlinkHref={`#icon-${menuOpen ? 'close' : 'menu'}`} />
-            </svg>
-          </button>
-          <NavLink exact strict to={{ type: 'home' }} className={cx('top-nav-logo')}>
-            <Img
-              loading="lazy"
-              className="logo-image"
-              src="/images/logos/new-logo-trase-red.svg"
-              alt="trase"
-            />
-          </NavLink>
-        </div>
-        <div className="right-section">
-          <ul className="nav-menu-main-navigation">
-            <NavLinks
-              links={allLinks}
-              itemClassName="top-nav-item"
-              linkClassName="top-nav-link"
-              linkActiveClassName="top-nav-link -active"
-              navLinkProps={this.navLinkProps}
-            />
-          </ul>
-          <ul className="top-nav-item-list">
-            <li className="top-nav-item search-container">
-              <span className="search-icon">
-                {page === 'tool' ?
-                  <ToolSearch labelComponent={SearchLabel} /> :
-                  <Search className="top-nav-search" labelComponent={SearchLabel} />
-                }
-              </span>
-            </li>
-            <li className="top-nav-item">
-              <LocaleSelector />
-            </li>
-            {printable && (
-              <li className="top-nav-item">
-                <Suspense fallback={null}>
-                  <DownloadPdfLink />
-                </Suspense>
-              </li>
-            )}
-          </ul>
-        </div>
-      </div>
-    );
-  }
-
-  renderMobileMenu() {
-    const { links, showLogo } = this.props;
-    const { menuOpen } = this.state;
-
-    const toggleBtnIcon = menuOpen ? 'close' : 'menu';
-
-    const allLinks = [];
-
-    allLinks.push(...links);
-
-    return (
-      <div className="row -mobile-menu" ref={this.mobileMenuRef}>
-        <div className="top-nav-bar column small-12">
-          <ul className="top-nav-item-list">
-            <li className="top-nav-item -no-margin">
-              <NavLink
-                exact
-                strict
-                to={{ type: 'home' }}
-                className={cx('top-nav-link', '-logo', { '-hide-when-on-top': !showLogo })}
-              >
-                <Img src="/images/logos/logo-trase-nav.png" alt="trase" />
-              </NavLink>
-            </li>
-            <li className="top-nav-item -no-margin">
-              <button className="top-nav-toggle-btn" onClick={this.handleToggleClick}>
-                <svg className={`icon icon-${toggleBtnIcon}`}>
-                  <use xlinkHref={`#icon-${toggleBtnIcon}`} />
-                </svg>
-              </button>
-            </li>
-          </ul>
-        </div>
-        {menuOpen && (
-          <div className="top-nav-collapse column small-12">
-            <ul className="top-nav-item-list-collapse">
-              <NavLinks
-                links={allLinks}
-                itemClassName="top-nav-item-collapse"
-                linkClassName="top-nav-link-collapse"
-                linkActiveClassName="top-nav-link-collapse -active"
-                navLinkProps={this.navLinkProps}
-              />
-              <li className="top-nav-item-collapse">
-                <LocaleSelector />
-              </li>
-            </ul>
-          </div>
-        )}
-      </div>
+      <ResizeListener>
+        {({ windowWidth }) => {
+          const isDesktop = windowWidth >= BREAKPOINTS.laptop;
+          return (
+            <div className="nav-menu">
+              <div className="first-row">
+                <div className="left-section">
+                  <button className="top-nav-toggle-btn" onClick={this.handleToggleClick}>
+                    <svg className={`icon icon-${menuOpen ? 'close' : 'menu'}`}>
+                      <use xlinkHref={`#icon-${menuOpen ? 'close' : 'menu'}`} />
+                    </svg>
+                  </button>
+                  <NavLink exact strict to={{ type: 'home' }} className={cx('top-nav-logo')}>
+                    <Img
+                      loading="lazy"
+                      className="logo-image"
+                      src="/images/logos/new-logo-trase-red.svg"
+                      alt="trase"
+                    />
+                  </NavLink>
+                </div>
+                <div className="right-section">
+                  {isDesktop && (
+                    <ul className="nav-menu-main-navigation">
+                      <NavLinks
+                        links={allLinks}
+                        itemClassName="top-nav-item"
+                        linkClassName="top-nav-link"
+                        linkActiveClassName="top-nav-link -active"
+                        navLinkProps={this.navLinkProps}
+                      />
+                    </ul>
+                  )}
+                  <ul className="top-nav-item-list">
+                    <li className="top-nav-item search-container">
+                      <span className="search-icon">
+                        {page === 'tool' ? (
+                          <ToolSearch labelComponent={isDesktop ? SearchLabel : null} />
+                        ) : (
+                          <Search
+                            className="top-nav-search"
+                            labelComponent={isDesktop ? SearchLabel : null}
+                          />
+                        )}
+                      </span>
+                    </li>
+                    <li className="top-nav-item">
+                      <LocaleSelector />
+                    </li>
+                    {printable && (
+                      <li className="top-nav-item">
+                        <Suspense fallback={null}>
+                          <DownloadPdfLink />
+                        </Suspense>
+                      </li>
+                    )}
+                  </ul>
+                </div>
+              </div>
+              {!isDesktop && (
+                <div className="second-row">
+                  <ul className="nav-menu-main-navigation">
+                    <NavLinks
+                      links={allLinks}
+                      itemClassName="top-nav-item"
+                      linkClassName="top-nav-link"
+                      linkActiveClassName="top-nav-link -active"
+                      navLinkProps={this.navLinkProps}
+                    />
+                  </ul>
+                </div>
+              )}
+            </div>
+          );
+        }}
+      </ResizeListener>
     );
   }
 
   render() {
     const { className } = this.props;
     const { backgroundVisible, menuOpen } = this.state;
+    const isTablet = window.innerWidth <= BREAKPOINTS.tablet;
+    console.log('s', isTablet);
 
     return (
       <div
@@ -249,7 +228,7 @@ class TopNavRedesign extends React.PureComponent {
           className
         )}
       >
-        {this.renderDesktopMenu()}
+        {this.renderMenu()}
         {this.renderPopoverMenu()}
       </div>
     );
