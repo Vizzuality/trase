@@ -19,7 +19,7 @@ $menuOffset: 15vh;
   .locale-selector-selected-item,
   .locale-selector-menu-item {
     color: $gray-300;
-    font-size: $font-size-x-regular;
+    font-size: $font-size-xx-regular;
     font-weight: $font-weight-bold;
     text-transform: uppercase;
   }
@@ -51,7 +51,7 @@ $menuOffset: 15vh;
     .locale-selector-selected-item {
       color: $gray-200;
       font-family: $font-family-3;
-      font-size: $font-size-xxx-regular;
+      font-size: $font-size-xx-regular;
       font-weight: $font-weight-bold;
     }
     .locale-selector-selected-item:after {
@@ -219,6 +219,7 @@ $menuOffset: 15vh;
 
   .top-nav-logo {
     width: 113px;
+    margin-left: 20px;
   }
 
   .nav-tab-container {
@@ -259,12 +260,17 @@ $menuOffset: 15vh;
 
       .sites-menu {
         font-size: $font-size-regular;
+        margin-bottom: 2em;
+
+        @media screen and (min-width: $breakpoint-tablet) {
+          margin-bottom: 0;
+        }
 
         .sites-menu-link {
           color: $charcoal-grey;
           font-weight: $font-weight-bold;
-          font-size: $font-size-x-huge;
-          line-height: $line-height-lg;
+          font-size: $font-size-x-big;
+          line-height: $line-height-huge;
 
           &:hover {
             color: $orange-500;
@@ -311,7 +317,7 @@ $menuOffset: 15vh;
   }
 
   .top-nav-card {
-    flex: 0 0 30%;
+    flex: 0 0 260px;
     height: calc(100vh - 190px);
     max-height: 400px; // set max height so on larger screens cards don't go crazy long
     display: flex;
@@ -340,7 +346,7 @@ $menuOffset: 15vh;
       display: flex;
       justify-content: center;
       flex-flow: column;
-      padding: 40px 27px 27px;
+      padding: 27px;
       background: $white;
     }
 
@@ -348,7 +354,7 @@ $menuOffset: 15vh;
       font-family: $font-family-1;
       font-size: $font-size-xx-regular;
       color: $gray-400;
-      height: 300px;
+      height: 100px;
       text-overflow: ellipsis;
 
       .card-summary-content {

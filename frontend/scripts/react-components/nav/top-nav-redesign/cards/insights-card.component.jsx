@@ -2,16 +2,13 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Transition } from 'react-spring/renderprops';
 import Heading from 'react-components/shared/heading/heading.component';
-import Text from 'react-components/shared/text';
 import { ImgBackground } from 'react-components/shared/img';
 
-const InsightsCard = ({ title, url, summary, imageUrl, active, trailStyles }) => {
+const InsightsCard = ({ title, summary, imageUrl, active, trailStyles }) => {
   const [cardActive, setCardActive] = useState(active);
-
   useEffect(() => {
     setCardActive(active);
   }, [active, setCardActive]);
-
   return (
     <div
       className="top-nav-card"
@@ -23,7 +20,7 @@ const InsightsCard = ({ title, url, summary, imageUrl, active, trailStyles }) =>
     >
       <ImgBackground as="figure" alt={title} className="card-image" src={imageUrl} />
       <section className="card-contents">
-        <Heading weight="bold" as="h4" variant="dm-sans" color="gray-700" size="md">
+        <Heading weight="bold" as="h4" variant="dm-sans" color="gray-700" size="lg">
           {title}
         </Heading>
         <Transition
@@ -41,7 +38,7 @@ const InsightsCard = ({ title, url, summary, imageUrl, active, trailStyles }) =>
             opacity: 0
           }}
           enter={{
-            height: 300,
+            height: 100,
             marginTop: 10,
             marginBottom: 20,
             opacity: 1
@@ -52,12 +49,6 @@ const InsightsCard = ({ title, url, summary, imageUrl, active, trailStyles }) =>
             (props => (
               <div style={props} className="card-summary">
                 <div className="card-summary-content">{summary}</div>
-                <a className="card-summary-link" href={url} title={title} noreferrer nofollow>
-                  <Text as="h4" variant="dm-sans" color="gray-700" size="sm">
-                    VISIT SITE
-                  </Text>
-                  <span className="card-summary-button-link" />
-                </a>
               </div>
             ))
           }
