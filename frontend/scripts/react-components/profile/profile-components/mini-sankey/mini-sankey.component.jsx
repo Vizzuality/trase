@@ -81,16 +81,19 @@ class MiniSankey extends Component {
 
     let currentStartNodeY = startY;
     let currentEndNodeY = 0;
-    const nodes = [...data.targetNodes].map(node => {
-      const renderedHeight = MiniSankey.roundHeight(node.height);
-
-      const lines = wrapSVGText(
-        translateText(node.name),
-        Math.max(TEXT_LINE_HEIGHT, renderedHeight),
+    const wrapSVG = (text, labelCharHeight) =>
+      wrapSVGText(
+        text,
+        labelCharHeight || TEXT_LINE_HEIGHT,
         TEXT_LINE_HEIGHT,
         isSmallResolution ? 11 : 18,
         3
       );
+
+    const nodes = [...data.targetNodes].map(node => {
+      const renderedHeight = MiniSankey.roundHeight(node.height);
+
+      const lines = wrapSVG(translateText(node.name), Math.max(TEXT_LINE_HEIGHT, renderedHeight));
       const percent = 100 * node.height;
       const n = {
         id: node.id,
@@ -117,7 +120,12 @@ class MiniSankey extends Component {
       if (nodeB.name === 'OTHER') return 1;
       return nodeB.height - nodeA.height;
     });
-
+    const renderTspans = lines =>
+      lines.map((line, i) => (
+        <tspan key={i} y={i * TEXT_LINE_HEIGHT} x="0">
+          {line}{' '}
+        </tspan>
+      ));
     return (
       <div className="mini-sankey" data-test={testId}>
         <div className="c-info-tooltip is-hidden" ref={this.getTooltipRef} />
@@ -133,7 +141,7 @@ class MiniSankey extends Component {
               className="start"
               transform={`translate(-10, ${5 + BASE_HEIGHT / 2}) rotate(${leftTextRotate})`}
             >
-              {data.name}
+              {renderTspans(wrapSVG(data.name, totalHeight))}
             </text>
           </g>
 
@@ -161,11 +169,7 @@ class MiniSankey extends Component {
                   transform={`translate(${nodeWidth + 10},
                 ${13 + node.renderedHeight / 2 - (TEXT_LINE_HEIGHT * node.lines.length) / 2})`}
                 >
-                  {node.lines.map((line, i) => (
-                    <tspan key={i} y={i * TEXT_LINE_HEIGHT} x="0">
-                      {line}{' '}
-                    </tspan>
-                  ))}
+                  {renderTspans(node.lines)}
                   <tspan className="pct">{node.pct}</tspan>
                 </text>
               </g>
