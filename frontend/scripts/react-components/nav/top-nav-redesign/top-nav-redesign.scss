@@ -11,23 +11,23 @@ $menuOffset: 15vh;
   top: 0;
   width: 100vw;
   height: $nav-height;
-  // background: transparent; TODO: Use transparent when the new background is ready
-  background: $light-gray;
+  background: $white;
   font-family: $font-family-3;
   z-index: $z-nav;
   transition: all 150ms ease-in;
 
   .locale-selector-selected-item,
   .locale-selector-menu-item {
-    color: rgba($gray-500, 0.5);
-    font-size: $font-size-x-regular;
+    color: $gray-300;
+    font-size: $font-size-xx-regular;
+    font-weight: $font-weight-bold;
     text-transform: uppercase;
   }
 
   .locale-selector-selected-item:after {
     border-left: 4px solid transparent;
     border-right: 4px solid transparent;
-    border-top: 4px solid rgba($gray-500, 0.5);
+    border-top: 4px solid $gray-300;
   }
 
   // **
@@ -35,11 +35,9 @@ $menuOffset: 15vh;
 
   &.-has-background {
     background-color: $white;
-    .nav-menu {
-      border-bottom: 1px solid $gray-200;
-    }
+
     .top-nav-link {
-      color: rgba($gray-500, 0.5);
+      color: $gray-300;
     }
   }
 
@@ -47,13 +45,13 @@ $menuOffset: 15vh;
     .top-nav-search .icon-search,
     .top-nav-link,
     .locale-selector-selected-item {
-      color: $gray-500;
+      color: $gray-300;
       font-family: $font-family-3;
-      font-size: $font-size-x-regular;
+      font-size: $font-size-xx-regular;
       font-weight: $font-weight-bold;
     }
     .locale-selector-selected-item:after {
-      border-top: 4px solid $gray-500;
+      border-top: 4px solid $gray-300;
     }
   }
 
@@ -66,48 +64,107 @@ $menuOffset: 15vh;
   }
 
   .nav-menu {
-    padding: 0 $navMenuPadding;
+    border-bottom: 1px solid $gray-200;
+
+    z-index: 1;
+    height: 100%;
+
+    .first-row {
+      padding: 0 $navMenuPadding;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 100%;
+
+      .nav-menu-main-navigation {
+        width: auto;
+      }
+    }
+
+    .second-row {
+      padding: 0 $navMenuPadding;
+      background-color: $white;
+      display: flex;
+      align-items: center;
+      height: 100%;
+
+      .nav-menu-main-navigation {
+        width: 100%;
+        justify-content: space-between;
+
+        .top-nav-link {
+          font-size: $font-size-xx-regular;
+        }
+      }
+    }
   }
 
   .nav-menu-main-navigation {
+    position: relative;
     display: flex;
-    align-items: center;
     height: 100%;
+    width: 100%;
+
     .top-nav-item {
       padding: 0 10px;
+      height: 100%;
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      height: 100%;
     }
 
     .top-nav-link {
-      font-size: $font-size-xx-regular;
+      font-size: $font-size-xxx-regular;
       font-weight: $font-weight-medium;
       transform: opacity 150ms ease-in;
-      color: $gray-500;
+      color: $gray-300;
+      display: flex;
 
-      &:hover {
-        color: $orange-500;
+      &::after {
+        display: block;
+        position: absolute;
+        content: '';
+        height: 3px;
+        width: 0;
+        bottom: 0;
+        left: 0;
+        background-color: $strong-pink;
+        transition: width 150ms ease-in;
+      }
+
+      &:hover, &.-active {
+        color: $gray-500;
+
+        &::after {
+          width: 100%;
+        }
       }
     }
   }
 
   .search-icon {
     display: inline-block;
-    padding-top: 5px;
+    padding-top: 4px;
   }
 
   .search-text {
     display: inline-block;
     transform: translateY(-5px);
-    color: $gray-500;
+    color: $gray-300;
     font-family: $font-family-3;
-    font-size: $font-size-x-regular;
+    font-size: $font-size-xx-regular;
     font-weight: $font-weight-bold;
   }
 
   .top-nav-item-list {
     display: flex;
-    margin: 0 0 0 40px;
-    .top-nav-item {
-      margin-right: 20px;
+    justify-content: space-between;
+    width: 75px;
+    padding-top: 3px;
+
+    @media screen and (min-width: $breakpoint-laptop) {
+      width: 135px;
     }
   }
 
@@ -154,20 +211,13 @@ $menuOffset: 15vh;
     }
   }
 
-  .-desktop-menu {
-    position: relative;
-    display: flex;
-    justify-content: space-between;
-    flex-flow: row;
-    z-index: 1;
-    height: 100%;
-  }
-
   .left-section {
     display: flex;
     justify-content: space-between;
     flex-flow: row;
     align-items: center;
+    margin-left: 18px;
+
     > :first-child {
       margin-right: 24px;
     }
@@ -178,6 +228,7 @@ $menuOffset: 15vh;
     justify-content: space-between;
     flex-flow: row;
     align-items: center;
+    height: 100%;
   }
 
   .top-nav-toggle-btn {
@@ -194,6 +245,7 @@ $menuOffset: 15vh;
 
   .top-nav-logo {
     width: 113px;
+    margin-left: 20px;
   }
 
   .nav-tab-container {
@@ -214,7 +266,7 @@ $menuOffset: 15vh;
       .scroll-indicator {
         display: flex;
         position: relative;
-        margin-top: 2rem;
+        margin: 2rem 0;
         color: $orange-500;
         font-weight: $font-weight-bold;
         text-transform: uppercase;
@@ -234,12 +286,21 @@ $menuOffset: 15vh;
 
       .sites-menu {
         font-size: $font-size-regular;
+        margin-bottom: 2em;
 
-        a {
-          color: $gray-700;
+        @media screen and (min-width: $breakpoint-tablet) {
+          margin-bottom: 0;
+        }
+
+        @media screen and (min-width: $breakpoint-desktop) {
+          margin-bottom: 2em;
+        }
+
+        .sites-menu-link {
+          color: $charcoal-grey;
           font-weight: $font-weight-bold;
           font-size: $font-size-x-big;
-          line-height: $line-height-x-regular;
+          line-height: $line-height-huge;
 
           &:hover {
             color: $orange-500;
@@ -247,18 +308,15 @@ $menuOffset: 15vh;
         }
       }
 
-      .about-menu {
-        font-size: $font-size-regular;
+      .about-menu-item {
+        color: $gray-500;
+        text-transform: uppercase;
+        font-weight: $font-weight-light;
+        font-size: $font-size-xx-regular;
+        line-height: $line-height-lg;
 
-        a {
-          color: $gray-700;
-          font-weight: $font-weight-bold;
-          font-size: $font-size-xxx-regular;
-          line-height: $line-height-lg;
-
-          &:hover {
-            color: $orange-500;
-          }
+        &:hover {
+          color: $orange-500;
         }
       }
 
@@ -315,7 +373,7 @@ $menuOffset: 15vh;
       display: flex;
       justify-content: center;
       flex-flow: column;
-      padding: 15px;
+      padding: 27px;
       background: $white;
     }
 
@@ -323,15 +381,40 @@ $menuOffset: 15vh;
       font-family: $font-family-1;
       font-size: $font-size-xx-regular;
       color: $gray-400;
-      height: 46px;
+      height: 100px;
       text-overflow: ellipsis;
-    }
 
-    // For now, just override our heading class with this value
-    // As we migrate things forward we need a designer to review font sizes
-    .c-heading {
-      font-size: $font-size-x-big;
-      margin: 0 0 10px 0;
+      .card-summary-content {
+        padding: 40px 0;
+      }
+
+      .card-summary-link {
+        display: flex;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .card-summary-button-link {
+        height: 28px;
+        width: 28px;
+        background-color: $gray-400;
+        position: relative;
+        border-radius: 50%;
+
+        &:after {
+          content: "";
+          position: absolute;
+          top: 10px;
+          right: 11px;
+          width: 8px;
+          height: 8px;
+          border: 3px solid $white;
+          border-top: 0;
+          border-left: 0;
+          transform: rotate(-45deg);
+        }
+      }
     }
   }
 }
