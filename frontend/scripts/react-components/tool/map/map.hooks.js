@@ -88,7 +88,8 @@ export function useFitToBounds({
   useEffect(() => {
     const fitToBounds = () => {
       const selectedGeoNodesIds = selectedGeoNodes.map(n => n.geoId);
-      const selectedUnitLayer = unitLayers.find(u => u.id.startsWith(sourceLayer.toLowerCase()));
+      const selectedUnitLayer =
+        unitLayers && unitLayers.find(u => u.id.startsWith(sourceLayer.toLowerCase()));
       if (!selectedUnitLayer) return;
       const features = map
         .querySourceFeatures(selectedUnitLayer.id, { sourceLayer })
