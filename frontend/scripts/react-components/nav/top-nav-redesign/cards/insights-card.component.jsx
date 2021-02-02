@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Transition } from 'react-spring/renderprops';
-
 import Heading from 'react-components/shared/heading/heading.component';
 import { ImgBackground } from 'react-components/shared/img';
 
 const InsightsCard = ({ title, summary, imageUrl, active, trailStyles }) => {
   const [cardActive, setCardActive] = useState(active);
-
   useEffect(() => {
     setCardActive(active);
   }, [active, setCardActive]);
-
   return (
     <div
       className="top-nav-card"
@@ -23,7 +20,7 @@ const InsightsCard = ({ title, summary, imageUrl, active, trailStyles }) => {
     >
       <ImgBackground as="figure" alt={title} className="card-image" src={imageUrl} />
       <section className="card-contents">
-        <Heading weight="bold" as="h4" variant="dm-sans" color="gray-four" size="xlg">
+        <Heading weight="bold" as="h4" variant="dm-sans" color="gray-700" size="lg">
           {title}
         </Heading>
         <Transition
@@ -41,7 +38,7 @@ const InsightsCard = ({ title, summary, imageUrl, active, trailStyles }) => {
             opacity: 0
           }}
           enter={{
-            height: 46,
+            height: 100,
             marginTop: 10,
             marginBottom: 20,
             opacity: 1
@@ -50,9 +47,9 @@ const InsightsCard = ({ title, summary, imageUrl, active, trailStyles }) => {
           {show =>
             show &&
             (props => (
-              <p style={props} className="card-summary">
-                {summary}
-              </p>
+              <div style={props} className="card-summary">
+                <div className="card-summary-content">{summary}</div>
+              </div>
             ))
           }
         </Transition>

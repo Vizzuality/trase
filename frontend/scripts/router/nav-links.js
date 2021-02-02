@@ -41,7 +41,7 @@ let nav = [
     name: 'Profiles',
     page: 'profiles'
   },
-  {
+  !ENABLE_TOP_NAV_REDESIGN && {
     name: 'Dashboards',
     page: 'dashboardRoot'
   },
@@ -49,12 +49,12 @@ let nav = [
     name: 'Logistics Map',
     page: 'logisticsMap'
   },
-  {
+  !ENABLE_TOP_NAV_REDESIGN && {
     name: 'Finance',
     page: 'https://trase.finance',
     external: true
   },
-  {
+  !ENABLE_TOP_NAV_REDESIGN && {
     name: 'Insights',
     page: 'https://insights.trase.earth/insights',
     external: true
@@ -63,7 +63,7 @@ let nav = [
     name: 'Download',
     page: 'data'
   },
-  !ENABLE_TOP_NAV_REDESIGN && {
+  {
     name: 'About',
     page: 'about'
   }

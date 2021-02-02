@@ -49,7 +49,7 @@ function CountriesPanel(props) {
 }
 
 CountriesPanel.propTypes = {
-  fetchKey: PropTypes.bool.isRequired,
+  fetchKey: PropTypes.bool,
   fetchData: PropTypes.func.isRequired,
   countries: PropTypes.array.isRequired,
   width: PropTypes.number.isRequired,

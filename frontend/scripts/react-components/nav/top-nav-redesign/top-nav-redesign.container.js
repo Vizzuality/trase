@@ -6,7 +6,7 @@ function mapStateToProps(state) {
   const { type, routesMap } = state.location;
   return {
     page: type,
-    links: routerLinks.nav,
+    links: routerLinks.nav.filter(Boolean),
     showLogo: type !== 'home',
     ...routesMap[type].nav
   };

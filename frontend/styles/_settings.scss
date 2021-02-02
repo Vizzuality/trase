@@ -1,5 +1,5 @@
 // layout
-$nav-height: 60px;
+$nav-height: 60px; // TODO: Change to 70px for new nav-bar
 $tool-bar-height: 50px;
 $timeline-height: 60px;
 $map-width: 320px;
@@ -38,13 +38,16 @@ $font-size-medium: 20px;
 $font-size-big: 24px;
 $font-size-x-big: 32px;
 $font-size-huge: 48px;
+$font-size-x-huge: 52px;
 
 // Line height
+$line-height-regular: 16px; // 1
 $line-height-regular: 16px; // 1
 $line-height-x-regular: 17.6px; // 1.1
 $line-height-md: 20px;
 $line-height-lg: 31px;
 $line-height-xl: 35.2px; // 2.2
+$line-height-huge: 52px;
 
 // List style
 $list-style-image-path: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='-1 -1 2 2'><circle fill='#3444C' r='1' /></svg>";
@@ -128,6 +131,7 @@ $gray-700: #12282e;
 $gray-500: #1f434e;
 $gray-300: #193841;
 $gray-400: #5d767d;
+$gray-300: #B0BDC1; // gray-500 opacity 0.4
 $gray-200: #dadada;
 
 $green-200: #9AECC8;
