@@ -214,8 +214,6 @@ class TopNavRedesign extends React.PureComponent {
   render() {
     const { className } = this.props;
     const { backgroundVisible, menuOpen } = this.state;
-    const isTablet = window.innerWidth <= BREAKPOINTS.tablet;
-    console.log('s', isTablet);
 
     return (
       <div
