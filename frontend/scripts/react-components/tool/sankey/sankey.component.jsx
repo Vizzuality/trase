@@ -307,7 +307,14 @@ function Sankey(props) {
           : node.x + sankeyColumnsWidth,
       y: node.y - tooltipPadding
     };
-    if (nodeAttributes && selectedMapDimensions && selectedMapDimensions.length > 0) {
+
+    // Importer countries (Country of production) should only show the trade volume on the tooltip
+    if (
+      nodeAttributes &&
+      selectedMapDimensions &&
+      selectedMapDimensions.length > 0 &&
+      node.type !== NODE_TYPES.countryOfProduction
+    ) {
       const nodeIndicators = selectedMapDimensions
         .map(dimension => {
           const meta = getNodeMeta(dimension, node, nodeAttributes, selectedResizeBy, nodeHeights);
@@ -321,7 +328,7 @@ function Sankey(props) {
           };
         })
         .filter(Boolean);
-
+      console.log('node', nodeIndicators, nodeAttributes, node);
       tooltip.items.push(...nodeIndicators);
 
       if (otherNodeCount) {

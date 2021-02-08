@@ -2,6 +2,7 @@ import immer from 'immer';
 import createReducer from 'utils/createReducer';
 import fuzzySearch from 'utils/fuzzySearch';
 import { getPanelName } from 'utils/getProfilePanelName';
+import { NODE_TYPES } from 'constants';
 import {
   PROFILES__SET_ACTIVE_STEP,
   PROFILES__SET_PANEL_DATA,
@@ -62,7 +63,7 @@ const profilesReducer = {
       }
 
       // Select country of production item (there is only one) when country of production its the first tab
-      if (panelName === 'sources' && data && data[0].nodeType === 'COUNTRY OF PRODUCTION') {
+      if (panelName === 'sources' && data && data[0].nodeType === NODE_TYPES.countryOfProduction) {
         draft.panels.sources.activeTab = tab;
         draft.panels.sources.activeItems = [data[0].id];
 
@@ -184,7 +185,10 @@ const profilesReducer = {
 
       // If a country source is selected set the country item as active
       if (panel === 'sources') {
-        const { tabs: { sources }, data } = state;
+        const {
+          tabs: { sources },
+          data
+        } = state;
         const countryTab = sources.find(t => t.profile_type === 'country');
         if (activeTab === countryTab.id) {
           draft.panels.sources.activeItems = [data.sources[countryTab.id][0].id];
