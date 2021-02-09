@@ -55,7 +55,13 @@ $menuOffset: 15vh;
     }
   }
 
-  // **
+  .top-nav-search{
+    min-width: 34px;
+
+    @media screen and (min-width: $breakpoint-laptop) {
+      min-width: 100px;
+    }
+  }
 
   .top-nav-search .icon-search {
     margin: 0 10px 0 10px;
@@ -416,5 +422,8 @@ $menuOffset: 15vh;
         }
       }
     }
+  }
+  .icon-download-pdf {
+    stroke: gray;
   }
 }
