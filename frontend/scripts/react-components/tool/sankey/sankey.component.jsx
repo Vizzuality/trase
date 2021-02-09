@@ -328,7 +328,6 @@ function Sankey(props) {
           };
         })
         .filter(Boolean);
-      console.log('node', nodeIndicators, nodeAttributes, node);
       tooltip.items.push(...nodeIndicators);
 
       if (otherNodeCount) {
