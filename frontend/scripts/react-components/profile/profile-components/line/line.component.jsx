@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import capitalize from 'lodash/capitalize';
 import isEqual from 'lodash/isEqual';
 
 import { event as d3_event, select as d3_select } from 'd3-selection';
@@ -423,10 +422,10 @@ class Line extends Component {
               <span>{index + 1}.</span>
               {isLink ? (
                 <span className="link" onClick={linkOnClick}>
-                  {capitalize(translateText(lineData.name))}
+                  {translateText(lineData.name)}
                 </span>
               ) : (
-                <span>{capitalize(translateText(lineData.name))}</span>
+                <span>{translateText(lineData.name)}</span>
               )}
             </li>
           );

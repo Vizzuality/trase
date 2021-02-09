@@ -16,12 +16,12 @@ class DownloadSelector extends Component {
       onOptionSelected,
       options,
       selected,
-      selectedFilters
+      selectedFilters,
+      title
     } = this.props;
-
     return options.map((elem, key) => (
       <li key={key}>
-        <span>{elem.name}</span>
+        <span>{title === 'COMPANIES' ? elem.name.toUpperCase() : elem.name}</span>
         {elem.filterOptions && (
           <FilterTooltip
             indicator={elem}
