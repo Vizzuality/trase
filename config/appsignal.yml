@@ -44,7 +44,7 @@ production:
 
 staging:
   <<: *defaults
-  active: true
+  active: false
 
 sandbox:
   <<: *defaults
@@ -52,8 +52,8 @@ sandbox:
 
 demo:
   <<: *defaults
-  active: true
+  active: false
 
 indonesiademo:
   <<: *defaults
-  active: true
+  active: false
