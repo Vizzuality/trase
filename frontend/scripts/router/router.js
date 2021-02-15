@@ -96,7 +96,7 @@ export const routes = {
       import(/* webpackChunkName: "tool" */ '../react-components/tool/tool.js')
     ),
     title: getPageTitle,
-    thunk: loadPageData(loadToolInitialData, resizeSankeyTool, loadDisclaimerTool, loadUnitLayers),
+    thunk: loadPageData(loadToolInitialData, resizeSankeyTool, loadDisclaimerTool),
     footer: false,
     feedback: false,
     nav: {
@@ -125,7 +125,7 @@ export const routes = {
       className: '-egg-shell',
       printable: true
     },
-    thunk: loadPageData()
+    thunk: loadPageData(loadUnitLayers)
   },
   dashboardRoot: {
     path: '/dashboards',

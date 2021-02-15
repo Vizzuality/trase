@@ -18,6 +18,7 @@ function PlaceSummary(props) {
     onChange,
     context,
     openModal,
+    countryLayers,
     data: {
       countryName,
       jurisdiction1GeoId,
@@ -26,12 +27,15 @@ function PlaceSummary(props) {
       jurisdictionGeoId,
       jurisdiction1: stateName,
       jurisdiction2: biomeName,
-      headerAttributes
+      headerAttributes,
+      columnName
     } = {},
     profileMetadata: { mainTopojsonPath, mainTopojsonRoot, years } = {}
   } = props;
-
   const { commodityName } = context;
+  // VECTOR LAYER
+  const layer = columnName && countryLayers?.find(layer => layer.id.endsWith(columnName.toLowerCase()));
+  console.log('___', layer)
   const titles = [
     { name: commodityName, label: 'Commodity' },
     {

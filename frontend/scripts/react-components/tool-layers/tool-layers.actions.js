@@ -39,7 +39,8 @@ export function setMapDimensions(dimensions, dimensionGroups) {
 
 export function loadUnitLayers() {
   return async (dispatch, getState) => {
-    if (!getState().toolLayers.data.mapUnitLayers) {
+    // TODO: can we made this condition only for the tool?
+    // if (!getState().toolLayers.data.mapUnitLayers) {
       const urlsPromise = await axios.get(`${UNIT_LAYERS_API_URL}/services`);
       const urls = urlsPromise?.data.map(d => d.url);
       if (urls && urls.length) {
@@ -55,7 +56,7 @@ export function loadUnitLayers() {
         });
       }
       return undefined;
-    }
+    // }
     return undefined;
   }
 };

@@ -20,7 +20,8 @@ function SummaryWidget(props) {
     profileType,
     onChange,
     profileMetadata,
-    openModal
+    openModal,
+    countryLayers
   } = props;
   const params = { node_id: nodeId, context_id: context?.id, profile_type: profileType, year };
 
@@ -88,6 +89,7 @@ function SummaryWidget(props) {
               context={context}
               profileMetadata={profileMetadata}
               openModal={openModal}
+              countryLayers={countryLayers}
             />
           </>
         );

@@ -13,11 +13,12 @@ class ProfileContainer extends React.PureComponent {
     context: PropTypes.object,
     commodityId: PropTypes.number,
     nodeId: PropTypes.number,
-    selectedYear: PropTypes.number
+    selectedYear: PropTypes.number,
+    unitLayers: PropTypes.array
   };
 
   render() {
-    const { context, nodeId, selectedYear, commodityId } = this.props;
+    const { context, nodeId, selectedYear, commodityId, unitLayers } = this.props;
     const contextProps = {};
 
     if (context) {
@@ -42,6 +43,7 @@ class ProfileContainer extends React.PureComponent {
               errorMetadata={error}
               loadingMetadata={loading}
               profileMetadata={profileMetadata}
+              countryLayers={unitLayers}
               year={year}
             />
           );
@@ -49,10 +51,6 @@ class ProfileContainer extends React.PureComponent {
       </Widget>
     );
   }
-}
-
-function mapStateToProps(state) {
-  return getProfileProps(state);
 }
 
 const updateQueryParams = (profileType, query) => {
@@ -81,4 +79,4 @@ const mapDispatchToProps = dispatch =>
     dispatch
   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProfileContainer);
+export default connect(getProfileProps, mapDispatchToProps)(ProfileContainer);

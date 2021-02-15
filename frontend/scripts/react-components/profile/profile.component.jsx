@@ -50,7 +50,8 @@ const Profile = props => {
     loadingMetadata,
     errorMetadata,
     updateQueryParams,
-    openModal
+    openModal,
+    countryLayers
   } = props;
   // if requestIdleCallback is not supported (Edge, IE) we render the iframe immediately
   const [renderIframes, setRenderIframes] = useState(
@@ -245,6 +246,7 @@ const Profile = props => {
               profileMetadata={profileMetadata}
               onChange={updateQuery}
               openModal={openModal}
+              countryLayers={countryLayers}
             />
             <div className="profile-content-anchor" ref={anchorRef} />
             <ProfileSelector />
