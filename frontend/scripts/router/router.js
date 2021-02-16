@@ -96,7 +96,7 @@ export const routes = {
       import(/* webpackChunkName: "tool" */ '../react-components/tool/tool.js')
     ),
     title: getPageTitle,
-    thunk: loadPageData(loadToolInitialData, resizeSankeyTool, loadDisclaimerTool),
+    thunk: loadPageData(loadToolInitialData, resizeSankeyTool, loadDisclaimerTool, loadUnitLayers),
     footer: false,
     feedback: false,
     nav: {

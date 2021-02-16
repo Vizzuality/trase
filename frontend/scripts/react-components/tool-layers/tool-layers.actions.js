@@ -39,12 +39,12 @@ export function setMapDimensions(dimensions, dimensionGroups) {
 
 export function loadUnitLayers() {
   return async (dispatch, getState) => {
-    // TODO: can we made this condition only for the tool?
-    // if (!getState().toolLayers.data.mapUnitLayers) {
+    const { toolLayers, location: { type, payload:  { profileType }}} = getState();
+    if ((type === 'tool' || (type === 'profile' &&  profileType === 'place')) && !toolLayers.data.mapUnitLayers) {
       const urlsPromise = await axios.get(`${UNIT_LAYERS_API_URL}/services`);
       const urls = urlsPromise?.data.map(d => d.url);
       if (urls && urls.length) {
-        const layersPromise = await Promise.all(urls.map(url => axios.get(url)));
+      const layersPromise = await Promise.all(urls.map(url => axios.get(url)));
         const layers =
           layersPromise &&
           layersPromise.map(l =>
@@ -56,7 +56,7 @@ export function loadUnitLayers() {
         });
       }
       return undefined;
-    // }
+    }
     return undefined;
   }
 };
