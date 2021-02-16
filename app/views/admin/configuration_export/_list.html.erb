@@ -1,0 +1,31 @@
+<% if events.any? %>
+  <h3>Previous exports:</h3>
+  <table class="index_table">
+    <thead>
+      <th class="col" width="15%">Started</th>
+      <th class="col" width="15%">Finished</th>
+      <th class="col" width="10%">Status</th>
+      <th class="col">Error</th>
+      <th class="col" width="15%">Started by</th>
+      <th class="col" width="10%"></th>
+      <th class="col" width="10%"></th>
+    </thead>
+    <tbody>
+      <% events.each do |event| %>
+        <tr>
+          <td><%= event.created_at %></td>
+          <td><%= event.finished_at %></td>
+          <td><%= event.status %></td>
+          <td><%= event.error %></td>
+          <td><%= event.started_by %></td>
+          <td><% if event.finished? %><%= link_to 'Download', admin_configuration_export_download_url(id: event.id) %><% end %></td>
+          <td>
+            <% unless event.started? %>
+              <%= link_to 'Delete', admin_configuration_export_destroy_url(id: event.id), method: :delete %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

@@ -1,0 +1,19 @@
+<div class="panel">
+  <h3>Export configuration</h3>
+  <div>
+    <% if started_or_queued_event %>
+      <b>Export in progress</b>
+      <% if started_or_queued_event.jid %> (JID: <%= started_or_queued_event.jid %>)<% end %>
+    <% end %>
+    <br>
+    Status of currently running and errored backround operations can be monitored <%= link_to 'here', sidekiq_web_url %>.
+  </div>
+  <div>
+    <%= form_tag(admin_configuration_export_start_path, class: 'formtastic') do %>
+      <%= submit_tag 'Start export',
+        disabled: started_or_queued_event.present?,
+        class: started_or_queued_event.present? ? 'disabled' : ''
+      %>
+    <% end %>
+  </div>
+</div>

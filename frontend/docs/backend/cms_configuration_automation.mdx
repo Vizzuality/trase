@@ -1,0 +1,81 @@
+---
+name: CMS configuration automation
+menu: Backend
+---
+
+# Exporting CMS configuration
+
+There are two ways to export the configuration data in a JSON format - using the CMS or programmatically via an API.
+
+## Exporting using the CMS
+
+The configuraton export dashboard is under [Database -> Configuration export](https://staging.trase.earth/content/admin/configuration_export).
+
+If no export jub is currently running or queued, it is possible to start one using the `Start export` button.
+
+Please refresh the page to check the progress of the job.
+
+Status can be one of:
+- QUEUED - added to the queue
+- STARTED - now processing
+- FINISHED - completed successfully
+- FAILED - completed with errors
+
+Once the job is finished, it is possible to download the JSON data.
+
+## Exporting using the API
+
+### Authentication
+
+The API uses token authentication built using the `devise_token_auth` gem. The authentication endpoints are at `/api/private/auth`. [Here is the description of all endpoints provided by the gem](https://devise-token-auth.gitbook.io/devise-token-auth/usage), but we're only using `sign_in` / `sign_out`.
+
+Sign in using the CMS email / password:
+
+```
+curl -X POST -H "Content-Type: application/json" -d '{"email":"xxx@xxx.xxx","password":"xxxxxxxx"}' -i https://staging.trase.earth/api/private/auth/sign_in
+```
+
+The response headers contain information needed to authenticate further requests:
+
+```
+access-token: XXX
+token-type: Bearer
+client: XXX
+expiry: 1614725502
+uid: xxx@xxx.xxx
+```
+
+To authenticate requests you need to pass the `uid`, `access-token`, `token-type` and `client` headers.
+
+### Start export
+
+To start a configuration export job use a POST request to `/api/private/configuration_export_events`.
+
+```
+curl -X POST -H "Content-Type: application/json" -d '' -H "access-token:ACCESS_TOKEN" -H "uid:UID" -H "token-type:Bearer" -H "client:CLIENT" https://staging.trase.earth/api/private/configuration_export_events
+```
+
+This will return immediately, since it only schedules the job in the background processor.
+
+```
+{
+  "data":{
+    "id":5,
+    "created_at":"2021-02-16T22:43:03.795Z",
+    "updated_at":"2021-02-16T22:43:03.805Z",
+    "status":"QUEUED",
+    "jid":"44799594501793cdba36d543",
+    "started_by":"xxx@xxx.xxx",
+    "error":null,
+    "data":null
+  }
+}
+```
+
+Use the `id` from the response body to check for the status of the job:
+
+```
+curl -H "Content-Type: application/json" -H "access-token:ACCESS_TOKEN" -H "uid:UID" -H "token-type:Bearer" -H "client:CLIENT" https://staging.trase.earthapi/private/configuration_export_events/5
+```
+
+When status is FINISHED, `data` will contain the configuration exported in json format.

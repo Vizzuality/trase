@@ -22,6 +22,7 @@ module Api
       has_many :qual_commodity_properties
 
       has_many :sankey_card_links
+      has_many :top_profile_images
 
       validates :name, presence: true, uniqueness: true
 
