@@ -84,7 +84,12 @@ class GlobalSearchResult extends Component {
           )}
 
           {item.nodes
-            .filter(n => n.profile && !DISABLE_PROFILES)
+            .filter(
+              n =>
+                n.profile &&
+                !(n.nodeType === 'COUNTRY' && !ENABLE_COUNTRY_PROFILES) &&
+                !DISABLE_PROFILES
+            )
             .map(node => (
               <LinkButton
                 onClick={closeSearch}

@@ -1,4 +1,4 @@
-import { PROFILE_STEPS } from 'constants';
+import { PROFILE_STEPS, NODE_TYPES } from 'constants';
 
 export const PROFILES__SET_MORE_PANEL_DATA = 'PROFILES__SET_MORE_PANEL_DATA';
 export const PROFILES__SET_PANEL_DATA = 'PROFILES__SET_PANEL_DATA';
@@ -82,7 +82,7 @@ export const goToProfile = () => (dispatch, getState) => {
     panels.sources.activeItems.length > 0 &&
     data.sources[panels.sources.activeTab] &&
     data.sources[panels.sources.activeTab][0] &&
-    data.sources[panels.sources.activeTab][0].nodeType === 'COUNTRY OF PRODUCTION';
+    data.sources[panels.sources.activeTab][0].nodeType === NODE_TYPES.countryOfProduction;
   const isCountryProfile = isDestinationCountryProfile || isProductionCountryProfile;
   const getProfileType = () => {
     if (isCountryProfile) return 'country';
