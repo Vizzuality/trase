@@ -45,6 +45,7 @@ module Api
         end
 
         def summary
+          @node_name = @node.name.upcase
           result = summary_of_production
           result << summary_of_production_ranking
           result << summary_of_top_exporter_and_top_consumer
@@ -257,13 +258,13 @@ module Api
           return '' unless @commodity_production
 
           if @commodity_production.zero?
-            return "<span class=\"notranslate\">#{@node.name.capitalize}</span> \
+            return "<span class=\"notranslate\">#{@node_name}</span> \
 did not produce any #{@commodity_name} in \
 <span class=\"notranslate\">#{@year}</span>."
           end
 
           summary_text = "In <span class=\"notranslate\">#{@year}</span>, \
-<span class=\"notranslate\">#{@node.name.capitalize}</span> produced \
+<span class=\"notranslate\">#{@node_name}</span> produced \
 <span class=\"notranslate\">#{@commodity_production_formatted}</span> \
 <span class=\"notranslate\">#{@commodity_production_unit}</span> of \
 <span class=\"notranslate\">#{@commodity_name}</span>"
@@ -321,7 +322,7 @@ did not produce any #{@commodity_name} in \
 
           text + "of the total production, it \
 ranks <span class=\"notranslate\">#{country_ranking}</span> in \
-<span class=\"notranslate\">#{@context.country.name.capitalize}</span> \
+<span class=\"notranslate\">#{@context.country.name.upcase}</span> \
 in \
 <span class=\"notranslate\">#{@commodity_name}</span> \
 production#{state_ranking_text}."
@@ -331,7 +332,7 @@ production#{state_ranking_text}."
         def summary_of_top_exporter_and_top_consumer
           top_exporter = @top_exporters.first
           if top_exporter.present?
-            top_exporter_name = top_exporter['name']&.capitalize
+            top_exporter_name = top_exporter['name']&.upcase
             if @total_exports.present?
               percentage_total_exports = helper.number_to_percentage(
                 ((top_exporter[:value] || 0) / @total_exports) * 100,
@@ -341,11 +342,11 @@ production#{state_ranking_text}."
           end
 
           top_consumer = @top_consumers.first
-          top_consumer_name = top_consumer['name']&.capitalize if top_consumer
+          top_consumer_name = top_consumer['name']&.upcase if top_consumer
 
           if top_exporter && percentage_total_exports && top_consumer
             " The largest exporter of #{@commodity_name} in \
-<span class=\"notranslate\">#{@node.name.capitalize}</span> was \
+<span class=\"notranslate\">#{@node_name}</span> was \
 <span class=\"notranslate\">#{top_exporter_name}</span>, which accounted for \
 <span class=\"notranslate\">#{percentage_total_exports}</span> of \
 the total exports, and the main destination was \
