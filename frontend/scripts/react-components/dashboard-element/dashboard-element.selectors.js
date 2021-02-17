@@ -267,7 +267,7 @@ const buildDynamicSentence = (
       name: sourcesSettings.name,
       prefix: sourcesValues ? sourcesSettings.prefix : 'produced in countries covered by Trase',
       value: sourcesValues,
-      transform: 'capitalize'
+      transform: 'uppercase'
     },
     {
       panel: 'exporters',
