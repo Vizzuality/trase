@@ -331,7 +331,7 @@ production#{state_ranking_text}."
         def summary_of_top_exporter_and_top_consumer
           top_exporter = @top_exporters.first
           if top_exporter.present?
-            top_exporter_name = top_exporter['name']&.titleize
+            top_exporter_name = top_exporter['name']&.capitalize
             if @total_exports.present?
               percentage_total_exports = helper.number_to_percentage(
                 ((top_exporter[:value] || 0) / @total_exports) * 100,
@@ -341,7 +341,7 @@ production#{state_ranking_text}."
           end
 
           top_consumer = @top_consumers.first
-          top_consumer_name = top_consumer['name']&.titleize if top_consumer
+          top_consumer_name = top_consumer['name']&.capitalize if top_consumer
 
           if top_exporter && percentage_total_exports && top_consumer
             " The largest exporter of #{@commodity_name} in \
