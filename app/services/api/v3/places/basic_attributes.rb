@@ -341,7 +341,7 @@ production#{state_ranking_text}."
           end
 
           top_consumer = @top_consumers.first
-          top_consumer_name = top_consumer['name']&.titleize if top_consumer
+          top_consumer_name = top_consumer['name']&.capitalize if top_consumer
 
           if top_exporter && percentage_total_exports && top_consumer
             " The largest exporter of #{@commodity_name} in \

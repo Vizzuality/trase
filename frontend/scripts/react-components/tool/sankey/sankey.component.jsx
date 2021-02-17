@@ -58,10 +58,18 @@ function useMenuOptions(props, hoveredSelectedNode) {
       link.profileType = hoveredSelectedNode.profileType;
       link.nodeId = hoveredSelectedNode.id;
     }
-
+    const DISALLOW_NODE_TYPES = [
+      NODE_TYPES.economicBloc,
+      NODE_TYPES.districtOfExport,
+      NODE_TYPES.biome
+    ];
+    if (!ENABLE_COUNTRY_PROFILES) {
+      DISALLOW_NODE_TYPES.push(NODE_TYPES.countryOfProduction);
+      DISALLOW_NODE_TYPES.push(NODE_TYPES.country);
+    }
     if (
-      link.profileType &&
-      (nodeType !== NODE_TYPES.countryOfProduction || ENABLE_COUNTRY_PROFILES)
+      (link.profileType && console.log('ss', nodeType)) ||
+      !DISALLOW_NODE_TYPES.includes(nodeType)
     ) {
       items.splice(2, 0, {
         id: 'profile-link',
