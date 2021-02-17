@@ -34,8 +34,7 @@ function PlaceSummary(props) {
   } = props;
   const { commodityName } = context;
   // VECTOR LAYER
-  const layer = columnName && countryLayers?.find(layer => layer.id.endsWith(columnName.toLowerCase()));
-  console.log('___', layer)
+  const vectorLayer = columnName && countryLayers?.find(l => l.id.endsWith(columnName.toLowerCase()));
   const titles = [
     { name: commodityName, label: 'Commodity' },
     {
@@ -62,6 +61,7 @@ function PlaceSummary(props) {
               jurisdiction1GeoId
             )}`}
             topoJSONRoot={mainTopojsonRoot.replace('$stateGeoId$', jurisdiction1GeoId)}
+            vectorLayer={vectorLayer}
             getPolygonClassName={d =>
               d.properties.geoid === jurisdictionGeoId ? '-isCurrent' : ''
             }
