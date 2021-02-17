@@ -1,7 +1,6 @@
 module Api
   module V3
     class DownloadController < ApiController
-      include ActionController::Live # required for streaming
       include ZipTricks::RailsStreaming
 
       def index
