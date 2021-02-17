@@ -576,7 +576,10 @@ CREATE TABLE content.users (
     current_sign_in_ip character varying,
     last_sign_in_ip character varying,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    uid text,
+    provider text,
+    tokens json
 );
 
 
@@ -2025,6 +2028,40 @@ CREATE SEQUENCE public.commodities_id_seq
 --
 
 ALTER SEQUENCE public.commodities_id_seq OWNED BY public.commodities.id;
+
+
+--
+-- Name: configuration_export_events; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.configuration_export_events (
+    id bigint NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    jid text,
+    status text DEFAULT 'QUEUED'::text NOT NULL,
+    error text,
+    data json
+);
+
+
+--
+-- Name: configuration_export_events_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.configuration_export_events_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: configuration_export_events_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.configuration_export_events_id_seq OWNED BY public.configuration_export_events.id;
 
 
 --
@@ -9601,6 +9638,13 @@ ALTER TABLE ONLY public.commodities ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
+-- Name: configuration_export_events id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.configuration_export_events ALTER COLUMN id SET DEFAULT nextval('public.configuration_export_events_id_seq'::regclass);
+
+
+--
 -- Name: context_node_type_properties id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -10301,6 +10345,14 @@ ALTER TABLE ONLY public.commodities
 
 ALTER TABLE ONLY public.commodities
     ADD CONSTRAINT commodities_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: configuration_export_events configuration_export_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.configuration_export_events
+    ADD CONSTRAINT configuration_export_events_pkey PRIMARY KEY (id);
 
 
 --
@@ -13004,6 +13056,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200903085354'),
 ('20201007085611'),
 ('20210118102600'),
-('20210118140021');
+('20210118140021'),
+('20210215110809'),
+('20210216183845');
 
 

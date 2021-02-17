@@ -51,6 +51,8 @@ module Api
       delegate :is_disabled, to: :context_property
       delegate :is_highlighted, to: :context_property
       delegate :default_basemap, to: :context_property
+      delegate :name, prefix: 'commodity', to: :commodity
+      delegate :name, prefix: 'country', to: :country
 
       validates :country, presence: true
       validates :commodity, presence: true, uniqueness: {scope: :country}

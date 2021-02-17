@@ -3,9 +3,7 @@ shared_context 'minimal config for tooltips' do
 
   ### Boilerplate
 
-  let!(:chart) {
-    FactoryBot.create(:api_v3_chart)
-  }
+  let!(:chart) { FactoryBot.create(:api_v3_chart, profile: place_profile) }
 
   let!(:chart_attribute) {
     FactoryBot.create(

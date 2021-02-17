@@ -29,6 +29,7 @@ module Api
       delegate :column_group, to: :context_node_type_property
       delegate :prefix, to: :context_node_type_property
       delegate :role, to: :context_node_type_property
+      delegate :name, prefix: 'node_type', to: :node_type
 
       validates :context, presence: true
       validates :node_type, presence: true, uniqueness: {scope: :context}

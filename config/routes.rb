@@ -9,11 +9,15 @@ Rails.application.routes.draw do
     end
   end
 
+  # authentication endpoints for the private API
+  mount_devise_token_auth_for 'Content::User',
+    at: 'api/private/auth',
+    skip: [:registrations, :passwords, :confirmations, :omniauth_callbacks, :unlocks]
+
   namespace :admin do
     get :source_search, controller: :node_search, action: :source_search
     get :company_search, controller: :node_search, action: :company_search
     get :destination_search, controller: :node_search, action: :destination_search
-
     resources :commodity_search, only: [:index]
     resources :country_search, only: [:index]
   end
@@ -145,6 +149,10 @@ Rails.application.routes.draw do
         resources :destinations, only: [:index]
       end
       resources :node_types
+    end
+
+    namespace :private do
+      resources :configuration_export_events, as: :configuration_export, only: [:create, :show]
     end
   end
 end
