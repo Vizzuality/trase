@@ -65,6 +65,7 @@ function ToolSearchResult(props) {
         {buttonList}
         {item.profile &&
           !DISABLE_PROFILES &&
+          !(item.nodeType === 'COUNTRY' && !ENABLE_COUNTRY_PROFILES) &&
           item.nodeType.split(' & ').map(nodeType => (
             <LinkButton
               className="-medium-large"

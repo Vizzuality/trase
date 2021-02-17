@@ -2,7 +2,7 @@
 export const NUM_DECIMALS = {
   // resize by
   'trade volume': 0,
-  'volume': 0,
+  volume: 0,
   'land use': 0,
   'financial flow': 0,
   'territorial deforestation': 0,
@@ -296,7 +296,11 @@ export const PROFILE_TYPES = {
 };
 
 export const NODE_TYPES = {
-  countryOfProduction: 'COUNTRY OF PRODUCTION'
+  countryOfProduction: 'COUNTRY OF PRODUCTION',
+  country: 'COUNTRY',
+  economicBloc: 'ECONOMIC BLOC',
+  biome: 'BIOME',
+  districtOfExport: 'DISTRICT OF EXPORT'
 };
 
 export const DEFAULT_DASHBOARD_UNIT_FORMAT = '.4~s';
