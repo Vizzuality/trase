@@ -7,7 +7,7 @@ import Line from 'react-components/profile/profile-components/line/line.componen
 import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.component';
 import formatValue from 'utils/formatValue';
 
-class LineChartChart extends React.Component {
+class LineChart extends React.Component {
   state = { tooltipConfig: null };
 
   onMouseMove = (data, x, y) => {
@@ -63,7 +63,7 @@ class LineChartChart extends React.Component {
   }
 }
 
-LineChartChart.propTypes = {
+LineChart.propTypes = {
   testId: PropTypes.string,
   lines: PropTypes.array,
   xValues: PropTypes.array,
@@ -72,4 +72,4 @@ LineChartChart.propTypes = {
   highlightYear: PropTypes.bool
 };
 
-export default LineChartChart;
+export default LineChart;

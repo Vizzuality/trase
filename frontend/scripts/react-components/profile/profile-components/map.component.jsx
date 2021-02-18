@@ -10,29 +10,12 @@ import PropTypes from 'prop-types';
 import Responsive from 'react-components/shared/responsive.hoc';
 import scrollOffset from 'utils/scroll-offset';
 
-function geojson([x, y, z], layer, filter = () => true) {
-  if (!layer) return;
-  const features = [];
-  for (let i = 0; i < layer.length; ++i) {
-    const f = layer.feature(i).toGeoJSON(x, y, z);
-    if (filter.call(null, f, i, features)) features.push(f);
-  }
-  return { type: 'FeatureCollection', features };
-}
-
 class Map extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      vectorTiles: null
-    };
-  }
-
   componentDidMount() {
     this.build();
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps) {
     const {
       getPolygonClassName: cb1,
       hideTooltipCallback: cb2,
@@ -41,18 +24,13 @@ class Map extends Component {
     } = nextProps;
 
     const {
-      vectorTiles: nextVectorTiles
-    } = nextState;
-    const { vectorTiles } = this.state;
-
-    const {
       getPolygonClassName,
       hideTooltipCallback,
       showTooltipCallback,
       ...current
     } = this.props;
 
-    return !isEqual(next, current) || nextVectorTiles !== vectorTiles;
+    return !isEqual(next, current);
   }
 
   componentDidUpdate() {
@@ -92,7 +70,6 @@ class Map extends Component {
       showTooltipCallback,
       hideTooltipCallback,
       useRobinsonProjection,
-      vectorLayer
     } = this.props;
 
     this.element.innerHTML = '';
@@ -110,11 +87,8 @@ class Map extends Component {
     const container = geoParent.append('g');
     const projection = useRobinsonProjection === true ? d3_geoRobinson() : d3_geoMercator();
 
-    const { vectorTiles } = this.state;
     const path = d3_geoPath().projection(projection);
-    if (vectorTiles) {
-    } else {
-      d3_json(topoJSONPath, (error, topoJSON) => {
+    d3_json(topoJSONPath, (error, topoJSON) => {
       if (!topoJSON) return;
       const features = topojsonFeature(topoJSON, topoJSON.objects[topoJSONRoot]);
       // Filter Antartica
@@ -153,8 +127,6 @@ class Map extends Component {
 
       container.selectAll('path').style('stroke-width', 0.5 / scale);
     });
-    }
-
   }
 
   render() {

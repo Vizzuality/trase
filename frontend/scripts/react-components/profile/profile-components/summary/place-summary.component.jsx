@@ -9,6 +9,7 @@ import HelpTooltip from 'react-components/shared/help-tooltip/help-tooltip.compo
 import TitleGroup from 'react-components/profile/profile-components/title-group';
 import SummaryTitle from 'react-components/profile/profile-components/summary/summary-title.component';
 import Map from 'react-components/profile/profile-components/map.component';
+import VectorMap from 'react-components/profile/profile-components/vector-map/vector-map.component';
 import Text from 'react-components/shared/text';
 import formatValue from 'utils/formatValue';
 
@@ -33,7 +34,6 @@ function PlaceSummary(props) {
     profileMetadata: { mainTopojsonPath, mainTopojsonRoot, years } = {}
   } = props;
   const { commodityName } = context;
-  // VECTOR LAYER
   const vectorLayer = columnName && countryLayers?.find(l => l.id.endsWith(columnName.toLowerCase()));
   const titles = [
     { name: commodityName, label: 'Commodity' },
@@ -54,19 +54,24 @@ function PlaceSummary(props) {
   const renderMunicipalityMap = () => (
     <div className="c-overall-info page-break-inside-avoid">
       <div className="c-locator-map map-municipality-banner">
-        {countryName && (
-          <Map
-            topoJSONPath={`./vector_layers${mainTopojsonPath.replace(
-              '$stateGeoId$',
-              jurisdiction1GeoId
-            )}`}
-            topoJSONRoot={mainTopojsonRoot.replace('$stateGeoId$', jurisdiction1GeoId)}
-            vectorLayer={vectorLayer}
-            getPolygonClassName={d =>
-              d.properties.geoid === jurisdictionGeoId ? '-isCurrent' : ''
-            }
-          />
-        )}
+        {countryName &&
+          (vectorLayer ? (
+            <VectorMap
+              vectorLayer={vectorLayer}
+              geoId={jurisdictionGeoId}
+            />
+          ) : (
+            <Map
+              topoJSONPath={`./vector_layers${mainTopojsonPath.replace(
+                '$stateGeoId$',
+                jurisdiction1GeoId
+              )}`}
+              topoJSONRoot={mainTopojsonRoot.replace('$stateGeoId$', jurisdiction1GeoId)}
+              getPolygonClassName={d =>
+                d.properties.geoid === jurisdictionGeoId ? '-isCurrent' : ''
+              }
+            />
+          ))}
       </div>
     </div>
   );
