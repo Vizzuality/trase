@@ -315,13 +315,12 @@ function Sankey(props) {
           : node.x + sankeyColumnsWidth,
       y: node.y - tooltipPadding
     };
-
-    // Importer countries (Country of production) should only show the trade volume on the tooltip
+    // Importing countries (Country of import) should only show the trade volume on the tooltip
     if (
       nodeAttributes &&
       selectedMapDimensions &&
       selectedMapDimensions.length > 0 &&
-      node.type !== NODE_TYPES.countryOfProduction
+      node.type !== NODE_TYPES.country
     ) {
       const nodeIndicators = selectedMapDimensions
         .map(dimension => {
