@@ -213,7 +213,7 @@ GEM
       has_scope (~> 0.6)
       railties (>= 5.0, < 6.1)
       responders (>= 2, < 4)
-    jbuilder (2.10.1)
+    jbuilder (2.11.2)
       activesupport (>= 5.0.0)
     jmespath (1.4.0)
     jquery-rails (4.3.5)
@@ -506,7 +506,7 @@ DEPENDENCIES
   ed25519 (~> 1.2)
   enumerate_it (~> 3.2.0)
   factory_bot_rails
-  jbuilder (~> 2.10)
+  jbuilder (~> 2.11)
   json-schema
   kaminari
   listen (~> 3.3.3)
