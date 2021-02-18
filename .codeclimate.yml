@@ -34,7 +34,7 @@ checks:
 plugins:
   rubocop:
     enabled: true
-    channel: rubocop-1-4
+    channel: rubocop-1-10
   brakeman:
     enabled: true
   bundler-audit:
