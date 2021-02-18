@@ -140,7 +140,12 @@ module Api
         end
 
         def initialize_commodity_production
-          @commodity_name = @context.commodity.name.downcase
+          @commodity_name =
+            if @context.commodity.name == 'WOOD PULP'
+              'pulpwood'
+            else
+              @context.commodity.name.downcase
+            end
           if @commodity_production_attribute
             @commodity_production = attribute_value(
               @commodity_production_attribute
