@@ -30,5 +30,10 @@ module Content
     devise :database_authenticatable,
            :recoverable, :rememberable, :trackable, :validatable
     include DeviseTokenAuth::Concerns::User
+
+    before_validation do |user|
+      user.provider ||= 'email'
+      user.uid ||= email
+    end
   end
 end
