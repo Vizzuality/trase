@@ -24,8 +24,10 @@ function PlaceSummary(props) {
       summary,
       jurisdictionName,
       jurisdictionGeoId,
-      jurisdiction1: stateName,
-      jurisdiction2: biomeName,
+      jurisdiction1: jurisdiction1Name,
+      jurisdiction1Label,
+      jurisdiction2: jurisdiction2Name,
+      jurisdiction2Label,
       headerAttributes
     } = {},
     profileMetadata: { mainTopojsonPath, mainTopojsonRoot, years } = {}
@@ -44,8 +46,8 @@ function PlaceSummary(props) {
       onChange: newYear => onChange('year', newYear)
     },
     { name: capitalize(countryName), label: 'Country' },
-    { name: capitalize(biomeName), label: 'Biome' },
-    { name: capitalize(stateName), label: 'State' }
+    { name: capitalize(jurisdiction2Name), label: jurisdiction2Label || 'Biome' },
+    { name: capitalize(jurisdiction1Name), label: jurisdiction1Label || 'State' }
   ];
 
   const renderMunicipalityMap = () => (

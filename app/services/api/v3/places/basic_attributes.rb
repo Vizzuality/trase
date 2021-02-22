@@ -119,7 +119,8 @@ module Api
             label = "jurisdiction_#{chart_node_type.position + 1}"
             instance_variable_set("@#{label}", node)
             attributes[:"#{label}"] = node_name
-            attributes[:"#{label}_geo_id"] = node.geo_id if node
+            attributes[:"#{label}_geo_id"] = node&.geo_id
+            attributes[:"#{label}_label"] = node_type.name
           end
           attributes
         end
