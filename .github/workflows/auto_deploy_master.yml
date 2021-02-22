@@ -6,11 +6,11 @@ env:
   TRASE_LOCAL_MIRROR_SCHEMA: trase_earth
   TRASE_LOCAL_SCHEMA: public
 
-name: Deploy develop
+name: Deploy master
 
 on:
   push:
-    branches: [develop]
+    branches: [master]
   workflow_dispatch:
 
 jobs:
@@ -82,9 +82,9 @@ jobs:
       - name: Publish code coverage 🚀
         run: cc-test-reporter after-build
 
-  staging:
+  demo:
     needs: [rspec]
-    name: Deploy to staging
+    name: Deploy to demo
     runs-on: ubuntu-18.04
 
     steps:
@@ -108,13 +108,13 @@ jobs:
       - name: Deploy 🚀
         uses: miloserdow/capistrano-deploy@master
         with:
-          target: staging
-          deploy_key: ${{ secrets.STAGING_DEPLOY_ENC_KEY }}
-          enc_rsa_key_pth: ./config/deploy/encrypted_keys/staging_gh_deploy_enc
+          target: demo
+          deploy_key: ${{ secrets.DEMO_DEPLOY_ENC_KEY }}
+          enc_rsa_key_pth: ./config/deploy/encrypted_keys/demo_gh_deploy_enc
 
-  sandbox:
+  indonesiademo:
     needs: [rspec]
-    name: Deploy to sandbox
+    name: Deploy to indonesiademo
     runs-on: ubuntu-18.04
 
     steps:
@@ -138,6 +138,6 @@ jobs:
       - name: Deploy 🚀
         uses: miloserdow/capistrano-deploy@master
         with:
-          target: sandbox
-          deploy_key: ${{ secrets.SANDBOX_DEPLOY_ENC_KEY }}
-          enc_rsa_key_pth: ./config/deploy/encrypted_keys/sandbox_gh_deploy_enc
+          target: indonesiademo
+          deploy_key: ${{ secrets.INDONESIADEMO_DEPLOY_ENC_KEY }}
+          enc_rsa_key_pth: ./config/deploy/encrypted_keys/indonesiademo_gh_deploy_enc
