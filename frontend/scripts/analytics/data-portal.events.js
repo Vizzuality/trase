@@ -17,8 +17,8 @@ export default [
       const payload = Object.assign(
         {},
         {
-          country: context.countryName,
-          commodity: context.commodityName
+          country: context?.countryName,
+          commodity: context?.commodityName
         },
         action.payload
       );

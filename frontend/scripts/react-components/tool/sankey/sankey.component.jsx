@@ -295,6 +295,7 @@ function Sankey(props) {
     const rect = getRect(toolLayout);
     const nodeHeight = nodeHeights[node.id];
     const otherNodeCount = otherNodes && otherNodes[node.id] && otherNodes[node.id].count;
+    const scrollY = scrollContainerRef?.current?.scrollTop || 0;
     const tooltipPadding = 10;
     const minTooltipWidth = 180;
     const tooltip = {
@@ -313,15 +314,14 @@ function Sankey(props) {
         node.x + sankeyColumnsWidth + tooltipPadding > rect.width - minTooltipWidth
           ? node.x
           : node.x + sankeyColumnsWidth,
-      y: node.y - tooltipPadding
+      y: node.y - tooltipPadding - scrollY
     };
-
-    // Importer countries (Country of production) should only show the trade volume on the tooltip
+    // Importing countries (Country of import) should only show the trade volume on the tooltip
     if (
       nodeAttributes &&
       selectedMapDimensions &&
       selectedMapDimensions.length > 0 &&
-      node.type !== NODE_TYPES.countryOfProduction
+      node.type !== NODE_TYPES.country
     ) {
       const nodeIndicators = selectedMapDimensions
         .map(dimension => {

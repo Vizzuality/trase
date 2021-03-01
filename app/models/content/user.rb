@@ -13,6 +13,9 @@
 #  last_sign_in_at        :datetime
 #  current_sign_in_ip     :string
 #  last_sign_in_ip        :string
+#  uid                    :text
+#  provider               :text
+#  tokens                 :json
 #
 # Indexes
 #
@@ -21,9 +24,16 @@
 #
 module Content
   class User < Content::Base
+    extend Devise::Models
     # Include default devise modules. Others available are:
     # :confirmable, :lockable, :timeoutable and :omniauthable
     devise :database_authenticatable,
            :recoverable, :rememberable, :trackable, :validatable
+    include DeviseTokenAuth::Concerns::User
+
+    before_validation do |user|
+      user.provider ||= 'email'
+      user.uid ||= email
+    end
   end
 end

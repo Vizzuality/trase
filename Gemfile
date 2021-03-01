@@ -6,7 +6,7 @@ gem 'rails', '~> 5.2.4.4'
  # Use pg as the database for Active Record
 gem 'pg', '~> 0.18'
 # Use Puma as the app server
-gem 'puma', '~> 5.0'
+gem 'puma', '~> 5.2'
 # Use SCSS for stylesheets
 gem 'sassc-rails', '~> 2.1.2'
 gem 'sprockets', '< 4'
@@ -19,7 +19,7 @@ gem 'coffee-rails', '~> 5.0'
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
 gem 'turbolinks', '~> 5'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 2.10'
+gem 'jbuilder', '~> 2.11'
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
 # Use ActiveModel has_secure_password
@@ -43,6 +43,7 @@ gem 'aws-sdk-s3', '~> 1'
 gem 'best_in_place'
 gem 'ckeditor', '4.3.0'
 gem 'devise', '~> 4.7'
+gem 'devise_token_auth'
 gem 'dotenv-rails', '~> 2.7'
 gem 'enumerate_it', '~> 3.2.0'
 gem 'kaminari'
@@ -55,7 +56,7 @@ gem 'pg_search'
 gem 'rack', '~> 2.2.3' # issue with sidekiq web in version 2.1.1, still doesn't work on sandbox in version 2.1.2
 gem 'rack-cors', '~> 1.1'
 gem 'scenic'
-gem 'sidekiq', '~> 6.1.2'
+gem 'sidekiq', '~> 6.1.3'
 gem 'sidekiq-unique-jobs'
 gem 'sitemap_generator'
 gem 'staccato'
@@ -83,7 +84,7 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'annotate'
   gem 'bcrypt_pbkdf', '~> 1.0'
-  gem 'capistrano', '~> 3.14', require: false
+  gem 'capistrano', '~> 3.15', require: false
   gem 'capistrano-bundler'
   gem 'capistrano-yarn'
   gem 'capistrano-nvm'
@@ -91,7 +92,7 @@ group :development do
   gem 'capistrano-rails', '~> 1.6', require: false
   gem 'capistrano-rvm'
   gem 'ed25519', '~> 1.2'
-  gem 'rubocop', '~> 1.4.2', require: false
+  gem 'rubocop', '~> 1.10.0', require: false
   gem 'rubocop-performance', require: false
 end
 

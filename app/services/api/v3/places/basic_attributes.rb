@@ -119,7 +119,8 @@ module Api
             label = "jurisdiction_#{chart_node_type.position + 1}"
             instance_variable_set("@#{label}", node)
             attributes[:"#{label}"] = node_name
-            attributes[:"#{label}_geo_id"] = node.geo_id if node
+            attributes[:"#{label}_geo_id"] = node&.geo_id
+            attributes[:"#{label}_label"] = node_type.name
           end
           attributes
         end
@@ -140,7 +141,12 @@ module Api
         end
 
         def initialize_commodity_production
-          @commodity_name = @context.commodity.name.downcase
+          @commodity_name =
+            if @context.commodity.name == 'WOOD PULP'
+              'pulpwood'
+            else
+              @context.commodity.name.downcase
+            end
           if @commodity_production_attribute
             @commodity_production = attribute_value(
               @commodity_production_attribute
