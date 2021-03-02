@@ -29,7 +29,19 @@ jobs:
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v2
-
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.16.3'
+      - name: Install node_modules
+        working-directory: ./frontend
+        run: yarn
+      - name: Run Front end tests
+        working-directory: ./frontend
+        run: yarn test
+      - name: Verify front end build
+        working-directory: ./frontend
+        run: yarn build
       - name: Install PostgreSQL client 🐘
         run: |
           sudo apt update

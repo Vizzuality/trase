@@ -1,7 +1,10 @@
 name: Front end checks
 
-on: [push]
-
+on:
+  push:
+    branches-ignore:
+      - master
+      - develop
 jobs:
   lint:
     name: Front end code quality tests
