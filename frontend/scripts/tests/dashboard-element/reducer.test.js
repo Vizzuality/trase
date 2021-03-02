@@ -28,7 +28,6 @@ import {
   setDashboardPanelLoadingItems,
   setDashboardPanelActiveTab,
   clearDashboardPanel,
-  editDashboard,
   setDashboardSelectedCountryId,
   setDashboardSelectedCommodityId
 } from 'react-components/dashboard-element/dashboard-element.actions';
