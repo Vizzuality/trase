@@ -20,7 +20,7 @@ jobs:
       - name: Run tests
         run: yarn ci:lint
       - name: Run tests
-        run yarn test
+        run: yarn test
   build:
     name: Verify build
     runs-on: ubuntu-latest
