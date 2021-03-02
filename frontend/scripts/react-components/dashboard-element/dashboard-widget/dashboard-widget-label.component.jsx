@@ -10,18 +10,24 @@ const regularSuffix = (text, suffix) => (
 );
 
 const DashboardWidgetLabel = props => {
-  const { text, suffix } = props;
+  const { text, suffix, axis } = props;
   const isSuffixPercentage = suffix === '%';
+  const yAxisContent = isSuffixPercentage ? percentageSuffix(text, suffix) : regularSuffix(text, suffix);
   return (
-    <p className="widget-yAxis-label">
-      {isSuffixPercentage ? percentageSuffix(text, suffix) : regularSuffix(text, suffix)}
+    <p className={`widget-${axis}Axis-label`}>
+      {axis === 'y' ? yAxisContent : text}
     </p>
   );
 };
 
 DashboardWidgetLabel.propTypes = {
   text: PropTypes.string.isRequired,
-  suffix: PropTypes.string.isRequired
+  suffix: PropTypes.string.isRequired,
+  axis: PropTypes.string
+};
+
+DashboardWidgetLabel.defaultProps = {
+  axis: 'y'
 };
 
 export default DashboardWidgetLabel;

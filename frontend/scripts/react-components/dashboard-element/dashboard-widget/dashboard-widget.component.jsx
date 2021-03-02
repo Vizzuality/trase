@@ -137,6 +137,12 @@ function DashboardWidget(props) {
               testId="widget-chart"
               containerRef={widgetBoxRef}
             />
+            {chartConfig.xAxisLabel && (
+              <DashboardWidgetLabel
+                axis="x"
+                text={chartConfig.xAxisLabel.suffix}
+              />
+            )}
           </React.Fragment>
         );
     }
