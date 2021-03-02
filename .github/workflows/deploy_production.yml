@@ -1,0 +1,110 @@
+env:
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: postgres
+  POSTGRES_DB: trase_test
+  API_HOST: localhost:3000
+  TRASE_LOCAL_MIRROR_SCHEMA: trase_earth
+  TRASE_LOCAL_SCHEMA: public
+
+name: Deploy production
+
+on: [workflow_dispatch]
+
+jobs:
+  rspec:
+    name: RSpec
+    runs-on: ubuntu-18.04
+    services:
+      postgres:
+        image: postgres:11
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: ${{ env.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v2
+
+      - name: Install PostgreSQL client 🐘
+        run: |
+          sudo apt update
+          sudo bash -c "echo deb http://apt.postgresql.org/pub/repos/apt/ bionic-pgdg main >> /etc/apt/sources.list.d/pgdg.list"
+          wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+          sudo apt-get update
+          sudo apt-get -yqq install libpq-dev postgresql-client-11
+
+      - name: Install Ruby 💎
+        uses: ruby/setup-ruby@v1
+
+      - name: Setup gems cache
+        uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gem-use-ruby-${{ hashFiles('**/Gemfile.lock') }}
+
+      - name: Install gems 💎
+        run: |
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
+
+      - name: Install CodeClimate reporter
+        uses: amancevice/setup-code-climate@v0
+        with:
+          cc_test_reporter_id: ${{ secrets.CC_TEST_REPORTER_ID }}
+
+      - name: Setup database
+        env:
+          PGHOST: localhost
+          PGUSER: ${{ env.POSTGRES_USER }}
+          PGPASSWORD: ${{ env.POSTGRES_PASSWORD }}
+          RAILS_ENV: test
+        run: |
+          bundle exec rails db:create RAILS_ENV=test
+          bundle exec rails db:migrate RAILS_ENV=test
+
+      - name: Setup code coverage
+        run: cc-test-reporter before-build
+
+      - name: Run tests 🔧
+        env:
+          PGHOST: localhost
+          PGUSER: ${{ env.POSTGRES_USER }}
+          PGPASSWORD: ${{ env.POSTGRES_PASSWORD }}
+          RAILS_ENV: test
+        run: bundle exec rspec spec --fail-fast
+
+      - name: Publish code coverage 🚀
+        run: cc-test-reporter after-build
+
+  production:
+    needs: [rspec]
+    name: Deploy production
+    runs-on: ubuntu-18.04
+
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v2
+
+      - name: Install Ruby 💎
+        uses: ruby/setup-ruby@v1
+
+      - name: Setup gems cache
+        uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gem-use-ruby-${{ hashFiles('**/Gemfile.lock') }}
+
+      - name: Install gems 💎
+        run: |
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
+
+      - name: Deploy 🚀
+        uses: miloserdow/capistrano-deploy@master
+        with:
+          target: production
+          deploy_key: ${{ secrets.PRODUCTION_DEPLOY_ENC_KEY }}
+          enc_rsa_key_pth: ./config/deploy/encrypted_keys/production_gh_deploy_enc

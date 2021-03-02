@@ -12,6 +12,7 @@
     "e2e": "jest --config ./jest.e2e.config.js --colors --runInBand --testMatch='**/?(*.)+(spec|test).e2e.js?(x)'",
     "webpack:prod": "NODE_ENV='production' webpack --config config/webpack.config.prod.js",
     "eslint": "eslint -c .eslintrc.json --ext .jsx,.js scripts/**/* --fix",
+    "ci:lint": "eslint -c .eslintrc.json --ext .jsx,.js scripts/**/* --no-error-on-unmatched-pattern --quiet",
     "prettier": "prettier --config .prettierrc --ignore-path .prettierignore --write 'scripts/**/*'",
     "eslint-check": "eslint --print-config .eslintrc.js | eslint-config-prettier-check",
     "named-maps": "node ./gis/cartodb/named-maps.js",

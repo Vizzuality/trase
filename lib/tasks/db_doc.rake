@@ -71,6 +71,7 @@ namespace :db do
         "-dp #{LIB_DIR}/#{POSTGRESQL_JAR}",
         "-db #{config[Rails.env]['database']}",
         "-u #{config[Rails.env]['username']}",
+        "-p #{config[Rails.env]['password']}",
         "-host #{config[Rails.env]['host']}",
         "-o ./#{OUTPUT_DIR}/#{output_name}"
       ]

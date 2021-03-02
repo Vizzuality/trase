@@ -21,7 +21,13 @@
     "no-plusplus": 0,
     "default-case": 0,
     "no-param-reassign": 0,
+    "react/jsx-props-no-multi-spaces": 0,
     "jsx-a11y/click-events-have-key-events": 0,
+    "import/named": "warn",
+    "import/no-unresolved": "warn",
+    "import/extensions": "warn",
+    "import/no-extraneous-dependencies": "warn",
+    "react/jsx-filename-extension": "warn",
     "react/no-array-index-key": "off",  // TODO: remove this and fix the code
     "react/destructuring-assignment": "off", // TODO: remove this and fix the code
     "prefer-destructuring": 0, // TODO: remove this and fix the code
