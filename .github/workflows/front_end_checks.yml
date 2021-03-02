@@ -1,0 +1,39 @@
+name: Front end checks
+
+on: [push]
+
+jobs:
+  lint:
+    name: Front end code quality tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.16.3'
+      - name: Install modules
+        run: yarn
+      - name: Run tests
+        run: yarn ci:lint
+      - name: Run tests
+        run yarn test
+  build:
+    name: Verify build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.16.3'
+      - name: Install modules
+        run: yarn install --production
+      - name: Run build
+        run: yarn build
