@@ -1,0 +1,31 @@
+name: Test inherit jobs
+
+on:
+  push:
+  workflow_run:
+    workflows: ["Front end checks"]
+    branches: [develop]
+    types:
+      - completed
+  workflow_dispatch:
+jobs:
+  lint:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+  build:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+  rerun_lint:
+    name: Front end code quality tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.16.3'
+      - name: Install modules
+        run: yarn
+      - name: Verify Linting
+        run: yarn ci:lint
