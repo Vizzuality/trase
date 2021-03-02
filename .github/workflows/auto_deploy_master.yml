@@ -15,24 +15,23 @@ on:
 
 jobs:
   front_end:
-    checks:
-      name: Front end tests and build
-      runs-on: ubuntu-18.04
-      defaults:
-        run:
-          working-directory: ./frontend
-      steps:
-        - uses: actions/checkout@v2
-        - name: Setup Node
-          uses: actions/setup-node@v1
-          with:
-            node-version: '12.16.3'
-        - name: Install modules
-          run: yarn
-        - name: Run tests
-          run: yarn test
-        - name: Verify build
-          run: yarn build
+    name: Front end tests and build
+    runs-on: ubuntu-18.04
+    defaults:
+      run:
+        working-directory: ./frontend
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.16.3'
+      - name: Install modules
+        run: yarn
+      - name: Run tests
+        run: yarn test
+      - name: Verify build
+        run: yarn build
   rspec:
     name: RSpec
     runs-on: ubuntu-18.04
