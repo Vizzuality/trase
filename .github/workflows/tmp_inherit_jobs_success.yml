@@ -9,11 +9,8 @@ on:
       - completed
   workflow_dispatch:
 jobs:
-  lint:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-  build:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
   rerun_lint:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     name: Front end code quality tests
     runs-on: ubuntu-latest
     defaults:
