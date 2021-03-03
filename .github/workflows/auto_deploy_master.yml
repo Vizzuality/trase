@@ -100,7 +100,7 @@ jobs:
         run: cc-test-reporter after-build
 
   demo:
-    needs: [rspec]
+    needs: [rspec, front_end]
     name: Deploy to demo
     runs-on: ubuntu-18.04
 
@@ -130,7 +130,7 @@ jobs:
           enc_rsa_key_pth: ./config/deploy/encrypted_keys/demo_gh_deploy_enc
 
   indonesiademo:
-    needs: [rspec]
+    needs: [rspec, front_end]
     name: Deploy to indonesiademo
     runs-on: ubuntu-18.04
 

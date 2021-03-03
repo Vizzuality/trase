@@ -10,7 +10,7 @@ We're using Github Actions for CI purposes. The configuration can be found in `.
 ## Tests workflow
 
 Runs on every push, except when pushing `develop` and `master`. Supports manual dispatch. Consists of 2 jobs:
-- `RSpec` for Rails tests
+- `rspec` for Rails tests
 - `front_end` For node + front end
 
 Please note: The reason this workflow does not run when pushing to `develop` and `master` is because it will run anyway when pushing to those branches as part of the deploy workflows described below, which have a dependency on a successful build. Unfortunately, test jobs definitions are currently duplicated across worflows, I haven't found a solution for this.
@@ -31,22 +31,22 @@ Runs on every push to `develop`. Supports manual dispatch. Consists of 2 jobs:
 ## Auto deploy develop
 Runs on every push to `develop`. Supports manual dispatch. Uses Capistrano. Consists of 4 jobs:
 - `front_end`, Runs tests + verifies front end build
-- `RSpec`
-- `Deploy to staging`, depends on `RSpec`
-- `Deploy to sandbox`, depends on `RSpec`
+- `rspec`
+- `Deploy to staging`, depends on `rspec` and `front_end`
+- `Deploy to sandbox`, depends on `rspec` and `front_end`
 
 ## Auto deploy master
 Runs on every push to `master`. Supports manual dispatch. Uses Capistrano. Consists of 4 jobs:
 - `front_end`, Runs tests + verifies front end build
-- `RSpec`
-- `Deploy to demo`, depends on `RSpec`
-- `Deploy to indonesiademo`, depends on `RSpec`
+- `rspec`
+- `Deploy to demo`, depends on `rspec` and `front_end`
+- `Deploy to indonesiademo`, depends on `rspec` and `front_end`
 
 ## Deploy production
 Available only as manual dispatch. Uses Capistrano. Consists of 3 jobs:
 - `front_end`, Runs tests + verifies front end build
-- `RSpec`
-- `Deploy production`, depends on `RSpec`
+- `rspec`
+- `Deploy production`, depends on `rspec` and `front_end`
 
 # About setting up deploy workflows
 

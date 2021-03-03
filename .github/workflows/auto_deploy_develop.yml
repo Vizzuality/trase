@@ -99,7 +99,7 @@ jobs:
         run: cc-test-reporter after-build
 
   staging:
-    needs: [rspec]
+    needs: [rspec, front_end]
     name: Deploy to staging
     runs-on: ubuntu-18.04
 
@@ -129,7 +129,7 @@ jobs:
           enc_rsa_key_pth: ./config/deploy/encrypted_keys/staging_gh_deploy_enc
 
   sandbox:
-    needs: [rspec]
+    needs: [rspec, front_end]
     name: Deploy to sandbox
     runs-on: ubuntu-18.04
 
