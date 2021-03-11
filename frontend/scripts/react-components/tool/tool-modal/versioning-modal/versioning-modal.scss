@@ -1,36 +1,22 @@
 @import 'styles/settings';
 
-$footer-height: 86px;
-
 .c-versioning-modal {
   .versioning-modal-content {
-    width: 750px;
-    height: 90vh;
-    padding: 15px 5px $footer-height + 20px;
+    min-width: 60vw;
+    padding: 25px 10px 30px;
 
     .modal-title,
-    .summary-title,
+    .summary-title {
+      margin-bottom: 10px;
+    }
+
     .summary {
-      margin-bottom: 15px;
-    }
-
-    .summary-text {
       margin-bottom: 20px;
-    }
-  }
 
-  .modal-footer {
-    background-color: $background-white;
-    padding: 20px 0 20px;
-    border-top: 1px solid $medium-gray;
-    position: absolute;
-    bottom: 0;
-    height: $footer-height;
-    width: 100%;
-
-    .link-button {
-      margin: 0 auto;
-      display: block;
+      a {
+        font-weight: $font-weight-bold;
+        text-decoration: underline;
+      }
     }
   }
 }
