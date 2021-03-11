@@ -85,8 +85,8 @@ export const getVersioningSelected = createSelector(getVersionData, versionData 
   id: 'version',
   type: 'optionsMenu',
   show: versionData,
-  label: 'Change version',
-  value: `${versionData?.title} v${versionData?.version}`
+  label: 'Version info',
+  value: `${versionData?.title}${versionData?.version ? `v ${versionData?.version}` : ''}`
 }));
 
 export const getViewModeFilter = createSelector(
