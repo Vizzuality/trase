@@ -4,7 +4,6 @@ import Heading from 'react-components/shared/heading';
 import Text from 'react-components/shared/text';
 import 'react-components/tool/tool-modal/versioning-modal/versioning-modal.scss';
 import capitalize from 'lodash/capitalize';
-import Link from 'redux-first-router-link';
 
 function VersioningModal({ data, context }) {
   const { title, version, summary } = data;
@@ -24,22 +23,20 @@ function VersioningModal({ data, context }) {
             )}
           </Heading>
           <Text
-            as="div"
+            as="span"
             size="md"
             lineHeight="lg"
             dangerouslySetInnerHTML={{ __html: summary }}
             className="summary"
-          />
-          <div>
-            <Text size="md" as="span">
-              Do you want to learn more? Explore{' '}
+          />{' '}
+          <a // Using a instead of Link because of the anchor: https://github.com/faceyspacey/redux-first-router-link/issues/82
+            href="/about/methods-and-data#user-content-subnational-supply-chain-maps-methods-and-data-sources"
+            title="Methods and data"
+          >
+            <Text as="span" className="link-text" size="md" weight="bold" decoration="underline">
+              Methods and data.
             </Text>
-            <Link to="/about/methods-and-data" title="Methods and data">
-              <Text as="span" className="link-text" size="md" weight="bold" decoration="underline">
-                Methods and data.
-              </Text>
-            </Link>
-          </div>
+          </a>
         </div>
       </div>
     </div>
