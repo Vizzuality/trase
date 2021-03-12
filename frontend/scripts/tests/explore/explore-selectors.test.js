@@ -1,4 +1,8 @@
-import { getCardsWithRecentCard, getRecentCard } from 'react-components/explore/explore.selectors.js';
+import {
+  getCardsWithRecentCard,
+  getRecentCard
+} from 'react-components/explore/explore.selectors.js';
+
 const validCountryId = 1;
 const validCommodityId = 2;
 

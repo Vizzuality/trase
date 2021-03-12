@@ -1,0 +1,91 @@
+env:
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: postgres
+  POSTGRES_DB: trase_test
+  API_HOST: localhost:3000
+  TRASE_LOCAL_MIRROR_SCHEMA: trase_earth
+  TRASE_LOCAL_SCHEMA: public
+
+name: Publish documentation
+
+on:
+  push:
+    branches: [ develop ]
+  workflow_dispatch:
+
+jobs:
+  gh_pages:
+    name: DB and API docs
+    runs-on: ubuntu-18.04
+    services:
+      postgres:
+        image: postgres:11
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: ${{ env.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v2
+
+      - name: Install PostgreSQL client 🐘
+        run: |
+          sudo apt update
+          sudo bash -c "echo deb http://apt.postgresql.org/pub/repos/apt/ bionic-pgdg main >> /etc/apt/sources.list.d/pgdg.list"
+          wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+          sudo apt-get update
+          sudo apt-get -yqq install libpq-dev postgresql-client-11
+
+      - name: Install Ruby 💎
+        uses: ruby/setup-ruby@v1
+
+      - name: Setup gems cache
+        uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gem-use-ruby-${{ hashFiles('**/Gemfile.lock') }}
+
+      - name: Install gems 💎
+        run: |
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
+
+      - name: Setup database
+        env:
+          PGHOST: localhost
+          PGUSER: ${{ env.POSTGRES_USER }}
+          PGPASSWORD: ${{ env.POSTGRES_PASSWORD }}
+          RAILS_ENV: test
+        run: |
+          bundle exec rails db:create RAILS_ENV=test
+          bundle exec rails db:migrate RAILS_ENV=test
+
+      - name: Build 🔧
+        env:
+          PGHOST: localhost
+          PGUSER: ${{ env.POSTGRES_USER }}
+          PGPASSWORD: ${{ env.POSTGRES_PASSWORD }}
+          RAILS_ENV: test
+        run: bundle exec rake db:doc:html
+
+      - name: Publish to https://vizzuality.github.io/trase/db/all_tables 🚀
+        uses: JamesIves/github-pages-deploy-action@4.0.0
+        with:
+          branch: gh-pages # The branch the action should deploy to.
+          folder: doc/gh-pages # The folder the action should deploy.
+
+  surge:
+    name: FE and BE docs
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Publish to trase.surge.sh 🚀
+        uses: dswistowski/surge-sh-action@v1
+        with:
+          domain: 'trase.surge.sh'
+          project: './frontend/docs/'
+          login: ${{ secrets.SURGE_LOGIN }}
+          token: ${{ secrets.SURGE_TOKEN }}
+
