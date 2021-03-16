@@ -140,7 +140,7 @@ $menuOffset: 15vh;
       }
 
       &:hover, &.-active {
-        color: $gray-500;
+        color: $gray-600;
 
         &::after {
           width: 100%;
@@ -315,7 +315,7 @@ $menuOffset: 15vh;
       }
 
       .about-menu-item {
-        color: $gray-500;
+        color: $gray-600;
         text-transform: uppercase;
         font-weight: $font-weight-light;
         font-size: $font-size-xx-regular;

@@ -17,7 +17,7 @@ const partners = [
   {
     className: 'gcp-logo',
     href: 'http://globalcanopy.org/',
-    image: '/images/footer/partnership/g-c-p@2x.png',
+    image: '/images/footer/partnership/gc@2x.png',
     alt: 'Global Canopy Programme',
     imageClassName: 'gcp-img'
   }
