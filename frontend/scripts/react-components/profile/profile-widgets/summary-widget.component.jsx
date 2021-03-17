@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 
-import ActorSummary from 'react-components/profile/profile-components/summary/actor-summary.component';
-import PlaceSummary from 'react-components/profile/profile-components/summary/place-summary.component';
-import CountrySummary from 'react-components/profile/profile-components/summary/country-summary.component';
+import ActorSummary from 'react-components/profile/profile-components/summary/actor-summary';
+import PlaceSummary from 'react-components/profile/profile-components/summary/place-summary';
+import CountrySummary from 'react-components/profile/profile-components/summary/country-summary';
 import Widget from 'react-components/widgets/widget.component';
 import { getSummaryEndpoint } from 'utils/getURLFromParams';
 import stripHtml from 'utils/stripHtml';
@@ -31,6 +31,7 @@ function SummaryWidget(props) {
     params.commodity_id = commodityId;
   }
   const summaryEndpoint = getSummaryEndpoint(profileType);
+
   return (
     <Widget params={[params]} query={[summaryEndpoint]}>
       {({ data, loading, error }) => {
@@ -62,7 +63,6 @@ function SummaryWidget(props) {
         const juristiction = data[summaryEndpoint].jurisdictionName;
 
         const description = data[summaryEndpoint]?.summary;
-
         return (
           <>
             <Helmet>
@@ -107,7 +107,8 @@ SummaryWidget.propTypes = {
   nodeId: PropTypes.number.isRequired,
   onChange: PropTypes.func.isRequired,
   openModal: PropTypes.func.isRequired,
-  profileType: PropTypes.string.isRequired
+  profileType: PropTypes.string.isRequired,
+  countryLayers: PropTypes.array
 };
 
 export default SummaryWidget;

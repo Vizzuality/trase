@@ -2,7 +2,7 @@
 export const NUM_DECIMALS = {
   // resize by
   'trade volume': 0,
-  'volume': 0,
+  volume: 0,
   'land use': 0,
   'financial flow': 0,
   'territorial deforestation': 0,
@@ -353,3 +353,12 @@ export const LOGISTICS_MAP_INSPECTION_LEVELS = [
   { value: 'SIM', label: 'SIM' },
   { value: 'UNKNOWN', label: 'Unknown' }
 ];
+
+export const CARTO_LAYERS = {
+  brazil_state: 'brazil_states',
+  argentina_province: 'ar_provinces_20191118'
+};
+
+export const CARTO_GEOID_NAMES = {
+  argentina_province: 'trase_id'
+};

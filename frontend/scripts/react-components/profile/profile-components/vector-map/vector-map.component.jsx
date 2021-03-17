@@ -2,10 +2,11 @@ import React, { useState, useRef, useEffect } from 'react';
 import { PropTypes } from 'prop-types';
 import { LayerManager, Layer } from 'layer-manager/dist/components';
 import { PluginMapboxGl } from 'layer-manager';
+import Spinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
 import ReactMapGL from 'react-map-gl';
 import 'react-components/tool/map/map.scss';
 import capitalize from 'lodash/capitalize';
-import geoViewport  from '@mapbox/geo-viewport';
+import geoViewport from '@mapbox/geo-viewport';
 import { createLayer, MAP_STYLE } from './vector-map-config';
 
 const fitToBounds = ({ setViewport, viewport, bounds }) => {
@@ -18,7 +19,7 @@ const fitToBounds = ({ setViewport, viewport, bounds }) => {
 
 const VectorMap = ({ vectorLayer, geoId }) => {
   const [longitude, latitude] = vectorLayer.center;
-  const initialViewport = { latitude, longitude, zoom: 4 }
+  const initialViewport = { latitude, longitude, zoom: 4 };
   const [viewport, setViewport] = useState(initialViewport);
   const [map, setMap] = useState(null);
   const [loaded, setLoaded] = useState(false);
@@ -36,7 +37,7 @@ const VectorMap = ({ vectorLayer, geoId }) => {
 
   useEffect(() => {
     if (map) {
-      const { bounds } =  vectorLayer;
+      const { bounds } = vectorLayer;
       fitToBounds({ setViewport, viewport, bounds });
     }
     return undefined;
@@ -44,27 +45,31 @@ const VectorMap = ({ vectorLayer, geoId }) => {
 
   const layer = createLayer({ ...vectorLayer, sourceLayer, geoId });
   return (
-    <ReactMapGL
-      ref={mapRef}
-      {...viewport}
-      onLoad={() => setLoaded(true)}
-      mapboxApiAccessToken={MAPBOX_TOKEN}
-      width="100%"
-      height="100%"
-      mapStyle={MAP_STYLE}
-      getCursor={() => 'default'}
-    >
-      {loaded && map && (
-        <LayerManager map={map} plugin={PluginMapboxGl}>
-          <Layer key={layer.id} {...layer} />
-        </LayerManager>
-      )}
-    </ReactMapGL>
+    <>
+      {!loaded && <Spinner className="-large" />}
+      <ReactMapGL
+        ref={mapRef}
+        {...viewport}
+        onLoad={() => setLoaded(true)}
+        mapboxApiAccessToken={MAPBOX_TOKEN}
+        width="100%"
+        height="100%"
+        mapStyle={MAP_STYLE}
+        getCursor={() => 'default'}
+      >
+        {loaded && map && (
+          <LayerManager map={map} plugin={PluginMapboxGl}>
+            <Layer key={layer.id} {...layer} />
+          </LayerManager>
+        )}
+      </ReactMapGL>
+    </>
   );
-}
+};
 
 VectorMap.propTypes = {
-  vectorLayer: PropTypes.object
-}
+  vectorLayer: PropTypes.object,
+  geoId: PropTypes.string
+};
 
 export default VectorMap;

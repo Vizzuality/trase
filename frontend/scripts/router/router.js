@@ -18,6 +18,7 @@ const loadTopNodes = (...args) =>
   import('../react-components/profiles/profiles.thunks').then(module =>
     module.loadTopNodes(...args)
   );
+
 const getPageStaticContent = (...args) =>
   import('../react-components/static-content/static-content.thunks').then(module =>
     module.default(...args)
@@ -47,8 +48,19 @@ const resizeSankeyTool = (...args) =>
   import('../react-components/tool/tool.thunks').then(module => module.resizeSankeyTool(...args));
 const loadDisclaimerTool = (...args) =>
   import('../react-components/tool/tool.thunks').then(module => module.loadDisclaimerTool(...args));
-const loadUnitLayers = (...args) =>
-  import('../react-components/tool/tool.thunks').then(module => module.loadUnitLayers(...args));
+const loadUnitLayers = (...args) => {
+  const [
+    ,
+    ,
+    {
+      action: { payload, type }
+    }
+  ] = args;
+  const { profileType } = payload;
+  if (type === 'tool' || profileType === 'place') {
+    import('../react-components/tool/tool.thunks').then(module => module.loadUnitLayers(...args));
+  }
+};
 
 const loadInitialDashboardData = (...args) =>
   import('../react-components/dashboard-element/dashboard-element.thunks').then(module =>

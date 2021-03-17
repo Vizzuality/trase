@@ -1,7 +1,8 @@
 /* eslint-disable camelcase,react/no-danger */
-import React from 'react';
+import React, { useEffect } from 'react';
 import Sticky from 'react-stickynode';
 import cx from 'classnames';
+import { CARTO_LAYERS, CARTO_GEOID_NAMES } from 'constants';
 
 import PropTypes from 'prop-types';
 import capitalize from 'lodash/capitalize';
@@ -26,15 +27,40 @@ function PlaceSummary(props) {
       summary,
       jurisdictionName,
       jurisdictionGeoId,
+      jurisdiction1Label,
       jurisdiction1: stateName,
       jurisdiction2: biomeName,
       headerAttributes,
       columnName
     } = {},
-    profileMetadata: { mainTopojsonPath, mainTopojsonRoot, years } = {}
+    profileMetadata: { mainTopojsonPath, mainTopojsonRoot, years } = {},
+    getProfilePlaceBounds,
+    placeBounds
   } = props;
+
+  console.log(placeBounds);
+
   const { commodityName } = context;
-  const vectorLayer = columnName && countryLayers?.find(l => l.id.endsWith(columnName.toLowerCase()));
+  const parentVectorLayer =
+    jurisdiction1Label &&
+    columnName &&
+    countryLayers?.find(l => l.id.endsWith(jurisdiction1Label.toLowerCase()));
+  const vectorLayer =
+    columnName && countryLayers?.find(l => l.id.endsWith(columnName.toLowerCase()));
+  useEffect(() => {
+    if (parentVectorLayer && stateName) {
+      const parsedParentLayerId = CARTO_LAYERS[parentVectorLayer.id];
+      if (parsedParentLayerId) {
+        getProfilePlaceBounds(
+          parsedParentLayerId,
+          jurisdiction1GeoId,
+          CARTO_GEOID_NAMES[parentVectorLayer.id]
+        );
+      } else {
+        console.error('Missing parent layer carto layer id on the constants.js file');
+      }
+    }
+  }, [parentVectorLayer, stateName]);
   const titles = [
     { name: commodityName, label: 'Commodity' },
     {
@@ -55,12 +81,7 @@ function PlaceSummary(props) {
     <div className="c-overall-info page-break-inside-avoid">
       <div className="c-locator-map map-municipality-banner">
         {countryName &&
-          (vectorLayer ? (
-            <VectorMap
-              vectorLayer={vectorLayer}
-              geoId={jurisdictionGeoId}
-            />
-          ) : (
+          (countryName === 'brazil' ? ( // We only have downloaded vector layers for brazil
             <Map
               topoJSONPath={`./vector_layers${mainTopojsonPath.replace(
                 '$stateGeoId$',
@@ -71,6 +92,8 @@ function PlaceSummary(props) {
                 d.properties.geoid === jurisdictionGeoId ? '-isCurrent' : ''
               }
             />
+          ) : (
+            vectorLayer && <VectorMap vectorLayer={vectorLayer} geoId={jurisdictionGeoId} />
           ))}
       </div>
     </div>
@@ -159,7 +182,10 @@ PlaceSummary.propTypes = {
   context: PropTypes.object,
   onChange: PropTypes.func.isRequired,
   openModal: PropTypes.func.isRequired,
-  profileMetadata: PropTypes.object.isRequired
+  profileMetadata: PropTypes.object.isRequired,
+  getProfilePlaceBounds: PropTypes.func.isRequired,
+  placeBounds: PropTypes.array,
+  countryLayers: PropTypes.array
 };
 
 export default PlaceSummary;
