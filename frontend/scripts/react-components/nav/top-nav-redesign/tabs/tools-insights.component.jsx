@@ -74,7 +74,7 @@ const ToolsInsights = () => {
           </li>
           <li>
             <a
-              href="https://insights.trase.earth/insights"
+              href="https://insights.trase.earth"
               className="sites-menu-link"
               onMouseOver={() => setActiveCard(2)}
               onFocus={() => setActiveCard(2)}
