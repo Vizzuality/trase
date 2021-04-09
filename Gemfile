@@ -83,7 +83,7 @@ group :development do
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'annotate'
-  gem 'bcrypt_pbkdf', '~> 1.0'
+  gem 'bcrypt_pbkdf', '~> 1.1'
   gem 'capistrano', '~> 3.16', require: false
   gem 'capistrano-bundler'
   gem 'capistrano-yarn'
