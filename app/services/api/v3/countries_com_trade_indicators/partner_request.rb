@@ -15,7 +15,7 @@ module Api
         def parse_attributes(element)
           result = super(element)
           partner_iso3 = element['pt3ISO']
-          return nil if partner_iso3.blank? # ignore, e.g. country groupings
+          return nil if partner_iso3.blank? || partner_iso3 == 'WLD' # ignore, e.g. country groupings
 
           partner_country = country_codes.lookup_by_iso3(partner_iso3)
           unless partner_country

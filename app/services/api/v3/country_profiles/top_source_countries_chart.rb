@@ -74,12 +74,6 @@ module Api
             include_domestic_consumption: false,
             limit: 10
           )
-          # @all_nodes_total = top_nodes_list.total(
-          #   @volume_attribute,
-          #   include_domestic_consumption: false
-          # )
-          # @target_nodes_total = @top_nodes.inject(0) { |sum, node| sum + node[:value] }
-          @top_nodes.each { |n| pp n }
           @top_nodes_by_iso2 = Hash[@top_nodes.map { |n| [n.geo_id, n]}]
         end
 
@@ -92,7 +86,7 @@ module Api
                 activity: 'importer',
                 commodity_id: @commodity.id
               ).
-              order(:quantity).
+              order(quantity: :desc).
               limit(10)
         end
 
