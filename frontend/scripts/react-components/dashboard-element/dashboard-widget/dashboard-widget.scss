@@ -62,18 +62,29 @@ $this: 'c-dashboard-widget';
       width: 100%;
     }
 
-    .widget-yAxis-label {
+    .axis-label {
       font-family: $font-family-1;
       font-size: 11px;
       position: relative;
-      top: 25px;
-      margin-left: 42px;
-      text-transform: uppercase;
 
       .widget-yAxis-label-unit {
         margin: 0 0 0 10px;
         text-transform: none;
       }
+    }
+
+    .widget-xAxis-label {
+      @extend .axis-label;
+      margin-right: 42px;
+      bottom: 25px;
+      text-align: right;
+    }
+
+    .widget-yAxis-label {
+      @extend .axis-label;
+      text-transform: uppercase;
+      top: 25px;
+      margin-left: 42px;
     }
 
     .widget-chart {
@@ -96,7 +107,7 @@ $this: 'c-dashboard-widget';
       border: solid 1px rgba($white, 0.13);
     }
 
-    .widget-yAxis-label {
+    .widget-yAxis-label, .widget-xAxis-label {
       color: $elephant;
     }
 
@@ -116,7 +127,7 @@ $this: 'c-dashboard-widget';
       background-color: $white;
     }
 
-    .widget-yAxis-label {
+    .widget-yAxis-label, .widget-xAxis-label {
       color: $charcoal-grey-faded;
     }
 

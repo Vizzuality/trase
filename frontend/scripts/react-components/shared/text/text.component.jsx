@@ -16,6 +16,7 @@ function Text(props) {
     children,
     className,
     transform,
+    decoration,
     ...rest
   } = props;
   const textProps = {
@@ -29,7 +30,8 @@ function Text(props) {
         [`size-${size}`]: size,
         [`weight-${weight}`]: weight,
         [`text-align-${align}`]: align,
-        [`transform-${transform}`]: transform
+        [`transform-${transform}`]: transform,
+        [`decoration-${decoration}`]: decoration
       },
       className
     )
@@ -54,6 +56,7 @@ Text.propTypes = {
   children: PropTypes.node,
   variant: PropTypes.string,
   transform: PropTypes.string,
+  decoration: PropTypes.string,
   className: PropTypes.string, // Use only for positioning
   as: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
 };

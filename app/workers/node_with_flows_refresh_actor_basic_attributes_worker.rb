@@ -6,14 +6,17 @@ class NodeWithFlowsRefreshActorBasicAttributesWorker
                   backtrace: true
 
   def perform(node_id, context_id)
+    context = Api::V3::Context.find(context_id)
     node_with_flows = Api::V3::Readonly::NodeWithFlows.
       without_unknowns.
       without_domestic.
       find_by(
-        id: node_id, context_id: context_id
+        id: node_id, context_id: context.id
       )
     return unless node_with_flows
 
     node_with_flows.refresh_actor_basic_attributes
+  rescue ActiveRecord::RecordNotFound
+    # no-op
   end
 end

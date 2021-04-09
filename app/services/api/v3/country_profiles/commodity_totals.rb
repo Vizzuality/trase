@@ -50,10 +50,18 @@ module Api
         def included_columns
           trade_volume_ranking = Api::V3::CountryProfiles::ExternalAttributesList.instance.call('com_trade.quantity.rank', substitutions).
             except(:short_name).
-            merge(name: "World #{trade_flow} ranking")
+            merge(
+              name: "World #{trade_flow} ranking",
+              unit: nil,
+              tooltip: "World #{trade_flow} ranking by netweight"
+            )
           trade_volume_value = Api::V3::CountryProfiles::ExternalAttributesList.instance.call('com_trade.quantity.value', substitutions).
             except(:short_name).
-            merge(name: "#{trade_flow}s".capitalize)
+            merge(
+              name: "#{trade_flow}s".capitalize,
+              unit: 't', # needs conversion as it comes in kg from the ComTrade API
+              tooltip: 'Netweight (tonnes)'
+            )
           trade_value = Api::V3::CountryProfiles::ExternalAttributesList.instance.call('com_trade.value.value', substitutions).
             except(:short_name).
             merge(name: 'Value')
@@ -62,8 +70,9 @@ module Api
             trade_volume_ranking,
             {
               name: 'Production',
-              unit: @volume_attribute.unit, # hmm
-              unit_position: 'suffix'
+              unit: @volume_attribute.unit || 't',
+              unit_position: 'suffix',
+              tooltip: @volume_attribute.tooltip_text || 'Production (tonnes)'
             },
             trade_volume_value,
             trade_value
@@ -78,12 +87,14 @@ module Api
               @activity,
               node_with_flows.commodity_id
             )
+            quantity = @external_attribute_value.call('com_trade.quantity.value')
+            quantity = quantity.to_f / 1000 if quantity.present?
             {
               name: node_with_flows['commodity'],
               values: [
                 @external_attribute_value.call('com_trade.quantity.rank'),
                 production_values[node_with_flows['commodity']],
-                @external_attribute_value.call('com_trade.quantity.value'),
+                quantity,
                 @external_attribute_value.call('com_trade.value.value')
               ]
             }
