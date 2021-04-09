@@ -86,7 +86,7 @@ module Api
                 activity: 'importer',
                 commodity_id: @commodity.id
               ).
-              order(:quantity).
+              order(quantity: :desc).
               limit(10)
         end
 
