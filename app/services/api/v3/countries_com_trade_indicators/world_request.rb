@@ -15,13 +15,10 @@ module Api
 
         def call
           response = Net::HTTP.get_response(@uri)
-          if response.code != '200'
-            error = ComTradeError.new(response)
-            # this is to force a retry on the job
-            raise error
-          end
-          body = response.body
-          data = JSON.parse(body)
+          # this will raise an exception and force sidekiq retry
+          response.value if !response.kind_of? Net::HTTPSuccess
+
+          data = JSON.parse(response.body)
           ensure_valid_response(data['validation']) or return
 
           data['dataset'].each do |element|

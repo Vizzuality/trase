@@ -10,12 +10,8 @@ module Api
           response = Net::HTTP.get_response(
             request_uri(wb_name, iso3, [start_year,end_year].compact.join(':').presence)
           )
-
-          if response.code != '200'
-            error = WbRequest::WBError.new(response)
-            # this is to force a retry on the job
-            raise error
-          end
+          # this will raise an exception and force sidekiq retry
+          response.value if !response.kind_of? Net::HTTPSuccess
 
           formatted_indicators(wb_name, JSON.parse(response.body))
         end
