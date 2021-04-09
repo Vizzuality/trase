@@ -31,8 +31,9 @@ module Api
         end
 
         def call
-          @named_summary_attributes = initialize_named_attributes NAMED_SUMMARY_ATTRIBUTES
-          @named_header_attributes = initialize_named_attributes NAMED_HEADER_ATTRIBUTES
+          @named_attributes = initialize_named_attributes(NAMED_SUMMARY_ATTRIBUTES + NAMED_HEADER_ATTRIBUTES)
+          @named_summary_attributes_values = initialize_named_attributes_values NAMED_SUMMARY_ATTRIBUTES
+          @named_header_attributes_values = initialize_named_attributes_values NAMED_HEADER_ATTRIBUTES
           {
             name: @node.name,
             geo_id: @node.geo_id,
@@ -75,7 +76,7 @@ module Api
               merge(value: @external_attribute_value.call(attribute_ref))
           end.compact
 
-          external + @named_header_attributes.values
+          external + @named_header_attributes_values.values
         end
 
         NAMED_SUMMARY_ATTRIBUTES = %w(hdi nydf amsterdam).freeze
@@ -85,6 +86,17 @@ module Api
           values = {}
           collection.map do |name|
             original_attribute = @chart_config.named_attribute(name)
+            next nil unless original_attribute
+
+            values[name] = original_attribute
+          end
+          values
+        end
+
+        def initialize_named_attributes_values(collection)
+          values = {}
+          collection.map do |name|
+            original_attribute = @named_attributes[name]
             next nil unless original_attribute
 
             value = @values.get(
@@ -149,17 +161,21 @@ module Api
         end
 
         def hdi
-          hdi = @named_summary_attributes[:hdi]
-          return '' unless hdi && hdi[:value]
+          hdi = @named_attributes['hdi']
+          pp hdi
+          return '' unless hdi
 
-          " It's placement in the #{hdi[:name]} is #{hdi[:value]}."
+          hdi_rank = NodeAttributeRanking.new(@node, @year).call(hdi)
+          return '' unless hdi_rank
+
+          " It's placement in the #{hdi[:name]} is #{hdi_rank}."
         end
 
         def declarations
           declarations = []
-          nydf = @named_summary_attributes[:nydf]
+          nydf = @named_summary_attributes_values[:nydf]
           declarations << nydf[:name] if nydf && nydf[:value]
-          amsterdam = @named_summary_attributes[:amsterdam]
+          amsterdam = @named_summary_attributes_values[:amsterdam]
           declarations << amsterdam[:name] if amsterdam && amsterdam[:value]
           return '' unless declarations.any?
 
