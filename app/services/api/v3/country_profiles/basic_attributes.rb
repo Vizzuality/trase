@@ -152,7 +152,7 @@ module Api
           hdi = @named_summary_attributes[:hdi]
           return '' unless hdi && hdi[:value]
 
-          " It's placement in the #{hdi[:name]} is #{hdi[:value]}."
+          " Its Human Development Index score is #{hdi[:value]}."
         end
 
         def declarations
