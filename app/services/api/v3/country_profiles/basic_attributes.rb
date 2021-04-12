@@ -163,7 +163,7 @@ module Api
           declarations << amsterdam[:name] if amsterdam && amsterdam[:value]
           return '' unless declarations.any?
 
-          " #{@node.name} is a signatory to " + declarations.join(' and ') + '.'
+          " #{@node.name} is a signatory to the " + declarations.join(' and the ') + '.'
         end
 
         def helper
