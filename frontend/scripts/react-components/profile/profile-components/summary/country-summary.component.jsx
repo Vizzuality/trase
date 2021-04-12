@@ -94,7 +94,7 @@ function CountrySummary(props) {
           </Text>
         )}
         <Text as="span" variant="mono" size="lg" weight="bold">
-          {formatValue(value, indicatorKey)}
+          {formatValue(value, name)}
         </Text>
         {suffix && suffix !== 'people' && (
           <Text as="span" variant="mono" size="lg" weight="bold">
