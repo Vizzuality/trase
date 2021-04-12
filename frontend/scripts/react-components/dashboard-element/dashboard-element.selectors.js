@@ -231,29 +231,29 @@ const buildDynamicSentence = (
     panelsValues.sources,
     prefixes.sources,
     excludingModeMap.sources,
-    'sources',
-    'from'
+    translateText('sources'),
+    translateText('from')
   );
   const exportersSettings = getSettings(
     panelsValues.exporters,
     prefixes.exporters,
     excludingModeMap.exporters,
-    'exporters',
-    'exported by'
+    translateText('exporters'),
+    translateText('exported by')
   );
   const importersSettings = getSettings(
     panelsValues.importers,
     prefixes.importers,
     excludingModeMap.importers,
-    'importers',
-    'imported by'
+    translateText('importers'),
+    translateText('imported by')
   );
   const destinationsSettings = getSettings(
     panelsValues.destinations,
     prefixes.destinations,
     excludingModeMap.destinations,
-    'destinations',
-    'going to'
+    translateText('destinations'),
+    translateText('going to')
   );
 
   return [

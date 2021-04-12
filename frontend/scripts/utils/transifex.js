@@ -1,6 +1,7 @@
 export function translateText(str) {
   const { Transifex } = window;
   if (typeof Transifex !== 'undefined' && str) {
+    console.log('translatable', str);
     return Transifex.live.translateText(str);
   }
   console.warn('Attempted translation before transifex finished loading:', str);

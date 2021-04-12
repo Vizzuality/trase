@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import formatDynamicSentenceValue from 'utils/formatDynamicSentenceValue';
+import { translateText } from 'utils/transifex';
 
 const getData = (state, props) => props.data || null;
 const getMeta = (state, props) => props.meta || null;
@@ -19,14 +20,14 @@ export const makeGetNodeIndicatorSentenceParts = () =>
 
       const nodeNamePart = {
         id: 'node-name',
-        prefix: 'In',
+        prefix: translateText('In'),
         value: [{ name: `${node.name}`.toLowerCase() }],
         transform: 'capitalize'
       };
 
       const indicatorNamePart = {
         id: 'indicator-name',
-        prefix: 'the',
+        prefix: translateText('the'),
         value: [{ name: `${yAxisLabel.text}`.toLowerCase() }],
         transform: 'capitalize'
       };
@@ -35,7 +36,7 @@ export const makeGetNodeIndicatorSentenceParts = () =>
         `${yAxisLabel.suffix}`.toLowerCase() === 'number' ? '' : yAxisLabel.suffix;
       const indicatorValuePart = {
         id: 'indicator-value',
-        prefix: temporal ? 'was' : 'equals',
+        prefix: temporal ? translateText('was') : translateText('equals'),
         value: [
           {
             name: formatDynamicSentenceValue(data[0].y0, indicatorValueSuffix)
@@ -47,7 +48,7 @@ export const makeGetNodeIndicatorSentenceParts = () =>
         selectedYears && temporal
           ? {
               id: 'year',
-              prefix: 'in',
+              prefix: translateText('in'),
               value: [
                 {
                   name:

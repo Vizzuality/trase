@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 import { getDynamicSentence } from 'react-components/dashboard-element/dashboard-element.selectors';
 import formatDynamicSentenceValue from 'utils/formatDynamicSentenceValue';
+import { translateText } from 'utils/transifex';
 
 const getData = (state, props) => props.data || null;
 const getConfig = (state, props) => props.config || null;
@@ -15,7 +16,7 @@ export const makeAddIndicatorsPartToSentence = () =>
       const commoditiesPart = dynamicSentenceParts.find(p => p.id === 'commodities');
       let updatedCommoditiesPart = commoditiesPart;
       if (commoditiesPart) {
-        updatedCommoditiesPart = { ...commoditiesPart, prefix: 'of' };
+        updatedCommoditiesPart = { ...commoditiesPart, prefix: translateText('of') };
       }
 
       const indicatorNamePart = {
@@ -26,7 +27,7 @@ export const makeAddIndicatorsPartToSentence = () =>
       };
       const indicatorValuePart = {
         id: 'indicator-value',
-        prefix: 'was',
+        prefix: translateText('was'),
         value: [
           {
             name: formatDynamicSentenceValue(data[0].y0, yAxisLabel.suffix)
@@ -37,7 +38,7 @@ export const makeAddIndicatorsPartToSentence = () =>
       const yearPart = selectedYears
         ? {
             id: 'year',
-            prefix: 'in',
+            prefix: translateText('in'),
             value: [
               {
                 name:
