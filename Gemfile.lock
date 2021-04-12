@@ -284,7 +284,7 @@ GEM
       mimemagic (~> 0.3.0)
       terrapin (~> 0.6.0)
     parallel (1.20.1)
-    parser (3.0.0.0)
+    parser (3.0.1.0)
       ast (~> 2.4.1)
     pg (0.21.0)
     pg_csv (0.2)
@@ -342,7 +342,7 @@ GEM
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     redis (4.2.5)
-    regexp_parser (2.0.3)
+    regexp_parser (2.1.1)
     require_all (1.5.0)
     responders (3.0.1)
       actionpack (>= 5.0)
@@ -367,7 +367,7 @@ GEM
       rspec-mocks (~> 3.10)
       rspec-support (~> 3.10)
     rspec-support (3.10.2)
-    rubocop (1.10.0)
+    rubocop (1.12.1)
       parallel (~> 1.10)
       parser (>= 3.0.0.0)
       rainbow (>= 2.2.2, < 4.0)
@@ -529,7 +529,7 @@ DEPENDENCIES
   rails-controller-testing
   rspec-collection_matchers
   rspec-rails (~> 4.0)
-  rubocop (~> 1.10.0)
+  rubocop (~> 1.12.1)
   rubocop-performance
   rubocop-rspec
   sassc-rails (~> 2.1.2)
