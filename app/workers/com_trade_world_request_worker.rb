@@ -2,7 +2,7 @@ class ComTradeWorldRequestWorker
   include Sidekiq::Worker
 
   sidekiq_options queue: :default,
-                  retry: 10,
+                  retry: 25,
                   backtrace: true
 
   def perform(uri)

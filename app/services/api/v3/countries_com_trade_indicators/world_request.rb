@@ -9,18 +9,15 @@ module Api
           2 => 'exporter'
         }
 
-        def initialize(uri)
-          @uri = URI(uri)
+        def initialize(url)
+          @url = url
+          @connection = Api::V3::CountriesComTradeIndicators::ApiConnection.instance
         end
 
         def call
-          response = Net::HTTP.get_response(@uri)
-          # this will raise an exception and force sidekiq retry
-          response.value if !response.kind_of? Net::HTTPSuccess
-
+          response = @connection.get(@url)
           data = JSON.parse(response.body)
           ensure_valid_response(data['validation']) or return
-
           data['dataset'].each do |element|
             attributes = parse_attributes(element)
             next unless attributes
