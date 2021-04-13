@@ -1,4 +1,5 @@
-import { NUM_DECIMALS, NUM_DECIMALS_DEFAULT } from 'constants';
+import { NUM_DECIMALS, NUM_DECIMALS_DEFAULT, NUM_EXPONENT_ROUNDING } from 'constants';
+import { formatPrefix } from 'd3-format';
 
 // returns a value rounded to numDecimals
 export default (value, dimensionName) => {
@@ -10,11 +11,15 @@ export default (value, dimensionName) => {
   }
 
   let maximumFractionDigits = NUM_DECIMALS_DEFAULT;
-
   const dimensionNameLower = dimensionName.toLowerCase();
 
   if (NUM_DECIMALS[dimensionNameLower] !== undefined) {
     maximumFractionDigits = NUM_DECIMALS[dimensionNameLower];
+  }
+
+  const exponentToRoundTo = NUM_EXPONENT_ROUNDING[dimensionNameLower];
+  if (exponentToRoundTo) {
+    return formatPrefix(',.0', parseFloat(`1e${exponentToRoundTo}`))(value);
   }
 
   if (maximumFractionDigits === 0 && value < 1 && value > 0) {
