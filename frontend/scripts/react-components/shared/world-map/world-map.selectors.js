@@ -7,6 +7,7 @@ import { geoPath } from 'd3-geo';
 import projections from 'react-simple-maps/lib/projections';
 import { getContexts } from 'react-components/explore/explore.selectors';
 import { WORLD_MAP_ASPECT_RATIO } from 'constants';
+import isEqual from 'lodash/isEqual';
 
 const getSelectedContext = (state, { context }) => context;
 const getHighlightedCountryIds = (state, { highlightedCountryIds }) => highlightedCountryIds;
@@ -66,6 +67,9 @@ function buildCustomArc(originCoords, destinationCoords, worldMapProjection) {
 }
 
 function buildGreatCircleArc(originCoords, destinationCoords, worldMapProjection) {
+  if (isEqual(originCoords, destinationCoords)) {
+    return null;
+  }
   const arc = greatCircle(originCoords, destinationCoords, { offset: 400, npoints: 100 });
   if (arc.geometry.type === 'MultiLineString') {
     return buildCustomArc(originCoords, destinationCoords, worldMapProjection);
