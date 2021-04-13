@@ -4,7 +4,7 @@ import Widget from 'react-components/widgets/widget.component';
 import { getSummaryEndpoint } from 'utils/getURLFromParams';
 import ShrinkingSpinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
 import ReactIframeResizer from 'react-iframe-resizer-super';
-import COUNTRIES_ISO3 from './data/COUNTRIES_ISO3.json';
+import ISO2_TO_ISO3 from './data/ISO2_TO_ISO3.json';
 import BRAZIL_GADM_GEOID from './data/BRAZIL_GADM_GEOID.json';
 
 class GfwWidget extends React.PureComponent {
@@ -17,7 +17,7 @@ class GfwWidget extends React.PureComponent {
   }
 
   render() {
-    const { year, nodeId, contextId, profileType, renderIframes, countryName } = this.props;
+    const { year, nodeId, contextId, profileType, renderIframes } = this.props;
     const params = { node_id: nodeId, context_id: contextId, profile_type: profileType, year };
 
     const renderIframe = path => (
@@ -43,10 +43,6 @@ class GfwWidget extends React.PureComponent {
       </React.Fragment>
     );
 
-    if (profileType === 'country') {
-      return renderIframe(COUNTRIES_ISO3[countryName]);
-    }
-
     return (
       <Widget params={[params]} query={[getSummaryEndpoint(profileType)]} raw={[false]}>
         {({ data, error, loading }) => {
@@ -56,10 +52,20 @@ class GfwWidget extends React.PureComponent {
             return null;
           }
 
+          if (profileType === 'country' && !loading) {
+            const { geoId } = data[getSummaryEndpoint(profileType)];
+            if (geoId) {
+              return renderIframe(ISO2_TO_ISO3[geoId]);
+            }
+            console.error(
+              'GFW widget: Country iso 2 is missing or iso 3 is missing from ISO2_TO_ISO3.json'
+            );
+            return null;
+          }
+
           if (loading || !renderIframes) {
             return this.renderSpinner();
           }
-
           const { jurisdictionGeoId } = data[getSummaryEndpoint(profileType)];
           const { path, match } = BRAZIL_GADM_GEOID.data[jurisdictionGeoId];
 
@@ -75,8 +81,7 @@ GfwWidget.propTypes = {
   nodeId: PropTypes.number,
   contextId: PropTypes.number,
   renderIframes: PropTypes.bool,
-  profileType: PropTypes.string,
-  countryName: PropTypes.string
+  profileType: PropTypes.string
 };
 
 export default GfwWidget;
