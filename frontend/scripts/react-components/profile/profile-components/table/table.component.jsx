@@ -46,7 +46,6 @@ class ProfilesTable extends Component {
   renderTopImportsTable() {
     const { data, testId } = this.props;
     const columns = data.included_columns || data.includedColumns;
-
     return (
       <tbody>
         {data.rows.map((entry, entryIndex) => (
@@ -58,25 +57,21 @@ class ProfilesTable extends Component {
             })}
             data-test={`${testId}-row`}
           >
-            {entry.map((row, rowIndex) => (
-              <td
-                key={`top-imports-table-row-${entryIndex}-${rowIndex}`}
-                className={cx({
-                  'cell-score': true,
-                  '_text-align-left': entry.length - 1 !== rowIndex,
-                  '_text-align-right': entry.length - 1 === rowIndex
-                })}
-              >
-                <span
-                  className="node-name"
-                  data-unit={
-                    !UNITLESS_UNITS.includes(columns[rowIndex].unit) ? columns[rowIndex].unit : null
-                  }
+            {entry.map((row, rowIndex) => {
+              const hasUnit = !UNITLESS_UNITS.includes(columns[rowIndex].unit);
+              return (
+                <td
+                  key={`top-imports-table-row-${entryIndex}-${rowIndex}`}
+                  className={cx('cell-score', {
+                    '_text-align-left': entry.length - 1 !== rowIndex,
+                    '_text-align-right': entry.length - 1 === rowIndex
+                  })}
                 >
-                  {formatValue(row, columns[rowIndex].name)}
-                </span>
-              </td>
-            ))}
+                  <span className="node-name">{formatValue(row, columns[rowIndex].name)}</span>
+                  <span className="unit">{hasUnit ? columns[rowIndex].unit : null}</span>
+                </td>
+              );
+            })}
           </tr>
         ))}
       </tbody>
