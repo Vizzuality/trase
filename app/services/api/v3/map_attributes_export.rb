@@ -6,18 +6,18 @@ module Api
     class MapAttributesExport
       EXPORT_DIR = 'tmp/export'.freeze
       S3_PREFIX = 'SITE_CONTENT'.freeze
-      FILENAME = 'map_attributes_values.csv.gz'.freeze
 
       def initialize
-        @local_filename = EXPORT_DIR + '/' + FILENAME
-        @s3_filename =
-          S3_PREFIX + '/' + Rails.env.upcase + '/' + FILENAME
+        @carto_name = "map_attributes_values_#{Rails.env.downcase}"
+        @local_filename = EXPORT_DIR + '/' + @carto_name + '.csv.gz'
+        @s3_filename = S3_PREFIX + '/' + Rails.env.upcase + '/' + @carto_name + '.csv.gz'
       end
 
       def call
         generate_csv
         unless Rails.env.development? || Rails.env.test?
           upload_to_s3
+          Api::V3::MapAttributesCartoSync.new(Rails.env, @carto_name)
         end
       end
 
@@ -58,9 +58,9 @@ module Api
         S3::CannedAcl.instance.call(@s3_filename, 'public-read')
       end
 
-        def dir_exists?
-          File.directory?(EXPORT_DIR)
-        end
+      def dir_exists?
+        File.directory?(EXPORT_DIR)
+      end
     end
   end
 end
