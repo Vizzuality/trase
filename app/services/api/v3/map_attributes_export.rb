@@ -17,6 +17,7 @@ module Api
         generate_csv
         unless Rails.env.development? || Rails.env.test?
           upload_to_s3
+          Api::V3::MapAttributesCartoSync.new(Rails.env, @carto_name)
         end
       end
 
