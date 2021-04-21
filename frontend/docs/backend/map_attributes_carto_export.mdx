@@ -1,0 +1,26 @@
+---
+name: Map attributes Carto export process
+menu: Backend
+---
+
+# Map attributes Carto export process
+
+For up to date map atrributes values to appear in tooltips on the map, the following needs to happen:
+- data from node_quants and node_inds exported into CSV
+- CSV uploaded to S3
+- relevant Carto DB sync table syncs the data
+
+This should happen at the point of deploy. You can force it by running `bundle exec rake map_attributes:refresh_later`.
+
+In order to just force the Carto sync, run `Api::V3::MapAttributesCartoSync.new(carto_table_name).call`
+
+# Carto DB sync tables
+
+You can retrieve a list of currently defined synchronisations like this:
+
+`curl https://{ENV['CARTO_ACCOUNT']}.carto.com/api/v1/synchronizations/?api_key={ENV['CARTO_TOKEN']}`
+
+We expect one synchronisation to be defined per environment. For example:
+
+Carto table name:   map_attributes_values_sandbox
+Sync from:          S3 bucket/SITE_CONTENT/SANDBOX/map_attributes_values_sandbox.csv.gz'
