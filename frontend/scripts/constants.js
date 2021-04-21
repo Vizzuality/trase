@@ -4,6 +4,7 @@ export const NUM_DECIMALS = {
   'trade volume': 0,
   volume: 0,
   gdp: 0,
+  exports: 0,
   'land use': 0,
   'financial flow': 0,
   'territorial deforestation': 0,
