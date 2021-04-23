@@ -2,11 +2,12 @@
 #
 # Table name: quant_properties
 #
-#  id                                                                    :integer          not null, primary key
-#  quant_id                                                              :integer          not null
-#  display_name(Name of attribute for display)                           :text             not null
-#  unit_type(Type of unit, e.g. count. One of restricted set of values.) :text
-#  tooltip_text(Generic tooltip text (lowest precedence))                :text
+#  id                                                                      :integer          not null, primary key
+#  quant_id                                                                :integer          not null
+#  display_name(Name of attribute for display)                             :text             not null
+#  unit_type(Type of unit, e.g. count. One of restricted set of values.)   :text
+#  tooltip_text(Generic tooltip text (lowest precedence))                  :text
+#  aggregation_method(To be used with ranges, one of SUM, AVG, MAX or MIN) :text
 #
 # Indexes
 #

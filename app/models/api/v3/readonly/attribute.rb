@@ -16,6 +16,7 @@
 #  display_name_by_context_id                                      :jsonb
 #  display_name_by_country_id                                      :jsonb
 #  display_name_by_commodity_id                                    :jsonb
+#  aggregation_method                                              :text
 #
 # Indexes
 #
