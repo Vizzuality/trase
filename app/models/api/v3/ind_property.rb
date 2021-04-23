@@ -27,11 +27,19 @@ module Api
         unitless
       ).freeze
 
+      AGGREGATION_METHOD = %w(
+        SUM
+        AVG
+        MAX
+        MIN
+      ).freeze
+
       belongs_to :ind
 
       validates :ind, presence: true, uniqueness: true
       validates :display_name, presence: true
       validates :unit_type, presence: true, inclusion: {in: UNIT_TYPE}
+      validates :aggregation_method, presence: true, inclusion: {in: AGGREGATION_METHOD}
 
       def self.blue_foreign_keys
         [

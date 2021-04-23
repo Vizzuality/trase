@@ -1,7 +1,7 @@
 ActiveAdmin.register Api::V3::QuantProperty, as: 'QuantProperty' do
   menu parent: 'Tooltips', priority: 12
 
-  permit_params :quant_id, :display_name, :unit_type, :tooltip_text
+  permit_params :quant_id, :display_name, :unit_type, :aggregation_method, :tooltip_text
 
   after_action :clear_cache, only: [:create, :update, :destroy]
 
@@ -22,6 +22,9 @@ ActiveAdmin.register Api::V3::QuantProperty, as: 'QuantProperty' do
       input :unit_type, as: :select,
                         collection: Api::V3::QuantProperty::UNIT_TYPE,
                         hint: object.class.column_comment('unit_type')
+      input :aggregation_method, as: :select,
+                        collection: Api::V3::QuantProperty::AGGREGATION_METHOD,
+                        hint: object.class.column_comment('aggregation_method')
       input :tooltip_text, as: :string,
                            hint: object.class.column_comment('tooltip_text')
     end
@@ -32,6 +35,7 @@ ActiveAdmin.register Api::V3::QuantProperty, as: 'QuantProperty' do
     column('Name') { |property| property.quant&.name }
     column :display_name
     column :unit_type
+    column :aggregation_method
     column :tooltip_text
     actions
   end
