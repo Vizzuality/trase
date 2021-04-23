@@ -283,7 +283,7 @@ module Api
             [
               [
                 'flows.path[?] AS node_id',
-                'SUM(flow_quants.value::DOUBLE PRECISION) AS total'
+                "#{@cont_attribute.aggregation_method}(flow_quants.value::DOUBLE PRECISION) AS total"
               ].join(', '),
               position + 1
             ]
@@ -332,7 +332,7 @@ module Api
           cont_attr_table = @cont_attribute.flow_values_class.table_name
           select_clause_parts = [
             'ARRAY[' + case_expressions.join(', ') + '] AS path',
-            "SUM(#{cont_attr_table}.value) AS quant_value"
+            "#{@cont_attribute.aggregation_method}(#{cont_attr_table}.value) AS quant_value"
           ]
 
           if @ncont_attribute
