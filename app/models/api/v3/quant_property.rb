@@ -2,11 +2,12 @@
 #
 # Table name: quant_properties
 #
-#  id                                                                    :integer          not null, primary key
-#  quant_id                                                              :integer          not null
-#  display_name(Name of attribute for display)                           :text             not null
-#  unit_type(Type of unit, e.g. count. One of restricted set of values.) :text
-#  tooltip_text(Generic tooltip text (lowest precedence))                :text
+#  id                                                                      :integer          not null, primary key
+#  quant_id                                                                :integer          not null
+#  display_name(Name of attribute for display)                             :text             not null
+#  unit_type(Type of unit, e.g. count. One of restricted set of values.)   :text
+#  tooltip_text(Generic tooltip text (lowest precedence))                  :text
+#  aggregation_method(To be used with ranges, one of SUM, AVG, MAX or MIN) :text
 #
 # Indexes
 #
@@ -27,11 +28,19 @@ module Api
         unitless
       ).freeze
 
+      AGGREGATION_METHOD = %w(
+        SUM
+        AVG
+        MAX
+        MIN
+      ).freeze
+
       belongs_to :quant
 
       validates :quant, presence: true, uniqueness: true
       validates :display_name, presence: true
       validates :unit_type, presence: true, inclusion: {in: UNIT_TYPE}
+      validates :aggregation_method, presence: true, inclusion: {in: AGGREGATION_METHOD}
 
       def self.blue_foreign_keys
         [

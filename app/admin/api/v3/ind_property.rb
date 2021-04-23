@@ -1,7 +1,7 @@
 ActiveAdmin.register Api::V3::IndProperty, as: 'IndProperty' do
   menu parent: 'Tooltips', priority: 4
 
-  permit_params :ind_id, :display_name, :unit_type, :tooltip_text
+  permit_params :ind_id, :display_name, :unit_type, :aggregation_method, :tooltip_text
 
   after_action :clear_cache, only: [:create, :update, :destroy]
 
@@ -22,6 +22,9 @@ ActiveAdmin.register Api::V3::IndProperty, as: 'IndProperty' do
       input :unit_type, as: :select,
                         collection: Api::V3::IndProperty::UNIT_TYPE,
                         hint: object.class.column_comment('unit_type')
+      input :aggregation_method, as: :select,
+                        collection: Api::V3::IndProperty::AGGREGATION_METHOD,
+                        hint: object.class.column_comment('aggregation_method')
       input :tooltip_text, as: :string,
                            hint: object.class.column_comment('tooltip_text')
     end
@@ -33,6 +36,7 @@ ActiveAdmin.register Api::V3::IndProperty, as: 'IndProperty' do
     column :display_name
     column :unit_type
     column :tooltip_text
+    column :aggregation_method
     actions
   end
 

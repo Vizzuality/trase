@@ -386,6 +386,8 @@ tables:
         comment: Type of unit, e.g. score. One of restricted set of values.
       - name: tooltip_text
         comment: Generic tooltip text (lowest precedence)
+      - name: aggregation_method
+        comment: To be used with ranges, one of SUM, AVG, MAX or MIN
   - name: map_attribute_groups
     comment: Groups attributes (inds/quals/quants) to display on map
     columns:
@@ -500,6 +502,8 @@ tables:
         comment: Type of unit, e.g. count. One of restricted set of values.
       - name: tooltip_text
         comment: Generic tooltip text (lowest precedence)
+      - name: aggregation_method
+        comment: To be used with ranges, one of SUM, AVG, MAX or MIN
   - name: recolor_by_attributes
     comment: Attributes (inds/quals) available for recoloring.
     columns:
@@ -619,6 +623,8 @@ views:
         comment: Type of the attribute (ind/quant)
       - name: unit
         comment: Name of the attribute''s unit
+      - name: aggregation_method
+        comment: To be used with ranges, one of SUM, AVG, MAX or MIN
       - name: description
         comment: Attribute''s description
       - name: original_attribute_id
