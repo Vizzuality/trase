@@ -104,11 +104,11 @@ COMMENT ON EXTENSION tablefunc IS 'functions that manipulate whole tables, inclu
 -- Name: aggregated_buckets(double precision[], integer[], integer[], text); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION public.aggregated_buckets(buckets double precision[], declared_years integer[], requested_years integer[], attribute_type text) RETURNS double precision[]
+CREATE FUNCTION public.aggregated_buckets(buckets double precision[], declared_years integer[], requested_years integer[], aggregation_method text) RETURNS double precision[]
     LANGUAGE sql IMMUTABLE
     AS $$
   SELECT CASE
-    WHEN attribute_type = 'quant' AND ICOUNT(COALESCE(declared_years, requested_years) & requested_years) > 0 THEN
+    WHEN aggregation_method = 'SUM' AND ICOUNT(COALESCE(declared_years, requested_years) & requested_years) > 0 THEN
       ARRAY(SELECT ICOUNT(COALESCE(declared_years, requested_years) & requested_years) * UNNEST(buckets))
     ELSE
       buckets
@@ -117,10 +117,10 @@ $$;
 
 
 --
--- Name: FUNCTION aggregated_buckets(buckets double precision[], declared_years integer[], requested_years integer[], attribute_type text); Type: COMMENT; Schema: public; Owner: -
+-- Name: FUNCTION aggregated_buckets(buckets double precision[], declared_years integer[], requested_years integer[], aggregation_method text); Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON FUNCTION public.aggregated_buckets(buckets double precision[], declared_years integer[], requested_years integer[], attribute_type text) IS 'Aggregates buckets.';
+COMMENT ON FUNCTION public.aggregated_buckets(buckets double precision[], declared_years integer[], requested_years integer[], aggregation_method text) IS 'Returns aggregated buckets for year range';
 
 
 --
@@ -13096,6 +13096,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210215110809'),
 ('20210216183845'),
 ('20210423090628'),
-('20210423093722');
+('20210423093722'),
+('20210426164057');
 
 

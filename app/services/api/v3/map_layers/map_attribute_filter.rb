@@ -21,10 +21,8 @@ module Api
             select([
               'color_scale',
               "#{Api::V3::Readonly::MapAttribute.table_name}.id",
-              "aggregated_buckets(dual_layer_buckets, years, ARRAY#{@years}, \
-attribute_type) AS dual_layer_buckets",
-              "aggregated_buckets(single_layer_buckets, years, ARRAY#{@years}, \
-attribute_type) AS single_layer_buckets",
+              "aggregated_buckets(dual_layer_buckets, years, ARRAY#{@years}, aggregation_method::TEXT) AS dual_layer_buckets",
+              "aggregated_buckets(single_layer_buckets, years, ARRAY#{@years}, aggregation_method::TEXT) AS single_layer_buckets",
               'map_attribute_group_id AS group_id',
               'is_default',
               'is_disabled',
