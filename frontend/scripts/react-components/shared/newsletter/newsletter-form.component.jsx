@@ -16,6 +16,7 @@ class NewsletterForm extends React.PureComponent {
     super(props);
     this.state = {
       submitted: false,
+      dropdownOpen: false,
       form: {
         email: '',
         firstname: '',
@@ -27,6 +28,10 @@ class NewsletterForm extends React.PureComponent {
     this.onClickSubmit = this.onClickSubmit.bind(this);
     this.onFormInput = this.onFormInput.bind(this);
     this.getFormRef = this.getFormRef.bind(this);
+  }
+
+  toggleOpenDropdown() {
+    this.setState(prevState => ({ dropdownOpen: !prevState.dropdownOpen }));
   }
 
   componentWillUnmount() {
@@ -64,6 +69,7 @@ class NewsletterForm extends React.PureComponent {
   render() {
     const { message, variant } = this.props;
     const { email } = this.state.form;
+    const { dropdownOpen } = this.state;
     const footer = variant === 'footer';
     const renderSubmitButton = () =>
       footer ? (
@@ -72,27 +78,32 @@ class NewsletterForm extends React.PureComponent {
           color="green"
           variant="circle"
           className="footer-submit-button"
-        />
+        >
+          ➔
+        </Button>
       ) : (
         <Button onClick={this.onClickSubmit} color="charcoal" weight="bold">
           Subscribe
         </Button>
       );
 
-    const renderFormInput = (field, placeholder) => {
+    const renderFormInput = ({ field, placeholder, formName }) => {
+      const id = `${formName}${field}`;
       const fields = {
         default: (
           <>
             <div className="newsletter-input-container">
+              <label className="visually-hidden" htmlFor={id}>
+                {placeholder || field}
+              </label>
               <input
                 onInput={e => this.onFormInput(e, field)}
                 type="text"
                 name={field}
                 placeholder={placeholder || field}
-                id={`newsletter-${field}`}
+                id={id}
                 required
-                className={cx({
-                  'newsletter-input': true,
+                className={cx('newsletter-input', {
                   error: this.elementHasError(field)
                 })}
               />
@@ -105,12 +116,20 @@ class NewsletterForm extends React.PureComponent {
         email: (
           <>
             <div className="newsletter-input-container">
+              <label className="visually-hidden" htmlFor={id}>
+                {placeholder || 'Sign up here to receive updates'}
+              </label>
               <input
-                onInput={e => this.onFormInput(e, 'email')}
+                onInput={e => {
+                  if (!dropdownOpen) {
+                    this.toggleOpenDropdown();
+                  }
+                  this.onFormInput(e, 'email');
+                }}
                 type="email"
                 name="email"
                 placeholder={placeholder || 'Sign up here to receive updates'}
-                id="newsletter-email"
+                id={id}
                 required
                 className={cx({
                   'newsletter-input': true,
@@ -138,28 +157,63 @@ class NewsletterForm extends React.PureComponent {
           >
             {footer ? (
               <>
-                {renderFormInput('email', 'Enter your email...')}
-                {renderFormInput('firstname', 'Enter your name...')}
-                {renderFormInput('organisation', 'Your organization...')}
-                {renderFormInput('country', 'Your country...')}
-                <div className="footer-conditions">
-                  <Text size="xs" as="div" color="white">
-                    You can unsuscribe at any time.
-                    <Link to="/about/privacy-policy">
-                      <Text as="div" size="xs" color="white" className="link-text">
-                        Learn about our privacy policies
-                      </Text>
-                    </Link>{' '}
-                  </Text>
-                  {renderSubmitButton()}
+                <div className="dropdown-container">
+                  {renderFormInput({
+                    field: 'email',
+                    placeholder: 'Enter your email...',
+                    formName: 'stay-informed'
+                  })}
+                  <Button
+                    variant="circle"
+                    onClick={() => this.toggleOpenDropdown()}
+                    color="green"
+                    className={cx('dropdown-button', { '-open': dropdownOpen })}
+                  />
+                </div>
+                <div className={cx('form-hidden-fields', { '-open': dropdownOpen })}>
+                  {renderFormInput({
+                    field: 'firstname',
+                    placeholder: 'Enter your first name...',
+                    formName: 'stay-informed'
+                  })}
+                  {renderFormInput({
+                    field: 'lastname',
+                    placeholder: 'Enter your last name...',
+                    formName: 'stay-informed'
+                  })}
+                  {renderFormInput({
+                    field: 'organisation',
+                    placeholder: 'Your organisation...',
+                    formName: 'stay-informed'
+                  })}
+                  <div className="footer-conditions">
+                    <Text size="xs" as="span" color="white" lineHeight="md">
+                      You can unsuscribe at any time. Learn about our
+                      <Link to="/about/privacy-policy">
+                        <Text as="span" size="xs" color="white" className="link-text">
+                          {' '}
+                          privacy policies
+                        </Text>
+                      </Link>{' '}
+                    </Text>
+                    {renderSubmitButton()}
+                  </div>
                 </div>
               </>
             ) : (
               <>
-                {renderFormInput('firstname')}
-                {renderFormInput('lastname')}
-                {renderFormInput('organisation')}
-                {renderFormInput('email')}
+                {renderFormInput({
+                  field: 'firstname',
+                  placeholder: 'First name',
+                  formName: 'footer'
+                })}
+                {renderFormInput({
+                  field: 'lastname',
+                  placeholder: 'Last name',
+                  formName: 'footer'
+                })}
+                {renderFormInput({ field: 'organisation', formName: 'footer' })}
+                {renderFormInput({ field: 'email', formName: 'footer' })}
                 <div className={cx('conditions', { visible: !message && email })}>
                   <Text lineHeight="lg">
                     After subscribing I consent that my email address will be used in order for us
