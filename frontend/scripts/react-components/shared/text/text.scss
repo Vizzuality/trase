@@ -6,7 +6,7 @@
 
   &.mono {
     font-family: $font-family-1;
-    letter-spacing: -0.8px;
+    letter-spacing: $letter-spacing-x-narrow;
   }
 
   &.serif {
