@@ -23,7 +23,8 @@ class NewsletterForm extends React.PureComponent {
         lastname: '',
         organisation: '',
         country: ''
-      }
+      },
+      formErrors: {}
     };
     this.onClickSubmit = this.onClickSubmit.bind(this);
     this.onFormInput = this.onFormInput.bind(this);
@@ -38,9 +39,32 @@ class NewsletterForm extends React.PureComponent {
     this.props.resetForm();
   }
 
+  updateErrors(justSubmitted) {
+    const { form, formErrors } = this.state;
+    const updatedErrors = { ...formErrors };
+    Object.keys(form).forEach(k => {
+      updatedErrors[k] = this.elementHasError(k, justSubmitted);
+    });
+    this.setState({
+      formErrors: updatedErrors
+    });
+  }
+
+  componentDidUpdate(_, prevState) {
+    const { form, submitted } = this.state;
+    const { form: prevForm } = prevState;
+    if (submitted) {
+      const changedKey = Object.keys(form).find(k => prevForm[k] !== form[k]);
+      if (changedKey) {
+        this.updateErrors();
+      }
+    }
+  }
+
   onClickSubmit(e) {
     e.preventDefault();
-    this.setState({ submitted: true, dirty: false });
+    this.setState({ submitted: true });
+    this.updateErrors(true);
     if (this.form.checkValidity()) {
       this.props.submitForm(this.state.form);
     }
@@ -48,28 +72,34 @@ class NewsletterForm extends React.PureComponent {
 
   onFormInput(e, type) {
     const { form } = this.state;
-    this.setState({ dirty: true, form: { ...form, [type]: e.target.value } });
+    this.setState({ form: { ...form, [type]: e.target.value } });
   }
 
   getFormRef(ref) {
     this.form = ref;
   }
 
-  elementHasError(name) {
-    const { submitted, dirty, form } = this.state;
+  elementHasError(name, justSubmitted) {
+    if (name === 'country') return false; // Not included
+
+    const { variant } = this.props;
+    const { submitted, form } = this.state;
+    const formSubmitted = justSubmitted || submitted;
     if (name === 'email') {
-      const field = document.getElementById('newsletter-email');
-      if (submitted && !field.checkValidity()) {
+      const emailId = variant === 'footer' ? 'footer-email' : 'stay-informed-email';
+      const emailElement = document.getElementById(emailId);
+      if (formSubmitted && !emailElement.checkValidity()) {
         return true;
       }
     }
-    return submitted && !dirty && form[name].length === 0;
+    return (formSubmitted && form[name].length === 0) || false;
   }
 
   render() {
     const { message, variant } = this.props;
     const { email } = this.state.form;
     const { dropdownOpen } = this.state;
+
     const footer = variant === 'footer';
     const renderSubmitButton = () =>
       footer ? (
@@ -88,7 +118,8 @@ class NewsletterForm extends React.PureComponent {
       );
 
     const renderFormInput = ({ field, placeholder, formName }) => {
-      const id = `${formName}${field}`;
+      const id = `${formName}-${field}`;
+      const hasError = this.state.formErrors[field];
       const fields = {
         default: (
           <>
@@ -104,13 +135,11 @@ class NewsletterForm extends React.PureComponent {
                 id={id}
                 required
                 className={cx('newsletter-input', {
-                  error: this.elementHasError(field)
+                  error: hasError
                 })}
               />
             </div>
-            {this.elementHasError(field) && (
-              <p className="error-message">{startCase(field)} is required</p>
-            )}
+            {hasError && <p className="error-message">{startCase(field)} is required</p>}
           </>
         ),
         email: (
@@ -133,14 +162,12 @@ class NewsletterForm extends React.PureComponent {
                 required
                 className={cx({
                   'newsletter-input': true,
-                  error: this.elementHasError('email')
+                  error: hasError
                 })}
               />
               {!footer && renderSubmitButton()}
             </div>
-            {this.elementHasError('email') && (
-              <p className="error-message">Please provide a valid email address</p>
-            )}
+            {hasError && <p className="error-message">Please provide a valid email address</p>}
           </>
         )
       };
@@ -161,7 +188,7 @@ class NewsletterForm extends React.PureComponent {
                   {renderFormInput({
                     field: 'email',
                     placeholder: 'Enter your email...',
-                    formName: 'stay-informed'
+                    formName: 'footer'
                   })}
                   <Button
                     variant="circle"
@@ -174,17 +201,17 @@ class NewsletterForm extends React.PureComponent {
                   {renderFormInput({
                     field: 'firstname',
                     placeholder: 'Enter your first name...',
-                    formName: 'stay-informed'
+                    formName: 'footer'
                   })}
                   {renderFormInput({
                     field: 'lastname',
                     placeholder: 'Enter your last name...',
-                    formName: 'stay-informed'
+                    formName: 'footer'
                   })}
                   {renderFormInput({
                     field: 'organisation',
                     placeholder: 'Your organisation...',
-                    formName: 'stay-informed'
+                    formName: 'footer'
                   })}
                   <div className="footer-conditions">
                     <Text size="xs" as="span" color="white" lineHeight="md">
@@ -205,15 +232,15 @@ class NewsletterForm extends React.PureComponent {
                 {renderFormInput({
                   field: 'firstname',
                   placeholder: 'First name',
-                  formName: 'footer'
+                  formName: 'stay-informed'
                 })}
                 {renderFormInput({
                   field: 'lastname',
                   placeholder: 'Last name',
-                  formName: 'footer'
+                  formName: 'stay-informed'
                 })}
-                {renderFormInput({ field: 'organisation', formName: 'footer' })}
-                {renderFormInput({ field: 'email', formName: 'footer' })}
+                {renderFormInput({ field: 'organisation', formName: 'stay-informed' })}
+                {renderFormInput({ field: 'email', formName: 'stay-informed' })}
                 <div className={cx('conditions', { visible: !message && email })}>
                   <Text lineHeight="lg">
                     After subscribing I consent that my email address will be used in order for us
