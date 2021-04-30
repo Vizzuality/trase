@@ -16,26 +16,55 @@ class NewsletterForm extends React.PureComponent {
     super(props);
     this.state = {
       submitted: false,
+      dropdownOpen: false,
       form: {
         email: '',
         firstname: '',
         lastname: '',
         organisation: '',
         country: ''
-      }
+      },
+      formErrors: {}
     };
     this.onClickSubmit = this.onClickSubmit.bind(this);
     this.onFormInput = this.onFormInput.bind(this);
     this.getFormRef = this.getFormRef.bind(this);
   }
 
+  toggleOpenDropdown() {
+    this.setState(prevState => ({ dropdownOpen: !prevState.dropdownOpen }));
+  }
+
   componentWillUnmount() {
     this.props.resetForm();
   }
 
+  updateErrors(justSubmitted) {
+    const { form, formErrors } = this.state;
+    const updatedErrors = { ...formErrors };
+    Object.keys(form).forEach(k => {
+      updatedErrors[k] = this.elementHasError(k, justSubmitted);
+    });
+    this.setState({
+      formErrors: updatedErrors
+    });
+  }
+
+  componentDidUpdate(_, prevState) {
+    const { form, submitted } = this.state;
+    const { form: prevForm } = prevState;
+    if (submitted) {
+      const changedKey = Object.keys(form).find(k => prevForm[k] !== form[k]);
+      if (changedKey) {
+        this.updateErrors();
+      }
+    }
+  }
+
   onClickSubmit(e) {
     e.preventDefault();
-    this.setState({ submitted: true, dirty: false });
+    this.setState({ submitted: true });
+    this.updateErrors(true);
     if (this.form.checkValidity()) {
       this.props.submitForm(this.state.form);
     }
@@ -43,27 +72,34 @@ class NewsletterForm extends React.PureComponent {
 
   onFormInput(e, type) {
     const { form } = this.state;
-    this.setState({ dirty: true, form: { ...form, [type]: e.target.value } });
+    this.setState({ form: { ...form, [type]: e.target.value } });
   }
 
   getFormRef(ref) {
     this.form = ref;
   }
 
-  elementHasError(name) {
-    const { submitted, dirty, form } = this.state;
+  elementHasError(name, justSubmitted) {
+    if (name === 'country') return false; // Not included
+
+    const { variant } = this.props;
+    const { submitted, form } = this.state;
+    const formSubmitted = justSubmitted || submitted;
     if (name === 'email') {
-      const field = document.getElementById('newsletter-email');
-      if (submitted && !field.checkValidity()) {
+      const emailId = variant === 'footer' ? 'footer-email' : 'stay-informed-email';
+      const emailElement = document.getElementById(emailId);
+      if (formSubmitted && !emailElement.checkValidity()) {
         return true;
       }
     }
-    return submitted && !dirty && form[name].length === 0;
+    return (formSubmitted && form[name].length === 0) || false;
   }
 
   render() {
     const { message, variant } = this.props;
     const { email } = this.state.form;
+    const { dropdownOpen } = this.state;
+
     const footer = variant === 'footer';
     const renderSubmitButton = () =>
       footer ? (
@@ -72,56 +108,66 @@ class NewsletterForm extends React.PureComponent {
           color="green"
           variant="circle"
           className="footer-submit-button"
-        />
+        >
+          ➔
+        </Button>
       ) : (
         <Button onClick={this.onClickSubmit} color="charcoal" weight="bold">
           Subscribe
         </Button>
       );
 
-    const renderFormInput = (field, placeholder) => {
+    const renderFormInput = ({ field, placeholder, formName }) => {
+      const id = `${formName}-${field}`;
+      const hasError = this.state.formErrors[field];
       const fields = {
         default: (
           <>
             <div className="newsletter-input-container">
+              <label className="visually-hidden" htmlFor={id}>
+                {placeholder || field}
+              </label>
               <input
                 onInput={e => this.onFormInput(e, field)}
                 type="text"
                 name={field}
                 placeholder={placeholder || field}
-                id={`newsletter-${field}`}
+                id={id}
                 required
-                className={cx({
-                  'newsletter-input': true,
-                  error: this.elementHasError(field)
+                className={cx('newsletter-input', {
+                  error: hasError
                 })}
               />
             </div>
-            {this.elementHasError(field) && (
-              <p className="error-message">{startCase(field)} is required</p>
-            )}
+            {hasError && <p className="error-message">{startCase(field)} is required</p>}
           </>
         ),
         email: (
           <>
             <div className="newsletter-input-container">
+              <label className="visually-hidden" htmlFor={id}>
+                {placeholder || 'Sign up here to receive updates'}
+              </label>
               <input
-                onInput={e => this.onFormInput(e, 'email')}
+                onInput={e => {
+                  if (!dropdownOpen) {
+                    this.toggleOpenDropdown();
+                  }
+                  this.onFormInput(e, 'email');
+                }}
                 type="email"
                 name="email"
                 placeholder={placeholder || 'Sign up here to receive updates'}
-                id="newsletter-email"
+                id={id}
                 required
                 className={cx({
                   'newsletter-input': true,
-                  error: this.elementHasError('email')
+                  error: hasError
                 })}
               />
               {!footer && renderSubmitButton()}
             </div>
-            {this.elementHasError('email') && (
-              <p className="error-message">Please provide a valid email address</p>
-            )}
+            {hasError && <p className="error-message">Please provide a valid email address</p>}
           </>
         )
       };
@@ -138,28 +184,63 @@ class NewsletterForm extends React.PureComponent {
           >
             {footer ? (
               <>
-                {renderFormInput('email', 'Enter your email...')}
-                {renderFormInput('firstname', 'Enter your name...')}
-                {renderFormInput('organisation', 'Your organization...')}
-                {renderFormInput('country', 'Your country...')}
-                <div className="footer-conditions">
-                  <Text size="xs" as="div" color="white">
-                    You can unsuscribe at any time.
-                    <Link to="/about/privacy-policy">
-                      <Text as="div" size="xs" color="white" className="link-text">
-                        Learn about our privacy policies
-                      </Text>
-                    </Link>{' '}
-                  </Text>
-                  {renderSubmitButton()}
+                <div className="dropdown-container">
+                  {renderFormInput({
+                    field: 'email',
+                    placeholder: 'Enter your email...',
+                    formName: 'footer'
+                  })}
+                  <Button
+                    variant="circle"
+                    onClick={() => this.toggleOpenDropdown()}
+                    color="green"
+                    className={cx('dropdown-button', { '-open': dropdownOpen })}
+                  />
+                </div>
+                <div className={cx('form-hidden-fields', { '-open': dropdownOpen })}>
+                  {renderFormInput({
+                    field: 'firstname',
+                    placeholder: 'Enter your first name...',
+                    formName: 'footer'
+                  })}
+                  {renderFormInput({
+                    field: 'lastname',
+                    placeholder: 'Enter your last name...',
+                    formName: 'footer'
+                  })}
+                  {renderFormInput({
+                    field: 'organisation',
+                    placeholder: 'Your organisation...',
+                    formName: 'footer'
+                  })}
+                  <div className="footer-conditions">
+                    <Text size="xs" as="span" color="white" lineHeight="md">
+                      You can unsuscribe at any time. Learn about our
+                      <Link to="/about/privacy-policy">
+                        <Text as="span" size="xs" color="white" className="link-text">
+                          {' '}
+                          privacy policies
+                        </Text>
+                      </Link>{' '}
+                    </Text>
+                    {renderSubmitButton()}
+                  </div>
                 </div>
               </>
             ) : (
               <>
-                {renderFormInput('firstname')}
-                {renderFormInput('lastname')}
-                {renderFormInput('organisation')}
-                {renderFormInput('email')}
+                {renderFormInput({
+                  field: 'firstname',
+                  placeholder: 'First name',
+                  formName: 'stay-informed'
+                })}
+                {renderFormInput({
+                  field: 'lastname',
+                  placeholder: 'Last name',
+                  formName: 'stay-informed'
+                })}
+                {renderFormInput({ field: 'organisation', formName: 'stay-informed' })}
+                {renderFormInput({ field: 'email', formName: 'stay-informed' })}
                 <div className={cx('conditions', { visible: !message && email })}>
                   <Text lineHeight="lg">
                     After subscribing I consent that my email address will be used in order for us

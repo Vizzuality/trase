@@ -16,7 +16,7 @@
         padding: 9px;
         color: $charcoal-grey;
         font-size: $font-size-x-regular;
-        letter-spacing: -0.8px;
+        letter-spacing: $letter-spacing-x-narrow;
         background-color: $light-gray;
         text-transform: uppercase;
       }
@@ -96,7 +96,7 @@
     padding: 0 5px 0 20px;
     font-family: $font-family-1;
     font-size: 18px;
-    letter-spacing: -0.8px;
+    letter-spacing: $letter-spacing-x-narrow;
     text-align: left;
     color: $charcoal-grey;
     outline: none;
