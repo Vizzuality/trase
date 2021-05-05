@@ -256,7 +256,6 @@ $menuOffset: 15vh;
 
   .nav-tab-container {
     display: flex;
-    justify-content: space-between;
     padding: 40px 20px;
     background-color: $white;
 
@@ -308,7 +307,8 @@ $menuOffset: 15vh;
           font-size: $font-size-x-big;
           line-height: $line-height-huge;
 
-          &:hover {
+          &:hover,
+          &.active {
             color: $orange-500;
           }
         }
@@ -332,7 +332,7 @@ $menuOffset: 15vh;
     }
 
     .-tab-contents {
-      flex: 0 0 70%;
+      flex: 1;
       padding: 15px 0;
       overflow-y: scroll;
       // -ms-overflow-style: none; /* Internet Explorer 10+ */
@@ -344,15 +344,14 @@ $menuOffset: 15vh;
       .tab-contents-cards {
         display: flex;
         flex-flow: row;
-        justify-content: space-between;
       }
     }
   }
 
   .top-nav-card {
-    flex: 0 0 260px;
+    flex: 0 0 360px;
     height: calc(100vh - 190px);
-    max-height: 400px; // set max height so on larger screens cards don't go crazy long
+    max-height: 530px; // set max height so on larger screens cards don't go crazy long
     display: flex;
     flex-flow: column;
     justify-content: space-between;
@@ -387,7 +386,7 @@ $menuOffset: 15vh;
       font-family: $font-family-1;
       font-size: $font-size-xx-regular;
       color: $gray-400;
-      height: 100px;
+      height: auto;
       text-overflow: ellipsis;
 
       .card-summary-content {

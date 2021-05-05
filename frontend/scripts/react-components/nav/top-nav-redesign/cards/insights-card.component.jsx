@@ -1,21 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Transition } from 'react-spring/renderprops';
 import Heading from 'react-components/shared/heading/heading.component';
 import { ImgBackground } from 'react-components/shared/img';
 
-const InsightsCard = ({ title, summary, imageUrl, active, trailStyles }) => {
-  const [cardActive, setCardActive] = useState(active);
-  useEffect(() => {
-    setCardActive(active);
-  }, [active, setCardActive]);
+const InsightsCard = ({
+  title,
+  url,
+  summary,
+  imageUrl,
+  setActiveCard,
+  active,
+  trailStyles,
+  id
+}) => {
   return (
-    <div
+    <a
       className="top-nav-card"
       style={trailStyles}
       areaLabel={title}
-      onMouseOver={() => setCardActive(true)}
-      onMouseLeave={() => setCardActive(false)}
+      href={url}
+      onMouseOver={() => setActiveCard(id)}
+      onMouseLeave={() => setActiveCard(false)}
       onFocus={() => {}}
     >
       <ImgBackground as="figure" alt={title} className="card-image" src={imageUrl} />
@@ -24,7 +30,7 @@ const InsightsCard = ({ title, summary, imageUrl, active, trailStyles }) => {
           {title}
         </Heading>
         <Transition
-          items={cardActive}
+          items={active}
           from={{
             height: 0,
             marginTop: 0,
@@ -38,7 +44,7 @@ const InsightsCard = ({ title, summary, imageUrl, active, trailStyles }) => {
             opacity: 0
           }}
           enter={{
-            height: 100,
+            height: 120,
             marginTop: 10,
             marginBottom: 20,
             opacity: 1
@@ -54,7 +60,7 @@ const InsightsCard = ({ title, summary, imageUrl, active, trailStyles }) => {
           }
         </Transition>
       </section>
-    </div>
+    </a>
   );
 };
 
@@ -62,9 +68,12 @@ InsightsCard.defaultProps = {};
 
 InsightsCard.propTypes = {
   title: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
+  id: PropTypes.bool.isRequired,
   summary: PropTypes.string.isRequired,
   imageUrl: PropTypes.string.isRequired,
   active: PropTypes.bool.isRequired,
+  setActiveCard: PropTypes.func.isRequired,
   trailStyles: PropTypes.object.isRequired
 };
 

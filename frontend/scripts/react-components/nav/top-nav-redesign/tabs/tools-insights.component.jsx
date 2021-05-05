@@ -3,7 +3,7 @@ import { Trail } from 'react-spring/renderprops';
 import { NavLink } from 'redux-first-router-link';
 import Icon from 'react-components/shared/icon';
 import isMobile from 'utils/isMobile';
-
+import cx from 'classnames';
 import InsightsCard from '../cards/insights-card.component';
 
 const ToolsInsights = () => {
@@ -13,9 +13,10 @@ const ToolsInsights = () => {
     {
       key: 0,
       properties: {
-        title: 'Supply chains',
+        title: 'Supply chain',
+        url: 'https://supplychains.trase.earth',
         summary:
-          'Volutpat maecenas volutpat blandit aliquam etiam erat velit scelerisque. In ornare quam viverra orci',
+          'Explore the connections between production regions, trading companies and import markets. Understand exposure to deforestation and other environmental and social risks.',
         imageUrl: 'images/landing-redesign/supply-chain-blue.png'
       }
     },
@@ -23,8 +24,9 @@ const ToolsInsights = () => {
       key: 1,
       properties: {
         title: 'Finance',
+        url: 'https://trase.finance',
         summary:
-          'Volutpat maecenas volutpat blandit aliquam etiam erat velit scelerisque. In ornare quam viverra orci',
+          'Explore direct and indirect exposure of the finance sector to deforestation and other risks. Uncover the ownership patterns of commodity trading companies.',
         imageUrl: 'images/landing-redesign/finance-blue.png'
       }
     },
@@ -32,13 +34,13 @@ const ToolsInsights = () => {
       key: 2,
       properties: {
         title: 'Insights',
+        url: 'https://insights.trase.earth',
         summary:
-          'Volutpat maecenas volutpat blandit aliquam etiam erat velit scelerisque. In ornare quam viverra orci',
+          'Discover the latest insights and analysis on the sustainability of commodity trade by Trase’s team of experts and partners.',
         imageUrl: 'images/landing-redesign/insights-blue.png'
       }
     }
   ];
-
   return (
     <div className="nav-tab-container -insights">
       <div className="-navigation-block">
@@ -53,18 +55,18 @@ const ToolsInsights = () => {
               exact
               strict
               to={{ type: 'home' }}
-              className="sites-menu-link"
+              className={cx('sites-menu-link', { active: activeCard === 0 })}
               onMouseOver={() => setActiveCard(0)}
               onFocus={() => setActiveCard(0)}
               onMouseLeave={() => setActiveCard(null)}
             >
-              Supply Chains
+              Supply Chain
             </NavLink>
           </li>
           <li>
             <a
               href="https://trase.finance/"
-              className="sites-menu-link"
+              className={cx('sites-menu-link', { active: activeCard === 1 })}
               onMouseOver={() => setActiveCard(1)}
               onFocus={() => setActiveCard(1)}
               onMouseLeave={() => setActiveCard(null)}
@@ -75,7 +77,7 @@ const ToolsInsights = () => {
           <li>
             <a
               href="https://insights.trase.earth"
-              className="sites-menu-link"
+              className={cx('sites-menu-link', { active: activeCard === 2 })}
               onMouseOver={() => setActiveCard(2)}
               onFocus={() => setActiveCard(2)}
               onMouseLeave={() => setActiveCard(null)}
@@ -111,7 +113,9 @@ const ToolsInsights = () => {
                 <InsightsCard
                   trailStyles={props}
                   {...item.properties}
+                  id={item.key}
                   active={activeCard === item.key}
+                  setActiveCard={setActiveCard}
                 />
               )}
             </Trail>
