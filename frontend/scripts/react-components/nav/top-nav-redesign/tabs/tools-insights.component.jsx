@@ -1,7 +1,6 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { Trail } from 'react-spring/renderprops';
 import { NavLink } from 'redux-first-router-link';
-import Icon from 'react-components/shared/icon';
 import isMobile from 'utils/isMobile';
 import cx from 'classnames';
 import InsightsCard from '../cards/insights-card.component';
@@ -9,6 +8,19 @@ import InsightsCard from '../cards/insights-card.component';
 const ToolsInsights = () => {
   const [activeCard, setActiveCard] = useState(null);
   const mobile = useMemo(() => isMobile());
+  const cardsRef = useRef([]);
+
+  useEffect(() => {
+    if (
+      !mobile &&
+      (activeCard || activeCard === 0) &&
+      cardsRef.current &&
+      cardsRef.current[activeCard]
+    ) {
+      cardsRef.current[activeCard].scrollIntoView({ inline: 'center', behavior: 'smooth' });
+    }
+  }, [activeCard, cardsRef]);
+
   const cards = [
     {
       key: 0,
@@ -86,12 +98,6 @@ const ToolsInsights = () => {
             </a>
           </li>
         </ul>
-        {!mobile && (
-          <span className="scroll-indicator">
-            <span>scroll</span>
-            <Icon icon="icon-scroll-arrow" />
-          </span>
-        )}
         <ul className="about-menu">
           <li className="about-menu-item">
             <NavLink exact strict to={{ type: 'about' }}>
@@ -113,6 +119,7 @@ const ToolsInsights = () => {
                 <InsightsCard
                   trailStyles={props}
                   {...item.properties}
+                  cardsRef={cardsRef}
                   id={item.key}
                   active={activeCard === item.key}
                   setActiveCard={setActiveCard}
