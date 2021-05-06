@@ -10,12 +10,7 @@ import './grid-list-item.scss';
 function WrapWithTooltip({ tooltip, wrap, children }) {
   if (wrap) {
     return (
-      <HelpTooltip
-        theme="black-padding"
-        showInfoIcon={false}
-        className="size-sm"
-        text={tooltip}
-      >
+      <HelpTooltip theme="black-padding" showInfoIcon={false} className="size-sm" text={tooltip}>
         {children}
       </HelpTooltip>
     );
@@ -131,7 +126,7 @@ GridListItem.propTypes = {
   onInfoClick: PropTypes.func,
   onHover: PropTypes.func,
   isInfoActive: PropTypes.bool,
-  style: PropTypes.object.isRequired,
+  style: PropTypes.object,
   variant: PropTypes.string
 };
 
