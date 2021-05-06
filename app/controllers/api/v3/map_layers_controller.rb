@@ -44,10 +44,6 @@ module Api
           merge(serialized_contextual_layers)
       end
 
-      def data
-        redirect_to Api::V3::MapAttributesExport.new.public_url
-      end
-
       private
 
       def set_start_end_year
