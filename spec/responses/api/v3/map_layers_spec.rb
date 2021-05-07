@@ -25,15 +25,4 @@ RSpec.describe 'Map layers', type: :request do
       expect(@response).to match_response_schema('v3_map_layers')
     end
   end
-
-  describe 'GET /api/v3/map_layers_data' do
-    it 'redirects to S3' do
-      s3_url = 'TODO'
-      map_attributes_export = instance_double(Api::V3::MapAttributesExport)
-      allow(Api::V3::MapAttributesExport).to receive(:new).and_return(map_attributes_export)
-      allow(map_attributes_export).to receive(:public_url).and_return(s3_url)
-      get '/api/v3/map_layers_data'
-      expect(@response).to redirect_to(s3_url)
-    end
-  end
 end

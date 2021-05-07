@@ -16,13 +16,8 @@ module Api
       def call
         generate_csv
         unless Rails.env.development? || Rails.env.test?
-          upload_to_s3
-          Api::V3::MapAttributesCartoSync.new(@carto_name)
+          Api::V3::MapAttributesCartoUpload.new(@carto_name, column_names, @local_filename).call
         end
-      end
-
-      def public_url
-        S3::PublicUrl.instance.call(@s3_filename)
       end
 
       private
@@ -41,21 +36,15 @@ module Api
         Rails.logger.debug 'Map attributes values file generated'
       end
 
-      def upload_to_s3
-        meta = {
-          schema_version: ActiveRecord::Migrator.current_version.to_s
-        }
-        last_successful_update = Api::V3::DatabaseUpdate.last_successful_update
-        if last_successful_update
-          meta = meta.merge({
-            last_update: last_successful_update.created_at.to_s,
-            filename: last_successful_update.filename || 'N/A'
-          })
-        end
-        S3::Uploader.instance.call(@s3_filename, @local_filename, meta)
-        Rails.logger.debug "File uploaded to #{@s3_filename}"
-        # set canned ACL - public read, owner write
-        S3::CannedAcl.instance.call(@s3_filename, 'public-read')
+      def column_names
+        sql = <<~SQL
+          SELECT c.column_name
+          FROM information_schema.tables t
+          LEFT JOIN information_schema.columns c ON t.table_schema = c.table_schema AND t.table_name = c.table_name
+          WHERE table_type = 'VIEW' AND t.table_name = 'map_attributes_values_v'
+        SQL
+        result = Api::V3::Readonly::MapAttribute.connection.execute sql
+        result.values.flatten
       end
 
       def dir_exists?
