@@ -499,7 +499,7 @@ DEPENDENCIES
   capistrano (~> 3.16)
   capistrano-bundler
   capistrano-nvm
-  capistrano-passenger
+  capistrano-passenger (~> 0.2.0)
   capistrano-rails (~> 1.6)
   capistrano-rvm
   capistrano-yarn
