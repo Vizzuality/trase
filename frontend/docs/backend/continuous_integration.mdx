@@ -58,5 +58,5 @@ A naming convention is applied to differentiate between environments. For exampl
 - [on staging] `cat ~/.ssh/gh_deploy.pub >> ~/.ssh/authorized_keys`
 - Add the public key `~/.ssh/gh_deploy.pub` to [Github Deploy keys](https://github.com/Vizzuality/trase/settings/keys)
 - Generate a password to encrypt the key and store it in [Github Actions secrets](https://github.com/Vizzuality/trase/settings/secrets/actions) and in LastPass as `STAGING_DEPLOY_ENC_KEY`
-- [on staging] `openssl enc -aes-256-cbc -md sha512 -salt -in ~/.ssh/gh_deploy -out staging_gh_deploy_enc -k [STAGING_DEPLOY_ENC_KEY] -a`
+- [on staging] `openssl enc -aes-256-cbc -md sha512 -salt -in ~/.ssh/gh_deploy -out staging_gh_deploy_enc -k [STAGING_DEPLOY_ENC_KEY] -a -pbkdf2`
 - Add `staging_gh_deploy_enc` to the repository at `config/deploy/encrypted_keys`
