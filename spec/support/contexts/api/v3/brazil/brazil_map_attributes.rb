@@ -68,7 +68,7 @@ shared_context 'api v3 brazil map attributes' do
         position: 21,
         dual_layer_buckets: [6, 10, 15],
         single_layer_buckets: [1, 3, 7, 15],
-        years: [2015],
+        years: [2014, 2015],
         color_scale: 'red'
       )
       FactoryBot.create(
