@@ -16,7 +16,7 @@ module Api
       def call
         generate_csv
         unless Rails.env.development? || Rails.env.test?
-          Api::V3::MapAttributesCartoUpload.new(@carto_name, column_names, @local_filename).call
+          Api::V3::MapAttributesCartoUpload.new(@carto_name, column_definitions, @local_filename).call
         end
       end
 
@@ -36,15 +36,15 @@ module Api
         Rails.logger.debug 'Map attributes values file generated'
       end
 
-      def column_names
+      def column_definitions
         sql = <<~SQL
-          SELECT c.column_name
+          SELECT c.column_name, c.data_type
           FROM information_schema.tables t
           LEFT JOIN information_schema.columns c ON t.table_schema = c.table_schema AND t.table_name = c.table_name
           WHERE table_type = 'VIEW' AND t.table_name = 'map_attributes_values_v'
         SQL
         result = Api::V3::Readonly::MapAttribute.connection.execute sql
-        result.values.flatten
+        Hash[result.values]
       end
 
       def dir_exists?
