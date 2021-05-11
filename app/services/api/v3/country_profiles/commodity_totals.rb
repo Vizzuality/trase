@@ -98,7 +98,7 @@ module Api
                 @external_attribute_value.call('com_trade.value.value')
               ]
             }
-          end.sort { |a, b| b[:values][2].to_f <=> a[:values][2].to_f }
+          end.sort { |a, b| b[:values][2].to_f <=> a[:values][2].to_f }.reject { |r| r[:values].compact.empty? }
         end
 
         def production_values
