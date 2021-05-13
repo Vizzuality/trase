@@ -7,15 +7,15 @@ module Api
       # @param file_path [String]
       def initialize(carto_name, column_definitions, file_path)
         @carto_name = carto_name
-        @backup_carto_name = carto_name + '_bkp'
+        @new_carto_name = carto_name + '_new'
         @column_definitions = column_definitions
         @file_path = file_path
       end
 
       def call
         setup
-        make_public
         copy
+        make_public
         teardown
       end
 
@@ -24,10 +24,9 @@ module Api
       # backs up current table, creates new table for copy
       def setup
         sql = [
-          "DROP TABLE IF EXISTS #{@backup_carto_name}",
-          "ALTER TABLE IF EXISTS #{@carto_name} RENAME TO #{@backup_carto_name}",
+          "DROP TABLE IF EXISTS #{@new_carto_name}",
           create_table_sql,
-          "SELECT CDB_CartodbfyTable('#{org_name}', '#{@carto_name}')"
+          "SELECT CDB_CartodbfyTable('#{org_name}', '#{@new_carto_name}')"
         ].join(';')
         # presumably this happens in a transaction
         carto_sql_post(sql)
@@ -44,14 +43,10 @@ module Api
         response = Net::HTTP.start(uri.host, uri.port, use_ssl: true, read_timeout: 300) { |http| http.request(request) }
         # this will raise an exception and force sidekiq retry
         response.value unless response.is_a? Net::HTTPSuccess
-      rescue
-        # anything goes wrong in here, restore table from backup
-        restore
-        raise
       end
 
       def make_public
-        show_uri = URI("https://sei-international.carto.com/u/#{org_name}/api/v1/viz/#{@carto_name}?#{auth}")
+        show_uri = URI("https://sei-international.carto.com/u/#{org_name}/api/v1/viz/#{@new_carto_name}?#{auth}")
         request = Net::HTTP::Get.new(show_uri.path + '?' + show_uri.query)
         response = Net::HTTP.start(show_uri.host, show_uri.port, use_ssl: true) { |http| http.request(request) }
         # this will raise an exception and force sidekiq retry
@@ -68,20 +63,12 @@ module Api
         response.value unless response.is_a? Net::HTTPSuccess
       end
 
-      # drops backup table, indexes new table
+      # drops old table, renames new table, indexes new table
       def teardown
         sql = [
-          "DROP TABLE #{@backup_carto_name}",
-          index_table_sql
-        ].join(';')
-        # presumably this happens in a transaction
-        carto_sql_post(sql)
-      end
-
-      def restore
-        sql = [
           "DROP TABLE IF EXISTS #{@carto_name}",
-          "ALTER TABLE IF EXISTS #{@backup_carto_name} RENAME TO #{@carto_name}"
+          "ALTER TABLE IF EXISTS #{@new_carto_name} RENAME TO #{@carto_name}",
+          index_table_sql
         ].join(';')
         # presumably this happens in a transaction
         carto_sql_post(sql)
@@ -110,12 +97,12 @@ module Api
 
       def create_table_sql
         columns_with_types = @column_definitions.map { |name, type| "#{name} #{type}" }.join(', ')
-        "CREATE TABLE #{@carto_name} (the_geom geometry, #{columns_with_types})"
+        "CREATE TABLE #{@new_carto_name} (the_geom geometry, #{columns_with_types})"
       end
 
       def copy_sql
         column_names = @column_definitions.keys.join(', ')
-        "COPY #{@carto_name} (#{column_names}) FROM STDIN WITH (FORMAT csv, HEADER true)"
+        "COPY #{@new_carto_name} (#{column_names}) FROM STDIN WITH (FORMAT csv, HEADER true)"
       end
 
       def index_table_sql
