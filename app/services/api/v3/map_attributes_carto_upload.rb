@@ -14,6 +14,7 @@ module Api
 
       def call
         setup
+        make_public
         copy
         teardown
       end
@@ -23,6 +24,7 @@ module Api
       # backs up current table, creates new table for copy
       def setup
         sql = [
+          "DROP TABLE IF EXISTS #{@backup_carto_name}",
           "ALTER TABLE IF EXISTS #{@carto_name} RENAME TO #{@backup_carto_name}",
           create_table_sql,
           "SELECT CDB_CartodbfyTable('#{org_name}', '#{@carto_name}')"
@@ -48,6 +50,24 @@ module Api
         raise
       end
 
+      def make_public
+        show_uri = URI("https://sei-international.carto.com/u/#{org_name}/api/v1/viz/#{@carto_name}?#{auth}")
+        request = Net::HTTP::Get.new(show_uri.path + '?' + show_uri.query)
+        response = Net::HTTP.start(show_uri.host, show_uri.port, use_ssl: true) { |http| http.request(request) }
+        # this will raise an exception and force sidekiq retry
+        response.value unless response.is_a? Net::HTTPSuccess
+        visualization = JSON.parse(response.body)
+        visualization_id = visualization['id']
+
+        update_uri = URI("https://sei-international.carto.com/u/#{org_name}/api/v1/viz/#{visualization_id}?#{auth}")
+        request = Net::HTTP::Put.new(update_uri.path + '?' + update_uri.query)
+        request['Content-Type'] = 'application/json'
+        request.body = {id: visualization_id, privacy: 'PUBLIC'}.to_json
+        response = Net::HTTP.start(update_uri.host, update_uri.port, use_ssl: true) { |http| http.request(request) }
+        # this will raise an exception and force sidekiq retry
+        response.value unless response.is_a? Net::HTTPSuccess
+      end
+
       # drops backup table, indexes new table
       def teardown
         sql = [
@@ -60,7 +80,7 @@ module Api
 
       def restore
         sql = [
-          "DROP TABLE #{@carto_name}",
+          "DROP TABLE IF EXISTS #{@carto_name}",
           "ALTER TABLE IF EXISTS #{@backup_carto_name} RENAME TO #{@carto_name}"
         ].join(';')
         # presumably this happens in a transaction
@@ -71,7 +91,7 @@ module Api
         uri = URI("https://#{host}/api/v2/sql?#{auth}&q=#{sql}")
         request = Net::HTTP::Post.new(uri.path + '?' + uri.query)
         # https://www.exceptionalcreatures.com/bestiary/Net/ReadTimeout.html
-        response = Net::HTTP.start(uri.host, uri.port, use_ssl: true, read_timeout: 300) { |http| http.request(request) }
+        response = Net::HTTP.start(uri.host, uri.port, use_ssl: true) { |http| http.request(request) }
         # this will raise an exception and force sidekiq retry
         response.value unless response.is_a? Net::HTTPSuccess
       end
