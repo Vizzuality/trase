@@ -158,9 +158,11 @@ module Api
         def declarations
           declarations = []
           nydf = @named_summary_attributes[:nydf]
-          declarations << nydf[:name] if nydf && nydf[:value]
+          is_nydf_signatory = (nydf && ActiveModel::Type::Boolean.new.cast(nydf[:value]))
+          declarations << nydf[:name] if is_nydf_signatory
           amsterdam = @named_summary_attributes[:amsterdam]
-          declarations << amsterdam[:name] if amsterdam && amsterdam[:value]
+          is_amsterdam_signatory = (amsterdam && ActiveModel::Type::Boolean.new.cast(amsterdam[:value]))
+          declarations << amsterdam[:name] if is_amsterdam_signatory
           return '' unless declarations.any?
 
           " #{@node.name} is a signatory to the " + declarations.join(' and the ') + '.'
