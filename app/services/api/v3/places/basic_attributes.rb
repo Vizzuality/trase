@@ -111,7 +111,7 @@ module Api
             qual = Api::V3::Qual.find_by_name(node_type.name)
             next unless qual
 
-            node_name = @values.get(qual.simple_type, qual.id)
+            node_name = @values.get(qual.simple_type, qual.id)&.value
             next unless node_name
 
             node = Api::V3::Node.where(node_type_id: node_type.id).
@@ -128,7 +128,7 @@ module Api
         def attribute_value(attribute)
           return nil unless attribute
 
-          @values.get(attribute.simple_type, attribute.id)
+          @values.get(attribute.simple_type, attribute.id)&.value
         end
 
         def initialize_pasture_area
@@ -219,7 +219,9 @@ module Api
           name_and_tooltip = get_name_and_tooltip.call(
             attribute: attribute.readonly_attribute,
             context: @context,
-            defaults: Api::V3::AttributeNameAndTooltip::NameAndTooltip.new(attribute.display_name, attribute.tooltip_text)
+            defaults: Api::V3::AttributeNameAndTooltip::NameAndTooltip.new(
+              attribute.display_name, attribute.tooltip_text
+            )
           )
           {
             value: instance_variable_get("@#{attribute_name}"),
