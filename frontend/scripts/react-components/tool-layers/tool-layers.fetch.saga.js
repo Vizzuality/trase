@@ -128,6 +128,8 @@ export function* getUnitLayerData(params) {
   const { selectedGeoColumnId, iso2 } = params;
   const selectedDimensions = yield select(getSelectedMapDimensionsData);
   if (!selectedDimensions.length) return;
+
+  // Add a query for each indicator as they could have different aggregation Method
   const getQuery = dimension => `(SELECT node_type_id, node_id, geo_id, attribute_id, json_object_agg(COALESCE(year, 0 ), total
     ORDER BY year) as years FROM (SELECT node_type_id, node_id, geo_id, attribute_id, year,
     ${dimension.aggregationMethod}(value) AS total FROM map_attributes_values_${UNIT_LAYERS_DATA_ENV}
