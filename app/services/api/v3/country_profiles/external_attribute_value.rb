@@ -2,6 +2,7 @@ module Api
   module V3
     module CountryProfiles
       class ExternalAttributeValue
+        AttributeValue = Struct.new(:value, :year)
         # @param iso_code2 [String]
         # @param year [Integer]
         # @param activity [Symbol] e.g. :exporter, :importer
@@ -50,7 +51,7 @@ module Api
             first
           return nil unless row
 
-          row.send(property)
+          AttributeValue.new(row.send(property), row.send(:year))
         end
 
         # @param attribute_short_name [Symbol] e.g. :population
@@ -70,11 +71,13 @@ module Api
           )
           return nil unless row
 
-          if property == :rank
-            row.send(:"#{attribute_short_name}_rank")
-          else
-            row.send(attribute_short_name)
-          end
+          value =
+            if property == :rank
+              row.send(:"#{attribute_short_name}_rank")
+            else
+              row.send(attribute_short_name)
+            end
+          AttributeValue.new(value, row.send(:year))
         end
       end
     end

@@ -76,12 +76,12 @@ module Api
             original_attribute = @chart_config.named_attribute(name)
             next nil unless original_attribute
 
-            value = @values.get(
+            attribute_value = @values.get(
               original_attribute.simple_type, original_attribute.id
             )
-            next nil unless value
+            next nil unless attribute_value&.value
 
-            values[name.to_sym] = value
+            values[name.to_sym] = attribute_value.value
 
             chart_attribute = @chart_config.named_chart_attribute(name)
             values[:header_attributes][chart_attribute.identifier.to_sym] =
@@ -94,13 +94,20 @@ module Api
           name_and_tooltip = get_name_and_tooltip.call(
             attribute: chart_attribute.readonly_attribute,
             context: @context,
-            defaults: Api::V3::AttributeNameAndTooltip::NameAndTooltip.new(chart_attribute.display_name, chart_attribute.tooltip_text)
+            defaults: Api::V3::AttributeNameAndTooltip::NameAndTooltip.new(
+              chart_attribute.display_name, chart_attribute.tooltip_text
+            )
           )
+          attribute_value = @values.get(attribute.simple_type, attribute.id)
+          year = attribute_value.year
+          tooltip_text = name_and_tooltip.tooltip_text || ''
+          tooltip_text += "(#{year})" if year && year != @year
           {
-            value: @values.get(attribute.simple_type, attribute.id),
+            value: attribute_value.value,
+            year: year,
             name: name_and_tooltip.display_name,
             unit: chart_attribute.unit,
-            tooltip: name_and_tooltip.tooltip_text
+            tooltip: tooltip_text
           }
         end
 

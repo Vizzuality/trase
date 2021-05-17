@@ -26,9 +26,11 @@ module Api
           return unless state_qual
 
           state_name = @values.get(state_qual.simple_type, state_qual.id)
-          return unless state_name.present?
+          return unless state_name&.value
 
-          @state_ranking = StateRanking.new(@context, @node, @year, state_name)
+          @state_ranking = StateRanking.new(
+            @context, @node, @year, state_name.value
+          )
         end
       end
     end
