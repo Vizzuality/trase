@@ -15,7 +15,10 @@ import { CARTO_BASE_URL, YEARS_DISABLED_UNAVAILABLE, YEARS_INCOMPLETE } from 'co
 import { getSingleMapDimensionWarning } from 'app/helpers/getMapDimensionsWarnings';
 import { setMapContextLayers } from 'react-components/tool/tool.actions';
 import { getSelectedContext, getSelectedYears } from 'app/app.selectors';
-import { getSelectedGeoColumn } from 'react-components/tool-layers/tool-layers.selectors';
+import {
+  getSelectedGeoColumn,
+  getSelectedMapDimensionsData
+} from 'react-components/tool-layers/tool-layers.selectors';
 
 export function* getLinkedGeoIds() {
   const {
@@ -122,20 +125,25 @@ export function* getMapDimensions(selectedContext, selectedYears) {
 }
 
 export function* getUnitLayerData(params) {
-  const { selectedGeoColumnId, selectedUnitIndicatorIds, iso2 } = params;
-  const url = `${CARTO_BASE_URL}/sql?q=
-    SELECT node_type_id, node_id, geo_id, attribute_id, json_object_agg(COALESCE(year, 0 ), total
+  const { selectedGeoColumnId, iso2 } = params;
+  const selectedDimensions = yield select(getSelectedMapDimensionsData);
+  if (!selectedDimensions.length) return;
+
+  // Add a query for each indicator as they could have different aggregation Method
+  const getQuery = dimension => `(SELECT node_type_id, node_id, geo_id, attribute_id, json_object_agg(COALESCE(year, 0 ), total
     ORDER BY year) as years FROM (SELECT node_type_id, node_id, geo_id, attribute_id, year,
-    SUM(value) AS total FROM map_attributes_values_${UNIT_LAYERS_DATA_ENV}
-    WHERE node_type_id = ${selectedGeoColumnId} and attribute_id IN (${selectedUnitIndicatorIds.join(
-    ','
-  )}) and iso2 = '${iso2}'
+    ${dimension.aggregationMethod}(value) AS total FROM map_attributes_values_${UNIT_LAYERS_DATA_ENV}
+    WHERE node_type_id = ${selectedGeoColumnId} and attribute_id = (${dimension.attributeId}) and iso2 = '${iso2}'
     GROUP BY node_type_id, node_id, geo_id, attribute_id, year) s
-    GROUP BY node_type_id, node_id, geo_id, attribute_id ORDER BY geo_id, node_id, attribute_id
+    GROUP BY node_type_id, node_id, geo_id, attribute_id ORDER BY geo_id, node_id, attribute_id)
   `;
+  const queries = selectedDimensions.map(getQuery);
+  const url = `${CARTO_BASE_URL}/sql?q=${
+    queries.length === 1 ? queries[0] : queries.join('UNION ALL ')
+  }`;
   const { source, fetchPromise } = fetchWithCancel(url);
   try {
-    const { data } =  yield call(fetchPromise);
+    const { data } = yield call(fetchPromise);
     yield put(setUnitLayerData(data && data.rows));
   } catch (e) {
     console.error('Error', e);

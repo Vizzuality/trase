@@ -67,10 +67,7 @@ function useMenuOptions(props, hoveredSelectedNode) {
       DISALLOW_NODE_TYPES.push(NODE_TYPES.countryOfProduction);
       DISALLOW_NODE_TYPES.push(NODE_TYPES.country);
     }
-    if (
-      (link.profileType && console.log('ss', nodeType)) ||
-      !DISALLOW_NODE_TYPES.includes(nodeType)
-    ) {
+    if (link.profileType && !DISALLOW_NODE_TYPES.includes(nodeType)) {
       items.splice(2, 0, {
         id: 'profile-link',
         label: `Go To The ${
@@ -323,9 +320,11 @@ function Sankey(props) {
       selectedMapDimensions.length > 0 &&
       node.type !== NODE_TYPES.country
     ) {
+      console.log('----', node, nodeAttributes, nodeHeights);
       const nodeIndicators = selectedMapDimensions
         .map(dimension => {
           const meta = getNodeMeta(dimension, node, nodeAttributes, selectedResizeBy, nodeHeights);
+          console.log('meta', meta);
           if (!meta) {
             return null;
           }
