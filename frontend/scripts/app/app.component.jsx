@@ -2,6 +2,7 @@ import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import CookieBanner from 'react-components/shared/cookie-banner';
+import NewCookieBanner from 'react-components/shared/new-cookie-banner';
 import FullScreenButton from 'react-components/shared/full-screen-button';
 import Feedback from 'react-components/shared/feedback';
 import Footer from 'react-components/shared/footer/footer.component';
@@ -52,20 +53,12 @@ function App() {
       <main>
         <Component key={pageKey} content={layout && layout(pageContent[type])} />
 
-        {!isInIframe && <CookieBanner />}
+        {!isInIframe && (ENABLE_FOOTER_REDESIGN ? <NewCookieBanner /> : <CookieBanner />)}
         {isInIframe && <FullScreenButton />}
         {feedback && <Feedback />}
       </main>
 
-      {footer && (
-        <footer>
-          {ENABLE_FOOTER_REDESIGN ?
-            <NewFooter />
-            :
-            <Footer />
-          }
-        </footer>
-      )}
+      {footer && <footer>{ENABLE_FOOTER_REDESIGN ? <NewFooter /> : <Footer />}</footer>}
       <div id="recharts-tooltip-portal" />
     </Suspense>
   );
