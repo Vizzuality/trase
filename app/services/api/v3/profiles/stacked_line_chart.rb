@@ -56,7 +56,7 @@ module Api
           return unless state_qual
 
           @values = Api::V3::NodeAttributeValuesPreloader.new(@node, @year)
-          state_name = @values.get(state_qual.simple_type, state_qual.id)
+          state_name = @values.get(state_qual.simple_type, state_qual.id)&.value
           return unless state_name.present?
 
           @state_ranking = Api::V3::Places::StateRanking.new(@context, @node, @year, state_name)
