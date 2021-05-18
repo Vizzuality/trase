@@ -45,7 +45,7 @@ module Api
               "#{node_values}.year IN (?) OR #{node_values}.year IS NULL",
               @years
             ).
-            where('maa.map_attribute_id' => @map_attributes.map(&:id)).
+            where('maa.map_attribute_id' => map_attribute.id).
             group(
               "#{node_values}.node_id",
               "#{node_values}.#{attribute_type}_id"
