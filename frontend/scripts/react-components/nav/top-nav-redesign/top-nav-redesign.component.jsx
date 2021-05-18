@@ -136,6 +136,7 @@ class TopNavRedesign extends React.PureComponent {
       <ResizeListener>
         {({ windowWidth }) => {
           const isDesktop = windowWidth >= BREAKPOINTS.laptop;
+          const isSmall = windowWidth <= BREAKPOINTS.small;
           return (
             <div className="nav-menu">
               <div className="first-row">
@@ -157,11 +158,17 @@ class TopNavRedesign extends React.PureComponent {
                       color="grey"
                       as="span"
                       variant="sans"
-                      size="lg"
+                      size={isSmall ? 'md' : 'lg'}
                       weight="bold"
                     >
                       trase{' '}
-                      <Heading color="pink" as="span" variant="sans" size="lg" weight="bold">
+                      <Heading
+                        color="pink"
+                        as="span"
+                        variant="sans"
+                        size={isSmall ? 'md' : 'lg'}
+                        weight="bold"
+                      >
                         supply chains
                       </Heading>
                     </Heading>
