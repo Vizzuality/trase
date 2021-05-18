@@ -5,6 +5,7 @@ import cx from 'classnames';
 import throttle from 'lodash/throttle';
 import { NavLink } from 'redux-first-router-link';
 import NavLinks from 'react-components/nav/nav-links.component';
+import Heading from 'react-components/shared/heading';
 import LocaleSelector from 'react-components/nav/locale-selector/locale-selector.container';
 import Search from 'react-components/nav/global-search/global-search.container';
 import ToolSearch from 'react-components/tool/tool-search/tool-search.container';
@@ -144,13 +145,26 @@ class TopNavRedesign extends React.PureComponent {
                       <use xlinkHref={`#icon-${menuOpen ? 'close' : 'menu'}`} />
                     </svg>
                   </button>
-                  <NavLink exact strict to={{ type: 'home' }} className={cx('top-nav-logo')}>
+                  <NavLink exact strict to={{ type: 'home' }} className="top-nav-logo">
                     <Img
                       loading="lazy"
                       className="logo-image"
-                      src="/images/logos/new-logo-trase-red.svg"
-                      alt="trase"
+                      src="/images/logos/logo-trase-small.svg"
+                      alt="trase logo"
                     />
+                    <Heading
+                      className="trase-logo-text"
+                      color="grey"
+                      as="span"
+                      variant="sans"
+                      size="lg"
+                      weight="bold"
+                    >
+                      trase{' '}
+                      <Heading color="pink" as="span" variant="sans" size="lg" weight="bold">
+                        supply chains
+                      </Heading>
+                    </Heading>
                   </NavLink>
                 </div>
                 <div className="right-section">
@@ -212,7 +226,7 @@ class TopNavRedesign extends React.PureComponent {
   }
 
   render() {
-    const { className } = this.props;
+    const { className, page } = this.props;
     const { backgroundVisible, menuOpen } = this.state;
 
     return (
@@ -220,7 +234,7 @@ class TopNavRedesign extends React.PureComponent {
         className={cx(
           'c-nav',
           {
-            '-has-background': backgroundVisible || menuOpen,
+            '-has-background': page !== 'home' || backgroundVisible || menuOpen,
             '-no-shadow': className === '-egg-shell'
           },
           className
