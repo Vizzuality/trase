@@ -26,7 +26,7 @@ const ToolsInsights = () => {
       key: 0,
       properties: {
         title: 'Supply chain',
-        url: 'https://supplychains.trase.earth',
+        url: '/',
         summary:
           'Explore the connections between production regions, trading companies and import markets. Understand exposure to deforestation and other environmental and social risks.',
         imageUrl: 'images/landing-redesign/supply-chain-blue.png'

@@ -82,7 +82,8 @@ module.exports = {
       CARTO_ACCOUNT: JSON.stringify(process.env.CARTO_ACCOUNT),
       MAPBOX_TOKEN: JSON.stringify(process.env.MAPBOX_TOKEN),
       ENABLE_TOP_NAV_REDESIGN: JSON.stringify(process.env.ENABLE_TOP_NAV_REDESIGN === 'true'),
-      ENABLE_FOOTER_REDESIGN: JSON.stringify(process.env.ENABLE_FOOTER_REDESIGN === 'true')
+      ENABLE_FOOTER_REDESIGN: JSON.stringify(process.env.ENABLE_FOOTER_REDESIGN === 'true'),
+      ENABLE_NEW_HOME: JSON.stringify(process.env.ENABLE_NEW_HOME === 'true')
     }),
     new webpack.LoaderOptionsPlugin({ options: {} })
   ],
