@@ -92,10 +92,10 @@ module Api
             {
               name: node_with_flows['commodity'],
               values: [
-                @external_attribute_value.call('com_trade.quantity.rank'),
+                @external_attribute_value.call('com_trade.quantity.rank')&.value,
                 production_values[node_with_flows['commodity']],
                 quantity,
-                @external_attribute_value.call('com_trade.value.value')
+                @external_attribute_value.call('com_trade.value.value')&.value
               ]
             }
           end.sort { |a, b| b[:values][2].to_f <=> a[:values][2].to_f }.reject { |r| r[:values].compact.empty? }
