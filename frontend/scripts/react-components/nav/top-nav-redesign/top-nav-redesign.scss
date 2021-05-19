@@ -20,7 +20,7 @@ $menuOffset: 15vh;
   .locale-selector-menu-item {
     color: $gray-300;
     font-family: $font-family-1;
-    font-size: $font-size-x-regular;
+    font-size: $font-size-xx-regular;
     font-weight: $font-weight-bold;
     text-transform: uppercase;
   }
@@ -48,7 +48,7 @@ $menuOffset: 15vh;
     .locale-selector-selected-item {
       color: $gray-300;
       font-family: $font-family-1;
-      font-size: $font-size-x-regular;
+      font-size: $font-size-xx-regular;
       font-weight: $font-weight-bold;
     }
 
@@ -238,10 +238,13 @@ $menuOffset: 15vh;
     justify-content: space-between;
     flex-flow: row;
     align-items: center;
-    margin-left: 18px;
 
-    > :first-child {
-      margin-right: 24px;
+    @media screen and (min-width: $breakpoint-tablet) {
+      margin-left: 18px;
+
+      > :first-child {
+        margin-right: 24px;
+      }
     }
   }
 
@@ -276,10 +279,18 @@ $menuOffset: 15vh;
 
   .trase-logo-text {
     margin-left: 10px;
+    margin-right: 6px;
+
+    @media screen and (min-width: $breakpoint-tablet) {
+      margin-right: 8px;
+    }
   }
 
   .logo-image {
-    width: 60px;
+    width: 30px;
+    @media screen and (min-width: $breakpoint-tablet) {
+      width: 60px;
+    }
   }
 
   .nav-tab-container {
@@ -395,7 +406,7 @@ $menuOffset: 15vh;
       flex: 1;
       height: 240px;
       width: 100%;
-      background-size: cover;
+      background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
       transform: translateX(90px);

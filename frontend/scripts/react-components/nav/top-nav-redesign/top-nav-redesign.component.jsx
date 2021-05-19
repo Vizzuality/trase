@@ -158,19 +158,19 @@ class TopNavRedesign extends React.PureComponent {
                       color="grey"
                       as="span"
                       variant="sans"
-                      size={isSmall ? 'md' : 'lg'}
+                      size={isSmall ? 'rg' : 'lg'}
                       weight="bold"
                     >
                       trase{' '}
-                      <Heading
-                        color="pink"
-                        as="span"
-                        variant="sans"
-                        size={isSmall ? 'md' : 'lg'}
-                        weight="bold"
-                      >
-                        supply chains
-                      </Heading>
+                    </Heading>
+                    <Heading
+                      color="pink"
+                      as="span"
+                      variant="sans"
+                      size={isSmall ? 'rg' : 'lg'}
+                      weight="bold"
+                    >
+                      supply chains
                     </Heading>
                   </NavLink>
                 </div>
