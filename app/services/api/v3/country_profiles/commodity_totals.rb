@@ -87,7 +87,7 @@ module Api
               @activity,
               node_with_flows.commodity_id
             )
-            quantity = @external_attribute_value.call('com_trade.quantity.value')
+            quantity = @external_attribute_value.call('com_trade.quantity.value')&.value
             quantity = quantity.to_f / 1000 if quantity.present?
             {
               name: node_with_flows['commodity'],
