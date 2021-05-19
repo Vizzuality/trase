@@ -100,33 +100,27 @@ module Api
           country_names_by_iso2 = Hash[
             country_nodes.map { |n| [n.geo_id, n.name] }
           ]
-          @all_nodes_total = 0
-          result = @com_trade_top_countries.map do |com_trade_record|
-            trase_top_node = @top_nodes_by_iso2[com_trade_record.partner_iso2]
-
-            if trase_top_node
-              # puts "FOUND TRASE NODE"
-              # puts "COM TRADE VALUE: #{com_trade_record.quantity}"
-              # puts "TRASE VALUE: #{trase_top_node['value']}"
-              value = trase_top_node['value']
-              @all_nodes_total += value
-              {
-                node_id: trase_top_node['node_id'],
-                geo_id: trase_top_node['geo_id'],
-                name: trase_top_node['name'],
-                # height: value / @all_nodes_total,
-                value: value
-              }
-            else
-              value = com_trade_record.quantity
-              @all_nodes_total += value
-              {
-                geo_id: com_trade_record.partner_iso2,
-                name: country_names_by_iso2[com_trade_record.partner_iso2],
-                value: value
-              }
-            end
+          result = []
+          @com_trade_top_countries.each do |com_trade_record|
+            result << {
+              geo_id: com_trade_record.partner_iso2,
+              name: country_names_by_iso2[com_trade_record.partner_iso2],
+              value: com_trade_record.quantity
+            }
           end
+          @top_nodes.each do |trase_top_node|
+            result << {
+              node_id: trase_top_node['node_id'],
+              geo_id: trase_top_node['geo_id'],
+              name: trase_top_node['name'],
+              value: trase_top_node['value']
+            }
+          end
+          # sort and take top 10
+          result.sort! { |a, b| a[:value] <=> b[:value] }
+          result = result[0..9]
+          @all_nodes_total = result.map { |n| n[:value] }.inject(:+)
+
           result.map do |record|
             record[:height] = record[:value] / @all_nodes_total
           end
