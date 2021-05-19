@@ -114,7 +114,7 @@ module Api
             next unless production_quant.present?
 
             preloaded_value = preloaded_values.get(production_quant.simple_type, production_quant.id)
-            @production_values[commodity_name] = preloaded_value
+            @production_values[commodity_name] = preloaded_value&.value
           end
           @production_values
         end
