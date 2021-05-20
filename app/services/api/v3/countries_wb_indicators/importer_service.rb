@@ -5,8 +5,14 @@ module Api
     module CountriesWbIndicators
       class ImporterService
         def self.call
-          # This checks if it's the first week of the month
-          return unless Date.today.day <= 7 || Rails.env.test? || Rails.env.development? || Rails.env.production?
+          # do not run in production
+          return if Rails.env.production?
+          # On staging, run in the first week of the month
+          return if Rails.env.staging? && Date.today.day > 7
+          # On sandbox, run in the second week of the month
+          return if Rails.env.sandbox? && (Date.today.day > 14 || Date.today.day <= 7)
+          # elsewhere run in the third week of the month
+          return unless (Date.today.day > 14 && Date.today.day <= 21) || Rails.env.test? || Rails.env.development?
 
           start_year = Api::V3::Flow.minimum(:year)
           end_year = Api::V3::Flow.maximum(:year)
