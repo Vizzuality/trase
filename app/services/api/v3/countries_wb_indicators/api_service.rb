@@ -7,12 +7,8 @@ module Api
         WORLD_BANK_API_URL = 'https://api.worldbank.org'.freeze
 
         def self.indicator_request(wb_name, iso3, start_year = nil, end_year = nil)
-          response = Net::HTTP.get_response(
-            request_uri(wb_name, iso3, [start_year,end_year].compact.join(':').presence)
-          )
-          # this will raise an exception and force sidekiq retry
-          response.value if !response.kind_of? Net::HTTPSuccess
-
+          @connection = Api::V3::CountriesWbIndicators::ApiConnection.instance
+          response = @connection.get(request_uri(wb_name, iso3, [start_year,end_year].compact.join(':').presence))
           formatted_indicators(wb_name, JSON.parse(response.body))
         end
 
