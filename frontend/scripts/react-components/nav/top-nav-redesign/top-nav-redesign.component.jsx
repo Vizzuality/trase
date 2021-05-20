@@ -175,7 +175,7 @@ class TopNavRedesign extends React.PureComponent {
                   </NavLink>
                 </div>
                 <div className="right-section">
-                  {isDesktop && (
+                  {isDesktop && !menuOpen && (
                     <ul className="nav-menu-main-navigation">
                       <NavLinks
                         links={allLinks}
@@ -235,13 +235,14 @@ class TopNavRedesign extends React.PureComponent {
   render() {
     const { className, page } = this.props;
     const { backgroundVisible, menuOpen } = this.state;
-
+    const YELLOW_PAGES = ['profiles', 'profile', 'data'];
     return (
       <div
         className={cx(
           'c-nav',
           {
-            '-has-background': page !== 'home' || backgroundVisible || menuOpen,
+            '-has-background': backgroundVisible || menuOpen,
+            '-yellow-background': YELLOW_PAGES.includes(page) && !backgroundVisible,
             '-no-shadow': className === '-egg-shell'
           },
           className

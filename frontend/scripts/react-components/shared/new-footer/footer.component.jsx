@@ -10,14 +10,14 @@ const partners = [
   {
     className: 'sei-logo',
     href: 'https://sei-international.org/',
-    image: '/images/footer/partnership/sei@2x.png',
+    image: '/images/footer/partnership/sei.svg',
     alt: 'Stockholm Environment Institute',
     imageClassName: null
   },
   {
     className: 'gcp-logo',
     href: 'http://globalcanopy.org/',
-    image: '/images/footer/partnership/gc@2x.png',
+    image: '/images/footer/partnership/gc.svg',
     alt: 'Global Canopy Programme',
     imageClassName: 'gcp-img'
   }
@@ -27,7 +27,7 @@ const donors = [
   {
     className: 'moore-logo',
     href: 'https://www.moore.org/',
-    image: '/images/footer/donors/moore-white@2x.png',
+    image: '/images/footer/donors/gbmf.svg',
     alt: 'Gordon and Betty Moore Foundation',
     imageClassName: null
   },
@@ -35,14 +35,14 @@ const donors = [
     className: 'nicfi-logo',
     href:
       'https://www.regjeringen.no/en/topics/climate-and-environment/climate/climate-and-forest-initiative/id2000712/',
-    image: '/images/footer/donors/nicfi@2x.png',
+    image: '/images/footer/donors/nicfi.svg',
     alt: "Norway's International Climate and Forest Initiative (NICFI)",
     imageClassName: null
   },
   {
     className: 'ggp-logo',
     href: 'https://goodgrowthpartnership.com/',
-    image: '/images/footer/donors/ggp@2x.png',
+    image: '/images/footer/donors/ggp.svg',
     alt: 'Good growth partnership',
     imageClassName: null
   }
