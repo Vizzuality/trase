@@ -104,7 +104,8 @@ export const routes = {
     feedback: false,
     nav: {
       className: '-light'
-    }
+    },
+    parent: 'explore'
   },
   profiles: {
     path: '/profiles',
@@ -128,6 +129,7 @@ export const routes = {
       className: '-egg-shell',
       printable: true
     },
+    parent: 'profiles',
     thunk: loadPageData()
   },
   dashboardRoot: {

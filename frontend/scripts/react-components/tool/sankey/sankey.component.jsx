@@ -320,11 +320,9 @@ function Sankey(props) {
       selectedMapDimensions.length > 0 &&
       node.type !== NODE_TYPES.country
     ) {
-      console.log('----', node, nodeAttributes, nodeHeights);
       const nodeIndicators = selectedMapDimensions
         .map(dimension => {
           const meta = getNodeMeta(dimension, node, nodeAttributes, selectedResizeBy, nodeHeights);
-          console.log('meta', meta);
           if (!meta) {
             return null;
           }

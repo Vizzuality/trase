@@ -53,11 +53,9 @@ const Entrypoints = props => {
   );
 
   const { onClick } = props;
-  console.log(window.innerWidth);
   return (
     <ResizeListener>
       {({ windowWidth }) => {
-        console.log('w', windowWidth);
         const isSmallResolution = windowWidth <= BREAKPOINTS.small;
         return (
           <div className="c-new-entrypoints">
