@@ -101,19 +101,23 @@ module Api
             country_nodes.map { |n| [n.geo_id, n.name] }
           ]
           result = []
-          @com_trade_top_countries.each do |com_trade_record|
-            result << {
-              geo_id: com_trade_record.partner_iso2,
-              name: country_names_by_iso2[com_trade_record.partner_iso2],
-              value: com_trade_record.quantity.to_f / 1000 # conversion from kg
-            }
-          end
+          included_countries = Set.new
           @top_nodes.each do |trase_top_node|
+            included_countries.add(trase_top_node['geo_id'])
             result << {
               node_id: trase_top_node['node_id'],
               geo_id: trase_top_node['geo_id'],
               name: trase_top_node['name'],
               value: trase_top_node['value']
+            }
+          end
+          @com_trade_top_countries.each do |com_trade_record|
+            next if included_countries.include?(com_trade_record.partner_iso2)
+
+            result << {
+              geo_id: com_trade_record.partner_iso2,
+              name: country_names_by_iso2[com_trade_record.partner_iso2],
+              value: com_trade_record.quantity.to_f / 1000 # conversion from kg
             }
           end
           # sort and take top 10

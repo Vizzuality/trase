@@ -71,13 +71,13 @@ module Api
           external = HEADER_ATTRIBUTES.map do |attribute_ref|
             attribute_def = list.call(attribute_ref, substitutions)
             attribute_value = @external_attribute_value.call(attribute_ref)
-            year = attribute_value.year
+            year = attribute_value&.year
             tooltip = attribute_def[:tooltip]
-            tooltip += " (#{attribute_value.year})" if year && year != @year
+            tooltip += " (#{year})" if year && year != @year
             attribute_def.
               except(:short_name, :wb_name).
               merge(
-                value: attribute_value.value,
+                value: attribute_value&.value,
                 year: year,
                 tooltip: tooltip
               )
