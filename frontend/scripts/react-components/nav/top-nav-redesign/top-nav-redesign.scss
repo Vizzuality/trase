@@ -42,6 +42,14 @@ $menuOffset: 15vh;
     }
   }
 
+  &.-yellow-background {
+    background-color: $egg-shell;
+
+    .top-nav-link {
+      color: $gray-300;
+    }
+  }
+
   &:not(.-has-background) {
     .top-nav-search .icon-search,
     .top-nav-link,
@@ -84,6 +92,7 @@ $menuOffset: 15vh;
 
       .nav-menu-main-navigation {
         width: auto;
+        max-width: 600px;
 
         @media screen and (min-width: $breakpoint-laptop) {
           flex: 1;
@@ -118,6 +127,17 @@ $menuOffset: 15vh;
       border-bottom: 1px solid $white;
     }
   }
+
+  &.-yellow-background {
+    .second-row {
+      background-color: $egg-shell;
+
+      // Fix gap between rows
+      margin-top: -1px;
+      border-bottom: 1px solid $egg-shell;
+    }
+  }
+
   .nav-menu-main-navigation {
     position: relative;
     display: flex;
@@ -181,8 +201,8 @@ $menuOffset: 15vh;
   .top-nav-item-list {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     width: 75px;
-    padding-top: 3px;
 
     @media screen and (min-width: $breakpoint-laptop) {
       width: 135px;
@@ -190,7 +210,8 @@ $menuOffset: 15vh;
   }
 
   .c-locale-selector {
-    transform: translateY(-2px);
+    transform: translateY(-1.5px);
+    z-index: $z-language-selector;
   }
 
   .top-nav-item-collapse {
@@ -250,10 +271,14 @@ $menuOffset: 15vh;
 
   .right-section {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     flex-flow: row;
     align-items: center;
     height: 100%;
+
+    @media screen and (min-width: $breakpoint-tablet) {
+      margin-right: 18px;
+    }
 
     @media screen and (min-width: $breakpoint-laptop) {
       flex: 1;
