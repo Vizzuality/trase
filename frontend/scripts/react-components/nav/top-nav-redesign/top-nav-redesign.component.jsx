@@ -27,8 +27,7 @@ class TopNavRedesign extends React.PureComponent {
 
   navLinkProps = {
     exact: false,
-    strict: false,
-    isActive: null
+    strict: false
   };
 
   mobileMenuRef = React.createRef(null);
@@ -242,7 +241,7 @@ class TopNavRedesign extends React.PureComponent {
           'c-nav',
           {
             '-has-background': backgroundVisible || menuOpen,
-            '-yellow-background': YELLOW_PAGES.includes(page) && !backgroundVisible,
+            '-yellow-background': YELLOW_PAGES.includes(page) && !backgroundVisible && !menuOpen,
             '-no-shadow': className === '-egg-shell'
           },
           className
