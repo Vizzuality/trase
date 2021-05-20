@@ -49,6 +49,9 @@ RSpec.describe Api::V3::CountriesComTradeIndicators::ImporterService do
     partner_uri = com_trade_partner_uri(codes, 2015)
     partner_response = File.read(com_trade_partner_request_path('BEEF', 'BRA', 2015))
     stub_request(:get, partner_uri).to_return(body: partner_response)
+    jip = instance_double(Api::V3::JobsInProgress)
+    allow(Api::V3::JobsInProgress).to receive(:instance).and_return(jip)
+    allow(jip).to receive(:call).and_return(false)
   end
 
   describe '#call' do

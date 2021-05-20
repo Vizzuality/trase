@@ -4,6 +4,8 @@ module Api
   module V3
     module CountriesWbIndicators
       class ImporterService
+        # rubocop:disable Metrics/CyclomaticComplexity
+        # rubocop:disable Metrics/PerceivedComplexity
         def self.call
           # do not run in production
           return if Rails.env.production?
@@ -24,6 +26,8 @@ module Api
             WbRequestWorker.perform_async(indicator_name, start_year, end_year)
           end
         end
+        # rubocop:enable Metrics/CyclomaticComplexity
+        # rubocop:enable Metrics/PerceivedComplexity
       end
     end
   end
