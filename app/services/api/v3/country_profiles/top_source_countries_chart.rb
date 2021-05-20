@@ -105,7 +105,7 @@ module Api
             result << {
               geo_id: com_trade_record.partner_iso2,
               name: country_names_by_iso2[com_trade_record.partner_iso2],
-              value: com_trade_record.quantity
+              value: com_trade_record.quantity.to_f / 1000 # conversion from kg
             }
           end
           @top_nodes.each do |trase_top_node|
