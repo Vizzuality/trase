@@ -4,19 +4,22 @@ RSpec.describe Api::V3::CountriesWbIndicators::ImporterService do
   include FixtureRequestsHelpers
   include_context 'api v3 brazil country'
 
-  context '#call' do
-    before :each do
-      FactoryBot.create(:api_v3_country, iso2: 'AR')
-      FactoryBot.create(:api_v3_country, iso2: 'BO')
-      FactoryBot.create(:api_v3_country, iso2: 'CO')
-      allow(Api::V3::Flow).to receive(:minimum).and_return(2013)
-      allow(Api::V3::Flow).to receive(:maximum).and_return(2013)
-      stub_const(
-        'Api::V3::CountriesWbIndicators::IndicatorsList::ATTRIBUTES',
-        Api::V3::CountriesWbIndicators::IndicatorsList::ATTRIBUTES.slice(:population)
-      )
-    end
+  before :each do
+    FactoryBot.create(:api_v3_country, iso2: 'AR')
+    FactoryBot.create(:api_v3_country, iso2: 'BO')
+    FactoryBot.create(:api_v3_country, iso2: 'CO')
+    allow(Api::V3::Flow).to receive(:minimum).and_return(2013)
+    allow(Api::V3::Flow).to receive(:maximum).and_return(2013)
+    stub_const(
+      'Api::V3::CountriesWbIndicators::IndicatorsList::ATTRIBUTES',
+      Api::V3::CountriesWbIndicators::IndicatorsList::ATTRIBUTES.slice(:population)
+    )
+    jip = instance_double(Api::V3::JobsInProgress)
+    allow(Api::V3::JobsInProgress).to receive(:instance).and_return(jip)
+    allow(jip).to receive(:call).and_return(false)
+  end
 
+  describe '#call' do
     context 'when there is unexpected countries' do
       before do
         uri = worldbank_uri(:population, 'ALL', '2013:2013')
