@@ -379,7 +379,7 @@ GEM
       rspec-mocks (~> 3.10)
       rspec-support (~> 3.10)
     rspec-support (3.10.2)
-    rubocop (1.14.0)
+    rubocop (1.15.0)
       parallel (~> 1.10)
       parser (>= 3.0.0.0)
       rainbow (>= 2.2.2, < 4.0)
@@ -544,7 +544,7 @@ DEPENDENCIES
   rails-controller-testing
   rspec-collection_matchers
   rspec-rails (~> 5.0)
-  rubocop (~> 1.14.0)
+  rubocop (~> 1.15.0)
   rubocop-performance
   rubocop-rspec
   sassc-rails (~> 2.1.2)
