@@ -329,6 +329,7 @@ $menuOffset: 15vh;
       flex-direction: column;
       justify-content: space-between;
       padding: 16px;
+      margin-right: 10%;
 
       .scroll-indicator {
         display: flex;
@@ -397,16 +398,15 @@ $menuOffset: 15vh;
       flex: 1;
       padding: 15px 0;
       overflow-y: scroll;
-      // -ms-overflow-style: none; /* Internet Explorer 10+ */
-      // scrollbar-width: none; /* Firefox */
-      // &::-webkit-scrollbar {
-      //   display: none; /* Safari and Chrome */
-      // }
+      -ms-overflow-style: none; /* Internet Explorer 10+ */
+      scrollbar-width: none; /* Firefox */
+      &::-webkit-scrollbar {
+        display: none; /* Safari and Chrome */
+      }
 
       .tab-contents-cards {
         display: flex;
         flex-flow: row;
-        justify-content: flex-end;
       }
     }
   }
