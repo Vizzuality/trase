@@ -197,6 +197,7 @@ const Profile = props => {
         );
       case 'sankey': {
         const type = chart.identifier.split('_')[0];
+        const invert = type === 'country' && profileMetadata.activity === 'importer';
         return (
           <TopConsumersWidget
             key={chart.id}
@@ -209,6 +210,7 @@ const Profile = props => {
             onLinkClick={updateQueryParams}
             commodityName={commodityName}
             profileType={profileType}
+            invert={invert}
             testId={type === 'actor' ? 'top-traders' : 'top-importers'}
           />
         );
