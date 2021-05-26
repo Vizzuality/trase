@@ -25,7 +25,7 @@ const ToolsInsights = () => {
     {
       key: 0,
       properties: {
-        title: 'Supply chain',
+        title: 'Supply chains',
         url: '/',
         summary:
           'Explore the connections between production regions, trading companies and import markets. Understand exposure to deforestation and other environmental and social risks.',
@@ -72,7 +72,7 @@ const ToolsInsights = () => {
               onFocus={() => setActiveCard(0)}
               onMouseLeave={() => setActiveCard(null)}
             >
-              Supply Chain
+              Supply Chains
             </NavLink>
           </li>
           <li>
