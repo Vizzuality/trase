@@ -96,11 +96,11 @@ const Footer = () => {
           },
           {
             title: 'Logistics Maps',
-            link: 'logistics maps'
+            link: 'logisticsMap'
           },
           {
             title: 'Downloads',
-            link: 'downloads'
+            link: 'data'
           }
         ]
       },
@@ -152,7 +152,7 @@ const Footer = () => {
 
     const renderItems = items =>
       items.map(i =>
-        i.link ? (
+        console.log('i', i.link) || i.link ? (
           <Link className="menu-link" to={{ type: i.link }}>
             {i.title}
           </Link>
@@ -260,7 +260,7 @@ const Footer = () => {
         <div className="donors-logos-container row">
           <ul className="donors-logos">
             {donors.map(logo => (
-              <li key={logo.className} className={cx('logo-item', logo.className)}>
+              <li key={logo.className} className={cx('logo-item donor-logo', logo.className)}>
                 <a href={logo.href} target="_blank" rel="noopener noreferrer">
                   <Img src={logo.image} alt={logo.alt} />
                 </a>

@@ -39,13 +39,29 @@
   }
 
   .footer-menu {
-    flex: 2;
     display: flex;
+    flex: 0;
+
+    @media screen and (min-width: $breakpoint-foundation-medium) {
+      flex: 2;
+    }
   }
 
   .footer-menu-item {
     margin-left: 30px;
     margin-bottom: 15px;
+
+    &:not(:first-child) {
+      margin-left: 20px;
+    }
+
+    @media screen and (min-width: $breakpoint-foundation-medium) {
+      margin-left: 30px;
+
+      &:not(:first-child) {
+        margin-left: 30px;
+      }
+    }
   }
 
   .sign-up {
@@ -66,13 +82,33 @@
 
   .logo-list {
     display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    margin-bottom: 10px;
+
+    @media screen and (min-width: $breakpoint-foundation-medium) {
+      flex-direction: row;
+      align-items: center;
+    }
   }
 
   .logo-item {
-    margin: 0 0 30px 30px;
+    margin: 0 0 30px 0;
+
+    &.donor-logo {
+      margin-left: 20px;
+    }
+
+    &:first-child {
+      margin-right: 24px;
+    }
 
     @media screen and (min-width: $breakpoint-foundation-medium) {
       margin: 0;
+
+      &:first-child {
+        margin: 0;
+      }
 
       &:not(:first-child) {
         margin-left: 24px;
@@ -155,6 +191,11 @@
   .social-links-list {
     display: flex;
     color: $green-200;
+    margin-bottom: 10px;
+
+    @media screen and (min-width: $breakpoint-foundation-medium) {
+      margin-bottom: 0;
+    }
 
     :first-child {
       margin-right: 5px;
@@ -192,12 +233,6 @@
     font-size: $font-size-regular;
     line-height: $line-height-md;
     margin-bottom: 5px;
-  }
-
-  .logo-list {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
   }
 }
 
