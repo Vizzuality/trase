@@ -156,11 +156,15 @@ $menuOffset: 15vh;
 
     .top-nav-link {
       font-family: $font-family-3;
-      font-size: $font-size-xx-regular;
+      font-size: $font-size-regular;
       font-weight: $font-weight-medium;
       transform: opacity 150ms ease-in;
       color: $gray-300;
       display: flex;
+
+      @media screen and (min-width: $breakpoint-tablet) {
+        font-size: $font-size-xx-regular;
+      }
 
       &::after {
         display: block;
