@@ -16,6 +16,8 @@ module Api
         end
 
         def result
+          return [] unless @map_attributes.any?
+
           result = @map_attributes.map do |ma|
             attribute_values_query(ma)
           end.reduce(&:+)
