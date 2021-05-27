@@ -31,7 +31,6 @@ module Api
           initialize_selected_nodes
           initialize_other_nodes_ids
           initialize_excluded_nodes
-          initialize_unknown_nodes
           if @errors.none?
             initialize_active_nodes
             @flows = flows_query.all
@@ -183,15 +182,6 @@ module Api
           end
         end
 
-        def initialize_unknown_nodes
-          # TODO: this should be happening per column
-          @unknown_municipality_nodes_ids = Api::V3::Node.
-            joins(:node_type).
-            where(is_unknown: true).
-            where('node_types.name' => NodeTypeName::MUNICIPALITY).
-            pluck(:id)
-        end
-
         def initialize_active_nodes
           active_nodes_by_position, @other_nodes =
             if @selected_nodes.none?
@@ -293,32 +283,39 @@ module Api
             :sanitize_sql_array,
             ['year, flows.path[?]', position + 1]
           )
-          # if there are unknowns, push them to the bottom
-          # currently works for the first column only
-          # TODO: should work for all the columns
-          if @unknown_municipality_nodes_ids.any?
+
+          subquery = basic_flows_query.
+            select(select_clause).
+            group(group_clause)
+
+          node_type = @active_node_types.find { |nt| nt.column_position == position }
+          unknown_nodes_ids =
+            if node_type
+              Api::V3::Node.where(node_type_id: node_type.id, is_unknown: true).pluck(:id)
+            else
+              []
+            end
+
+          if unknown_nodes_ids.any?
             order_by_unknown_clause = ActiveRecord::Base.send(
               :sanitize_sql_array,
               [
-                'CASE WHEN flows.path[?] = ANY(ARRAY[?]) THEN 2 ELSE 1 END',
-                position + 1, @unknown_municipality_nodes_ids
+                'CASE WHEN node_id = ANY(ARRAY[?]) THEN 2 ELSE 1 END',
+                unknown_nodes_ids
               ]
             )
             order_by_unknown_clause = Arel.sql(order_by_unknown_clause)
           end
+
           order_clause = [
             order_by_unknown_clause, 'total DESC'
           ].compact
 
-          subquery = basic_flows_query.
-            select(select_clause).
-            group(group_clause).
-            order(order_clause)
-
           Api::V3::Flow.
             from("(#{subquery.to_sql}) s").
             select("node_id, #{@cont_attribute.aggregation_method}(total) AS total").
-            group('node_id')
+            group('node_id').
+            order(order_clause)
         end
 
         def flows_query
