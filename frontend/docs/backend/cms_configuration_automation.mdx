@@ -75,7 +75,7 @@ This will return immediately, since it only schedules the job in the background 
 Use the `id` from the response body to check for the status of the job:
 
 ```
-curl -H "Content-Type: application/json" -H "access-token:ACCESS_TOKEN" -H "uid:UID" -H "token-type:Bearer" -H "client:CLIENT" https://staging.trase.earthapi/private/configuration_export_events/5
+curl -H "Content-Type: application/json" -H "access-token:ACCESS_TOKEN" -H "uid:UID" -H "token-type:Bearer" -H "client:CLIENT" https://staging.trase.earth/api/private/configuration_export_events/5
 ```
 
 When status is FINISHED, `data` will contain the configuration exported in json format.
