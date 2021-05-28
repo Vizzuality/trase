@@ -5,18 +5,18 @@
   z-index: $z-above;
   padding: 48px 0 56px;
   bottom: 0;
-  background-color: $gray-300;
+  background-color: $gray-600;
   font-family: $font-family-3;
 
   .section-separator {
-    border-top: 1px solid $gray-200;
+    border-top: 1px solid $gray-400;
     margin: 60px 0;
   }
 
   .footer-low {
     display: flex;
     width: 100%;
-    align-items: start;
+    align-items: flex-start;
     margin: 0 30px;
     flex-direction: column;
 
@@ -39,13 +39,29 @@
   }
 
   .footer-menu {
-    flex: 2;
     display: flex;
+    flex: 0;
+
+    @media screen and (min-width: $breakpoint-foundation-medium) {
+      flex: 2;
+    }
   }
 
   .footer-menu-item {
     margin-left: 30px;
     margin-bottom: 15px;
+
+    &:not(:first-child) {
+      margin-left: 20px;
+    }
+
+    @media screen and (min-width: $breakpoint-foundation-medium) {
+      margin-left: 30px;
+
+      &:not(:first-child) {
+        margin-left: 30px;
+      }
+    }
   }
 
   .sign-up {
@@ -58,7 +74,7 @@
   }
 
   .sign-up-title {
-    font-size: $font-size-medium;
+    font-size: $font-size-xx-regular;
     font-weight: $font-weight-bold;
     color: $green-200;
     margin-bottom: 15px;
@@ -66,13 +82,33 @@
 
   .logo-list {
     display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    margin-bottom: 10px;
+
+    @media screen and (min-width: $breakpoint-foundation-medium) {
+      flex-direction: row;
+      align-items: center;
+    }
   }
 
   .logo-item {
-    margin: 0 0 30px 30px;
+    margin: 0 0 30px 0;
+
+    &.donor-logo {
+      margin-left: 20px;
+    }
+
+    &:first-child {
+      margin-right: 24px;
+    }
 
     @media screen and (min-width: $breakpoint-foundation-medium) {
       margin: 0;
+
+      &:first-child {
+        margin: 0;
+      }
 
       &:not(:first-child) {
         margin-left: 24px;
@@ -138,7 +174,7 @@
     display: flex;
     margin-bottom: 10px;
     flex-direction: column;
-    align-items: start;
+    align-items: flex-start;
 
     @media screen and (min-width: $breakpoint-foundation-medium) {
       flex-direction: row;
@@ -155,6 +191,11 @@
   .social-links-list {
     display: flex;
     color: $green-200;
+    margin-bottom: 10px;
+
+    @media screen and (min-width: $breakpoint-foundation-medium) {
+      margin-bottom: 0;
+    }
 
     :first-child {
       margin-right: 5px;
@@ -181,9 +222,9 @@
   .menu-title {
     color: $white;
     font-weight: $font-weight-bold;
-    font-size: $font-size-medium;
+    font-size: $font-size-xx-regular;
     line-height: $line-height-md;
-    margin-bottom: 15px;
+    margin-bottom: 6px;
   }
 
   .menu-link {
@@ -192,12 +233,6 @@
     font-size: $font-size-regular;
     line-height: $line-height-md;
     margin-bottom: 5px;
-  }
-
-  .logo-list {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
   }
 }
 

@@ -37,7 +37,7 @@ RSpec.describe Api::V3::MapLayers::MapAttributeFilter do
       )
       map_attributes = filter.call
       land_conflicts = map_attributes.find { |attr| attr['id'] == api_v3_land_conflicts_map_attribute.id }
-      expect(land_conflicts['dual_layer_buckets']).to eq([6, 10, 15])
+      expect(land_conflicts['dual_layer_buckets']).to eq([12, 20, 30])
     end
     it 'returns single layer buckets as is' do
       filter = Api::V3::MapLayers::MapAttributeFilter.new(
@@ -45,7 +45,7 @@ RSpec.describe Api::V3::MapLayers::MapAttributeFilter do
       )
       map_attributes = filter.call
       land_conflicts = map_attributes.find { |attr| attr['id'] == api_v3_land_conflicts_map_attribute.id }
-      expect(land_conflicts['single_layer_buckets']).to eq([1, 3, 7, 15])
+      expect(land_conflicts['single_layer_buckets']).to eq([2, 6, 14, 30])
     end
   end
 end

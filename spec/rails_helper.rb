@@ -66,7 +66,8 @@ RSpec.configure do |config|
 
     Sidekiq.configure_client do |sidekiq_config|
       sidekiq_config.client_middleware do |chain|
-        chain.remove SidekiqUniqueJobs::Client::Middleware
+        chain.remove SidekiqUniqueJobs::Middleware::Client
+        chain.remove SidekiqUniqueJobs::Middleware::Server
       end
     end
   end

@@ -87,7 +87,7 @@ module Api
           def generate_link
             return generate_edit_link if @link == :edit
             return nil unless @link == :index && @association.present?
-            url_helpers.url_for([:admin, @association, only_path: true])
+            url_helpers.url_for([:admin, @association.to_sym, only_path: true])
           end
 
           def generate_edit_link
@@ -96,7 +96,7 @@ module Api
             object_class = object.class.name
             object_name = object_class.demodulize.underscore
             url_helpers.url_for(
-              [:edit, :admin, object_name, id: object.id, only_path: true]
+              [:edit, :admin, object_name.to_sym, id: object.id, only_path: true]
             )
           end
         end

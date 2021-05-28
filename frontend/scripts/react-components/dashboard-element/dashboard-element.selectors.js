@@ -17,6 +17,7 @@ import {
   getDraftDirtyBlocks,
   getDirtyBlocks
 } from 'react-components/nodes-panel/nodes-panel.selectors';
+import { translateText } from 'utils/transifex';
 
 const getCountriesData = state => state.nodesPanel.countries.data;
 const getSourcesData = state => state.nodesPanel.sources.data;
@@ -211,14 +212,16 @@ const buildDynamicSentence = (
     const [first] = items;
     if (prefixesMap && first) {
       const nodeType = first.nodeType || first.type;
-      settings.name = nodeType ? pluralize(nodeType) : defaultName;
-      settings.prefix = prefixesMap[nodeType] || defaultPrefix;
+      settings.name = translateText(nodeType ? pluralize(nodeType) : defaultName);
+      settings.prefix = translateText(prefixesMap[nodeType] || defaultPrefix);
     }
     if (excludingMode) {
       if (items.length > 1) {
-        settings.prefix = `${settings.prefix} all but`;
+        settings.prefix = `${settings.prefix} ${translateText('all but')}`;
       } else if (items.length === 1) {
-        settings.prefix = `${settings.prefix} all ${settings.name} except`;
+        settings.prefix = `${settings.prefix} ${translateText('all')} ${
+          settings.name
+        } ${translateText('except')}`;
       }
     }
     return settings;
@@ -228,29 +231,29 @@ const buildDynamicSentence = (
     panelsValues.sources,
     prefixes.sources,
     excludingModeMap.sources,
-    'sources',
-    'produced in'
+    translateText('sources'),
+    translateText('from')
   );
   const exportersSettings = getSettings(
     panelsValues.exporters,
     prefixes.exporters,
     excludingModeMap.exporters,
-    'exporters',
-    'exported by'
+    translateText('exporters'),
+    translateText('exported by')
   );
   const importersSettings = getSettings(
     panelsValues.importers,
     prefixes.importers,
     excludingModeMap.importers,
-    'importers',
-    'imported by'
+    translateText('importers'),
+    translateText('imported by')
   );
   const destinationsSettings = getSettings(
     panelsValues.destinations,
     prefixes.destinations,
     excludingModeMap.destinations,
-    'destinations',
-    'going to'
+    translateText('destinations'),
+    translateText('going to')
   );
 
   return [
@@ -265,7 +268,9 @@ const buildDynamicSentence = (
       panel: 'sources',
       id: 'sources',
       name: sourcesSettings.name,
-      prefix: sourcesValues ? sourcesSettings.prefix : 'produced in countries covered by Trase',
+      prefix: sourcesValues
+        ? sourcesSettings.prefix
+        : translateText('from countries covered by Trase'),
       value: sourcesValues,
       transform: 'uppercase'
     },
@@ -352,7 +357,7 @@ const getDashboardContextRecolorBy = createSelector(getDashboardsContext, contex
   const emptyOption = {
     position: 0,
     groupNumber: -1,
-    label: 'No selection',
+    label: translateText('No selection'),
     name: 'none',
     years: [],
     value: null,
@@ -373,7 +378,7 @@ export const getDashboardSelectedResizeBy = createSelector(
   (selectedResizeBy, contextResizeByItems) => {
     if (!contextResizeByItems) {
       const attributeId = selectedResizeBy || null;
-      return { label: 'Select an Indicator', value: attributeId, attributeId };
+      return { label: translateText('Select an Indicator'), value: attributeId, attributeId };
     }
 
     const itemIncludedInContext = contextResizeByItems.find(

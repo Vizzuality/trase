@@ -66,12 +66,15 @@ const loadPageData = (...thunks) => (...params) =>
 const StaticContent = lazy(() =>
   import('../react-components/static-content/static-content.container')
 );
-
 export const routes = {
   home: {
     path: '/',
     Component: lazy(() =>
-      import(/* webpackChunkName: "home" */ '../react-components/home/home.container')
+      import(
+        /* webpackChunkName: "home" */ `../react-components/${
+          ENABLE_NEW_HOME ? 'new-home' : 'home'
+        }/home.container`
+      )
     ),
     title: getPageTitle,
     thunk: loadPageData(getPostsContent, getTweetsContent, getTestimonialsContent)
@@ -101,7 +104,8 @@ export const routes = {
     feedback: false,
     nav: {
       className: '-light'
-    }
+    },
+    parent: 'explore'
   },
   profiles: {
     path: '/profiles',
@@ -125,6 +129,7 @@ export const routes = {
       className: '-egg-shell',
       printable: true
     },
+    parent: 'profiles',
     thunk: loadPageData()
   },
   dashboardRoot: {

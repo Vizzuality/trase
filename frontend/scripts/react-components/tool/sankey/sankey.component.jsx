@@ -67,10 +67,7 @@ function useMenuOptions(props, hoveredSelectedNode) {
       DISALLOW_NODE_TYPES.push(NODE_TYPES.countryOfProduction);
       DISALLOW_NODE_TYPES.push(NODE_TYPES.country);
     }
-    if (
-      (link.profileType && console.log('ss', nodeType)) ||
-      !DISALLOW_NODE_TYPES.includes(nodeType)
-    ) {
+    if (link.profileType && !DISALLOW_NODE_TYPES.includes(nodeType)) {
       items.splice(2, 0, {
         id: 'profile-link',
         label: `Go To The ${

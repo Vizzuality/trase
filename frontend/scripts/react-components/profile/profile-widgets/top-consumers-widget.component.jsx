@@ -27,7 +27,17 @@ class TopConsumersWidget extends React.PureComponent {
   }
 
   render() {
-    const { onLinkClick, year, nodeId, contextId, type, testId, title, commodityName } = this.props;
+    const {
+      onLinkClick,
+      year,
+      nodeId,
+      contextId,
+      type,
+      testId,
+      title,
+      commodityName,
+      invert
+    } = this.props;
 
     const params = { node_id: nodeId, context_id: contextId, year };
 
@@ -106,6 +116,7 @@ class TopConsumersWidget extends React.PureComponent {
                     targetPayload={
                       isImportingCountries ? null : onLinkClick && { profileType: type }
                     }
+                    invert={invert}
                   />
                 </div>
               </div>
@@ -127,7 +138,12 @@ TopConsumersWidget.propTypes = {
   nodeId: PropTypes.number.isRequired,
   contextId: PropTypes.number,
   commodityName: PropTypes.string,
-  profileType: PropTypes.string.isRequired
+  profileType: PropTypes.string.isRequired,
+  invert: PropTypes.bool
+};
+
+TopConsumersWidget.defaultProps = {
+  invert: false
 };
 
 export default React.memo(TopConsumersWidget);

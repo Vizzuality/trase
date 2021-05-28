@@ -12,7 +12,8 @@ shared_context 'api v3 quants' do
         quant: q,
         unit_type: 'area',
         tooltip_text: 'Municipal area according in Km2',
-        display_name: 'Area'
+        display_name: 'Area',
+        aggregation_method: 'AVG'
       )
     end
     q
@@ -30,7 +31,8 @@ shared_context 'api v3 quants' do
         quant: q,
         unit_type: 'count',
         tooltip_text: 'Number of land conflicts per municipality',
-        display_name: 'Land conflicts (2014)'
+        display_name: 'Land conflicts (2014)',
+        aggregation_method: 'SUM'
       )
     end
     q
@@ -48,7 +50,8 @@ shared_context 'api v3 quants' do
         quant: q,
         unit_type: 'count',
         tooltip_text: 'Number of people involved in lawsuits relating to cases fo forced labor or degrading working conditions',
-        display_name: 'Reported cases of forced labour (2014)'
+        display_name: 'Reported cases of forced labour (2014)',
+        aggregation_method: 'SUM'
       )
     end
     q
@@ -66,7 +69,8 @@ shared_context 'api v3 quants' do
         quant: q,
         unit_type: 'count',
         tooltip_text: 'Number of fines and embargos associated with infringements of environmental legislations per municipality',
-        display_name: 'Number of environmental embargos (2015)'
+        display_name: 'Number of environmental embargos (2015)',
+        aggregation_method: 'SUM'
       )
     end
     q
@@ -83,7 +87,8 @@ shared_context 'api v3 quants' do
         :api_v3_quant_property,
         quant: q,
         tooltip_text: 'Value of commodity shipments',
-        display_name: 'Financial flow'
+        display_name: 'Financial flow',
+        aggregation_method: 'SUM'
       )
     end
     q
@@ -100,7 +105,8 @@ shared_context 'api v3 quants' do
         :api_v3_quant_property,
         quant: q,
         tooltip_text: 'Total deforestation per municipality for a given year (ha). Calculated only for forested and wooded biomes - the Amazon, Cerrado and Atlantic Forest. Clearance of native vegetation in Brazil´s other biomes (Caatinga, Pantanal and Pampas) is not considered as deforestation in this indicator.',
-        display_name: 'Territorial deforestation'
+        display_name: 'Territorial deforestation',
+        aggregation_method: 'SUM'
       )
     end
     q
@@ -117,7 +123,8 @@ shared_context 'api v3 quants' do
         :api_v3_quant_property,
         quant: q,
         tooltip_text: 'Population per municipality',
-        display_name: 'Population'
+        display_name: 'Population',
+        aggregation_method: 'AVG'
       )
     end
     q
@@ -134,7 +141,8 @@ shared_context 'api v3 quants' do
         :api_v3_quant_property,
         quant: q,
         tooltip_text: 'Production of soy in Tn.',
-        display_name: 'Production of soy'
+        display_name: 'Production of soy',
+        aggregation_method: 'SUM'
       )
     end
     q
@@ -151,7 +159,8 @@ shared_context 'api v3 quants' do
         :api_v3_quant_property,
         quant: q,
         tooltip_text: 'Maximum potential soy-related deforestation (ha). Calculated as the maximum deforestation in the year prior to soy being harvested that could be attributable to soy expansion for that harvest. As an example, in a municipality with 1000 ha of soy expansion between 2014-2015, but only 400 ha of deforestation in 2014, the potential soy-related deforestation during 2014 could not be more than 400 ha. The remaining 600 ha of soy, at a minimum, expanded onto non-forest land, typically cattle pasture. This expansion may contribute towards the displacement of other land uses into forest land, a phenomenon known as indirect land-use change. Calculated only for forested and wooded biomes - the Amazon, Cerrado and Atlantic Forest. Clearance of native vegetation in Brazil´s other biomes (Caatinga, Pantanal and Pampas) is not considered as deforestation in this indicator.',
-        display_name: 'Maximum soy deforestation'
+        display_name: 'Maximum soy deforestation',
+        aggregation_method: 'SUM'
       )
     end
     q
@@ -168,7 +177,8 @@ shared_context 'api v3 quants' do
         :api_v3_quant_property,
         quant: q,
         tooltip_text: 'Total exports in Tn of soy equivalents',
-        display_name: 'Soy exports for trader'
+        display_name: 'Soy exports for trader',
+        aggregation_method: 'SUM'
       )
     end
     q
@@ -185,7 +195,8 @@ shared_context 'api v3 quants' do
         :api_v3_quant_property,
         quant: q,
         tooltip_text: 'Annual deforestation due to direct conversion for soy (ha) (currently only in Cerrado biome, 2010-2013). Calculated by crossing per-pixel annual deforestation alerts and soy crop maps.',
-        display_name: 'Soy deforestation (Cerrado only)'
+        display_name: 'Soy deforestation (Cerrado only)',
+        aggregation_method: 'SUM'
       )
     end
     q
@@ -201,7 +212,8 @@ shared_context 'api v3 quants' do
       FactoryBot.create(
         :api_v3_quant_property,
         quant: q,
-        display_name: 'Trade volume'
+        display_name: 'Trade volume',
+        aggregation_method: 'SUM'
       )
     end
     q
@@ -217,7 +229,8 @@ shared_context 'api v3 quants' do
       FactoryBot.create(
         :api_v3_quant_property,
         quant: q,
-        display_name: 'Land use'
+        display_name: 'Land use',
+        aggregation_method: 'AVG'
       )
     end
     q
@@ -233,7 +246,8 @@ shared_context 'api v3 quants' do
       FactoryBot.create(
         :api_v3_quant_property,
         quant: q,
-        display_name: 'Loss of biodiversity habitat'
+        display_name: 'Loss of biodiversity habitat',
+        aggregation_method: 'SUM'
       )
     end
     q
@@ -249,7 +263,8 @@ shared_context 'api v3 quants' do
       FactoryBot.create(
         :api_v3_quant_property,
         quant: q,
-        display_name: 'Loss of biodiversity habitat'
+        display_name: 'Loss of biodiversity habitat',
+        aggregation_method: 'SUM'
       )
     end
     q

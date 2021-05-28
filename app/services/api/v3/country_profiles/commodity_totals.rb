@@ -50,10 +50,18 @@ module Api
         def included_columns
           trade_volume_ranking = Api::V3::CountryProfiles::ExternalAttributesList.instance.call('com_trade.quantity.rank', substitutions).
             except(:short_name).
-            merge(name: "World #{trade_flow} ranking")
+            merge(
+              name: "World #{trade_flow} ranking",
+              unit: nil,
+              tooltip: "World #{trade_flow} ranking by netweight"
+            )
           trade_volume_value = Api::V3::CountryProfiles::ExternalAttributesList.instance.call('com_trade.quantity.value', substitutions).
             except(:short_name).
-            merge(name: "#{trade_flow}s".capitalize)
+            merge(
+              name: "#{trade_flow}s".capitalize,
+              unit: 't', # needs conversion as it comes in kg from the ComTrade API
+              tooltip: 'Netweight (tonnes)'
+            )
           trade_value = Api::V3::CountryProfiles::ExternalAttributesList.instance.call('com_trade.value.value', substitutions).
             except(:short_name).
             merge(name: 'Value')
@@ -62,8 +70,9 @@ module Api
             trade_volume_ranking,
             {
               name: 'Production',
-              unit: @volume_attribute.unit, # hmm
-              unit_position: 'suffix'
+              unit: @volume_attribute.unit || 't',
+              unit_position: 'suffix',
+              tooltip: @volume_attribute.tooltip_text || 'Production (tonnes)'
             },
             trade_volume_value,
             trade_value
@@ -78,16 +87,18 @@ module Api
               @activity,
               node_with_flows.commodity_id
             )
+            quantity = @external_attribute_value.call('com_trade.quantity.value')&.value
+            quantity = quantity.to_f / 1000 if quantity.present?
             {
               name: node_with_flows['commodity'],
               values: [
-                @external_attribute_value.call('com_trade.quantity.rank'),
+                @external_attribute_value.call('com_trade.quantity.rank')&.value,
                 production_values[node_with_flows['commodity']],
-                @external_attribute_value.call('com_trade.quantity.value'),
-                @external_attribute_value.call('com_trade.value.value')
+                quantity,
+                @external_attribute_value.call('com_trade.value.value')&.value
               ]
             }
-          end.sort { |a, b| b[:values][2].to_f <=> a[:values][2].to_f }
+          end.sort { |a, b| b[:values][2].to_f <=> a[:values][2].to_f }.reject { |r| r[:values].compact.empty? }
         end
 
         def production_values
@@ -103,7 +114,7 @@ module Api
             next unless production_quant.present?
 
             preloaded_value = preloaded_values.get(production_quant.simple_type, production_quant.id)
-            @production_values[commodity_name] = preloaded_value
+            @production_values[commodity_name] = preloaded_value&.value
           end
           @production_values
         end

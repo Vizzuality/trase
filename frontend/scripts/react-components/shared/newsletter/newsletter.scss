@@ -36,21 +36,11 @@
   .footer-conditions {
     display: flex;
     justify-content: space-between;
+    margin-top: 20px;
   }
 
   .footer-submit-button {
-    &:after {
-      content: "";
-      position: absolute;
-      top: 13px;
-      right: 12px;
-      width: 8px;
-      height: 8px;
-      border: 3px solid $black;
-      border-top: 0;
-      border-left: 0;
-      transform: rotate(-45deg);
-    }
+    color: $gray-500;
   }
 
   .link-text {
@@ -106,18 +96,20 @@
       flex: auto;
       height: 100%;
       font-family: $font-family-1;
+      font-weight: $font-weight-bold;
       font-size: 13px;
-      letter-spacing: -0.8px;
+      letter-spacing: $letter-spacing-x-narrow;
       text-align: left;
       border: 0;
       border-radius: 4px;
       background-color: $light-gray;
       color: $charcoal-grey-faded;
-      text-transform: uppercase;
       padding: 1px 10px 0;
+
       &.error {
         border: 1px solid $strong-pink;
       }
+
       &::placeholder {
         text-transform: uppercase;
       }
@@ -128,7 +120,7 @@
       margin-left: auto;
       padding: 0 16px;
       flex: none;
-      letter-spacing: -0.8px;
+      letter-spacing: $letter-spacing-x-narrow;
       font-weight: $font-weight-regular;
     }
   }
@@ -145,8 +137,8 @@
       flex: auto;
       height: 100%;
       font-family: $font-family-3;
-      font-size: 13px;
-      letter-spacing: -0.8px;
+      font-size: $font-size-x-regular;
+      letter-spacing: $letter-spacing-x-narrow;
       text-align: left;
       border: 0;
       border-radius: 0;
@@ -160,8 +152,61 @@
       }
 
       &::placeholder {
-        text-transform: capitalize;
         color: rgba($green-200, 0.8);
+        text-transform: none;
+      }
+    }
+  }
+
+  .form-hidden-fields {
+    visibility: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: opacity 1.5s;
+
+
+    &.-open {
+      visibility: visible;
+      max-height: 260px;
+      opacity: 1;
+      transition: opacity 1.5s;
+
+    }
+  }
+
+  .dropdown-container {
+    position: relative;
+  }
+
+  .dropdown-button {
+    position: absolute;
+    top: 10px;
+    right: 5%;
+    width: 20px;
+    height: 20px;
+    opacity: 0.5;
+
+    &:after {
+      content: "";
+      position: absolute;
+      top: 6px;
+      right: 7px;
+      width: 5px;
+      height: 5px;
+      border: 1px solid $gray-500;
+      border-top: 0;
+      border-left: 0;
+      transform: rotate(-45deg);
+      transition: transform 0.5s;
+    }
+
+    &.-open {
+      opacity: 1;
+
+      &:after {
+        right: 7px;
+        transform: rotate(45deg);
+        transition: transform 0.5s;
       }
     }
   }

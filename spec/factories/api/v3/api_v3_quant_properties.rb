@@ -3,5 +3,6 @@ FactoryBot.define do
     association :quant, factory: :api_v3_quant
     sequence(:display_name) { |n| "attribute #{n}" }
     unit_type { 'currency' }
+    aggregation_method { 'SUM' }
   end
 end

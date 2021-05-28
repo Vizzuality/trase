@@ -23,7 +23,7 @@ function TagsGroup(props) {
           align="center"
           key={part.id || part.prefix}
           color={color}
-          className="tag-group-part notranslate"
+          className="tag-group-part"
         >
           {part.prefix && translateText(`${part.prefix} `)}
           {part.value && <Tag {...props} part={part} showDropdown={showDropdown} as={textAs} />}

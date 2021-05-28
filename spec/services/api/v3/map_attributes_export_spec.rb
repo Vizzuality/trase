@@ -34,7 +34,7 @@ RSpec.describe Api::V3::MapAttributesExport do
     end
     let(:subject) { Api::V3::MapAttributesExport.new }
     it 'should generate file' do
-      filepath = 'spec/support/export/' + Api::V3::MapAttributesExport::FILENAME
+      filepath = 'spec/support/export/map_attributes_values_test.csv.gz'
       subject.call
       expect(File).to exist(filepath)
     end

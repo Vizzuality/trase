@@ -1,8 +1,8 @@
 class WbRequestWorker
   include Sidekiq::Worker
 
-  sidekiq_options queue: :high,
-                  retry: 5,
+  sidekiq_options queue: :default,
+                  retry: 10,
                   backtrace: true
 
   def perform(indicator_name, start_year, end_year)

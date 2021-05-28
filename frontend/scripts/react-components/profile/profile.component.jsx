@@ -83,6 +83,10 @@ const Profile = props => {
   };
 
   const renderSection = chart => {
+    const commodityName =
+      context?.commodityName ||
+      profileMetadata.commodities.find(comm => comm.id === commodityId)?.name;
+
     switch (chart.chart_type) {
       case 'line_chart_with_map': {
         const isCountries = chart.identifier === 'actor_top_countries';
@@ -119,7 +123,7 @@ const Profile = props => {
             contextId={context?.id}
             commodityId={context?.commodityId}
             onLinkClick={updateQueryParams}
-            commodityName={context?.commodityName}
+            commodityName={commodityName}
             profileType={profileType}
           />
         );
@@ -140,7 +144,7 @@ const Profile = props => {
             nodeId={nodeId}
             title={chart.title}
             contextId={context?.id}
-            commodityName={context?.commodityName}
+            commodityName={commodityName}
             testId={isActor ? 'deforestation-risk' : 'sustainability-indicators'}
             targetPayload={{ profileType: isActor ? 'place' : 'actor' }}
           />
@@ -148,10 +152,6 @@ const Profile = props => {
       }
       case 'table': {
         const type = chart.identifier.split('_')[0];
-        const commodityName =
-          context?.commodityName ||
-          profileMetadata.commodities.find(comm => comm.id === commodityId)?.name;
-
         return (
           <TableWidget
             key={chart.id}
@@ -177,7 +177,7 @@ const Profile = props => {
             title={chart.title}
             printMode={printMode}
             contextId={context?.id}
-            commodityName={context?.commodityName}
+            commodityName={commodityName}
             testId="company-compare"
           />
         );
@@ -191,12 +191,13 @@ const Profile = props => {
             nodeId={nodeId}
             title={chart.title}
             contextId={context?.id}
-            commodityName={context?.commodityName}
+            commodityName={commodityName}
             testId="deforestation-trajectory"
           />
         );
       case 'sankey': {
         const type = chart.identifier.split('_')[0];
+        const invert = type === 'country' && profileMetadata.activity === 'importer';
         return (
           <TopConsumersWidget
             key={chart.id}
@@ -207,8 +208,9 @@ const Profile = props => {
             title={chart.title}
             contextId={context?.id}
             onLinkClick={updateQueryParams}
-            commodityName={context?.commodityName}
+            commodityName={commodityName}
             profileType={profileType}
+            invert={invert}
             testId={type === 'actor' ? 'top-traders' : 'top-importers'}
           />
         );
@@ -226,7 +228,7 @@ const Profile = props => {
             contextId={context?.id || profileMetadata?.contextId}
             commodityId={context?.commodityId || profileMetadata?.commodityId}
             onLinkClick={updateQueryParams}
-            commodityName={context?.commodityName}
+            commodityName={commodityName}
             profileType={profileType}
           />
         );

@@ -11,7 +11,7 @@ $menuOffset: 15vh;
   top: 0;
   width: 100vw;
   height: $nav-height;
-  background: $white;
+  background: $light-gray;
   font-family: $font-family-3;
   z-index: $z-nav;
   transition: all 150ms ease-in;
@@ -19,6 +19,7 @@ $menuOffset: 15vh;
   .locale-selector-selected-item,
   .locale-selector-menu-item {
     color: $gray-300;
+    font-family: $font-family-1;
     font-size: $font-size-xx-regular;
     font-weight: $font-weight-bold;
     text-transform: uppercase;
@@ -41,21 +42,30 @@ $menuOffset: 15vh;
     }
   }
 
+  &.-yellow-background {
+    background-color: $egg-shell;
+
+    .top-nav-link {
+      color: $gray-300;
+    }
+  }
+
   &:not(.-has-background) {
     .top-nav-search .icon-search,
     .top-nav-link,
     .locale-selector-selected-item {
       color: $gray-300;
-      font-family: $font-family-3;
+      font-family: $font-family-1;
       font-size: $font-size-xx-regular;
       font-weight: $font-weight-bold;
     }
+
     .locale-selector-selected-item:after {
       border-top: 4px solid $gray-300;
     }
   }
 
-  .top-nav-search{
+  .top-nav-search {
     min-width: 34px;
 
     @media screen and (min-width: $breakpoint-laptop) {
@@ -70,8 +80,6 @@ $menuOffset: 15vh;
   }
 
   .nav-menu {
-    border-bottom: 1px solid $gray-200;
-
     z-index: 1;
     height: 100%;
 
@@ -84,19 +92,24 @@ $menuOffset: 15vh;
 
       .nav-menu-main-navigation {
         width: auto;
+        max-width: 600px;
+
+        @media screen and (min-width: $breakpoint-laptop) {
+          flex: 1;
+        }
       }
     }
 
     .second-row {
       padding: 0 $navMenuPadding;
-      background-color: $white;
+      background-color: $light-gray;
       display: flex;
       align-items: center;
       height: 100%;
 
       .nav-menu-main-navigation {
         width: 100%;
-        justify-content: space-between;
+        justify-content: space-around;
 
         .top-nav-link {
           font-size: $font-size-xx-regular;
@@ -105,9 +118,30 @@ $menuOffset: 15vh;
     }
   }
 
+  &.-has-background {
+    .second-row {
+      background-color: $white;
+
+      // Fix gap between rows
+      margin-top: -1px;
+      border-bottom: 1px solid $white;
+    }
+  }
+
+  &.-yellow-background {
+    .second-row {
+      background-color: $egg-shell;
+
+      // Fix gap between rows
+      margin-top: -1px;
+      border-bottom: 1px solid $egg-shell;
+    }
+  }
+
   .nav-menu-main-navigation {
     position: relative;
     display: flex;
+    justify-content: space-around;
     height: 100%;
     width: 100%;
 
@@ -121,11 +155,16 @@ $menuOffset: 15vh;
     }
 
     .top-nav-link {
-      font-size: $font-size-xxx-regular;
+      font-family: $font-family-3;
+      font-size: $font-size-regular;
       font-weight: $font-weight-medium;
       transform: opacity 150ms ease-in;
       color: $gray-300;
       display: flex;
+
+      @media screen and (min-width: $breakpoint-tablet) {
+        font-size: $font-size-xx-regular;
+      }
 
       &::after {
         display: block;
@@ -140,7 +179,7 @@ $menuOffset: 15vh;
       }
 
       &:hover, &.-active {
-        color: $gray-500;
+        color: $gray-600;
 
         &::after {
           width: 100%;
@@ -158,7 +197,7 @@ $menuOffset: 15vh;
     display: inline-block;
     transform: translateY(-5px);
     color: $gray-300;
-    font-family: $font-family-3;
+    font-family: $font-family-1;
     font-size: $font-size-xx-regular;
     font-weight: $font-weight-bold;
   }
@@ -166,8 +205,8 @@ $menuOffset: 15vh;
   .top-nav-item-list {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     width: 75px;
-    padding-top: 3px;
 
     @media screen and (min-width: $breakpoint-laptop) {
       width: 135px;
@@ -175,12 +214,14 @@ $menuOffset: 15vh;
   }
 
   .c-locale-selector {
-    transform: translateY(-1px);
+    transform: translateY(-1.5px);
+    z-index: $z-language-selector;
   }
 
   .top-nav-item-collapse {
     display: block;
     padding: 12px 0px;
+    font-family: $font-family-1;
     font-size: $font-size-xx-regular;
     font-weight: $font-weight-bold;
     letter-spacing: 0.5px;
@@ -222,19 +263,30 @@ $menuOffset: 15vh;
     justify-content: space-between;
     flex-flow: row;
     align-items: center;
-    margin-left: 18px;
 
-    > :first-child {
-      margin-right: 24px;
+    @media screen and (min-width: $breakpoint-tablet) {
+      margin-left: 18px;
+
+      > :first-child {
+        margin-right: 24px;
+      }
     }
   }
 
   .right-section {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     flex-flow: row;
     align-items: center;
     height: 100%;
+
+    @media screen and (min-width: $breakpoint-tablet) {
+      margin-right: 18px;
+    }
+
+    @media screen and (min-width: $breakpoint-laptop) {
+      flex: 1;
+    }
   }
 
   .top-nav-toggle-btn {
@@ -250,24 +302,38 @@ $menuOffset: 15vh;
   }
 
   .top-nav-logo {
-    width: 113px;
     margin-left: 20px;
+    display: flex;
+  }
+
+  .trase-logo-text {
+    margin-left: 10px;
+    margin-right: 6px;
+
+    @media screen and (min-width: $breakpoint-tablet) {
+      margin-right: 8px;
+    }
+  }
+
+  .logo-image {
+    width: 30px;
+    @media screen and (min-width: $breakpoint-tablet) {
+      width: 60px;
+    }
   }
 
   .nav-tab-container {
     display: flex;
-    justify-content: space-between;
     padding: 40px 20px;
     background-color: $white;
 
     .-navigation-block {
-      flex: 1;
-
       display: flex;
       max-width: 300px;
       flex-direction: column;
       justify-content: space-between;
       padding: 16px;
+      margin-right: 10%;
 
       .scroll-indicator {
         display: flex;
@@ -308,14 +374,15 @@ $menuOffset: 15vh;
           font-size: $font-size-x-big;
           line-height: $line-height-huge;
 
-          &:hover {
+          &:hover,
+          &.active {
             color: $orange-500;
           }
         }
       }
 
       .about-menu-item {
-        color: $gray-500;
+        color: $gray-600;
         text-transform: uppercase;
         font-weight: $font-weight-light;
         font-size: $font-size-xx-regular;
@@ -332,27 +399,26 @@ $menuOffset: 15vh;
     }
 
     .-tab-contents {
-      flex: 0 0 70%;
+      flex: 1;
       padding: 15px 0;
       overflow-y: scroll;
-      // -ms-overflow-style: none; /* Internet Explorer 10+ */
-      // scrollbar-width: none; /* Firefox */
-      // &::-webkit-scrollbar {
-      //   display: none; /* Safari and Chrome */
-      // }
+      -ms-overflow-style: none; /* Internet Explorer 10+ */
+      scrollbar-width: none; /* Firefox */
+      &::-webkit-scrollbar {
+        display: none; /* Safari and Chrome */
+      }
 
       .tab-contents-cards {
         display: flex;
         flex-flow: row;
-        justify-content: space-between;
       }
     }
   }
 
   .top-nav-card {
-    flex: 0 0 260px;
+    flex: 0 0 360px;
     height: calc(100vh - 190px);
-    max-height: 400px; // set max height so on larger screens cards don't go crazy long
+    max-height: 530px; // set max height so on larger screens cards don't go crazy long
     display: flex;
     flex-flow: column;
     justify-content: space-between;
@@ -369,7 +435,7 @@ $menuOffset: 15vh;
       flex: 1;
       height: 240px;
       width: 100%;
-      background-size: cover;
+      background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
       transform: translateX(90px);
@@ -387,7 +453,7 @@ $menuOffset: 15vh;
       font-family: $font-family-1;
       font-size: $font-size-xx-regular;
       color: $gray-400;
-      height: 100px;
+      height: auto;
       text-overflow: ellipsis;
 
       .card-summary-content {

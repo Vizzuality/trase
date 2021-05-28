@@ -31,7 +31,6 @@ module Api
           initialize_selected_nodes
           initialize_other_nodes_ids
           initialize_excluded_nodes
-          initialize_unknown_nodes
           if @errors.none?
             initialize_active_nodes
             @flows = flows_query.all
@@ -183,15 +182,6 @@ module Api
           end
         end
 
-        def initialize_unknown_nodes
-          # TODO: this should be happening per column
-          @unknown_municipality_nodes_ids = Api::V3::Node.
-            joins(:node_type).
-            where(is_unknown: true).
-            where('node_types.name' => NodeTypeName::MUNICIPALITY).
-            pluck(:id)
-        end
-
         def initialize_active_nodes
           active_nodes_by_position, @other_nodes =
             if @selected_nodes.none?
@@ -282,39 +272,50 @@ module Api
             :sanitize_sql_array,
             [
               [
+                'year',
                 'flows.path[?] AS node_id',
-                'SUM(flow_quants.value::DOUBLE PRECISION) AS total'
+                "SUM(flow_quants.value::DOUBLE PRECISION) AS total"
               ].join(', '),
               position + 1
             ]
           )
           group_clause = ActiveRecord::Base.send(
             :sanitize_sql_array,
-            ['flows.path[?]', position + 1]
+            ['year, flows.path[?]', position + 1]
           )
-          # if there are unknowns, push them to the bottom
-          # currently works for the first column only
-          # TODO: should work for all the columns
-          if @unknown_municipality_nodes_ids.any?
+
+          subquery = basic_flows_query.
+            select(select_clause).
+            group(group_clause)
+
+          node_type = @active_node_types.find { |nt| nt.column_position == position }
+          unknown_nodes_ids =
+            if node_type
+              Api::V3::Node.where(node_type_id: node_type.id, is_unknown: true).pluck(:id)
+            else
+              []
+            end
+
+          if unknown_nodes_ids.any?
             order_by_unknown_clause = ActiveRecord::Base.send(
               :sanitize_sql_array,
               [
-                'CASE WHEN flows.path[?] = ANY(ARRAY[?]) THEN 2 ELSE 1 END',
-                position + 1, @unknown_municipality_nodes_ids
+                'CASE WHEN node_id = ANY(ARRAY[?]) THEN 2 ELSE 1 END',
+                unknown_nodes_ids
               ]
             )
             order_by_unknown_clause = Arel.sql(order_by_unknown_clause)
           end
+
           order_clause = [
             order_by_unknown_clause, 'total DESC'
           ].compact
 
-          query = basic_flows_query.
-            select(select_clause).
-            group(group_clause).
+          Api::V3::Flow.
+            from("(#{subquery.to_sql}) s").
+            select("node_id, #{@cont_attribute.aggregation_method}(total) AS total").
+            group('node_id').
             order(order_clause)
-
-          query
         end
 
         def flows_query
@@ -329,28 +330,29 @@ module Api
               position + 1, nodes_ids, position + 1, other_node_id
             ]
           end
+          select_clause_path = ActiveRecord::Base.send(
+            :sanitize_sql_array, ['ARRAY[' + case_expressions.join(', ') + '] AS path', *case_substitutions]
+          )
           cont_attr_table = @cont_attribute.flow_values_class.table_name
-          select_clause_parts = [
-            'ARRAY[' + case_expressions.join(', ') + '] AS path',
+          subquery_select_clause_parts = [
+            'year',
+            select_clause_path,
             "SUM(#{cont_attr_table}.value) AS quant_value"
+          ]
+          query_select_clause_parts = [
+            'path',
+            "#{@cont_attribute.aggregation_method}(quant_value) AS quant_value"
           ]
 
           if @ncont_attribute
-            select_clause_parts << select_clause_ncont_attribute
+            subquery_select_clause_parts << select_clause_ncont_attribute
+            query_select_clause_parts += ['ind_value', 'qual_value']
           end
 
-          select_clause = ActiveRecord::Base.send(
-            :sanitize_sql_array,
-            [
-              select_clause_parts.join(','),
-              *case_substitutions
-            ]
-          )
-
-          query = basic_flows_query.
-            select(select_clause).
-            group('1').
-            where("#{cont_attr_table}.value > 0")
+          subquery = basic_flows_query.
+            select(subquery_select_clause_parts.join(',')).
+            where("#{cont_attr_table}.value > 0").
+            group('1,2') # year and path
 
           if @ncont_attribute
             ncont_attr_table = @ncont_attribute.flow_values_class.table_name
@@ -363,10 +365,15 @@ module Api
                 @ncont_attribute.original_id
               ]
             )
-            query = query.
+            subquery = subquery.
               joins(ncont_attr_join_clause).
               group("#{ncont_attr_table}.value")
           end
+          query = Api::V3::Flow.
+            from("(#{subquery.to_sql}) s").
+            select(query_select_clause_parts.join(',')).
+            group('1') # path
+          query = query.group('ind_value, qual_value') if @ncont_attribute
           query
         end
 

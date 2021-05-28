@@ -74,12 +74,6 @@ module Api
             include_domestic_consumption: false,
             limit: 10
           )
-          # @all_nodes_total = top_nodes_list.total(
-          #   @volume_attribute,
-          #   include_domestic_consumption: false
-          # )
-          # @target_nodes_total = @top_nodes.inject(0) { |sum, node| sum + node[:value] }
-          @top_nodes.each { |n| pp n }
           @top_nodes_by_iso2 = Hash[@top_nodes.map { |n| [n.geo_id, n]}]
         end
 
@@ -92,7 +86,7 @@ module Api
                 activity: 'importer',
                 commodity_id: @commodity.id
               ).
-              order(:quantity).
+              order(quantity: :desc).
               limit(10)
         end
 
@@ -106,33 +100,31 @@ module Api
           country_names_by_iso2 = Hash[
             country_nodes.map { |n| [n.geo_id, n.name] }
           ]
-          @all_nodes_total = 0
-          result = @com_trade_top_countries.map do |com_trade_record|
-            trase_top_node = @top_nodes_by_iso2[com_trade_record.partner_iso2]
-
-            if trase_top_node
-              # puts "FOUND TRASE NODE"
-              # puts "COM TRADE VALUE: #{com_trade_record.quantity}"
-              # puts "TRASE VALUE: #{trase_top_node['value']}"
-              value = trase_top_node['value']
-              @all_nodes_total += value
-              {
-                node_id: trase_top_node['node_id'],
-                geo_id: trase_top_node['geo_id'],
-                name: trase_top_node['name'],
-                # height: value / @all_nodes_total,
-                value: value
-              }
-            else
-              value = com_trade_record.quantity
-              @all_nodes_total += value
-              {
-                geo_id: com_trade_record.partner_iso2,
-                name: country_names_by_iso2[com_trade_record.partner_iso2],
-                value: value
-              }
-            end
+          result = []
+          included_countries = Set.new
+          @top_nodes.each do |trase_top_node|
+            included_countries.add(trase_top_node['geo_id'])
+            result << {
+              node_id: trase_top_node['node_id'],
+              geo_id: trase_top_node['geo_id'],
+              name: trase_top_node['name'],
+              value: trase_top_node['value']
+            }
           end
+          @com_trade_top_countries.each do |com_trade_record|
+            next if included_countries.include?(com_trade_record.partner_iso2)
+
+            result << {
+              geo_id: com_trade_record.partner_iso2,
+              name: country_names_by_iso2[com_trade_record.partner_iso2],
+              value: com_trade_record.quantity.to_f / 1000 # conversion from kg
+            }
+          end
+          # sort and take top 10
+          result.sort! { |a, b| a[:value] <=> b[:value] }
+          result = result[0..9]
+          @all_nodes_total = result.map { |n| n[:value] }.inject(:+)
+
           result.map do |record|
             record[:height] = record[:value] / @all_nodes_total
           end

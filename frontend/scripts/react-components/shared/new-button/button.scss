@@ -1,0 +1,151 @@
+@import 'styles/settings';
+@import 'styles/mixins';
+
+.c-new-button {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid rgba($charcoal-grey, .3);
+  border-radius: 20px;
+  color: $charcoal-grey;
+  font-family: $font-family-1;
+  font-size: $font-size-regular;
+  line-height: 1;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+
+  &:active {
+    opacity: 0.8;
+  }
+
+  &.v-circle {
+    display: flex;
+    width: 34px;
+    height: 34px;
+    max-width: 34px;
+    max-height: 34px;
+    border-radius: 50%;
+
+    .icon {
+      flex: 1;
+    }
+  }
+
+  > .button-text-container {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &[disabled=""] {
+    opacity: 0.4;
+    cursor: default;
+  }
+
+  &.size-xs {
+    padding: 10px 14px;
+  }
+
+  &.size-sm {
+    padding: 15px;
+  }
+
+  &.size-rg {
+    padding: 15px 24px;
+  }
+
+  &.size-md {
+    padding: 15px 70px;
+  }
+
+  &.size-lg {
+    padding: 16px 24px 13px;
+  }
+
+  &.weight-bold {
+    font-weight: $font-weight-bold;
+  }
+
+  &.color-pink {
+    border-color: transparent;
+    background-color: $strong-pink;
+    color: $white;
+  }
+
+  &.color-green {
+    border-color: transparent;
+    background-color: $green-200;
+    color: $white;
+  }
+
+  &.color-white {
+    border-color: transparent;
+    background-color: $white;
+    color: $medium-pink;
+  }
+
+  &.color-gray {
+    border-color: transparent;
+    background-color: $gray;
+    color: $charcoal-grey;
+  }
+
+  &.color-charcoal {
+    border-color: transparent;
+    background-color: $charcoal-grey;
+    color: $white;
+  }
+
+  &.color-pink-transparent {
+    border-color: $medium-pink;
+    background-color: transparent;
+    color: $medium-pink;
+  }
+
+  &.color-gray-transparent {
+    border-color: $gray;
+    background-color: transparent;
+    color: $gray;
+  }
+
+  &.color-charcoal-transparent {
+    border-color: $charcoal-grey-faded;
+    background-color: transparent;
+    color: $charcoal-grey;
+  }
+
+  &.disabled,
+  // backwards compat
+  &.-disabled {
+    border-color: rgba($charcoal-grey, .3);
+    color: rgba($charcoal-grey, .3);
+    pointer-events: none;
+  }
+
+  &.with-icon,
+  // backwards compat
+  &.-with-icon {
+    justify-content: space-between;
+
+    &.v-circle {
+      .icon {
+        margin-left: 0;
+      }
+    }
+  }
+
+  &.v-icon {
+    height: 32px;
+    width: 32px;
+    padding: 0;
+
+    &.color-gray {
+      .icon {
+        margin: 0;
+        fill: $charcoal-grey;
+      }
+    }
+  }
+}

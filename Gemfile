@@ -2,11 +2,11 @@ source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.2.4.4'
+gem 'rails', '~> 5.2.6'
  # Use pg as the database for Active Record
 gem 'pg', '~> 0.18'
 # Use Puma as the app server
-gem 'puma', '~> 5.2'
+gem 'puma', '~> 5.3'
 # Use SCSS for stylesheets
 gem 'sassc-rails', '~> 2.1.2'
 gem 'sprockets', '< 4'
@@ -46,6 +46,7 @@ gem 'devise', '~> 4.7'
 gem 'devise_token_auth'
 gem 'dotenv-rails', '~> 2.7'
 gem 'enumerate_it', '~> 3.2.0'
+gem 'faraday'
 gem 'kaminari'
 gem 'mailchimp-api', require: 'mailchimp'
 # gem 'newrelic_rpm'
@@ -56,7 +57,7 @@ gem 'pg_search'
 gem 'rack', '~> 2.2.3' # issue with sidekiq web in version 2.1.1, still doesn't work on sandbox in version 2.1.2
 gem 'rack-cors', '~> 1.1'
 gem 'scenic'
-gem 'sidekiq', '~> 6.1.3'
+gem 'sidekiq', '~> 6.2.1'
 gem 'sidekiq-unique-jobs'
 gem 'sitemap_generator'
 gem 'staccato'
@@ -71,28 +72,28 @@ group :development, :test do
   gem 'json-schema'
   gem 'rails-controller-testing'
   gem 'rspec-collection_matchers'
-  gem 'rspec-rails', '~> 4.0'
+  gem 'rspec-rails', '~> 5.0'
   gem 'rubocop-rspec'
 end
 
 group :development do
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
   # gem 'web-console', '>= 3.3.0'
-  gem 'listen', '~> 3.3.3'
+  gem 'listen', '~> 3.5.1'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'annotate'
-  gem 'bcrypt_pbkdf', '~> 1.0'
-  gem 'capistrano', '~> 3.15', require: false
+  gem 'bcrypt_pbkdf', '~> 1.1'
+  gem 'capistrano', '~> 3.16', require: false
   gem 'capistrano-bundler'
   gem 'capistrano-yarn'
   gem 'capistrano-nvm'
-  gem 'capistrano-passenger'
+  gem 'capistrano-passenger', '~> 0.2.0'
   gem 'capistrano-rails', '~> 1.6', require: false
   gem 'capistrano-rvm'
   gem 'ed25519', '~> 1.2'
-  gem 'rubocop', '~> 1.10.0', require: false
+  gem 'rubocop', '~> 1.15.0', require: false
   gem 'rubocop-performance', require: false
 end
 

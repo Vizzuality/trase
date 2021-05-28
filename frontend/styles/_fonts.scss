@@ -37,3 +37,11 @@
   src: url('/fonts/Merriweather-Bold.woff2') format('woff2'),
   url('/fonts/Merriweather-Bold.woff') format('woff')
 }
+
+@font-face {
+  font-family: 'DM Sans';
+  font-display: swap;
+  font-weight: $font-weight-regular;
+  src: url('/fonts/DMSans-Regular.woff2') format('woff2'),
+  url('/fonts/DMSans-Regular.woff') format('woff')
+}

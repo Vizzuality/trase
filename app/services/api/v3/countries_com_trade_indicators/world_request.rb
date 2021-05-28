@@ -9,21 +9,15 @@ module Api
           2 => 'exporter'
         }
 
-        def initialize(uri)
-          @uri = URI(uri)
+        def initialize(url)
+          @url = url
+          @connection = Api::V3::CountriesComTradeIndicators::ApiConnection.instance
         end
 
         def call
-          response = Net::HTTP.get_response(@uri)
-          if response.code != '200'
-            error = ComTradeError.new(response)
-            # this is to force a retry on the job
-            raise error
-          end
-          body = response.body
-          data = JSON.parse(body)
+          response = @connection.get(@url)
+          data = JSON.parse(response.body)
           ensure_valid_response(data['validation']) or return
-
           data['dataset'].each do |element|
             attributes = parse_attributes(element)
             next unless attributes
@@ -40,6 +34,11 @@ module Api
           )
         end
 
+        # invalid status codes:
+        # Query complexity (5002)
+        # Result too large (5003)
+        # Invalid parameter (5004)
+        # There's no point retrying, must be fixed first
         def ensure_valid_response(validation)
           status = validation['status']
           return true if status['name'] == 'Ok'
@@ -68,7 +67,7 @@ module Api
           end
 
           iso3 = element['rt3ISO']
-          return nil if iso3.blank? # ignore, e.g. country groupings
+          return nil if iso3.blank? || iso3 == 'WLD' # ignore, e.g. country groupings
 
           country = country_codes.lookup_by_iso3(iso3)
           unless country

@@ -104,11 +104,11 @@ COMMENT ON EXTENSION tablefunc IS 'functions that manipulate whole tables, inclu
 -- Name: aggregated_buckets(double precision[], integer[], integer[], text); Type: FUNCTION; Schema: public; Owner: -
 --
 
-CREATE FUNCTION public.aggregated_buckets(buckets double precision[], declared_years integer[], requested_years integer[], attribute_type text) RETURNS double precision[]
+CREATE FUNCTION public.aggregated_buckets(buckets double precision[], declared_years integer[], requested_years integer[], aggregation_method text) RETURNS double precision[]
     LANGUAGE sql IMMUTABLE
     AS $$
   SELECT CASE
-    WHEN attribute_type = 'quant' AND ICOUNT(COALESCE(declared_years, requested_years) & requested_years) > 0 THEN
+    WHEN aggregation_method = 'SUM' AND ICOUNT(COALESCE(declared_years, requested_years) & requested_years) > 0 THEN
       ARRAY(SELECT ICOUNT(COALESCE(declared_years, requested_years) & requested_years) * UNNEST(buckets))
     ELSE
       buckets
@@ -117,10 +117,10 @@ $$;
 
 
 --
--- Name: FUNCTION aggregated_buckets(buckets double precision[], declared_years integer[], requested_years integer[], attribute_type text); Type: COMMENT; Schema: public; Owner: -
+-- Name: FUNCTION aggregated_buckets(buckets double precision[], declared_years integer[], requested_years integer[], aggregation_method text); Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON FUNCTION public.aggregated_buckets(buckets double precision[], declared_years integer[], requested_years integer[], attribute_type text) IS 'Aggregates buckets.';
+COMMENT ON FUNCTION public.aggregated_buckets(buckets double precision[], declared_years integer[], requested_years integer[], aggregation_method text) IS 'Returns aggregated buckets for year range';
 
 
 --
@@ -205,6 +205,7 @@ INSERT INTO attributes (
   display_name,
   unit,
   unit_type,
+  aggregation_method,
   tooltip_text,
   tooltip_text_by_context_id,
   tooltip_text_by_commodity_id,
@@ -220,6 +221,7 @@ SELECT
   display_name,
   unit,
   unit_type,
+  aggregation_method,
   tooltip_text,
   tooltip_text_by_context_id,
   tooltip_text_by_commodity_id,
@@ -238,6 +240,7 @@ SELECT
   display_name,
   unit,
   unit_type,
+  aggregation_method,
   tooltip_text,
   tooltip_text_by_context_id,
   tooltip_text_by_commodity_id,
@@ -251,6 +254,7 @@ ON CONFLICT (name, original_type) DO UPDATE SET
   display_name = excluded.display_name,
   unit = excluded.unit,
   unit_type = excluded.unit_type,
+  aggregation_method = excluded.aggregation_method,
   tooltip_text = excluded.tooltip_text,
   tooltip_text_by_context_id = excluded.tooltip_text_by_context_id,
   tooltip_text_by_commodity_id = excluded.tooltip_text_by_commodity_id,
@@ -268,6 +272,7 @@ USING (
     display_name,
     unit,
     unit_type,
+    aggregation_method,
     tooltip_text,
     tooltip_text_by_context_id,
     tooltip_text_by_commodity_id,
@@ -286,6 +291,7 @@ USING (
     display_name,
     unit,
     unit_type,
+    aggregation_method,
     tooltip_text,
     tooltip_text_by_context_id,
     tooltip_text_by_commodity_id,
@@ -666,6 +672,7 @@ CREATE TABLE public.attributes (
     display_name_by_context_id jsonb,
     display_name_by_country_id jsonb,
     display_name_by_commodity_id jsonb,
+    aggregation_method text,
     CONSTRAINT attributes_original_type_check CHECK ((original_type = ANY (ARRAY['Ind'::text, 'Qual'::text, 'Quant'::text])))
 );
 
@@ -879,6 +886,7 @@ CREATE TABLE public.ind_properties (
     tooltip_text text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
+    aggregation_method text,
     CONSTRAINT ind_properties_unit_type_check CHECK ((unit_type = ANY (ARRAY['currency'::text, 'ratio'::text, 'score'::text, 'unitless'::text])))
 );
 
@@ -902,6 +910,13 @@ COMMENT ON COLUMN public.ind_properties.unit_type IS 'Type of unit, e.g. score. 
 --
 
 COMMENT ON COLUMN public.ind_properties.tooltip_text IS 'Generic tooltip text (lowest precedence)';
+
+
+--
+-- Name: COLUMN ind_properties.aggregation_method; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_properties.aggregation_method IS 'To be used with ranges, one of SUM, AVG, MAX or MIN';
 
 
 --
@@ -1302,6 +1317,7 @@ CREATE TABLE public.quant_properties (
     tooltip_text text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
+    aggregation_method text,
     CONSTRAINT quant_properties_unit_type_check CHECK ((unit_type = ANY (ARRAY['currency'::text, 'area'::text, 'count'::text, 'volume'::text, 'unitless'::text])))
 );
 
@@ -1325,6 +1341,13 @@ COMMENT ON COLUMN public.quant_properties.unit_type IS 'Type of unit, e.g. count
 --
 
 COMMENT ON COLUMN public.quant_properties.tooltip_text IS 'Generic tooltip text (lowest precedence)';
+
+
+--
+-- Name: COLUMN quant_properties.aggregation_method; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_properties.aggregation_method IS 'To be used with ranges, one of SUM, AVG, MAX or MIN';
 
 
 --
@@ -1371,6 +1394,7 @@ CREATE VIEW public.attributes_v AS
     s.display_name,
     s.unit,
     s.unit_type,
+    s.aggregation_method,
     s.tooltip_text,
     s.tooltip_text_by_context_id,
     s.tooltip_text_by_country_id,
@@ -1384,6 +1408,7 @@ CREATE VIEW public.attributes_v AS
             qp.display_name,
             quants.unit,
             qp.unit_type,
+            COALESCE(qp.aggregation_method, 'SUM'::text) AS aggregation_method,
             qp.tooltip_text,
             context_p.tooltip_text_by_context_id,
             country_p.tooltip_text_by_country_id,
@@ -1415,6 +1440,7 @@ CREATE VIEW public.attributes_v AS
             ip.display_name,
             inds.unit,
             ip.unit_type,
+            COALESCE(ip.aggregation_method, 'AVG'::text) AS aggregation_method,
             ip.tooltip_text,
             context_p.tooltip_text_by_context_id,
             country_p.tooltip_text_by_country_id,
@@ -1444,6 +1470,7 @@ CREATE VIEW public.attributes_v AS
             'Qual'::text,
             quals.name,
             qp.display_name,
+            NULL::text,
             NULL::text,
             NULL::text,
             qp.tooltip_text,
@@ -5240,6 +5267,7 @@ CREATE VIEW public.map_attributes_v AS
     a.display_name AS name,
     'quant'::text AS attribute_type,
     a.unit,
+    a.aggregation_method,
     a.tooltip_text AS description
    FROM (((public.map_quants maq
      JOIN public.map_attributes ma ON ((ma.id = maq.map_attribute_id)))
@@ -5261,6 +5289,7 @@ UNION ALL
     a.display_name AS name,
     'ind'::text AS attribute_type,
     a.unit,
+    a.aggregation_method,
     a.tooltip_text AS description
    FROM (((public.map_inds mai
      JOIN public.map_attributes ma ON ((ma.id = mai.map_attribute_id)))
@@ -5315,6 +5344,13 @@ COMMENT ON COLUMN public.map_attributes_v.attribute_type IS 'Type of the attribu
 --
 
 COMMENT ON COLUMN public.map_attributes_v.unit IS 'Name of the attribute''s unit';
+
+
+--
+-- Name: COLUMN map_attributes_v.aggregation_method; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.map_attributes_v.aggregation_method IS 'To be used with ranges, one of SUM, AVG, MAX or MIN';
 
 
 --
@@ -13058,6 +13094,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210118102600'),
 ('20210118140021'),
 ('20210215110809'),
-('20210216183845');
+('20210216183845'),
+('20210423090628'),
+('20210423093722'),
+('20210426164057');
 
 

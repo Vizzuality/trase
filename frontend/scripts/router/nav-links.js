@@ -56,14 +56,14 @@ let nav = [
   },
   !ENABLE_TOP_NAV_REDESIGN && {
     name: 'Insights',
-    page: 'https://insights.trase.earth/insights',
+    page: 'https://insights.trase.earth',
     external: true
   },
   {
     name: 'Download',
     page: 'data'
   },
-  {
+  !ENABLE_TOP_NAV_REDESIGN && {
     name: 'About',
     page: 'about'
   }

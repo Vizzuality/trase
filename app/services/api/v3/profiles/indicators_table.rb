@@ -41,8 +41,8 @@ module Api
           values = []
           ranking_scores = []
           chart_config.attributes.each do |attribute|
-            value = @values.get(attribute.simple_type, attribute.id)
-            values << value
+            attribute_value = @values.get(attribute.simple_type, attribute.id)
+            values << attribute_value&.value
             next unless @state_ranking.present?
 
             ranking_scores << @state_ranking.position_for_attribute(

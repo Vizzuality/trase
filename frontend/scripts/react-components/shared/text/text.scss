@@ -6,11 +6,15 @@
 
   &.mono {
     font-family: $font-family-1;
-    letter-spacing: -0.8px;
+    letter-spacing: $letter-spacing-x-narrow;
   }
 
   &.serif {
     font-family: $font-family-2;
+  }
+
+  &.sans {
+    font-family: $font-family-3;
   }
 
   &.size-xs {
@@ -33,12 +37,20 @@
     font-size: $font-size-xxx-regular;
   }
 
+  &.size-xl {
+    font-size: $font-size-medium;
+  }
+
   &.line-height-md {
     line-height: $line-height-md;
   }
 
   &.line-height-lg {
     line-height: $line-height-lg;
+  }
+
+  &.line-height-xl {
+    line-height: $line-height-xl;
   }
 
   &.color-white {

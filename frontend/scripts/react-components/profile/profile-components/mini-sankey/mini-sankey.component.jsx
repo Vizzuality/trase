@@ -56,7 +56,8 @@ class MiniSankey extends Component {
       year,
       targetPayload,
       contextId,
-      testId
+      testId,
+      invert
     } = this.props;
     const totalHeight = data.targetNodes.reduce(
       (total, node) => total + Math.ceil(node.height * BASE_HEIGHT) + NODE_V_SPACE,
@@ -74,9 +75,12 @@ class MiniSankey extends Component {
     const textMinWidth = isSmallResolution ? 130 : 200;
     const leftTextRotate = isSmallResolution ? '-90' : '0';
     const rightTextWidth = Math.max((width * TEXT_WIDTH_PERCENTAGE) / 100, textMinWidth);
-    const leftTextWidth = isSmallResolution ? 20 : rightTextWidth;
-    const sankeyWidth = width - (leftTextWidth + rightTextWidth);
+    const smallResolutionLeftTextWidth = invert ? rightTextWidth : 20;
+    const leftTextWidth = isSmallResolution ? smallResolutionLeftTextWidth : rightTextWidth;
     const sankeyXStart = leftTextWidth;
+    const sankeyWidth = invert
+      ? width - (leftTextWidth + rightTextWidth / 2)
+      : width - (leftTextWidth + rightTextWidth);
     const sankeyXEnd = sankeyXStart + sankeyWidth;
 
     let currentStartNodeY = startY;
@@ -135,17 +139,24 @@ class MiniSankey extends Component {
             <stop offset="100%" className="gradient-color-end" />
           </linearGradient>
 
-          <g transform={`translate(${sankeyXStart}, ${startY})`}>
-            <rect width={nodeWidth} height={BASE_HEIGHT} className="start" />
+          <g
+            transform={
+              invert
+                ? `translate(${sankeyXEnd}, ${startY})`
+                : `translate(${sankeyXStart}, ${startY})`
+            }
+          >
+            <rect width={nodeWidth} height={BASE_HEIGHT} className={invert ? 'end' : 'start'} />
             <text
-              className="start"
-              transform={`translate(-10, ${5 + BASE_HEIGHT / 2}) rotate(${leftTextRotate})`}
+              className={invert ? 'end' : 'start'}
+              transform={`translate(${invert ? nodeWidth + 10 : '-10'}, ${5 +
+                BASE_HEIGHT / 2}) rotate(${leftTextRotate})`}
             >
               {renderTspans(wrapSVG(data.name, totalHeight))}
             </text>
           </g>
 
-          <g transform={`translate(${sankeyXEnd}, 0)`}>
+          <g transform={`translate(${invert ? sankeyXStart : sankeyXEnd}, 0)`}>
             {sortedNodes.map((node, index) => (
               <g
                 key={index}
@@ -163,10 +174,14 @@ class MiniSankey extends Component {
                   });
                 }}
               >
-                <rect width={nodeWidth} height={node.renderedHeight} className="end" />
+                <rect
+                  width={nodeWidth}
+                  height={node.renderedHeight}
+                  className={invert ? 'start' : 'end'}
+                />
                 <text
-                  className="end"
-                  transform={`translate(${nodeWidth + 10},
+                  className={invert ? 'start' : 'end'}
+                  transform={`translate(${invert ? -nodeWidth : nodeWidth + 10},
                 ${13 + node.renderedHeight / 2 - (TEXT_LINE_HEIGHT * node.lines.length) / 2})`}
                 >
                   {renderTspans(node.lines)}
@@ -185,7 +200,9 @@ class MiniSankey extends Component {
               const x3 = xi(0.4);
               const y0 = node.sy + node.renderedHeight / 2;
               const y1 = node.ty + node.renderedHeight / 2;
-              const path = `M${x0},${y0}C${x2},${y0} ${x3},${y1} ${x1},${y1}`;
+              const path = invert
+                ? `M${x0},${y1}C${x3},${y1} ${x2},${y0} ${x1},${y0}`
+                : `M${x0},${y0}C${x2},${y0} ${x3},${y1} ${x1},${y1}`;
 
               return (
                 <path
@@ -223,7 +240,8 @@ MiniSankey.propTypes = {
   targetPayload: PropTypes.object,
   width: PropTypes.number,
   year: PropTypes.number,
-  contextId: PropTypes.number
+  contextId: PropTypes.number,
+  invert: PropTypes.bool
 };
 
 export default Responsive()(MiniSankey);

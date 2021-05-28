@@ -5,17 +5,21 @@
 
   &.mono {
     font-family: $font-family-1;
-    letter-spacing: -0.8px;
+    letter-spacing: $letter-spacing-x-narrow;
     text-transform: uppercase;
   }
 
-  &.dm-sans {
+  &.sans {
     font-family: $font-family-3;
   }
 
   &.serif {
     line-height: 1.75;
     font-family: $font-family-2;
+  }
+
+  &.size-xs {
+    font-size: $font-size-regular;
   }
 
   &.size-sm {
@@ -32,6 +36,10 @@
 
   &.size-lg {
     font-size: $font-size-big;
+  }
+
+  &.size-xlg {
+    font-size: $font-size-x-big;
   }
 
   &.size-xlg {

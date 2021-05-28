@@ -116,7 +116,7 @@ class ActorSummary extends React.PureComponent {
             {tooltip && <HelpTooltip text={tooltip} />}
           </Text>
           <Text as="span" variant="mono" size="lg" weight="bold">
-            {formatValue(value, indicatorKey)}
+            {formatValue(value, name)}
           </Text>
           <Text as="span" variant="mono" size="lg" weight="bold">
             {' '}

@@ -20,16 +20,7 @@ function isActive(match, location, link) {
 }
 
 const NavLinks = props => {
-  const {
-    links,
-    itemClassName,
-    linkClassName,
-    linkActiveClassName,
-    navLinkProps,
-    isActiveLink
-  } = props;
-
-  const checkLink = isActiveLink || isActive;
+  const { links, itemClassName, linkClassName, linkActiveClassName, navLinkProps } = props;
   return (
     <React.Fragment>
       {links.map(mapLinksToRouter).map(link => (
@@ -51,7 +42,7 @@ const NavLinks = props => {
               to={link.page}
               className={link.linkClassName || linkClassName}
               activeClassName={link.linkActiveClassName || linkActiveClassName}
-              isActive={(...params) => checkLink(...params, link)}
+              isActive={(...params) => isActive(...params, link)}
               {...navLinkProps}
             >
               {link.children || link.name}
@@ -68,8 +59,7 @@ NavLinks.propTypes = {
   itemClassName: PropTypes.string,
   linkClassName: PropTypes.string,
   linkActiveClassName: PropTypes.string,
-  navLinkProps: PropTypes.object,
-  isActiveLink: PropTypes.func
+  navLinkProps: PropTypes.object
 };
 
 export default NavLinks;

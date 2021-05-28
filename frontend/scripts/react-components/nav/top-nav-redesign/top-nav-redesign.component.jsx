@@ -5,6 +5,7 @@ import cx from 'classnames';
 import throttle from 'lodash/throttle';
 import { NavLink } from 'redux-first-router-link';
 import NavLinks from 'react-components/nav/nav-links.component';
+import Heading from 'react-components/shared/heading';
 import LocaleSelector from 'react-components/nav/locale-selector/locale-selector.container';
 import Search from 'react-components/nav/global-search/global-search.container';
 import ToolSearch from 'react-components/tool/tool-search/tool-search.container';
@@ -26,8 +27,7 @@ class TopNavRedesign extends React.PureComponent {
 
   navLinkProps = {
     exact: false,
-    strict: false,
-    isActive: null
+    strict: false
   };
 
   mobileMenuRef = React.createRef(null);
@@ -135,6 +135,7 @@ class TopNavRedesign extends React.PureComponent {
       <ResizeListener>
         {({ windowWidth }) => {
           const isDesktop = windowWidth >= BREAKPOINTS.laptop;
+          const isSmall = windowWidth <= BREAKPOINTS.small;
           return (
             <div className="nav-menu">
               <div className="first-row">
@@ -144,17 +145,36 @@ class TopNavRedesign extends React.PureComponent {
                       <use xlinkHref={`#icon-${menuOpen ? 'close' : 'menu'}`} />
                     </svg>
                   </button>
-                  <NavLink exact strict to={{ type: 'home' }} className={cx('top-nav-logo')}>
+                  <NavLink exact strict to={{ type: 'home' }} className="top-nav-logo">
                     <Img
                       loading="lazy"
                       className="logo-image"
-                      src="/images/logos/new-logo-trase-red.svg"
-                      alt="trase"
+                      src="/images/logos/logo-trase-small.svg"
+                      alt="trase logo"
                     />
+                    <Heading
+                      className="trase-logo-text"
+                      color="grey"
+                      as="span"
+                      variant="sans"
+                      size={isSmall ? 'rg' : 'lg'}
+                      weight="bold"
+                    >
+                      trase{' '}
+                    </Heading>
+                    <Heading
+                      color="pink"
+                      as="span"
+                      variant="sans"
+                      size={isSmall ? 'rg' : 'lg'}
+                      weight="bold"
+                    >
+                      supply chains
+                    </Heading>
                   </NavLink>
                 </div>
                 <div className="right-section">
-                  {isDesktop && (
+                  {isDesktop && !menuOpen && (
                     <ul className="nav-menu-main-navigation">
                       <NavLinks
                         links={allLinks}
@@ -212,15 +232,16 @@ class TopNavRedesign extends React.PureComponent {
   }
 
   render() {
-    const { className } = this.props;
+    const { className, page } = this.props;
     const { backgroundVisible, menuOpen } = this.state;
-
+    const YELLOW_PAGES = ['profiles', 'profile', 'data'];
     return (
       <div
         className={cx(
           'c-nav',
           {
             '-has-background': backgroundVisible || menuOpen,
+            '-yellow-background': YELLOW_PAGES.includes(page) && !backgroundVisible && !menuOpen,
             '-no-shadow': className === '-egg-shell'
           },
           className

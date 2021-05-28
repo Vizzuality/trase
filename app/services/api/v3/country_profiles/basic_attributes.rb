@@ -42,17 +42,17 @@ module Api
         end
 
         def summary
-          surface_area_rank = @external_attribute_value.call 'wb.surface_area.rank'
-          population_rank = @external_attribute_value.call 'wb.population.rank'
-          gdp_rank = @external_attribute_value.call 'wb.gdp.rank'
+          surface_area_rank = @external_attribute_value.call('wb.surface_area.rank')
+          population_rank = @external_attribute_value.call('wb.population.rank')
+          gdp_rank = @external_attribute_value.call('wb.gdp.rank')
           summary = overview(surface_area_rank, population_rank, gdp_rank)
 
-          surface_area = @external_attribute_value.call 'wb.surface_area.value'
-          forested_land_area = @external_attribute_value.call 'wb.forested_land_area.value'
-          agricultural_land_area = @external_attribute_value.call 'wb.agricultural_land_area.value'
+          surface_area = @external_attribute_value.call('wb.surface_area.value')
+          forested_land_area = @external_attribute_value.call('wb.forested_land_area.value')
+          agricultural_land_area = @external_attribute_value.call('wb.agricultural_land_area.value')
           summary << land_summary(surface_area, forested_land_area, agricultural_land_area)
-          summary << hdi
-          summary << declarations
+          summary << hdi_summary
+          summary << declarations_summary
           summary
         end
 
@@ -70,9 +70,17 @@ module Api
           list = ExternalAttributesList.instance
           external = HEADER_ATTRIBUTES.map do |attribute_ref|
             attribute_def = list.call(attribute_ref, substitutions)
+            attribute_value = @external_attribute_value.call(attribute_ref)
+            year = attribute_value&.year
+            tooltip = attribute_def[:tooltip]
+            tooltip += " (#{year})" if year && year != @year
             attribute_def.
               except(:short_name, :wb_name).
-              merge(value: @external_attribute_value.call(attribute_ref))
+              merge(
+                value: attribute_value&.value,
+                year: year,
+                tooltip: tooltip
+              )
           end.compact
 
           external + @named_header_attributes.values
@@ -87,10 +95,10 @@ module Api
             original_attribute = @chart_config.named_attribute(name)
             next nil unless original_attribute
 
-            value = @values.get(
+            attribute_value = @values.get(
               original_attribute.simple_type, original_attribute.id
             )
-            next nil unless value
+            next nil unless attribute_value&.value
 
             chart_attribute = @chart_config.named_chart_attribute(name)
             values[chart_attribute.identifier.to_sym] =
@@ -105,11 +113,17 @@ module Api
             context: @context,
             defaults: Api::V3::AttributeNameAndTooltip::NameAndTooltip.new(chart_attribute.display_name, chart_attribute.tooltip_text)
           )
+
+          attribute_value = @values.get(attribute.simple_type, attribute.id)
+          year = attribute_value&.year
+          tooltip_text = name_and_tooltip.tooltip_text || ''
+          tooltip_text += "(#{year})" if year && year != @year
           {
-            value: @values.get(attribute.simple_type, attribute.id),
+            value: attribute_value.value,
+            year: year,
             name: name_and_tooltip.display_name,
             unit: chart_attribute.unit,
-            tooltip: name_and_tooltip.tooltip_text
+            tooltip: tooltip_text
           }
         end
 
@@ -119,23 +133,25 @@ module Api
 
         def overview(surface_area_rank, population_rank, gdp_rank)
           summary = "#{@node.name} is the world's"
-          summary << " #{surface_area_rank&.ordinalize} largest country by area"
-          summary << ", #{population_rank&.ordinalize} largest by population size"
-          summary << " and is the world's #{gdp_rank&.ordinalize} largest economy (by GDP)."
+          summary << " #{surface_area_rank&.value&.ordinalize || 'UNKNOWN'} largest country by area"
+          summary << ", #{population_rank&.value&.ordinalize || 'UNKNOWN'} largest by population size"
+          summary << " and is the world's #{gdp_rank&.value&.ordinalize || 'UNKNOWN'} largest economy (by GDP)."
         end
 
+        # rubocop:disable Metrics/CyclomaticComplexity
+        # rubocop:disable Metrics/PerceivedComplexity
         def land_summary(surface_area, forested_land_area, agricultural_land_area)
-          return '' unless surface_area && (forested_land_area || agricultural_land_area)
+          return '' unless surface_area&.value && (forested_land_area&.value || agricultural_land_area&.value)
 
           if forested_land_area
             forested_percent = helper.number_to_percentage(
-              (forested_land_area * 100.0) / surface_area,
+              (forested_land_area.value * 100.0) / surface_area.value,
               precision: 0
             )
           end
           if agricultural_land_area
             agricultural_percent = helper.number_to_percentage(
-              (agricultural_land_area * 100.0) / surface_area,
+              (agricultural_land_area.value * 100.0) / surface_area.value,
               precision: 0
             )
           end
@@ -147,23 +163,27 @@ module Api
             " Agriculture makes up #{agricultural_percent} of its area."
           end
         end
+        # rubocop:enable Metrics/CyclomaticComplexity
+        # rubocop:enable Metrics/PerceivedComplexity
 
-        def hdi
+        def hdi_summary
           hdi = @named_summary_attributes[:hdi]
           return '' unless hdi && hdi[:value]
 
-          " It's placement in the #{hdi[:name]} is #{hdi[:value]}."
+          " Its Human Development Index score is #{hdi[:value]}."
         end
 
-        def declarations
+        def declarations_summary
           declarations = []
           nydf = @named_summary_attributes[:nydf]
-          declarations << nydf[:name] if nydf && nydf[:value]
+          is_nydf_signatory = (nydf && ActiveModel::Type::Boolean.new.cast(nydf[:value]))
+          declarations << nydf[:name] if is_nydf_signatory
           amsterdam = @named_summary_attributes[:amsterdam]
-          declarations << amsterdam[:name] if amsterdam && amsterdam[:value]
+          is_amsterdam_signatory = (amsterdam && ActiveModel::Type::Boolean.new.cast(amsterdam[:value]))
+          declarations << amsterdam[:name] if is_amsterdam_signatory
           return '' unless declarations.any?
 
-          " #{@node.name} is a signatory to " + declarations.join(' and ') + '.'
+          " #{@node.name} is a signatory to the " + declarations.join(' and the ') + '.'
         end
 
         def helper

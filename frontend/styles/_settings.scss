@@ -42,12 +42,16 @@ $font-size-x-huge: 52px;
 
 // Line height
 $line-height-regular: 16px; // 1
-$line-height-regular: 16px; // 1
 $line-height-x-regular: 17.6px; // 1.1
 $line-height-md: 20px;
 $line-height-lg: 31px;
 $line-height-xl: 35.2px; // 2.2
 $line-height-huge: 52px;
+
+// Letter spacing
+$letter-spacing: normal;
+$letter-spacing-narrow: -0.6px;
+$letter-spacing-x-narrow: -0.8px;
 
 // List style
 $list-style-image-path: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='-1 -1 2 2'><circle fill='#3444C' r='1' /></svg>";
@@ -79,7 +83,8 @@ $z-above-sidebar-mobile: 4;
 $z-veil-below-nav: 88;
 $z-above-veil-below-nav: 89;
 $z-nav: 90;
-$z-search: 91;
+$z-language-selector: 91;
+$z-search: 92;
 $z-veil: 100;
 $z-above-veil: 101;
 $z-tooltip: 102;
@@ -128,10 +133,10 @@ $carbon-gray: #333; // barely used
 // Redesign colors
 $orange-500: #ff615f;
 $gray-700: #12282e;
-$gray-500: #1f434e;
-$gray-300: #193841;
+$gray-600: #1f434e;
+$gray-500: #1a3841;
 $gray-400: #5d767d;
-$gray-300: #B0BDC1; // gray-500 opacity 0.4
+$gray-300: #8B9DA2; // gray-600 opacity 0.5
 $gray-200: #dadada;
 
 $green-200: #9AECC8;
@@ -196,9 +201,18 @@ $recolorby-qual-thematic-bovine-offals: #a6611a;
 $recolorby-qual-thematic-live-cattle-exports: #e7298a;
 $recolorby-qual-thematic-processed-beef-products: #7570b3;
 
+$recolorby-qual-thematic-beef: #43f3f3;
+$recolorby-qual-thematic-beef-boneless: #8c28ff;
+$recolorby-qual-thematic-beef-offals: #72ea28;
+$recolorby-qual-thematic-meat-preparations: #ffb314;
+
 $recolorby-qual-thematic-green: #31a354;
 $recolorby-qual-thematic-roasted: #a6611a;
 $recolorby-qual-thematic-processed: #7570b3;
+
+$recolorby-qual-thematic-soybean-oil: #f7fcb9;
+$recolorby-qual-thematic-soybean: #31a354;
+$recolorby-qual-thematic-soybean-cake: #e48716;
 
 $recolorby-qual-thematic-oil: #f7fcb9;
 $recolorby-qual-thematic-bean: #31a354;
@@ -304,12 +318,19 @@ $recolorby-colors: (
   'recolorby-qual-thematic-live-cattle-exports': $recolorby-qual-thematic-live-cattle-exports,
   'recolorby-qual-thematic-processed-beef-products':
     $recolorby-qual-thematic-processed-beef-products,
+  'recolorby-qual-thematic-beef': $recolorby-qual-thematic-beef,
+  'recolorby-qual-thematic-beef-boneless': $recolorby-qual-thematic-beef-boneless,
+  'recolorby-qual-thematic-beef-offals': $recolorby-qual-thematic-beef-offals,
+  'recolorby-qual-thematic-meat-preparations': $recolorby-qual-thematic-meat-preparations,
   'recolorby-qual-thematic-green': $recolorby-qual-thematic-green,
   'recolorby-qual-thematic-roasted': $recolorby-qual-thematic-roasted,
   'recolorby-qual-thematic-processed': $recolorby-qual-thematic-processed,
   'recolorby-qual-thematic-bean': $recolorby-qual-thematic-bean,
   'recolorby-qual-thematic-cake': $recolorby-qual-thematic-cake,
   'recolorby-qual-thematic-oil': $recolorby-qual-thematic-oil,
+  'recolorby-qual-thematic-soybeans': $recolorby-qual-thematic-bean,
+  'recolorby-qual-thematic-soybean-cake': $recolorby-qual-thematic-cake,
+  'recolorby-qual-thematic-soybean-oil': $recolorby-qual-thematic-oil,
   'recolorby-qual-thematic-crude-palm-oil': $recolorby-qual-thematic-crude-palm-oil,
   'recolorby-qual-thematic-refined-palm-oil': $recolorby-qual-thematic-refined-palm-oil,
   'recolorby-qual-thematic-paper-grade-pulp': $recolorby-qual-thematic-paper-grade-pulp,

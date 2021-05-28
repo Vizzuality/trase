@@ -3,6 +3,9 @@ export const NUM_DECIMALS = {
   // resize by
   'trade volume': 0,
   volume: 0,
+  gdp: 0,
+  exports: 0,
+  imports: 0,
   'land use': 0,
   'financial flow': 0,
   'territorial deforestation': 0,
@@ -33,6 +36,14 @@ export const NUM_DECIMALS = {
   area: 0,
   percentage: 1,
   tons: 0
+};
+
+export const NUM_EXPONENT_ROUNDING = {
+  // millions
+  gdp: 6,
+  // thousands
+  exports: 3,
+  imports: 3
 };
 
 export const NUM_DECIMALS_DEFAULT = 1;
