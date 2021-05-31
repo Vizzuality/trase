@@ -1,15 +1,11 @@
 class ConfigurationExportWorker
   include Sidekiq::Worker
 
-  sidekiq_options queue: :low,
-                  retry: false,
-                  backtrace: true,
-                  unique: :until_executed,
-                  run_lock_expiration: 120, # 2 mins
-                  log_duplicate_payload: true
+  sidekiq_options queue: :low
 
   def perform(event_id)
     event = Api::Private::ConfigurationExportEvent.find(event_id)
+    event.update_attribute(:jid, self.jid)
     Api::Private::Configuration::Exporter.new(event).call
   rescue ActiveRecord::RecordNotFound
     # no-op
