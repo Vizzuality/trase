@@ -293,7 +293,7 @@ const Footer = () => {
   );
 
   return (
-    <div className="c-new-footer">
+    <div className="c-footer">
       {renderFooterHigh()}
       <div className="section-separator" />
       {renderFooterLow()}

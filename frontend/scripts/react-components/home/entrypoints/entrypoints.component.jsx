@@ -71,7 +71,7 @@ const Entrypoints = props => {
       {({ windowWidth }) => {
         const isSmallResolution = windowWidth <= BREAKPOINTS.small;
         return (
-          <div className="c-new-entrypoints">
+          <div className="c-entrypoints">
             {data.map(slide => (
               <div key={slide.subtitle} className="column">
                 {isSmallResolution ? (

@@ -52,7 +52,6 @@ module.exports = {
     new HtmlWebpackPreconnectPlugin(),
     new webpack.DefinePlugin({
       NODE_ENV_DEV: process.env.NODE_ENV === 'development',
-      CONSOLIDATE_INSIGHTS: process.env.CONSOLIDATE_INSIGHTS === 'true',
       ENABLE_COUNTRY_PROFILES: process.env.ENABLE_COUNTRY_PROFILES === 'true',
       ENABLE_LOGISTIC_LAYERS_TAB: process.env.ENABLE_LOGISTIC_LAYERS_TAB === 'true',
       ENABLE_INTERSECTION_OBSERVER: process.env.ENABLE_INTERSECTION_OBSERVER === 'true',
@@ -71,7 +70,6 @@ module.exports = {
       API_V2_URL: JSON.stringify(process.env.API_V2_URL),
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
       DATA_FORM_ENDPOINT: JSON.stringify(process.env.DATA_FORM_ENDPOINT),
-      DATA_FORM_ENABLED: process.env.DATA_FORM_ENABLED === 'true',
       PDF_DOWNLOAD_URL: JSON.stringify(process.env.PDF_DOWNLOAD_URL),
       REDUX_LOGGER_ENABLED: process.env.REDUX_LOGGER_ENABLED === 'true',
       USE_SERVICE_WORKER: process.env.USE_SERVICE_WORKER === 'true',

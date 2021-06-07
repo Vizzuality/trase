@@ -1,10 +1,10 @@
 import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import NewCookieBanner from 'react-components/shared/new-cookie-banner';
+import CookieBanner from 'react-components/shared/cookie-banner';
 import FullScreenButton from 'react-components/shared/full-screen-button';
 import Feedback from 'react-components/shared/feedback';
-import NewFooter from 'react-components/shared/new-footer/footer.component';
+import Footer from 'react-components/shared/footer/footer.component';
 
 import isIe from 'utils/isIe';
 import isIframe from 'utils/isIframe';
@@ -13,9 +13,7 @@ import SeoHandler from './seo-handler.component';
 
 import 'styles/_layouts.scss';
 
-const TopNav = lazy(() =>
-  import('react-components/nav/top-nav-redesign/top-nav-redesign.container')
-);
+const TopNav = lazy(() => import('react-components/nav/top-nav/top-nav.container'));
 
 function App() {
   const { routesMap, type, query } = useSelector(state => state.location);
@@ -38,15 +36,14 @@ function App() {
       </nav>
       <main>
         <Component key={pageKey} />
-
-        {!isInIframe && <NewCookieBanner />}
+        {!isInIframe && <CookieBanner />}
         {isInIframe && <FullScreenButton />}
         {feedback && <Feedback />}
       </main>
 
       {footer && (
         <footer>
-          <NewFooter />
+          <Footer />
         </footer>
       )}
       <div id="recharts-tooltip-portal" />

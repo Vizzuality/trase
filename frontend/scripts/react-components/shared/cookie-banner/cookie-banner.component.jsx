@@ -2,11 +2,11 @@ import React from 'react';
 import { PropTypes } from 'prop-types';
 import NewButton from 'react-components/shared/new-button';
 import Text from 'react-components/shared/text';
-import 'react-components/shared/new-cookie-banner/cookie-banner.scss';
+import 'react-components/shared/cookie-banner/cookie-banner.scss';
 
 function CookieBanner({ setAccepted, accepted }) {
   return accepted ? null : (
-    <div className="c-new-cookie-banner">
+    <div className="c-cookie-banner">
       <div className="row">
         <div className="cookie-content">
           <div className="cookie-text">

@@ -34,7 +34,6 @@ module.exports = async ({ config }) =>
         API_V2_URL: JSON.stringify(process.env.API_V2_URL),
         'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
         DATA_FORM_ENDPOINT: JSON.stringify(process.env.DATA_FORM_ENDPOINT),
-        DATA_FORM_ENABLED: process.env.DATA_FORM_ENABLED === 'true',
         PDF_DOWNLOAD_URL: JSON.stringify(process.env.PDF_DOWNLOAD_URL),
         PERF_TEST: process.env.PERF_TEST === 'true',
         REDUX_LOGGER_ENABLED: process.env.REDUX_LOGGER_ENABLED === 'true',

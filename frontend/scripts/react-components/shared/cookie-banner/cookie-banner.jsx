@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import CookieBannerComponent from 'react-components/shared/new-cookie-banner/cookie-banner.component';
+import CookieBannerComponent from 'react-components/shared/cookie-banner/cookie-banner.component';
 
 const acceptedCookieBanner = {
   key: 'TRASE_EARTH_ACCEPTED_COOKIE_BANNER',
