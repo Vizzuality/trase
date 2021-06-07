@@ -16,7 +16,7 @@
     padding: 90px 0;
 
     @media only screen and (max-width: $breakpoint-foundation-small) {
-      padding: 60px 0;
+      padding: $nav-height 0;
     }
   }
 
