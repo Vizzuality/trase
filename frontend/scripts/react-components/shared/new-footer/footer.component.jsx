@@ -64,9 +64,16 @@ const Footer = () => {
       </ul>
       <div className="partnership-text">
         <div>In close collaboration with many others. </div>
-        <Link className="partnership-link" to={{ type: 'about', payload: { section: 'partners' } }}>
+        <a
+          className="partnership-link"
+          href="https://www.trase.earth/about/"
+          title="Parners and founders info"
+          // eslint-disable-next-line react/jsx-no-target-blank
+          target="_blank"
+          rel="noopener"
+        >
           Click for more information about our partners and founders.
-        </Link>
+        </a>
         .
       </div>
     </div>
@@ -79,7 +86,7 @@ const Footer = () => {
         items: [
           {
             title: 'About',
-            link: 'about'
+            href: 'https://trase.earth/about'
           }
         ]
       },
@@ -152,7 +159,7 @@ const Footer = () => {
 
     const renderItems = items =>
       items.map(i =>
-        console.log('i', i.link) || i.link ? (
+        i.link ? (
           <Link className="menu-link" to={{ type: i.link }}>
             {i.title}
           </Link>
@@ -218,31 +225,43 @@ const Footer = () => {
           </ul>
           <ul className="links-list">
             <li className="link-item">
-              <Link
+              <a
                 className="privacy-menu-link"
-                to={{ type: 'about', payload: { section: 'terms-of-use' } }}
+                href="https://www.trase.earth/terms-of-use"
+                title="Terms of use page"
+                // eslint-disable-next-line react/jsx-no-target-blank
+                target="_blank"
+                rel="noopener"
               >
-                Terms of Use
-              </Link>
+                Terms of use
+              </a>
             </li>
             <>
               <li className="separator"> · </li>
               <li className="link-item">
-                <Link
+                <a
                   className="privacy-menu-link"
-                  to={{ type: 'about', payload: { section: 'privacy-policy' } }}
+                  href="https://www.trase.earth/privacy-policy"
+                  title="Terms of use page"
+                  // eslint-disable-next-line react/jsx-no-target-blank
+                  target="_blank"
+                  rel="noopener"
                 >
                   Privacy policy
-                </Link>
+                </a>
               </li>
               <li className="separator"> · </li>
               <li className="link-item">
-                <Link
+                <a
                   className="privacy-menu-link"
-                  to={{ type: 'about', payload: { section: 'cookie-policy' } }}
+                  href="https://www.trase.earth/cookie-policy"
+                  title="Terms of use page"
+                  // eslint-disable-next-line react/jsx-no-target-blank
+                  target="_blank"
+                  rel="noopener"
                 >
                   Cookie policy
-                </Link>
+                </a>
               </li>
             </>
             <li className="separator"> · </li>

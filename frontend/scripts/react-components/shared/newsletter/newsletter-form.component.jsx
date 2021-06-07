@@ -3,7 +3,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Button from 'react-components/shared/button/button.component';
 import Text from 'react-components/shared/text';
-import Link from 'redux-first-router-link';
 import cx from 'classnames';
 
 import Heading from 'react-components/shared/heading/heading.component';
@@ -216,12 +215,18 @@ class NewsletterForm extends React.PureComponent {
                   <div className="footer-conditions">
                     <Text size="xs" as="span" color="white" lineHeight="md">
                       You can unsuscribe at any time. Learn about our
-                      <Link to="/about/privacy-policy">
+                      <a
+                        href="https://www.trase.earth/privacy-policy"
+                        title="Privacy policy page"
+                        // eslint-disable-next-line react/jsx-no-target-blank
+                        target="_blank"
+                        rel="noopener"
+                      >
                         <Text as="span" size="xs" color="white" className="link-text">
                           {' '}
                           privacy policies
                         </Text>
-                      </Link>{' '}
+                      </a>{' '}
                     </Text>
                     {renderSubmitButton()}
                   </div>
@@ -245,11 +250,17 @@ class NewsletterForm extends React.PureComponent {
                   <Text lineHeight="lg">
                     After subscribing I consent that my email address will be used in order for us
                     to send you the Trase newsletter. Please see our{' '}
-                    <Link to="/about/privacy-policy">
+                    <a
+                      href="https://www.trase.earth/privacy-policy"
+                      title="Privacy policy page"
+                      // eslint-disable-next-line react/jsx-no-target-blank
+                      target="_blank"
+                      rel="noopener"
+                    >
                       <Text as="span" className="conditions-link">
                         privacy policy
                       </Text>
-                    </Link>{' '}
+                    </a>{' '}
                     for more details on the use of your information
                   </Text>
                 </div>

@@ -3,7 +3,6 @@ import { connectRoutes, NOT_FOUND, redirect, replace } from 'redux-first-router'
 import restoreScroll from 'redux-first-router-restore-scroll';
 import parseURL from 'utils/parseURL';
 import qs from 'qs';
-import withSidebarNavLayout from 'react-components/nav/sidebar-nav/with-sidebar-nav-layout.hoc';
 import getPageTitle from 'scripts/router/page-title';
 
 const getPostsContent = (...args) =>
@@ -24,9 +23,6 @@ const getPageStaticContent = (...args) =>
   );
 const loadBaseAppData = (...args) =>
   import('../app/app.thunks').then(module => module.default(...args));
-
-const getTeam = (...args) =>
-  import('../react-components/team/team.thunks').then(module => module.default(...args));
 
 const loadDashboardTemplates = (...args) =>
   import('../react-components/dashboard-root/dashboard-root.thunks').then(module =>
@@ -164,28 +160,6 @@ export const routes = {
     nav: {
       className: '-light'
     }
-  },
-  team: {
-    path: '/about/team',
-    Component: StaticContent,
-    title: getPageTitle,
-    thunk: loadPageData(getTeam),
-    layout: withSidebarNavLayout
-  },
-  teamMember: {
-    path: '/about/team/:member',
-    Component: StaticContent,
-    title: getPageTitle,
-    thunk: loadPageData(getTeam),
-    layout: withSidebarNavLayout,
-    parent: 'team'
-  },
-  about: {
-    path: '/about/:section?',
-    Component: StaticContent,
-    title: getPageTitle,
-    thunk: loadPageData(getPageStaticContent),
-    layout: withSidebarNavLayout
   },
   logisticsMap: {
     path: '/logistics-map',

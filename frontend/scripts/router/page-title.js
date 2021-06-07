@@ -7,10 +7,6 @@ import { TOOL_LAYOUT } from 'constants';
 export default function(state) {
   const selectedContext = getSelectedContext(state);
   switch (state.location.type) {
-    case 'about':
-      return 'TRASE - About TRASE';
-    case 'team':
-      return 'TRASE - Team';
     case 'data':
       return 'TRASE - Data Download';
     case 'profiles':

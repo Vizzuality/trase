@@ -35,7 +35,15 @@ function useCloseOnEscape({ isSearchOpen, setIsSearchOpen }) {
 }
 
 function ToolSearch(props) {
-  const { isSearchOpen, className, selectedNodesIds = [], toolLayout, contextId, nodes, labelComponent } = props;
+  const {
+    isSearchOpen,
+    className,
+    selectedNodesIds = [],
+    toolLayout,
+    contextId,
+    nodes,
+    labelComponent
+  } = props;
 
   const [inputValue, setInputValue] = useState('');
   const downshift = useRef(null);
@@ -100,14 +108,7 @@ function ToolSearch(props) {
     }
   };
 
-  const renderIcon = () =>
-    ENABLE_TOP_NAV_REDESIGN ?
-      <Icon icon="icon-search-condensed" />
-    : (
-      <svg className="icon icon-search">
-        <use xlinkHref="#icon-search" />
-      </svg>
-    );
+  const renderIcon = () => <Icon icon="icon-search-condensed" />;
 
   if (isSearchOpen === false) {
     return (

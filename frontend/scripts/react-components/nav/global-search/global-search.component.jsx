@@ -90,7 +90,7 @@ export default class GlobalSearch extends Component {
     if (!isSearchOpen) {
       return (
         <div onClick={this.onOpenClicked} className={className} data-test="global-search-toggle">
-          <Icon icon={ENABLE_TOP_NAV_REDESIGN ? "icon-search-condensed" : "icon-search"} />
+          <Icon icon="icon-search-condensed" />
           {labelComponent && labelComponent()}
         </div>
       );

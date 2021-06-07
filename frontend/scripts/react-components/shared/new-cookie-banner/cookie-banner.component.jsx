@@ -1,5 +1,4 @@
 import React from 'react';
-import Link from 'redux-first-router-link';
 import { PropTypes } from 'prop-types';
 import NewButton from 'react-components/shared/new-button';
 import Text from 'react-components/shared/text';
@@ -16,11 +15,17 @@ function CookieBanner({ setAccepted, accepted }) {
               continuing to browse this site, you consent to the use of cookies and similar
               technologies. Please visit our{' '}
             </Text>
-            <Link to="/about/privacy-policy">
+            <a
+              href="https://www.trase.earth/privacy-policy"
+              title="Privacy policy page"
+              // eslint-disable-next-line react/jsx-no-target-blank
+              target="_blank"
+              rel="noopener"
+            >
               <Text as="span" color="pink" className="cookie-link" variant="sans" weight="bold">
                 privacy policy
               </Text>
-            </Link>{' '}
+            </a>{' '}
             <Text as="span" color="grey" variant="sans" weight="bold" lineHeight="md">
               for further details.
             </Text>

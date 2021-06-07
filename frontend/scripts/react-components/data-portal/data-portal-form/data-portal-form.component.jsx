@@ -187,7 +187,11 @@ class DataPortalForm extends Component {
                 <label htmlFor="tos_check">
                   <input type="checkbox" id="tos_check" />
                   &nbsp;* I agree to the&nbsp;
-                  <a rel="noopener noreferrer" target="_blank" href="/about/terms-of-use">
+                  <a
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    href="https://www.trase.earth/terms-of-use"
+                  >
                     Terms of use
                   </a>{' '}
                   (required field).

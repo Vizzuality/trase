@@ -42,9 +42,4 @@ SitemapGenerator::Sitemap.create do
     end
 
   add'/data', :changefreq => 'monthly'
-  add'/about', :changefreq => 'yearly'
-
-  Content::Page.all.map(&:name).each do |page|
-    add "/about/#{page}", :changefreq => 'yearly'
-  end
 end

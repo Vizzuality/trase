@@ -3,7 +3,6 @@ export { default as home } from 'react-components/home/home.initial-state';
 export { default as widgets } from 'react-components/widgets/widgets.initial-state';
 export { default as toolLinks } from 'react-components/tool-links/tool-links.initial-state';
 export { default as toolLayers } from 'react-components/tool-layers/tool-layers.initial-state';
-export { default as team } from 'react-components/team/team.initial-state';
 export { default as staticContent } from 'react-components/static-content/static-content.initial-state';
 export { default as profileSelector } from 'react-components/shared/profile-selector/profile-selector.initial-state';
 export { default as newsletter } from 'react-components/shared/newsletter/newsletter.initial-state';
