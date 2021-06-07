@@ -13,7 +13,6 @@ module.exports = {
 
   // feature flags
   USE_SERVICE_WORKER: true,
-  USE_CANVAS_MAP: true,
   ALWAYS_DISPLAY_DASHBOARD_INFO: true,
   DATA_DOWNLOAD_ENABLED: true,
   DATA_FORM_ENABLED: true,

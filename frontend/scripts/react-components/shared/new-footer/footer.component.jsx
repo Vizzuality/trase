@@ -55,7 +55,7 @@ const Footer = () => {
 
       <ul className="logo-list">
         {partners.map(logo => (
-          <li key={logo.className} className={cx('logo-item', logo.className)}>
+          <li key={logo.alt} className={cx('logo-item', logo.className)}>
             <a href={logo.href} target="_blank" rel="noopener noreferrer">
               <Img src={logo.image} alt={logo.alt} />
             </a>
@@ -160,7 +160,7 @@ const Footer = () => {
     const renderItems = items =>
       items.map(i =>
         i.link ? (
-          <Link className="menu-link" to={{ type: i.link }}>
+          <Link key={i.title} className="menu-link" to={{ type: i.link }}>
             {i.title}
           </Link>
         ) : (
@@ -169,6 +169,7 @@ const Footer = () => {
             className="menu-link"
             rel="noopener noreferrer"
             href={i.href}
+            key={i.title}
             alt={i.title}
           >
             {i.title}
@@ -179,7 +180,7 @@ const Footer = () => {
     return (
       <div className="footer-menu">
         {menuItems.map(i => (
-          <div className="footer-menu-item">
+          <div className="footer-menu-item" key={i.title}>
             {renderTitle(i.title)}
             {renderItems(i.items)}
           </div>
@@ -279,7 +280,7 @@ const Footer = () => {
         <div className="donors-logos-container row">
           <ul className="donors-logos">
             {donors.map(logo => (
-              <li key={logo.className} className={cx('logo-item donor-logo', logo.className)}>
+              <li key={logo.alt} className={cx('logo-item donor-logo', logo.className)}>
                 <a href={logo.href} target="_blank" rel="noopener noreferrer">
                   <Img src={logo.image} alt={logo.alt} />
                 </a>

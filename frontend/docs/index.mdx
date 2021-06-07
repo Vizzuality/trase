@@ -8,11 +8,12 @@ order: 1
 
 [Trase](http://supplychains.trase.earth) brings unprecedented transparency to commodity supply chains revealing new pathways towards achieving a deforestation-free economy.
 
-<img src="public/trase-screenshot.png" alt="Trase image" width="800"/>
+<img src="public/trase-screenshot.png" alt="Trase image" width="800" />
 
 ## Project structure
 
 This repository contains the source code for the website in two technically independent applications:
+
 - `/frontend` contains the frontend application, including a dedicated nodejs server (for dev purposes only);
 - `/` contains the Rails 5.x API that serves data to the above mentioned frontend application.
 
@@ -21,6 +22,7 @@ While technically independent, the frontend application is heavily dependent on 
 ## Requirements
 
 ### API
+
 - Ruby 2.6.3 and RubyGems (recommended installation via rvm)
 - [Bundler](http://bundler.io/)
 - PostgreSQL 11 with `intarray`, `tablefunc` and `postgres_fdw` extensions
@@ -30,6 +32,7 @@ While technically independent, the frontend application is heavily dependent on 
 - cron
 
 ### Frontend
+
 - Nodejs 8.2+
 
 ## Local setup
@@ -40,21 +43,21 @@ We recommend managing your Ruby installation through [rvm](https://github.com/rv
 
 1. Install ruby libraries
 
-    `bundle install`
+   `bundle install`
 
 2. Configure the environment
 
-    Copy `.env.sample` to `.env` and replace the values accordingly. See the Configuration section below for more information.
+   Copy `.env.sample` to `.env` and replace the values accordingly. See the Configuration section below for more information.
 
 3. Create the database
 
-    Create an empty database in PostgreSQL and then [import a stable database version](docs-backend-data-export-import). If it's an earlier version than the current schema, run the migrations:
+   Create an empty database in PostgreSQL and then [import a stable database version](docs-backend-data-export-import). If it's an earlier version than the current schema, run the migrations:
 
-    `rake db:migrate`
+   `rake db:migrate`
 
 4. Start the API
 
-    `rails server`
+   `rails server`
 
 5. Start background job processing
 
@@ -69,12 +72,11 @@ We recommend managing your Ruby installation through [rvm](https://github.com/rv
 
 3. Install dependencies: Don't use npm, install yarn if needed (https://yarnpkg.com/lang/en/docs/install)
 
-    `yarn install`
+   `yarn install`
 
+4) Start the development server
 
-4. Start the development server
-
-    `yarn start`
+   `yarn start`
 
 ## Configuration
 
@@ -131,7 +133,6 @@ DATA_FORM_ENDPOINT: end point to send form values in Data page
 PDF_DOWNLOAD_URL: end point to download a PDF snapshot of the page
 PERF_TEST: when set to true, enables performance evaluation mode. Only supported outside of production environments. See https://github.com/garbles/why-did-you-update for more info.
 REDUX_LOGGER_ENABLED: when set to true, enables logging redux actions on the browser's console. Only supported outside of production environments.
-USE_CANVAS_MAP: if set to true, may use a <canvas> to render the map's choropleth layer. Actual usage may also depend on browser support.
 SHOW_WORLD_MAP_IN_EXPLORE: if set to true, explore section will have the 2 step behavior. Setting it to false will only show the context-specific step.
 ENABLE_DASHBOARDS: if set to true, the dashboards section will be visible to end users.
 ALWAYS_DISPLAY_DASHBOARD_INFO: if set to true, the dashboards info modal will always be displayed. If set to false, it will only be displayed for new users.
@@ -157,16 +158,19 @@ api-v3-contexts-year-2015 will mock api/v3/contexts?year=2015
 The tests have to be run while the js server is running
 
 Run all tests with:
+
 ```
 yarn test
 ```
 
 Run only unit tests:
+
 ```
 yarn unit
 ```
 
 Run only end to end:
+
 ```
 yarn e2e
 ```
@@ -214,7 +218,9 @@ To refresh the sitemap and ping Google and Bing bots use:
 ```
 rake sitemap:refresh
 ```
+
 To do it without pinging the bots:
+
 ```
 rake sitemap:refresh:no_ping
 ```
@@ -224,6 +230,7 @@ The sitemap is refreshed automatically in each release.
 ## Git hooks
 
 This project includes a set of git hooks that you may find useful
+
 - Run `bundle install` when loading `Gemfile.lock` modifications from remotes
 - Run `yarn install` when loading `frontend/package.json` modifications from remotes
 - Receive a warning when loading `.env.sample` or `frontend/.env.sample` modifications from remotes
@@ -236,16 +243,19 @@ To enable then, simply execute once: `bin/git/init-hooks`
 ### Back end
 
 #### API
+
 - [internal API](https://vizzuality.github.io/trase/api/trase_internal_api.html)
 - [public API](https://vizzuality.github.io/trase/api/trase_public_api.html)
 
 #### Database
+
 - [full schema](https://vizzuality.github.io/trase/db/all_tables/)
 - ["blue tables" schema](https://vizzuality.github.io/trase/db/blue_tables/index.html)
 - [how to regenerate docs](docs-backend-automated-documentation)
 - [Models snapshot](public/docs/erd.pdf)
 
 #### More
+
 - [Cache management](docs-backend-cache-management)
 - [Background jobs](docs-backend-background-jobs)
 - [Data update](docs-backend-data-update)
@@ -288,13 +298,16 @@ There have been some race conditions and bugs related to the loading of transife
 Online in: http://trase.surge.sh
 
 #### Run locally
+
 - Run `yarn storybook`
-It will be served on localhost:8081
+  It will be served on localhost:8081
 
 #### Build
+
 - Run `yarn build-storybook`
 
 #### Deploy
+
 - Install surge `yarn add -g surge`
 - Run build
 - Go to docs/dist folder
@@ -302,6 +315,7 @@ It will be served on localhost:8081
 - If asked for login use trase.vizzuality@gmail.com
 
 #### More
+
 - [Generating CARTO maps](docs-frontend-generating-carto-maps)
 - [Serializing state to url](docs-frontend-serializing-state-to-url)
 - [Map](docs-frontend-map)

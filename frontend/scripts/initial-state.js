@@ -1,5 +1,4 @@
 export { default as app } from 'app/app.initial-state';
-export { default as home } from 'react-components/home/home.initial-state';
 export { default as widgets } from 'react-components/widgets/widgets.initial-state';
 export { default as toolLinks } from 'react-components/tool-links/tool-links.initial-state';
 export { default as toolLayers } from 'react-components/tool-layers/tool-layers.initial-state';

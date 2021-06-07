@@ -74,16 +74,12 @@ module.exports = {
       DATA_FORM_ENABLED: process.env.DATA_FORM_ENABLED === 'true',
       PDF_DOWNLOAD_URL: JSON.stringify(process.env.PDF_DOWNLOAD_URL),
       REDUX_LOGGER_ENABLED: process.env.REDUX_LOGGER_ENABLED === 'true',
-      USE_CANVAS_MAP: process.env.USE_CANVAS_MAP === 'true',
       USE_SERVICE_WORKER: process.env.USE_SERVICE_WORKER === 'true',
       TRANSIFEX_API_KEY: JSON.stringify(process.env.TRANSIFEX_API_KEY),
       HOME_VIDEO_ID: JSON.stringify(process.env.HOME_VIDEO_ID),
       NAMED_MAPS_ENV: JSON.stringify(process.env.NAMED_MAPS_ENV),
       CARTO_ACCOUNT: JSON.stringify(process.env.CARTO_ACCOUNT),
-      MAPBOX_TOKEN: JSON.stringify(process.env.MAPBOX_TOKEN),
-      ENABLE_TOP_NAV_REDESIGN: JSON.stringify(process.env.ENABLE_TOP_NAV_REDESIGN === 'true'),
-      ENABLE_FOOTER_REDESIGN: JSON.stringify(process.env.ENABLE_FOOTER_REDESIGN === 'true'),
-      ENABLE_NEW_HOME: JSON.stringify(process.env.ENABLE_NEW_HOME === 'true')
+      MAPBOX_TOKEN: JSON.stringify(process.env.MAPBOX_TOKEN)
     }),
     new webpack.LoaderOptionsPlugin({ options: {} })
   ],

@@ -5,14 +5,6 @@ import parseURL from 'utils/parseURL';
 import qs from 'qs';
 import getPageTitle from 'scripts/router/page-title';
 
-const getPostsContent = (...args) =>
-  import('../react-components/home/home.thunks').then(module => module.getPostsContent(...args));
-const getTestimonialsContent = (...args) =>
-  import('../react-components/home/home.thunks').then(module =>
-    module.getTestimonialsContent(...args)
-  );
-const getTweetsContent = (...args) =>
-  import('../react-components/home/home.thunks').then(module => module.getTweetsContent(...args));
 const loadTopNodes = (...args) =>
   import('../react-components/profiles/profiles.thunks').then(module =>
     module.loadTopNodes(...args)
@@ -66,14 +58,10 @@ export const routes = {
   home: {
     path: '/',
     Component: lazy(() =>
-      import(
-        /* webpackChunkName: "home" */ `../react-components/${
-          ENABLE_NEW_HOME ? 'new-home' : 'home'
-        }/home.container`
-      )
+      import(/* webpackChunkName: "home" */ `../react-components/home/home.container`)
     ),
     title: getPageTitle,
-    thunk: loadPageData(getPostsContent, getTweetsContent, getTestimonialsContent)
+    thunk: loadPageData()
   },
   explore: {
     path: '/explore',

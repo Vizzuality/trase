@@ -95,7 +95,6 @@ export default class GlobalSearch extends Component {
         </div>
       );
     }
-
     return (
       <div className="c-search -global">
         {isLoading ? (
@@ -191,5 +190,5 @@ GlobalSearch.propTypes = {
   onItemSelected: PropTypes.func,
   searchResults: PropTypes.array,
   searchTerm: PropTypes.string,
-  labelComponent: PropTypes.node
+  labelComponent: PropTypes.func
 };
