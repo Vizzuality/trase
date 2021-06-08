@@ -4,22 +4,18 @@ $entrypoints-stacked-card-size: 360px;
 
 .c-entrypoints {
   height: 100%;
+  padding-top: $nav-height;
 
-  .row {
-    position: relative;
-    > div {
-      height: $entrypoints-stacked-card-size;
-      width: 100%;
-      overflow: visible !important;
-
-      @media screen and (min-width: $home-entrypoint-breakpoint) {
-        height: $entrypoint-slide-height;
-      }
-    }
+  @media screen and (min-width: $breakpoint-mobile) {
+    padding-top: $nav-height * 2;
   }
 
   .column {
     padding: 0;
+  }
+
+  .row-link {
+    height: $entrypoints-stacked-card-size
   }
 
   .entrypoint-slide {
@@ -28,122 +24,37 @@ $entrypoints-stacked-card-size: 360px;
     background-position: bottom right;
     background-size: 75% auto;
     background-repeat: no-repeat;
-    border-bottom: 1px solid $charcoal-grey-faded-a-lot;
-
-    &::after {
-      content: '';
-      display: block;
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-    }
+    background-color: $light-gray;
 
     &.-profile {
-      &::after {
-        background-color: rgba($egg-shell, 0.15);
-      }
-    }
-
-    &.-supply-chain {
-      &::after {
-        background-color: rgba($light-gray, 0.15);
-      }
-    }
-
-    &.-map {
-      &::after {
-        background-color: rgba($light-gray, 0.15);
-      }
+      background-color: $egg-shell;
     }
 
     @media screen and (min-width: $breakpoint-mobile) {
       background-size: 60% auto;
     }
-
-    @media screen and (min-width: $home-entrypoint-breakpoint) {
-      height: $entrypoint-slide-height;
-      background-size: 100% auto;
-      border-right: 1px solid $charcoal-grey-faded-a-lot;
-      border-bottom: 0;
-
-      &::after {
-        content: none;
-      }
-    }
   }
 
   .entrypoint-slide-content {
     position: relative;
-    padding: 45px 20px 0 20px;
+    padding: 60px 20px 0 20px;
     height: 100%;
     width: 100%;
     z-index: $z-above;
+  }
 
-    @media screen and (min-width: $home-entrypoint-breakpoint) {
-      padding: 42px 20px 0 50px;
-    }
+  .entrypoint-content {
+    position: relative;
+    padding: 45px 20px 0 20px;
+    display: flex;
+    height: 100%;
+    width: 100%;
+    z-index: $z-above;
   }
 
   .entrypoint-text {
-    font-family: $font-family-2;
-    font-size: 18px;
-    font-weight: 300;
-    line-height: 1.75;
-    color: $charcoal-grey;
-
-    @media only screen and (min-width: 800px) {
-      font-size: 24px;
-    }
-  }
-
-  .entrypoint-button {
-    position: absolute;
-    top: 50%;
-    height: 40px;
-    width: 40px;
-    border-radius: 100%;
-    background-color: #f65e6e;
-    cursor: pointer;
-
-    &:hover {
-      background-color: darken($strong-pink, 4%);
-    }
-
-    &:active {
-      background-color: $strong-pink;
-    }
-
-    &::after {
-      content: '';
-      position: absolute;
-      width: 8px;
-      height: 8px;
-      background: transparent;
-      border-top: 1.5px solid white;
-      border-right: 1.5px solid white;
-      box-shadow: 0 0 0 lightgray;
-    }
-
-    &.-next {
-      left: calc((100% / 2.15) * 2);
-      transform: translate(-50%, -50%);
-      &::after {
-        transform: translate(-50%, -50%) rotate(45deg);
-        margin-left: -1px;
-        left: 50%; // IE-FIX
-      }
-    }
-
-    &.-prev {
-      right: calc((100% / 2.15) * 2);
-      transform: translate(50%, -50%);
-      &::after {
-        transform: translate(-50%, -50%) rotate(-135deg);
-        margin-left: 1px;
-        left: 50%; // IE-FIX
-      }
-    }
+    max-width: 390px;
+    min-width: 30%;
+    margin-right: 50px;
   }
 }

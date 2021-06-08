@@ -29,10 +29,7 @@ function VersioningModal({ data, context }) {
             dangerouslySetInnerHTML={{ __html: summary }}
             className="summary"
           />{' '}
-          <a // Using a instead of Link because of the anchor: https://github.com/faceyspacey/redux-first-router-link/issues/82
-            href="/about/methods-and-data#user-content-subnational-supply-chain-maps-methods-and-data-sources"
-            title="Methods and data"
-          >
+          <a href="https://www.trase.earth/resources" title="Methods and data">
             <Text as="span" className="link-text" size="md" weight="bold" decoration="underline">
               Methods and data.
             </Text>

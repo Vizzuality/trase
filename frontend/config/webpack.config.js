@@ -52,7 +52,6 @@ module.exports = {
     new HtmlWebpackPreconnectPlugin(),
     new webpack.DefinePlugin({
       NODE_ENV_DEV: process.env.NODE_ENV === 'development',
-      CONSOLIDATE_INSIGHTS: process.env.CONSOLIDATE_INSIGHTS === 'true',
       ENABLE_COUNTRY_PROFILES: process.env.ENABLE_COUNTRY_PROFILES === 'true',
       ENABLE_LOGISTIC_LAYERS_TAB: process.env.ENABLE_LOGISTIC_LAYERS_TAB === 'true',
       ENABLE_INTERSECTION_OBSERVER: process.env.ENABLE_INTERSECTION_OBSERVER === 'true',
@@ -71,19 +70,14 @@ module.exports = {
       API_V2_URL: JSON.stringify(process.env.API_V2_URL),
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
       DATA_FORM_ENDPOINT: JSON.stringify(process.env.DATA_FORM_ENDPOINT),
-      DATA_FORM_ENABLED: process.env.DATA_FORM_ENABLED === 'true',
       PDF_DOWNLOAD_URL: JSON.stringify(process.env.PDF_DOWNLOAD_URL),
       REDUX_LOGGER_ENABLED: process.env.REDUX_LOGGER_ENABLED === 'true',
-      USE_CANVAS_MAP: process.env.USE_CANVAS_MAP === 'true',
       USE_SERVICE_WORKER: process.env.USE_SERVICE_WORKER === 'true',
       TRANSIFEX_API_KEY: JSON.stringify(process.env.TRANSIFEX_API_KEY),
       HOME_VIDEO_ID: JSON.stringify(process.env.HOME_VIDEO_ID),
       NAMED_MAPS_ENV: JSON.stringify(process.env.NAMED_MAPS_ENV),
       CARTO_ACCOUNT: JSON.stringify(process.env.CARTO_ACCOUNT),
-      MAPBOX_TOKEN: JSON.stringify(process.env.MAPBOX_TOKEN),
-      ENABLE_TOP_NAV_REDESIGN: JSON.stringify(process.env.ENABLE_TOP_NAV_REDESIGN === 'true'),
-      ENABLE_FOOTER_REDESIGN: JSON.stringify(process.env.ENABLE_FOOTER_REDESIGN === 'true'),
-      ENABLE_NEW_HOME: JSON.stringify(process.env.ENABLE_NEW_HOME === 'true')
+      MAPBOX_TOKEN: JSON.stringify(process.env.MAPBOX_TOKEN)
     }),
     new webpack.LoaderOptionsPlugin({ options: {} })
   ],

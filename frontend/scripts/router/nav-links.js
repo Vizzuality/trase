@@ -41,110 +41,13 @@ let nav = [
     name: 'Profiles',
     page: 'profiles'
   },
-  !ENABLE_TOP_NAV_REDESIGN && {
-    name: 'Dashboards',
-    page: 'dashboardRoot'
-  },
   {
     name: 'Logistics Map',
     page: 'logisticsMap'
   },
-  !ENABLE_TOP_NAV_REDESIGN && {
-    name: 'Finance',
-    page: 'https://trase.finance',
-    external: true
-  },
-  !ENABLE_TOP_NAV_REDESIGN && {
-    name: 'Insights',
-    page: 'https://insights.trase.earth',
-    external: true
-  },
   {
     name: 'Download',
     page: 'data'
-  },
-  !ENABLE_TOP_NAV_REDESIGN && {
-    name: 'About',
-    page: 'about'
-  }
-];
-
-const sidebarNav = [
-  {
-    name: 'What is Trase?',
-    page: 'about'
-  },
-  {
-    name: 'Who is Trase for?',
-    page: {
-      type: 'about',
-      payload: {
-        section: 'who-is-trase-for'
-      }
-    }
-  },
-  {
-    name: 'Methods and data',
-    page: {
-      type: 'about',
-      payload: {
-        section: 'methods-and-data'
-      }
-    }
-  },
-  {
-    name: 'FAQ',
-    page: {
-      type: 'about',
-      payload: {
-        section: 'faq'
-      }
-    }
-  },
-  {
-    name: 'Partners',
-    page: {
-      type: 'about',
-      payload: {
-        section: 'partners'
-      }
-    }
-  },
-  {
-    name: 'Funders',
-    page: {
-      type: 'about',
-      payload: {
-        section: 'funders'
-      }
-    }
-  },
-  {
-    name: 'Terms of Use',
-    page: {
-      type: 'about',
-      payload: {
-        section: 'terms-of-use'
-      }
-    }
-  },
-  {
-    name: 'Privacy policy',
-    page: {
-      type: 'about',
-      payload: {
-        section: 'privacy-policy'
-      }
-    }
-  },
-  {
-    name: 'Cookie policy',
-    page: {
-      type: 'about',
-      payload: {
-        section: 'cookie-policy'
-      }
-    }
   }
 ];
 
@@ -157,6 +60,5 @@ if (!ENABLE_DASHBOARDS) {
 }
 
 export default {
-  nav,
-  sidebarNav
+  nav
 };
