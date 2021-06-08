@@ -100,6 +100,11 @@ const ToolsInsights = () => {
         </ul>
         <ul className="about-menu">
           <li className="about-menu-item">
+            <a href="https://trase.earth/resources" title="Resources page">
+              Resources
+            </a>
+          </li>
+          <li className="about-menu-item">
             <a href="https://trase.earth/about" title="About page">
               About
             </a>

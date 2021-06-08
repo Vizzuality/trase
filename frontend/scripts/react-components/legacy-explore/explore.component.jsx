@@ -173,7 +173,12 @@ function Explore(props) {
           <div className="column small-12 medium-7 small-order-2 medium-order-1">
             <p className="explore-footer-text">
               By accessing the Trase platform you have acknowledged and agreed to our{' '}
-              <Link to={{ type: 'about', payload: { section: 'termsOfUse' } }}>Terms of Use.</Link>
+              <a
+                href="https://www.trase.earth/terms-of-use"
+                title="https://www.trase.earth/terms-of-use"
+              >
+                Terms of Use.
+              </a>
             </p>
           </div>
           <div className="column small-12 medium-5 small-order-1 medium-order-2 explore-footer-button-container">

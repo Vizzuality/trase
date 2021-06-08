@@ -85,6 +85,10 @@ const Footer = () => {
         title: 'Home',
         items: [
           {
+            title: 'Resources',
+            href: 'https://trase.earth/resources'
+          },
+          {
             title: 'About',
             href: 'https://trase.earth/about'
           }
