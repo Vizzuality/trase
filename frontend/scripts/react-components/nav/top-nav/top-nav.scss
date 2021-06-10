@@ -243,6 +243,9 @@ $menuOffset: 15vh;
     }
   }
 
+  .top-nav-logo {
+    transform: translate(0, -2px);
+  }
 
   .nav-tabs-container {
     position: relative;
@@ -301,11 +304,6 @@ $menuOffset: 15vh;
     }
   }
 
-  .top-nav-logo {
-    margin-left: 20px;
-    display: flex;
-  }
-
   .trase-logo-text {
     margin-left: 10px;
     margin-right: 6px;
@@ -316,15 +314,16 @@ $menuOffset: 15vh;
   }
 
   .logo-image {
-    width: 30px;
+    width: 225px;
+
     @media screen and (min-width: $breakpoint-tablet) {
-      width: 60px;
+      width: 395px;
     }
   }
 
   .nav-tab-container {
     display: flex;
-    padding: 40px 20px;
+    padding: 14px 24px 50px;
     background-color: $white;
 
     .-navigation-block {
@@ -381,12 +380,16 @@ $menuOffset: 15vh;
         }
       }
 
+      .about-menu {
+        margin-bottom: 8px;
+      }
+
       .about-menu-item {
         color: $gray-600;
         text-transform: uppercase;
         font-weight: $font-weight-light;
-        font-size: $font-size-xx-regular;
-        line-height: $line-height-lg;
+        font-size: $font-size-x-regular;
+        line-height: 23px;
 
         &:hover {
           color: $orange-500;
