@@ -19,7 +19,7 @@ import ToolsInsights from './tabs/tools-insights.component';
 
 const DownloadPdfLink = React.lazy(() => import('./download-pdf-link.component'));
 
-class TopNavRedesign extends React.PureComponent {
+class TopNav extends React.PureComponent {
   state = {
     backgroundVisible: false,
     menuOpen: false
@@ -230,7 +230,7 @@ class TopNavRedesign extends React.PureComponent {
   }
 }
 
-TopNavRedesign.propTypes = {
+TopNav.propTypes = {
   page: PropTypes.string,
   links: PropTypes.array,
   showLogo: PropTypes.bool,
@@ -239,8 +239,8 @@ TopNavRedesign.propTypes = {
   pageOffset: PropTypes.number
 };
 
-TopNavRedesign.defaultProps = {
+TopNav.defaultProps = {
   pageOffset: 0
 };
 
-export default TopNavRedesign;
+export default TopNav;

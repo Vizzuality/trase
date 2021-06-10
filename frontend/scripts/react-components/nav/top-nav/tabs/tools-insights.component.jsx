@@ -25,7 +25,7 @@ const ToolsInsights = () => {
     {
       key: 0,
       properties: {
-        title: 'Supply chains',
+        title: 'Supply Chains',
         url: '/',
         summary:
           'Explore the connections between production regions, trading companies and import markets. Understand exposure to deforestation and other environmental and social risks.',
@@ -127,6 +127,7 @@ const ToolsInsights = () => {
                   cardsRef={cardsRef}
                   id={item.key}
                   active={activeCard === item.key}
+                  inactive={(activeCard || activeCard === 0) && activeCard !== item.key}
                   setActiveCard={setActiveCard}
                 />
               )}
