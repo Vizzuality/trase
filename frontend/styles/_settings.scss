@@ -23,6 +23,7 @@ $padding-wrap-desktop: 120px;
 $font-family-1: 'DecimaMonoPro', 'Courier New', sans-serif;
 $font-family-2: 'Merriweather', serif;
 $font-family-3: 'DM Sans', sans-serif;
+$font-family-4: 'Crimson Pro', serif;
 
 $font-weight-light: 300;
 $font-weight-regular: 400;
@@ -36,7 +37,7 @@ $font-size-xx-regular: 16px;
 $font-size-xxx-regular: 18px;
 $font-size-medium: 20px;
 $font-size-big: 24px;
-$font-size-x-big: 32px;
+$font-size-x-big: 36px;
 $font-size-huge: 48px;
 $font-size-x-huge: 52px;
 
@@ -52,6 +53,7 @@ $line-height-huge: 52px;
 $letter-spacing: normal;
 $letter-spacing-narrow: -0.6px;
 $letter-spacing-x-narrow: -0.8px;
+$letter-spacing-sm: 0.08px;
 
 // List style
 $list-style-image-path: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='-1 -1 2 2'><circle fill='#3444C' r='1' /></svg>";

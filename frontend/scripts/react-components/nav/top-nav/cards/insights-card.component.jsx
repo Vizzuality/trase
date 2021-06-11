@@ -4,6 +4,7 @@ import { Transition } from 'react-spring/renderprops';
 import Heading from 'react-components/shared/heading/heading.component';
 import { ImgBackground } from 'react-components/shared/img';
 import Text from 'react-components/shared/text';
+import cx from 'classnames';
 
 const InsightsCard = ({
   title,
@@ -11,13 +12,14 @@ const InsightsCard = ({
   summary,
   imageUrl,
   setActiveCard,
+  inactive,
   active,
   trailStyles,
   id,
   cardsRef
 }) => (
   <a
-    className="top-nav-card"
+    className={cx('top-nav-card', { active, inactive })}
     style={trailStyles}
     arealabel={title}
     href={url}
@@ -30,7 +32,7 @@ const InsightsCard = ({
   >
     <ImgBackground as="figure" alt={title} className="card-image" src={imageUrl} />
     <section className="card-contents">
-      <Heading weight="bold" as="h4" variant="sans" color="gray-700" size="lg">
+      <Heading weight="bold" as="h4" variant="sans" color="gray-700" size="xlg">
         {title}
       </Heading>
       <Transition

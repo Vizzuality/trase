@@ -5,7 +5,7 @@ import cx from 'classnames';
 import throttle from 'lodash/throttle';
 import { NavLink } from 'redux-first-router-link';
 import NavLinks from 'react-components/nav/nav-links.component';
-import Heading from 'react-components/shared/heading';
+import Hamburger from 'react-components/nav/hamburger';
 import LocaleSelector from 'react-components/nav/locale-selector/locale-selector.container';
 import Search from 'react-components/nav/global-search/global-search.container';
 import ToolSearch from 'react-components/tool/tool-search/tool-search.container';
@@ -19,7 +19,7 @@ import ToolsInsights from './tabs/tools-insights.component';
 
 const DownloadPdfLink = React.lazy(() => import('./download-pdf-link.component'));
 
-class TopNavRedesign extends React.PureComponent {
+class TopNav extends React.PureComponent {
   state = {
     backgroundVisible: false,
     menuOpen: false
@@ -135,42 +135,18 @@ class TopNavRedesign extends React.PureComponent {
       <ResizeListener>
         {({ windowWidth }) => {
           const isDesktop = windowWidth >= BREAKPOINTS.laptop;
-          const isSmall = windowWidth <= BREAKPOINTS.small;
           return (
             <div className="nav-menu">
               <div className="first-row">
                 <div className="left-section">
-                  <button className="top-nav-toggle-btn" onClick={this.handleToggleClick}>
-                    <svg className={`icon icon-${menuOpen ? 'close' : 'menu'}`}>
-                      <use xlinkHref={`#icon-${menuOpen ? 'close' : 'menu'}`} />
-                    </svg>
-                  </button>
+                  <Hamburger onClick={this.handleToggleClick} isOpen={menuOpen} />
                   <NavLink exact strict to={{ type: 'home' }} className="top-nav-logo">
                     <Img
                       loading="lazy"
                       className="logo-image"
-                      src="/images/logos/logo-trase-small.svg"
+                      src="/images/logos/trase-logo.svg"
                       alt="trase logo"
                     />
-                    <Heading
-                      className="trase-logo-text"
-                      color="grey"
-                      as="span"
-                      variant="sans"
-                      size={isSmall ? 'rg' : 'lg'}
-                      weight="bold"
-                    >
-                      trase{' '}
-                    </Heading>
-                    <Heading
-                      color="pink"
-                      as="span"
-                      variant="sans"
-                      size={isSmall ? 'rg' : 'lg'}
-                      weight="bold"
-                    >
-                      supply chains
-                    </Heading>
                   </NavLink>
                 </div>
                 <div className="right-section">
@@ -254,7 +230,7 @@ class TopNavRedesign extends React.PureComponent {
   }
 }
 
-TopNavRedesign.propTypes = {
+TopNav.propTypes = {
   page: PropTypes.string,
   links: PropTypes.array,
   showLogo: PropTypes.bool,
@@ -263,8 +239,8 @@ TopNavRedesign.propTypes = {
   pageOffset: PropTypes.number
 };
 
-TopNavRedesign.defaultProps = {
+TopNav.defaultProps = {
   pageOffset: 0
 };
 
-export default TopNavRedesign;
+export default TopNav;

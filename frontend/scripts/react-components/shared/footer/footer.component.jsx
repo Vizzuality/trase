@@ -51,7 +51,7 @@ const donors = [
 const Footer = () => {
   const renderMainFooter = () => (
     <div className="main-footer">
-      <div className="partnership-text presentation">Trase is a partnership between:</div>
+      <div className="partnership-text presentation">Trase is a partnership between</div>
 
       <ul className="logo-list">
         {partners.map(logo => (
@@ -67,12 +67,12 @@ const Footer = () => {
         <a
           className="partnership-link"
           href="https://www.trase.earth/about/"
-          title="Parners and founders info"
+          title="Parners and funders info"
           // eslint-disable-next-line react/jsx-no-target-blank
           target="_blank"
           rel="noopener"
         >
-          Click for more information about our partners and founders.
+          Click for more information about our partners and funders.
         </a>
         .
       </div>
@@ -199,7 +199,7 @@ const Footer = () => {
       {renderLinkMenu()}
       <div className="sign-up">
         <div className="sign-up-title">Sign up for our Newsletter</div>
-        <NewsletterForm variant="footer" />
+        <NewsletterForm />
       </div>
     </div>
   );
@@ -269,19 +269,9 @@ const Footer = () => {
                 </a>
               </li>
             </>
-            <li className="separator"> · </li>
-            <li className="link-item">
-              <a
-                className="privacy-menu-link"
-                rel="noopener noreferrer"
-                href="mailto:info@trase.earth"
-              >
-                Contact us
-              </a>
-            </li>
           </ul>
         </div>
-        <div className="donors-logos-container row">
+        <div className="donors-logos-container">
           <ul className="donors-logos">
             {donors.map(logo => (
               <li key={logo.alt} className={cx('logo-item donor-logo', logo.className)}>
