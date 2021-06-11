@@ -213,7 +213,7 @@ class NewsletterForm extends React.PureComponent {
                     formName: 'footer'
                   })}
                   <div className="footer-conditions">
-                    <Text size="xs" as="span" color="white" lineHeight="md">
+                    <Text size="xs" as="span" color="white" lineHeight="sm" variant="sans">
                       You can unsuscribe at any time. Learn about our
                       <a
                         href="https://www.trase.earth/privacy-policy"
@@ -222,7 +222,13 @@ class NewsletterForm extends React.PureComponent {
                         target="_blank"
                         rel="noopener"
                       >
-                        <Text as="span" size="xs" color="white" className="link-text">
+                        <Text
+                          as="span"
+                          size="xs"
+                          color="white"
+                          variant="sans"
+                          className="link-text"
+                        >
                           {' '}
                           privacy policies
                         </Text>

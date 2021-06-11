@@ -89,7 +89,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 40px;
+    height: 45px;
     margin-bottom: 10px;
 
     .newsletter-input {
@@ -136,23 +136,24 @@
     .newsletter-input {
       flex: auto;
       height: 100%;
-      font-family: $font-family-3;
+      font-family: $font-family-4;
       font-size: $font-size-x-regular;
-      letter-spacing: $letter-spacing-x-narrow;
+      font-weight: $font-weight-regular;
+      letter-spacing: $letter-spacing-sm;
       text-align: left;
       border: 0;
       border-radius: 0;
-      border-left: 3px solid $green-200;
+      border-left: 2px solid $green-200;
       background-color: rgba($green-200, 0.1);
-      color: $green-200;
-      padding: 1px 10px 0;
+      color: $white;
+      padding: 1px 18px 0;
 
       &.error {
         border: 1px solid $strong-pink;
       }
 
       &::placeholder {
-        color: rgba($green-200, 0.8);
+        color: $green-200;
         text-transform: none;
       }
     }
@@ -180,11 +181,11 @@
 
   .dropdown-button {
     position: absolute;
-    top: 10px;
-    right: 5%;
+    top: 12px;
+    right: 9%;
     width: 20px;
     height: 20px;
-    opacity: 0.5;
+    opacity: 0.2;
 
     &:after {
       content: "";
