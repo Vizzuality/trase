@@ -199,7 +199,7 @@ const Footer = () => {
       {renderLinkMenu()}
       <div className="sign-up">
         <div className="sign-up-title">Sign up for our Newsletter</div>
-        <NewsletterForm variant="footer" />
+        <NewsletterForm />
       </div>
     </div>
   );

@@ -5,8 +5,6 @@ import Button from 'react-components/shared/button/button.component';
 import Text from 'react-components/shared/text';
 import cx from 'classnames';
 
-import Heading from 'react-components/shared/heading/heading.component';
-
 import 'react-components/shared/newsletter/newsletter.scss';
 import { startCase } from 'lodash';
 
@@ -81,11 +79,10 @@ class NewsletterForm extends React.PureComponent {
   elementHasError(name, justSubmitted) {
     if (name === 'country') return false; // Not included
 
-    const { variant } = this.props;
     const { submitted, form } = this.state;
     const formSubmitted = justSubmitted || submitted;
     if (name === 'email') {
-      const emailId = variant === 'footer' ? 'footer-email' : 'stay-informed-email';
+      const emailId = 'footer-email';
       const emailElement = document.getElementById(emailId);
       if (formSubmitted && !emailElement.checkValidity()) {
         return true;
@@ -95,26 +92,19 @@ class NewsletterForm extends React.PureComponent {
   }
 
   render() {
-    const { message, variant } = this.props;
-    const { email } = this.state.form;
+    const { message } = this.props;
     const { dropdownOpen } = this.state;
 
-    const footer = variant === 'footer';
-    const renderSubmitButton = () =>
-      footer ? (
-        <Button
-          onClick={this.onClickSubmit}
-          color="green"
-          variant="circle"
-          className="footer-submit-button"
-        >
-          ➔
-        </Button>
-      ) : (
-        <Button onClick={this.onClickSubmit} color="charcoal" weight="bold">
-          Subscribe
-        </Button>
-      );
+    const renderSubmitButton = () => (
+      <Button
+        onClick={this.onClickSubmit}
+        color="green"
+        variant="circle"
+        className="footer-submit-button"
+      >
+        ➔
+      </Button>
+    );
 
     const renderFormInput = ({ field, placeholder, formName }) => {
       const id = `${formName}-${field}`;
@@ -164,7 +154,6 @@ class NewsletterForm extends React.PureComponent {
                   error: hasError
                 })}
               />
-              {!footer && renderSubmitButton()}
             </div>
             {hasError && <p className="error-message">Please provide a valid email address</p>}
           </>
@@ -173,89 +162,44 @@ class NewsletterForm extends React.PureComponent {
       return fields[field] || fields.default;
     };
 
-    const renderForm = () => (
+    return (
       <>
         {message && <p className="subscription-success">{message}</p>}
         {!message && (
-          <form
-            ref={this.getFormRef}
-            className={footer ? 'c-newsletter v-footer' : 'column small-12 medium-6 large-4'}
-          >
-            {footer ? (
-              <>
-                <div className="dropdown-container">
-                  {renderFormInput({
-                    field: 'email',
-                    placeholder: 'Enter your email...',
-                    formName: 'footer'
-                  })}
-                  <Button
-                    variant="circle"
-                    onClick={() => this.toggleOpenDropdown()}
-                    color="green"
-                    className={cx('dropdown-button', { '-open': dropdownOpen })}
-                  />
-                </div>
-                <div className={cx('form-hidden-fields', { '-open': dropdownOpen })}>
-                  {renderFormInput({
-                    field: 'firstname',
-                    placeholder: 'Enter your first name...',
-                    formName: 'footer'
-                  })}
-                  {renderFormInput({
-                    field: 'lastname',
-                    placeholder: 'Enter your last name...',
-                    formName: 'footer'
-                  })}
-                  {renderFormInput({
-                    field: 'organisation',
-                    placeholder: 'Your organisation...',
-                    formName: 'footer'
-                  })}
-                  <div className="footer-conditions">
-                    <Text size="xs" as="span" color="white" lineHeight="sm" variant="sans">
-                      You can unsuscribe at any time. Learn about our
-                      <a
-                        href="https://www.trase.earth/privacy-policy"
-                        title="Privacy policy page"
-                        // eslint-disable-next-line react/jsx-no-target-blank
-                        target="_blank"
-                        rel="noopener"
-                      >
-                        <Text
-                          as="span"
-                          size="xs"
-                          color="white"
-                          variant="sans"
-                          className="link-text"
-                        >
-                          {' '}
-                          privacy policies
-                        </Text>
-                      </a>{' '}
-                    </Text>
-                    {renderSubmitButton()}
-                  </div>
-                </div>
-              </>
-            ) : (
-              <>
+          <form ref={this.getFormRef} className="c-newsletter">
+            <>
+              <div className="dropdown-container">
+                {renderFormInput({
+                  field: 'email',
+                  placeholder: 'Enter your email...',
+                  formName: 'footer'
+                })}
+                <Button
+                  variant="circle"
+                  onClick={() => this.toggleOpenDropdown()}
+                  color="green"
+                  className={cx('dropdown-button', { '-open': dropdownOpen })}
+                />
+              </div>
+              <div className={cx('form-hidden-fields', { '-open': dropdownOpen })}>
                 {renderFormInput({
                   field: 'firstname',
-                  placeholder: 'First name',
-                  formName: 'stay-informed'
+                  placeholder: 'Enter your first name...',
+                  formName: 'footer'
                 })}
                 {renderFormInput({
                   field: 'lastname',
-                  placeholder: 'Last name',
-                  formName: 'stay-informed'
+                  placeholder: 'Enter your last name...',
+                  formName: 'footer'
                 })}
-                {renderFormInput({ field: 'organisation', formName: 'stay-informed' })}
-                {renderFormInput({ field: 'email', formName: 'stay-informed' })}
-                <div className={cx('conditions', { visible: !message && email })}>
-                  <Text lineHeight="lg">
-                    After subscribing I consent that my email address will be used in order for us
-                    to send you the Trase newsletter. Please see our{' '}
+                {renderFormInput({
+                  field: 'organisation',
+                  placeholder: 'Your organisation...',
+                  formName: 'footer'
+                })}
+                <div className="footer-conditions">
+                  <Text size="xs" as="span" color="white" lineHeight="sm" variant="sans">
+                    You can unsuscribe at any time. Learn about our
                     <a
                       href="https://www.trase.earth/privacy-policy"
                       title="Privacy policy page"
@@ -263,39 +207,19 @@ class NewsletterForm extends React.PureComponent {
                       target="_blank"
                       rel="noopener"
                     >
-                      <Text as="span" className="conditions-link">
-                        privacy policy
+                      <Text as="span" size="xs" color="white" variant="sans" className="link-text">
+                        {' '}
+                        privacy policies
                       </Text>
                     </a>{' '}
-                    for more details on the use of your information
                   </Text>
+                  {renderSubmitButton()}
                 </div>
-              </>
-            )}
+              </div>
+            </>
           </form>
         )}
       </>
-    );
-
-    if (variant === 'footer') {
-      return renderForm();
-    }
-
-    return (
-      <div className={cx('c-newsletter align-middle align-right', { sent: message })}>
-        <div className="newsletter row">
-          <div className="column">
-            <Heading variant="mono" color="pink" size="sm">
-              STAY INFORMED
-            </Heading>
-            <p className="newsletter-text">
-              Sign up to stay informed about Trase Earth, and other Trase developments and
-              discoveries.
-            </p>
-          </div>
-          {renderForm()}
-        </div>
-      </div>
     );
   }
 }
@@ -303,8 +227,7 @@ class NewsletterForm extends React.PureComponent {
 NewsletterForm.propTypes = {
   submitForm: PropTypes.func.isRequired,
   resetForm: PropTypes.func.isRequired,
-  message: PropTypes.string,
-  variant: PropTypes.string
+  message: PropTypes.string
 };
 
 export default NewsletterForm;
