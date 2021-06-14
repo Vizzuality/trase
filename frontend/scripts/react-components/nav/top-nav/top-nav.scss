@@ -245,6 +245,11 @@ $menuOffset: 15vh;
 
   .top-nav-logo {
     transform: translate(0, -2px);
+    margin-left: 10px;
+
+    @media screen and (min-width: $breakpoint-tablet) {
+      margin-left: 0;
+    }
   }
 
   .nav-tabs-container {
