@@ -1,13 +1,12 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
-import { Trail } from 'react-spring/renderprops';
 import { NavLink } from 'redux-first-router-link';
 import isMobile from 'utils/isMobile';
 import cx from 'classnames';
-import InsightsCard from '../cards/insights-card.component';
+import TopNavCard from '../cards/top-nav-card.component';
 
-const ToolsInsights = () => {
+const TopNavCards = () => {
   const [activeCard, setActiveCard] = useState(null);
-  const mobile = useMemo(() => isMobile());
+  const mobile = useMemo(() => isMobile(), []);
   const cardsRef = useRef([]);
 
   useEffect(() => {
@@ -114,24 +113,17 @@ const ToolsInsights = () => {
       {!mobile && (
         <div className="-tab-contents">
           <div className="tab-contents-cards">
-            <Trail
-              items={cards}
-              keys={item => item.key}
-              from={{ transform: 'translate3d(0,-400px,0)' }}
-              to={{ transform: 'translate3d(0,0px,0)' }}
-            >
-              {item => props => (
-                <InsightsCard
-                  trailStyles={props}
-                  {...item.properties}
-                  cardsRef={cardsRef}
-                  id={item.key}
-                  active={activeCard === item.key}
-                  inactive={(activeCard || activeCard === 0) && activeCard !== item.key}
-                  setActiveCard={setActiveCard}
-                />
-              )}
-            </Trail>
+            {cards.map((card, i) => (
+              <TopNavCard
+                {...card.properties}
+                key={card.key}
+                cardsRef={cardsRef}
+                id={i}
+                active={activeCard === card.key}
+                inactive={(activeCard || activeCard === 0) && activeCard !== card.key}
+                setActiveCard={setActiveCard}
+              />
+            ))}
           </div>
         </div>
       )}
@@ -139,6 +131,6 @@ const ToolsInsights = () => {
   );
 };
 
-ToolsInsights.propTypes = {};
+TopNavCards.propTypes = {};
 
-export default ToolsInsights;
+export default TopNavCards;

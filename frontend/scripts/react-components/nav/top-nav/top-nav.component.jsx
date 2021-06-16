@@ -15,7 +15,7 @@ import ResizeListener from 'react-components/shared/resize-listener.component';
 
 import 'scripts/react-components/nav/top-nav/top-nav.scss';
 
-import ToolsInsights from './tabs/tools-insights.component';
+import TopNavCards from './tabs/top-nav-cards.component';
 
 const DownloadPdfLink = React.lazy(() => import('./download-pdf-link.component'));
 
@@ -75,6 +75,7 @@ class TopNav extends React.PureComponent {
       <div className="nav-tabs-container">
         <Transition
           items={menuOpen}
+          config={{ duration: 50 }}
           from={{ opacity: 0, transform: 'translateY(-110%)' }}
           leave={{ opacity: 0, transform: 'translateY(-110%)' }}
           enter={{ opacity: 1, transform: 'translateY(0%)' }}
@@ -83,7 +84,7 @@ class TopNav extends React.PureComponent {
             show &&
             (props => (
               <div style={props}>
-                <ToolsInsights />
+                <TopNavCards />
               </div>
             ))
           }

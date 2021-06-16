@@ -6,7 +6,7 @@ import { ImgBackground } from 'react-components/shared/img';
 import Text from 'react-components/shared/text';
 import cx from 'classnames';
 
-const InsightsCard = ({
+const TopNavCard = ({
   title,
   url,
   summary,
@@ -14,13 +14,11 @@ const InsightsCard = ({
   setActiveCard,
   inactive,
   active,
-  trailStyles,
   id,
   cardsRef
 }) => (
   <a
     className={cx('top-nav-card', { active, inactive })}
-    style={trailStyles}
     arealabel={title}
     href={url}
     onMouseOver={() => setActiveCard(id)}
@@ -71,17 +69,18 @@ const InsightsCard = ({
   </a>
 );
 
-InsightsCard.defaultProps = {};
+TopNavCard.defaultProps = {};
 
-InsightsCard.propTypes = {
+TopNavCard.propTypes = {
   title: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
   id: PropTypes.number.isRequired,
   summary: PropTypes.string.isRequired,
   imageUrl: PropTypes.string.isRequired,
+  inactive: PropTypes.string,
+  cardsRef: PropTypes.string,
   active: PropTypes.bool.isRequired,
-  setActiveCard: PropTypes.func.isRequired,
-  trailStyles: PropTypes.object.isRequired
+  setActiveCard: PropTypes.func.isRequired
 };
 
-export default InsightsCard;
+export default TopNavCard;

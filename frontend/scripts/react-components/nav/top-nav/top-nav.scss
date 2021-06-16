@@ -14,7 +14,7 @@ $menuOffset: 15vh;
   background: $light-gray;
   font-family: $font-family-3;
   z-index: $z-nav;
-  transition: all 150ms ease-in;
+  transition: all 50ms ease-in;
 
   .locale-selector-selected-item,
   .locale-selector-menu-item {
@@ -158,7 +158,7 @@ $menuOffset: 15vh;
       font-family: $font-family-3;
       font-size: $font-size-regular;
       font-weight: $font-weight-medium;
-      transform: opacity 150ms ease-in;
+      transition: opacity 50ms ease-in;
       color: $gray-300;
       display: flex;
 
@@ -175,7 +175,7 @@ $menuOffset: 15vh;
         bottom: 0;
         left: 0;
         background-color: $strong-pink;
-        transition: width 150ms ease-in;
+        transition: width 50ms ease-in;
       }
 
       &:hover, &.-active {
@@ -424,6 +424,7 @@ $menuOffset: 15vh;
   }
 
   .top-nav-card {
+    position: relative;
     flex: 0 0 360px;
     height: calc(100vh - 190px);
     max-height: 550px; // set max height so on larger screens cards don't go crazy long
@@ -433,6 +434,7 @@ $menuOffset: 15vh;
     overflow: hidden;
     background: linear-gradient(#b9fde7, #fff 100%);
     border-bottom: 4px solid $gray-400;
+    transition: all 300ms;
 
     &:nth-child(even) {
       margin: 0 40px;
@@ -472,7 +474,6 @@ $menuOffset: 15vh;
 
     &.inactive {
       opacity: 0.5;
-      transition: opacity 50ms ease-in;
     }
 
     .card-summary {
