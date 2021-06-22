@@ -1,0 +1,41 @@
+@import 'styles/settings';
+
+.c-hamburger {
+  .hamburgerContent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 24px;
+    padding: 10px;
+    cursor: pointer;
+  }
+
+  .bar {
+    display: block;
+    position: absolute;
+    height: 1.5px;
+    width: 24px;
+    background-color: $black;
+    transition: all 0.2s ease-in-out;
+
+    &.openedMiddle {
+      opacity: 0;
+    }
+
+    &.closedTop {
+      transform: translate(0, 7.5px);
+    }
+
+    &.closedBottom {
+      transform: translate(0, -7.5px);
+    }
+
+    &.openedTop {
+      transform: rotate(-38deg);
+    }
+
+    &.openedBottom {
+      transform: rotate(38deg);
+    }
+  }
+}

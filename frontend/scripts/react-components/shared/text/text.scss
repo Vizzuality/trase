@@ -41,6 +41,10 @@
     font-size: $font-size-medium;
   }
 
+  &.line-height-sm {
+    line-height: $line-height-x-regular;
+  }
+
   &.line-height-md {
     line-height: $line-height-md;
   }

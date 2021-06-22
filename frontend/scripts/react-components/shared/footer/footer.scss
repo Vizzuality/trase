@@ -1,161 +1,286 @@
 @import 'styles/settings';
 
 .c-footer {
+  .row {
+    max-width: none;
+    padding: 0;
+
+    @media screen and (min-width: $breakpoint-tablet) {
+      padding: 0 40px;
+    }
+  }
+
   position: relative;
   z-index: $z-above;
-  padding: 48px 0 56px;
+  padding: 48px 0 36px;
   bottom: 0;
-  background-color: $light-gray;
+  background-color: $gray-500;
+  font-family: $font-family-3;
+
+  .section-separator {
+    border-top: 1px solid $gray-400;
+    margin: 50px 0 30px;
+  }
+
+  .footer-high {
+    justify-content: space-between;
+    flex-direction: column;
+
+    @media screen and (min-width: $breakpoint-foundation-medium) {
+      flex-direction: row;
+    }
+  }
+
+  .footer-low {
+    display: flex;
+    width: 100%;
+    align-items: flex-start;
+    margin: 0 30px;
+    flex-direction: column;
+
+
+    @media screen and (min-width: $breakpoint-foundation-medium) {
+      margin: 0;
+      flex-direction: row;
+      align-items: flex-end;
+    }
+  }
+
+  .main-footer {
+    margin: 0 30px 30px;
+
+    @media screen and (min-width: $breakpoint-foundation-medium) {
+      max-width: 395px;
+      margin: 0;
+    }
+  }
+
+  .footer-menu {
+    display: flex;
+    margin-right: 30px;
+
+    @media screen and (min-width: $breakpoint-desktop) {
+      flex: 1;
+      justify-content: space-evenly;
+      max-width: 700px;
+      margin-right: 70px;
+      margin-left: 30px;
+    }
+  }
+
+  .footer-menu-item {
+    margin-left: 30px;
+    margin-bottom: 15px;
+
+    &:not(:first-child) {
+      margin-left: 20px;
+    }
+
+    @media screen and (min-width: $breakpoint-foundation-medium) {
+      &:not(:first-child) {
+        margin-left: 70px;
+      }
+    }
+  }
+
+  .sign-up {
+    margin: 30px 30px 0;
+    flex: 1;
+
+    @media screen and (min-width: $breakpoint-foundation-medium) {
+      margin: 30px 0 0;
+      max-width: 235px;
+    }
+
+    @media screen and (min-width: $breakpoint-desktop) {
+      margin: 0;
+    }
+  }
+
+  .sign-up-title {
+    font-size: $font-size-xx-regular;
+    font-weight: $font-weight-bold;
+    color: $green-200;
+    margin-bottom: 15px;
+  }
+
+  .logo-list {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    margin-bottom: 10px;
+    max-width: 400px;
+    min-width: 300px;
+
+
+    .logo-item {
+      width: 50%;
+    }
+
+    @media screen and (min-width: $breakpoint-foundation-medium) {
+      flex-direction: row;
+      align-items: center;
+    }
+  }
+
+  .logo-item {
+    margin: 0 0 30px 0;
+
+    &.donor-logo {
+      margin-left: 0;
+
+      @media screen and (min-width: $breakpoint-foundation-medium) {
+        margin-left: 20px;
+      }
+    }
+
+    &:first-child {
+      margin-right: 24px;
+    }
+
+    @media screen and (min-width: $breakpoint-foundation-medium) {
+      margin: 0;
+
+      &:first-child {
+        margin: 0;
+      }
+    }
+  }
+
+  .partnership-text {
+    color: $green-200;
+    font-size: $font-size-regular;
+    line-height: $line-height-md;
+
+    &.presentation {
+      margin-bottom: 20px;
+    }
+
+    .partnership-link {
+      color: $green-200;
+      text-decoration: underline;
+    }
+  }
 
   .contain-logos-footer {
-    overflow: hidden;
+    display: flex;
+    width: 100%;
+  }
 
-    .contain-logos {
-      width: 100%;
+  .logo-list-container {
+    @media screen and (min-width: 880px) {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
 
-      > .title {
-        margin: 0 0 32px;
-        color: $charcoal-grey;
-      }
+    @media screen and (min-width: $breakpoint-foundation-medium) {
+      display: block;
+    }
+  }
 
-      .logo-list-container {
-        @media screen and (min-width: 880px) {
-          display: flex;
-          align-items: center;
-          justify-content: flex-start;
-        }
+  .link-list-container {
+    flex: 1;
+    color: $green-200;
+    margin-bottom: 20px;
 
-        @media screen and (min-width: $breakpoint-foundation-medium) {
-          display: block;
-        }
-      }
+    @media screen and (min-width: $breakpoint-foundation-medium) {
+      margin: 0;
 
-      .logo-list {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 75px;
-        flex-wrap: wrap;
-
-        &:not(:first-of-type) {
-          margin: 16px 0 0;
-        }
-
-        @media screen and (min-width: 880px) {
-          &:not(:first-child) {
-            margin: 0 0 0 35px;
-          }
-        }
-
-        @media screen and (min-width: $breakpoint-foundation-medium) {
-          justify-content: flex-start;
-
-          &:not(:first-child) {
-            margin: 16px 0 0;
-          }
-        }
-
-
-        .logo-item {
-          display: inline-block;
-
-          &:not(:first-child) {
-            margin: 0 0 0 45px;
-          }
-
-          @media screen and (min-width: 880px) {
-            &:not(:first-child) {
-              margin: 0 0 0 35px;
-            }
-          }
-
-          @media screen and (min-width: $breakpoint-foundation-medium) {
-            &:not(:first-child) {
-              margin: 0 0 0 45px;
-            }
-          }
-
-          &.sei-logo > a > img {
-            width: 112px;
-          }
-
-          &.gcp-logo > a > img {
-            width: 170px;
-          }
-
-          &.vizzuality-logo > a > img {
-            width: 116px;
-          }
-
-          &.efi-logo > a > img {
-            width: 64px;
-          }
-
-          &.wwf-logo > a > img {
-            width: 50px;
-          }
-
-          &.gef-logo > a > img {
-            width: 57px;
-          }
-
-          &.eustars-logo > a > img {
-            width: 80px;
-          }
-
-          &.ukaidsv-logo > a > img {
-            width: 48px;
-          }
-
-          &.conservancy-logo > a > img {
-            width: 120px;
-          }
-
-          &.formas-logo > a > img {
-            width: 40px;
-          }
-
-          &.moore-logo > a > img {
-            width: 104px;
-          }
-
-          &.nicfi-logo > a > img {
-            width: 116px;
-          }
-        }
-      }
-
-      > .contain-text {
-        margin: 16px 0 0;
-
-        > p {
-          color: rgba($charcoal-grey, .5);
-        }
+      > :first-child {
+        margin-bottom: 6px;
       }
     }
   }
 
-  .contain-link-list {
-    margin-top: 54px;
-    overflow: hidden;
+  .donors-logos-container {
+    flex: 1;
+  }
 
-    .links-list {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-wrap: wrap;
+  .donors-logos {
+    display: flex;
+    margin-bottom: 10px;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-end;
 
-      .separator {
-        display: inline-flex;
-        align-items: center;
-        margin: 0 8px;
+    @media screen and (min-width: $breakpoint-foundation-medium) {
+      flex-direction: row;
+      margin: 0;
+      align-items: flex-end;
 
-        color: $charcoal-grey;
-      }
-
-      .link-item {
-        flex-shrink: 0;
+      :not(:last-child) {
+        margin-right: 36px;
       }
     }
+  }
+
+
+  .social-links-list {
+    display: flex;
+    color: $green-200;
+    margin-bottom: 10px;
+
+    @media screen and (min-width: $breakpoint-foundation-medium) {
+      margin-bottom: 0;
+    }
+
+    :first-child {
+      margin-right: 2px;
+    }
+  }
+
+  .separator {
+    display: inline-flex;
+    align-items: center;
+    margin: 0 16px;
+    font-size: $font-size-medium;
+    font-weight: $font-weight-bold;
+  }
+
+  .links-list {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .privacy-menu-link {
+    color: $green-200;
+    font-size: $font-size-x-regular;
+    font-weight: $font-weight-bold;
+  }
+
+  .menu-title {
+    color: $white;
+    font-weight: $font-weight-bold;
+    font-size: $font-size-xx-regular;
+    line-height: $line-height-md;
+    margin-bottom: 6px;
+  }
+
+  .menu-link {
+    display: block;
+    color: $white;
+    font-size: $font-size-regular;
+    line-height: $line-height-md;
+    margin-bottom: 5px;
+  }
+
+  .gcp-logo img {
+    transform: translate(0px, -10px);
+    width: 100%;
+  }
+
+  .moore-logo img {
+    width: 108px;
+  }
+
+  .nicfi-logo img {
+    width: 200px;
+  }
+
+  .ggp-logo img {
+    width: 122px;
   }
 }
+

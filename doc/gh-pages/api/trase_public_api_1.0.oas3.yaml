@@ -15,7 +15,7 @@ info:
     # Introduction
 
 
-    The Trase Public API allows access to trade flow data of the forest risk commodities hosted in Trase’s database. For a list of available commodities and country contexts please refer to the documentation on the Trase homepage: https://supplychains.trase.earth/about
+    The Trase Public API allows access to trade flow data of the forest risk commodities hosted in Trase’s database. For a list of available commodities and country contexts please refer to the documentation on the Trase homepage: https://www.trase.earth/resources/
 
 
     # Entities
@@ -72,8 +72,8 @@ info:
 
 
     Countries can be retrieved using the countries endpoint.
-    
-    
+
+
     /api/public/countries?include=commodities
 
 

@@ -3,8 +3,8 @@
 
 .c-newsletter {
   width: 100%;
-  padding: 40px 0;
-  background: $metal-grey;
+  padding: 0;
+  background: transparent;
 
   @media only screen and (min-width: $breakpoint-foundation-small) {
     &.sent {
@@ -18,19 +18,6 @@
     font-size: $font-size-regular;
     margin: 0 0 10px 10px;
     font-weight: 500;
-  }
-
-  .conditions {
-    max-height: 0;
-    overflow: hidden;
-    padding: 0;
-    background-color: rgba($egg-shell, 0.15);
-    transition: max-height 0.2s ease-out;
-
-    &.visible {
-      max-height: 200px;
-      padding: 10px;
-    }
   }
 
   .footer-conditions {
@@ -47,22 +34,6 @@
     text-decoration: underline;
   }
 
-  .conditions-link {
-    text-decoration: underline;
-  }
-
-  .newsletter-label {
-    position: absolute;
-    font-family: $font-family-2;
-    font-size: $font-size-xx-regular;
-    color: $charcoal-grey;
-    transform: translateY(calc(-100% - 8px));
-  }
-
-  .-pink {
-    color: $medium-pink;
-  }
-
   .subscription-success {
     display: flex;
     align-items: center;
@@ -72,46 +43,35 @@
     color: $charcoal-grey;
   }
 
-  .newsletter-text {
-    margin: 20px 0 0 0;
-    font-family: $font-family-2;
-    font-size: 18px;
-    font-weight: 300;
-    line-height: 1.75;
-    color: $charcoal-grey;
-
-    @media only screen and (min-width: 800px) {
-      font-size: 24px;
-    }
-  }
-
   .newsletter-input-container {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 40px;
+    height: 45px;
     margin-bottom: 10px;
-
+    border-radius: 0;
     .newsletter-input {
       flex: auto;
       height: 100%;
-      font-family: $font-family-1;
-      font-weight: $font-weight-bold;
-      font-size: 13px;
-      letter-spacing: $letter-spacing-x-narrow;
+      font-family: $font-family-4;
+      font-size: $font-size-x-regular;
+      font-weight: $font-weight-regular;
+      letter-spacing: $letter-spacing-sm;
       text-align: left;
       border: 0;
-      border-radius: 4px;
-      background-color: $light-gray;
-      color: $charcoal-grey-faded;
-      padding: 1px 10px 0;
+      border-radius: 0;
+      border-left: 2px solid $green-200;
+      background-color: rgba($green-200, 0.1);
+      color: $white;
+      padding: 1px 18px 0;
 
       &.error {
         border: 1px solid $strong-pink;
       }
 
       &::placeholder {
-        text-transform: uppercase;
+        color: $green-200;
+        text-transform: none;
       }
     }
 
@@ -122,39 +82,6 @@
       flex: none;
       letter-spacing: $letter-spacing-x-narrow;
       font-weight: $font-weight-regular;
-    }
-  }
-
-  &.v-footer  {
-    padding: 0;
-    background: transparent;
-
-    .newsletter-input-container {
-      border-radius: 0;
-    }
-
-    .newsletter-input {
-      flex: auto;
-      height: 100%;
-      font-family: $font-family-3;
-      font-size: $font-size-x-regular;
-      letter-spacing: $letter-spacing-x-narrow;
-      text-align: left;
-      border: 0;
-      border-radius: 0;
-      border-left: 3px solid $green-200;
-      background-color: rgba($green-200, 0.1);
-      color: $green-200;
-      padding: 1px 10px 0;
-
-      &.error {
-        border: 1px solid $strong-pink;
-      }
-
-      &::placeholder {
-        color: rgba($green-200, 0.8);
-        text-transform: none;
-      }
     }
   }
 
@@ -180,11 +107,11 @@
 
   .dropdown-button {
     position: absolute;
-    top: 10px;
-    right: 5%;
+    top: 12px;
+    right: 9%;
     width: 20px;
     height: 20px;
-    opacity: 0.5;
+    opacity: 0.2;
 
     &:after {
       content: "";
@@ -209,5 +136,11 @@
         transition: transform 0.5s;
       }
     }
+  }
+
+  .subscription-success {
+    color: $white;
+    font-family: $font-family-2;
+    font-size: $font-size-regular;
   }
 }

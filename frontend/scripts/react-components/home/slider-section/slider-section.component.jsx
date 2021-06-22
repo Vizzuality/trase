@@ -4,7 +4,6 @@ import Siema from 'react-siema';
 import cx from 'classnames';
 import Card from 'react-components/shared/card/card.component';
 import AnimatedCard from 'react-components/shared/animated-card/animated-card.component';
-import QuoteCard from 'react-components/shared/quote-card/quote-card.component';
 import debounce from 'lodash/debounce';
 import { DOCUMENT_POST_TYPES } from 'constants';
 import Heading from 'react-components/shared/heading/heading.component';
@@ -94,14 +93,7 @@ class SliderSection extends React.PureComponent {
       );
     }
 
-    return slide.quote ? (
-      <QuoteCard
-        quote={slide.quote}
-        name={slide.authorName}
-        title={slide.authorTitle}
-        imageUrl={slide.imageUrl}
-      />
-    ) : (
+    return (
       <Card
         translateUrl
         title={slide.title}

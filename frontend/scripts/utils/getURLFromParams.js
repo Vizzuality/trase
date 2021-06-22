@@ -68,11 +68,6 @@ const API_ENDPOINTS = {
     mock: 'mocks/v3_get_testimonials.json'
   },
   [GET_MARKDOWN_CONTENT_URL]: { api: 'markdown', endpoint: 'content' },
-  [GET_TEAM_URL]: {
-    api: 'content',
-    endpoint: '/staff_groups',
-    mock: '/mocks/v3_get_team.json'
-  },
   [GET_TOP_NODES_URL]: { api: 3, endpoint: '/contexts/$context_id$/top_nodes' },
   [GET_TOP_NODE_STATS_URL]: { api: 3, endpoint: '/nodes_stats' },
   [GET_NODE_SUMMARY_URL]: {
@@ -179,7 +174,7 @@ function replaceURLParams(endpoint, params) {
 const parseParams = params => {
   if (!params.profile_type) return params;
   return { ...params, profile_type: pluralize(params.profile_type) };
-}
+};
 
 export function getURLForV3(endpoint, paramsArg = {}) {
   const params = parseParams(Object.assign({}, paramsArg));
@@ -188,9 +183,8 @@ export function getURLForV3(endpoint, paramsArg = {}) {
   return `${API_V3_URL}${apiEndpoint}${queryParams.length > 0 ? `?${queryParams}` : ''}`;
 }
 
-export const getSummaryEndpoint = (profileType) => (
-  profileType === 'country' ? GET_COUNTRY_NODE_SUMMARY_URL : GET_NODE_SUMMARY_URL
-);
+export const getSummaryEndpoint = profileType =>
+  profileType === 'country' ? GET_COUNTRY_NODE_SUMMARY_URL : GET_NODE_SUMMARY_URL;
 
 export function getURLFromParams(endpointKey, params = {}, mock = false) {
   const endpointData = API_ENDPOINTS[endpointKey];

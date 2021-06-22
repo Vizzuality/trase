@@ -1,12 +1,11 @@
 import { createSelector } from 'reselect';
 import formatValue from 'utils/formatValue';
+import { getHighlightedNodesData } from 'react-components/tool/tool.selectors';
+import { getSelectedContext, getSelectedYears } from 'app/app.selectors';
 import {
   getSelectedMapDimensionsData,
   getSelectedMapContextualLayersData
 } from 'react-components/tool-layers/tool-layers.selectors';
-import { getHighlightedNodesData } from 'react-components/tool/tool.selectors';
-import { getSelectedContext, getSelectedYears } from 'app/app.selectors';
-import { getSelectedResizeBy } from 'react-components/tool-links/tool-links.selectors';
 import { getContextualLayersTemplates, getRasterLayerTemplate } from './layers/contextual-layers';
 import { getLogisticMapLayerTemplates } from './layers/logistic-layers';
 
@@ -19,8 +18,8 @@ export const getCountryName = createSelector(
   selectedContext => selectedContext?.countryName || null
 );
 
-const getHighlightedNodesCoordinates = state => state.toolLayers.highlightedNodeCoordinates;
 const getNodeAttributes = state => state.toolLinks.data.nodeAttributes || null;
+const getHighlightedNodesCoordinates = state => state.toolLayers.highlightedNodeCoordinates;
 export const getNodeHeights = state => state.toolLinks.data.nodeHeights || null;
 
 const getValue = (unitLayerValues, selectedYears, dimension) => {
@@ -53,20 +52,16 @@ export const getTooltipValues = createSelector(
   [
     getNodeAttributes,
     getSelectedMapDimensionsData,
-    getNodeHeights,
     getHighlightedNodesData,
     getHighlightedNodesCoordinates,
-    getSelectedResizeBy,
     getSelectedYears,
     getUnitLayersData
   ],
   (
     nodeAttributes,
     selectedMapDimensions,
-    nodeHeights,
     nodesData,
     coordinates,
-    selectedResizeBy,
     selectedYears,
     unitLayersData
   ) => {
@@ -75,7 +70,7 @@ export const getTooltipValues = createSelector(
     if (!coordinates || !unitLayersData || !node) {
       return null;
     }
-    const nodeHeight = nodeHeights && nodeHeights[node.id];
+
     if (nodeAttributes && selectedMapDimensions && selectedMapDimensions.length > 0) {
       values = selectedMapDimensions
         .map(dimension => {
@@ -95,15 +90,6 @@ export const getTooltipValues = createSelector(
           };
         })
         .filter(Boolean);
-    }
-
-    // if node is visible in sankey, quant is available. E.g. Trade Volume
-    if (nodeHeight) {
-      values.push({
-        title: selectedResizeBy.label,
-        unit: selectedResizeBy.unit,
-        value: formatValue(nodeHeight.quant, selectedResizeBy.label)
-      });
     }
 
     return values;
