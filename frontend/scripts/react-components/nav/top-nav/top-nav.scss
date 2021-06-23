@@ -207,6 +207,7 @@ $menuOffset: 15vh;
     justify-content: space-between;
     align-items: center;
     width: 75px;
+    transform: translate(0px, 1px);
 
     @media screen and (min-width: $breakpoint-laptop) {
       width: 135px;
@@ -244,7 +245,7 @@ $menuOffset: 15vh;
   }
 
   .top-nav-logo {
-    transform: translate(0, -2px);
+    transform: translate(0, -1px);
     margin-left: 10px;
 
     @media screen and (min-width: $breakpoint-tablet) {
