@@ -20,7 +20,7 @@ const getEntrypointsData = defaultContext => {
 
   return [
     {
-      link: { type: 'tool', payload: { serializerParams: defaultParams } },
+      link: { type: 'explore', payload: { serializerParams: defaultParams } },
       subtitle: 'Supply Chain',
       text:
         'Follow trade flows to identify sourcing regions, profile supply chain risks and' +
@@ -39,7 +39,7 @@ const getEntrypointsData = defaultContext => {
     },
     {
       link: {
-        type: 'tool',
+        type: 'explore',
         payload: { serializerParams: { toolLayout: TOOL_LAYOUT.left, ...defaultParams } }
       },
       subtitle: 'Map',
