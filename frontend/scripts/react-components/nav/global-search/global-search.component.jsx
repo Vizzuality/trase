@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import Downshift from 'downshift';
 import debounce from 'lodash/debounce';
@@ -83,7 +84,14 @@ export default class GlobalSearch extends Component {
   }, SEARCH_DEBOUNCE_RATE_IN_MS);
 
   render() {
-    const { isLoading, className, searchResults = [], searchTerm, labelComponent } = this.props;
+    const {
+      isLoading,
+      className,
+      searchResults = [],
+      searchTerm,
+      labelComponent,
+      portalRef
+    } = this.props;
     const { isSearchOpen, inputValue } = this.state;
     const noResults = !searchResults.length && !isLoading && !isEmpty(searchTerm);
 
@@ -95,7 +103,7 @@ export default class GlobalSearch extends Component {
         </div>
       );
     }
-    return (
+    const renderGlobalSearch = (
       <div className="c-search -global">
         {isLoading ? (
           <span className="search-spinner" />
@@ -180,6 +188,7 @@ export default class GlobalSearch extends Component {
         </div>
       </div>
     );
+    return portalRef ? ReactDOM.createPortal(renderGlobalSearch, portalRef) : renderGlobalSearch;
   }
 }
 
@@ -190,5 +199,6 @@ GlobalSearch.propTypes = {
   onItemSelected: PropTypes.func,
   searchResults: PropTypes.array,
   searchTerm: PropTypes.string,
-  labelComponent: PropTypes.func
+  labelComponent: PropTypes.func,
+  portalRef: PropTypes.object
 };
