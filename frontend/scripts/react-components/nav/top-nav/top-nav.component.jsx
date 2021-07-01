@@ -32,6 +32,8 @@ class TopNav extends React.PureComponent {
 
   mobileMenuRef = React.createRef(null);
 
+  navRef = React.createRef(null);
+
   componentDidMount() {
     // window.addEventListener('click', this.handleClickOutside);
     window.addEventListener('scroll', this.setBackground, { passive: true });
@@ -131,13 +133,17 @@ class TopNav extends React.PureComponent {
     allLinks.push(...links);
 
     const SearchLabel = desktop => (desktop ? null : <span className="search-text">SEARCH</span>);
-
     return (
       <ResizeListener>
         {({ windowWidth }) => {
           const isDesktop = windowWidth >= BREAKPOINTS.laptop;
           return (
-            <div className="nav-menu">
+            <div
+              className="nav-menu"
+              ref={ref => {
+                this.navRef = ref;
+              }}
+            >
               <div className="first-row">
                 <div className="left-section">
                   <Hamburger onClick={this.handleToggleClick} isOpen={menuOpen} />
@@ -166,11 +172,15 @@ class TopNav extends React.PureComponent {
                     <li className="top-nav-item search-container">
                       <span className="search-icon">
                         {page === 'tool' ? (
-                          <ToolSearch labelComponent={isDesktop ? SearchLabel : null} />
+                          <ToolSearch
+                            labelComponent={isDesktop ? SearchLabel : null}
+                            portalRef={this.navRef}
+                          />
                         ) : (
                           <Search
                             className="top-nav-search"
                             labelComponent={isDesktop ? SearchLabel : null}
+                            portalRef={this.navRef}
                           />
                         )}
                       </span>
