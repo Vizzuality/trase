@@ -10,47 +10,38 @@ import ResizeListener from 'react-components/shared/resize-listener.component';
 
 import './entrypoints.scss';
 
-const getEntrypointsData = defaultContext => {
-  const defaultParams = defaultContext
-    ? {
-        countries: defaultContext.countryId,
-        commodities: defaultContext.commodityId
-      }
-    : {};
-
-  return [
-    {
-      link: { type: 'explore', payload: { serializerParams: defaultParams } },
-      subtitle: 'Supply Chain',
-      text:
-        'Follow trade flows to identify sourcing regions, profile supply chain risks and' +
-        ' assess opportunities for sustainable production.',
-      className: '-supply-chain',
-      src: '/images/backgrounds/home_trase_supply.png'
+const data = [
+  {
+    link: { type: 'explore' },
+    subtitle: 'Supply Chain',
+    text:
+      'Follow trade flows to identify sourcing regions, profile supply chain risks and' +
+      ' assess opportunities for sustainable production.',
+    className: '-supply-chain',
+    src: '/images/backgrounds/home_trase_supply.png'
+  },
+  {
+    link: { type: 'profiles' },
+    subtitle: 'Profile',
+    text:
+      'View the trade and sustainability profile of a particular' +
+      ' company or production region.',
+    className: '-profile',
+    src: '/images/backgrounds/home_trase_profiles.png'
+  },
+  {
+    link: {
+      type: 'explore',
+      payload: { serializerParams: { toolLayout: TOOL_LAYOUT.left } }
     },
-    {
-      link: { type: 'profiles' },
-      subtitle: 'Profile',
-      text:
-        'View the trade and sustainability profile of a particular' +
-        ' company or production region.',
-      className: '-profile',
-      src: '/images/backgrounds/home_trase_profiles.png'
-    },
-    {
-      link: {
-        type: 'explore',
-        payload: { serializerParams: { toolLayout: TOOL_LAYOUT.left, ...defaultParams } }
-      },
-      subtitle: 'Map',
-      text:
-        'Explore the sustainability of different production regions and identify risks and' +
-        ' opportunities facing downstream buyers.',
-      className: '-map',
-      src: '/images/backgrounds/home_trase_map.png'
-    }
-  ];
-};
+    subtitle: 'Map',
+    text:
+      'Explore the sustainability of different production regions and identify risks and' +
+      ' opportunities facing downstream buyers.',
+    className: '-map',
+    src: '/images/backgrounds/home_trase_map.png'
+  }
+];
 
 const Entrypoints = props => {
   const renderEntrypointText = slide => (
@@ -64,8 +55,7 @@ const Entrypoints = props => {
     </>
   );
 
-  const { onClick, defaultContext } = props;
-  const data = getEntrypointsData(defaultContext);
+  const { onClick } = props;
   return (
     <ResizeListener>
       {({ windowWidth }) => {

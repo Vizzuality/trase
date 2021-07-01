@@ -5,13 +5,13 @@ import Entrypoints from 'react-components/home/entrypoints/entrypoints.component
 import 'scripts/react-components/home/homepage.scss';
 
 const Home = props => {
-  const { clickEntrypoint, defaultContext } = props;
+  const { clickEntrypoint } = props;
 
   return (
     <div className="l-homepage">
       <div className="c-homepage">
         <div className="homepage-entrypoints">
-          <Entrypoints onClick={clickEntrypoint} defaultContext={defaultContext} />
+          <Entrypoints onClick={clickEntrypoint} />
         </div>
       </div>
     </div>
