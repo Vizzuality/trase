@@ -29,7 +29,12 @@ function VersioningModal({ data, context }) {
             dangerouslySetInnerHTML={{ __html: summary }}
             className="summary"
           />{' '}
-          <a href="https://www.trase.earth/resources" title="Methods and data">
+          <a
+            href="https://www.trase.earth/resources#Methods"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Methods and data"
+          >
             <Text as="span" className="link-text" size="md" weight="bold" decoration="underline">
               Methods and data.
             </Text>

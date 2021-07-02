@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */
 import React, { useEffect, useState, useRef } from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import Downshift from 'downshift';
 import { FixedSizeList } from 'react-window';
@@ -42,7 +43,8 @@ function ToolSearch(props) {
     toolLayout,
     contextId,
     nodes,
-    labelComponent
+    labelComponent,
+    portalRef
   } = props;
 
   const [inputValue, setInputValue] = useState('');
@@ -119,7 +121,7 @@ function ToolSearch(props) {
     );
   }
 
-  return (
+  const renderToolSearch = (
     <div className="c-tool-search c-search -tool">
       {renderIcon()}
       <div className="c-search__veil" onClick={onCloseClicked} />
@@ -185,6 +187,7 @@ function ToolSearch(props) {
       </div>
     </div>
   );
+  return portalRef ? ReactDOM.createPortal(renderToolSearch, portalRef) : renderToolSearch;
 }
 
 ToolSearch.propTypes = {
@@ -197,7 +200,8 @@ ToolSearch.propTypes = {
   selectedNodesIds: PropTypes.array,
   setIsSearchOpen: PropTypes.func,
   labelComponent: PropTypes.node,
-  onInputValueChange: PropTypes.func
+  onInputValueChange: PropTypes.func,
+  portalRef: PropTypes.object
 };
 
 export default ToolSearch;
