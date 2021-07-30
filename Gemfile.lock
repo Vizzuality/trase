@@ -307,7 +307,7 @@ GEM
     polyamorous (2.3.2)
       activerecord (>= 5.2.1)
     public_suffix (4.0.6)
-    puma (5.3.1)
+    puma (5.4.0)
       nio4r (~> 2.0)
     racc (1.5.2)
     rack (2.2.3)
@@ -537,7 +537,7 @@ DEPENDENCIES
   pg (~> 0.18)
   pg_csv
   pg_search
-  puma (~> 5.3)
+  puma (~> 5.4)
   rack (~> 2.2.3)
   rack-cors (~> 1.1)
   rails (~> 5.2.6)
