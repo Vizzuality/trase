@@ -230,8 +230,16 @@ export const getSelectedUnitLayers = createSelector(
     const countryName = snakeCase(selectedContext.countryName);
     const columnName = (c) => snakeCase(c.name);
     const selectedUnitLayers = [];
+    const exceptions = [
+      'indonesia_country_of_production_wood_pulp'
+    ];
     geoColumns.forEach(geoColumn => {
-      const unitLayer = unitLayers.find(l => l.id === `${countryName}_${columnName(geoColumn)}`);
+      let layerId = `${countryName}_${columnName(geoColumn)}`;
+      const exceptionId = `${layerId}_${snakeCase(selectedContext.commodityName)}`;
+      if (exceptions.includes(exceptionId)) {
+        layerId = exceptionId;
+      }
+      const unitLayer = unitLayers.find(l => l.id === layerId);
       if (unitLayer) {
         selectedUnitLayers.push({...unitLayer, hasChoropleth: !geoColumn.isChoroplethDisabled } )
       }
