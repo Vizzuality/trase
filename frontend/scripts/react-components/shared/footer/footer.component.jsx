@@ -235,6 +235,7 @@ const Footer = () => {
               <a
                 className="social-link"
                 href="https://www.trase.earth/contact-us"
+                target="_blank"
                 rel="noopener noreferrer"
               >
                 <Img
