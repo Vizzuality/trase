@@ -63,6 +63,7 @@ gem 'sitemap_generator'
 gem 'staccato'
 gem 'twitter', '~> 7.0'
 gem 'zip_tricks'
+gem 'wet-health_endpoint'
 gem 'whenever', require: false
 
 group :development, :test do
