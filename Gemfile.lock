@@ -287,7 +287,7 @@ GEM
     nokogiri (1.11.5)
       mini_portile2 (~> 2.5.0)
       racc (~> 1.4)
-    oj (3.11.5)
+    oj (3.13.7)
     orm_adapter (0.5.0)
     paperclip (6.1.0)
       activemodel (>= 4.2.0)
