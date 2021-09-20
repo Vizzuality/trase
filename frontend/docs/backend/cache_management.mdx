@@ -5,9 +5,33 @@ menu: Backend
 
 # Cache management
 
-## Varnish configuration
+## Varnish + application server
 
-We use Varnish in staging / production for caching. You need to configure your `/etc/varnish/default.vcl` file to support PURGE commands. Refer to `doc/varnish/varnish-minimum.vcl` for a minimum configuration file, or to `doc/varnish/varnish-recommended.vcl` for a more thorough setup.
+We use Varnish for caching. One important thing to understand is we use it differently for production and sandbox than for staging / demo / etc. In short:
+
+production / sandbox: user -- https --> ELB -- http --> Varnish (:80) --> Nginx (:8080) + Passenger
+
+staging etc: user -- https --> Nginx (:80) -- http --> Varnish (:8081) --> Apache (:8080) + Passenger
+
+Mind about the port configuration.
+
+## Configuration file
+
+You need to configure your `/etc/varnish/default.vcl` file. Please use a template for the appropriate Varnish version, e.g.:
+
+https://github.com/mattiasgeniar/varnish-6.0-configuration-templates/blob/master/default.vcl
+
+That template needs to contain purging and banning settings.
+
+Remember about 2 IMPORTANT customisations:
+
+- ensure the backend port is set to the application server port (8080)
+- ensure /health requests pass
+  ````
+  if (req.url ~ "^/health") {
+    return (pass);
+  }
+  ````
 
 ## Purging
 
