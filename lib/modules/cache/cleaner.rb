@@ -34,7 +34,7 @@ module Cache
       private
 
       def with_uri(url)
-        return unless Rails.env.staging? || Rails.env.production?
+        return unless Rails.env.staging? || Rails.env.sandbox? || Rails.env.production?
         uri = URI(url)
         Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
           request = yield(uri)
