@@ -15,6 +15,7 @@ function Heading(props) {
     children,
     className,
     transform,
+    restyled, // remove when restyling has finished
     ...rest
   } = props;
 
@@ -28,7 +29,8 @@ function Heading(props) {
         [`size-${size}`]: size,
         [`weight-${weight}`]: weight,
         [`text-align-${align}`]: align,
-        [`transform-${transform}`]: transform
+        [`transform-${transform}`]: transform,
+        restyled
       },
       className
     )
@@ -42,7 +44,8 @@ Heading.defaultProps = {
   size: 'rg',
   color: 'grey',
   weight: 'light',
-  variant: 'serif'
+  variant: 'serif',
+  restyled: false
 };
 
 Heading.propTypes = {
@@ -54,7 +57,8 @@ Heading.propTypes = {
   variant: PropTypes.string,
   transform: PropTypes.string,
   as: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
-  className: PropTypes.string // Use just for positioning
+  className: PropTypes.string, // Use just for positioning
+  restyled: PropTypes.bool // remove when restyling has finished
 };
 
 export default Heading;

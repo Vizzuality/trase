@@ -9,6 +9,8 @@ export default function(state) {
   switch (state.location.type) {
     case 'data':
       return 'TRASE - Data Download';
+    case 'about':
+      return 'TRASE - About TRASE';
     case 'profiles':
       return 'TRASE - Profiles';
     case 'profile':

@@ -48,6 +48,27 @@ let nav = [
   {
     name: 'Download',
     page: 'data'
+  },
+  {
+    name: 'About',
+    page: 'about'
+  }
+];
+
+const sidebarNav = [
+  {
+    name: 'Methods',
+    page: {
+      type: 'about',
+      payload: {
+        section: 'methods-and-data'
+      }
+    }
+  },
+  {
+    name: 'What is Trase?',
+    page: 'about',
+    parent: 'about'
   }
 ];
 
@@ -60,5 +81,6 @@ if (!ENABLE_DASHBOARDS) {
 }
 
 export default {
-  nav
+  nav,
+  sidebarNav
 };

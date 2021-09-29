@@ -11,5 +11,6 @@ The app is using `redux-first-router` to handle SPA like navigation.
 - `dashboardRoot` The dashboards landing page.
 - `dashboardElement` The dashboard page
 - `data` The data download page
+- `about` the about pages
 - `logisticsMap` The logistics map page.
 - `NOT_FOUND` The 404 page.

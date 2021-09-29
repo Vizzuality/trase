@@ -3,6 +3,7 @@ import { connectRoutes, NOT_FOUND, redirect, replace } from 'redux-first-router'
 import restoreScroll from 'redux-first-router-restore-scroll';
 import parseURL from 'utils/parseURL';
 import qs from 'qs';
+import withSidebarNavLayout from 'react-components/nav/sidebar-nav/with-sidebar-nav-layout.hoc';
 import getPageTitle from 'scripts/router/page-title';
 
 const loadTopNodes = (...args) =>
@@ -148,6 +149,13 @@ export const routes = {
     nav: {
       className: '-light'
     }
+  },
+  about: {
+    path: '/about/:section?',
+    Component: StaticContent,
+    title: getPageTitle,
+    thunk: loadPageData(getPageStaticContent),
+    layout: withSidebarNavLayout
   },
   logisticsMap: {
     path: '/logistics-map',

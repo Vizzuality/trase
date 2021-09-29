@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import NavLinks from 'react-components/nav/nav-links.component';
-
+import Heading from 'react-components/shared/heading';
 import 'scripts/react-components/nav/sidebar-nav/sidebar-nav.scss';
 
 class SidebarNav extends React.PureComponent {
@@ -25,10 +25,12 @@ class SidebarNav extends React.PureComponent {
   }
 
   render() {
-    const { links } = this.props;
-
+    const { links, title } = this.props;
     return (
       <div className="c-sidebar-nav">
+        <Heading variant="mono" color="pink" weight="bold" restyled>
+          {title}
+        </Heading>
         <ul className="nav-sidebar-link-list">
           <NavLinks
             links={links}
@@ -43,7 +45,8 @@ class SidebarNav extends React.PureComponent {
 }
 
 SidebarNav.propTypes = {
-  links: PropTypes.array
+  links: PropTypes.array,
+  title: PropTypes.string
 };
 
 export default SidebarNav;
