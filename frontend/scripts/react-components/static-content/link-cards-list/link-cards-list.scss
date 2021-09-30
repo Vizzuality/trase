@@ -1,0 +1,21 @@
+@import 'styles/settings';
+
+.c-link-cards-list {
+  margin: 30px 20px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.c-link-card {
+  background-color: $white;
+  border-left: 3px solid $orange-500;
+  width: 258px;
+  min-height: 100px;
+  display: flex;
+  align-items: start;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 17px 25px 18px 25px;
+  box-shadow: $box-shadow;
+  margin: 0 20px 30px 0;
+}

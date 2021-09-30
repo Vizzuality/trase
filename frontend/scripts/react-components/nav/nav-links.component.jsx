@@ -10,11 +10,15 @@ function mapLinksToRouter(link) {
 
 function isActive(match, location, link) {
   const route = location.routesMap[location.type];
-  const isParent = route.parent && link.page.type === route.parent;
+  const hasParent = route.parent && link.page.type === route.parent;
+  const noSectionButHasParent = hasParent && !link.page?.payload?.section;
+  const noSectionButIsDefault =
+    !location.payload?.section && link.page?.payload?.section === route?.default;
+
   return (
-    (location.type === link.page.type || isParent) &&
-    (link.page.payload && link.page.payload.section) ===
-      (location.payload && location.payload.section)
+    noSectionButHasParent ||
+    (location.type === link.page.type &&
+      (link.page?.payload?.section === location.payload?.section || noSectionButIsDefault))
   );
 }
 

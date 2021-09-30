@@ -67,8 +67,12 @@ const sidebarNav = [
   },
   {
     name: 'What is Trase?',
-    page: 'about',
-    parent: 'about'
+    page: {
+      type: 'about',
+      payload: {
+        section: 'what-is-trase'
+      }
+    }
   }
 ];
 

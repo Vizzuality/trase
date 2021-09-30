@@ -154,8 +154,10 @@ export const routes = {
     path: '/about/:section?',
     Component: StaticContent,
     title: getPageTitle,
+    default: 'methods-and-data',
     thunk: loadPageData(getPageStaticContent),
-    layout: withSidebarNavLayout
+    layout: withSidebarNavLayout,
+    parent: 'about'
   },
   logisticsMap: {
     path: '/logistics-map',

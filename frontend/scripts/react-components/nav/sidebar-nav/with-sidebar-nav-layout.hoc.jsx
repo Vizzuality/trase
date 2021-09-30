@@ -6,10 +6,10 @@ export default function(Component) {
   function SidebarNavLayoutHOC() {
     return (
       <div className="row">
-        <div className="column small-12 medium-3">
+        <div className="column small-12 medium-4">
           <SidebarNav />
         </div>
-        <article className="column small-12 medium-9 container">
+        <article className="column small-12 medium-8 container">
           <Component />
         </article>
       </div>
