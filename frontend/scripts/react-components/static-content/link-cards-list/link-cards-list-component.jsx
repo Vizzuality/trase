@@ -1,26 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Icon from 'react-components/shared/icon';
 import Text from 'react-components/shared/text';
-import Heading from 'react-components/shared/heading';
 import './link-cards-list.scss';
 
 const Card = ({ data }) => {
   const { title, href } = data;
   return (
-    <div className="c-link-card">
-      <Text size="xl" weight="bold" variant="sans" restyled>
+    <a className="c-link-card" href={href} target="_blank" rel="noopener noreferrer">
+      <Text size="xl" weight="bold" variant="sans" lineHeight="md" className="title" restyled>
         {title}
       </Text>
-      <a href={href} target="_blank" rel="noopener noreferrer" className="link">
-        <Heading variant="mono" color="pink" weight="bold" restyled>
+      <div className="view-pdf-container">
+        <Text
+          variant="mono"
+          color="pink"
+          weight="bold"
+          className="link-card-pdf-text"
+          as="span"
+          restyled
+        >
           VIEW PDF
-        </Heading>
-        <div className="arrow-container">
-          <Icon icon="icon-arrow" />
+        </Text>
+        <div className="round-button">
+          <div className="icon-pdf-arrow" />
         </div>
-      </a>
-    </div>
+      </div>
+    </a>
   );
 };
 
@@ -42,7 +47,7 @@ function LinkCardsList({ data }) {
     .flat();
 
   return (
-    <div classNames="c-link-cards-list">
+    <div className="c-link-cards-list">
       {listItems.map(item => (
         <Card data={item} />
       ))}
