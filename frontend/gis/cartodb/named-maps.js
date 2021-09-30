@@ -162,7 +162,7 @@ function saveTemplates(templates, namedMaps) {
 
 function applyTemplates(classified) {
   const { toUpdate, toCreate, toRemove } = classified;
-  console.log(toUpdate);
+  console.info(toUpdate);
   const updated = toUpdate.length > 0 ? update(toUpdate) : [];
   const created = toCreate.length > 0 ? create(toCreate) : [];
   if (toRemove.length > 0) remove(toRemove).catch(console.error);

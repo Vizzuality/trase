@@ -30,7 +30,6 @@ const evManager = new EventManager();
 const renderVainillaComponents = () => (
   <>
     <ModalContainer />
-    {/* <MapContainer /> */}
   </>
 );
 

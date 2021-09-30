@@ -5,7 +5,6 @@ import SidebarNav from './sidebar-nav.component';
 
 function mapStateToProps(state) {
   const { location } = state;
-  console.log('s', location, state);
   const filename = staticContentActions.getStaticContentFilename(location);
   const links = routerLinks[filename] || routerLinks.sidebarNav;
 

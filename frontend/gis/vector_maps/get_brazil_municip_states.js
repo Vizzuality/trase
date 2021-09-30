@@ -1,23 +1,27 @@
 #!/usr/bin/env node
 
-var CartoDB = require('cartodb');
-var exec = require('child_process').exec;
-var fs = require('fs');
+const CartoDB = require('cartodb');
+const exec = require('child_process').exec;
+const fs = require('fs');
 
-var sql = new CartoDB.SQL({user: 'p2cs-sei'})
+const sql = new CartoDB.SQL({ user: 'p2cs-sei' });
 
-sql.execute('SELECT geoid FROM BRAZIL_states')
-  .done(function(data) {
-    data.rows.forEach(function(row) {
-      var stateSQL = `SELECT the_geom, geoid FROM BRAZIL_municipalities_1 WHERE state_geoid = '${row.geoid}'`;
-      console.log(stateSQL);
-      sql.execute(stateSQL, {format: 'geojson'})
-        .done(function(data) {
-          fs.writeFileSync(`./tmp/BRAZIL_${row.geoid}.json`, data, 'utf8');
-          exec(`./node_modules/.bin/topojson -p --simplify 0.0000001 -o public/vector_layers/municip_states/brazil/${row.geoid}.topo.json -- ./tmp/BRAZIL_${row.geoid}.json`)
-        })
-        .error(function(err) {
-          console.log(err)
-        })
-    })
+sql.execute('SELECT geoid FROM BRAZIL_states').done(data => {
+  data.rows.forEach(row => {
+    const stateSQL = `SELECT the_geom, geoid FROM BRAZIL_municipalities_1 WHERE state_geoid = '${row.geoid}'`;
+    // eslint-disable-next-line no-console
+    console.info(stateSQL);
+    sql
+      .execute(stateSQL, { format: 'geojson' })
+      .done(d => {
+        fs.writeFileSync(`./tmp/BRAZIL_${row.geoid}.json`, d, 'utf8');
+        exec(
+          `./node_modules/.bin/topojson -p --simplify 0.0000001 -o public/vector_layers/municip_states/brazil/${row.geoid}.topo.json -- ./tmp/BRAZIL_${row.geoid}.json`
+        );
+      })
+      .error(err => {
+        // eslint-disable-next-line no-console
+        console.info(err);
+      });
   });
+});

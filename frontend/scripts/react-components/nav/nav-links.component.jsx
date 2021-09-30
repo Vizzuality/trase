@@ -11,7 +11,6 @@ function mapLinksToRouter(link) {
 function isActive(match, location, link) {
   const route = location.routesMap[location.type];
   const isParent = route.parent && link.page.type === route.parent;
-  console.log(match, location, link, route, isParent);
   return (
     (location.type === link.page.type || isParent) &&
     (link.page.payload && link.page.payload.section) ===
