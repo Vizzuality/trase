@@ -19,6 +19,10 @@
   }
 
   .not-found {
+    min-height: 42vh;
+    display: flex;
+    align-items: center;
+
     .not-found-text {
       color: $charcoal-grey;
       font-family: $font-family-2;
