@@ -5,20 +5,45 @@ import remark from 'remark';
 import remarkReact from 'remark-react';
 import slugs from 'remark-slug';
 import autolinkHeadings from 'remark-autolink-headings';
-
+import LinkCardsList from 'react-components/static-content/link-cards-list';
 import PropTypes from 'prop-types';
 
-const SmartLink = p => {
-  const isAbsoluteLink = /^http(s)?:\/\//.test(p.href);
-  const isEmail = /^mailto:/.test(p.href);
+const SmartLink = props => {
+  const { href, children } = props;
+  const isAbsoluteLink = /^http(s)?:\/\//.test(href);
+  const isEmail = /^mailto:/.test(href);
   if (!isAbsoluteLink && !isEmail) {
-    return <Link to={p.href}>{p.children}</Link>;
+    return <Link to={href}>{children}</Link>;
   }
   return (
-    <a href={p.href} target="_blank" rel="noopener noreferrer" tx-content="translate_urls">
-      {p.children}
+    <a href={href} target="_blank" rel="noopener noreferrer" tx-content="translate_urls">
+      {children}
     </a>
   );
+};
+
+SmartLink.propTypes = {
+  href: PropTypes.string,
+  children: PropTypes.node
+};
+
+const LinksCardList = props => {
+  const { children } = props;
+  const isLinksList =
+    children &&
+    children.length > 0 &&
+    children.some(
+      child =>
+        child.props?.children && child.props?.children[0] && child.props?.children[0].props?.href
+    );
+  if (isLinksList) {
+    return <LinkCardsList data={children} />;
+  }
+  return children;
+};
+
+LinksCardList.propTypes = {
+  children: PropTypes.node
 };
 
 function RemarkComponent(props) {
@@ -40,7 +65,9 @@ function RemarkComponent(props) {
   );
   return (
     remark()
-      .use(remarkReact, { remarkReactComponents: { div: MarkdownContainer, a: SmartLink } })
+      .use(remarkReact, {
+        remarkReactComponents: { div: MarkdownContainer, a: SmartLink, ul: LinksCardList }
+      })
       .use(slugs)
       // Note that this module must be included after `remark-slug`.
       .use(autolinkHeadings)

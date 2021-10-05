@@ -15,9 +15,15 @@ import 'styles/_layouts.scss';
 
 const TopNav = lazy(() => import('react-components/nav/top-nav/top-nav.container'));
 
+const pageContent = {
+  about: lazy(() =>
+    import('../react-components/static-content/markdown-renderer/markdown-renderer.container')
+  )
+};
+
 function App() {
   const { routesMap, type, query } = useSelector(state => state.location);
-  const { Component, footer = true, feedback = true } = routesMap[type];
+  const { Component, layout, footer = true, feedback = true } = routesMap[type];
   const [isInIframe, setIsInIframe] = useState(false);
   const pageKey = type === 'profile' ? `${type}-${query?.nodeId}` : type;
 
@@ -35,7 +41,7 @@ function App() {
         <TopNav />
       </nav>
       <main>
-        <Component key={pageKey} />
+        <Component key={pageKey} content={layout && layout(pageContent[type])} />
         {!isInIframe && <CookieBanner />}
         {isInIframe && <FullScreenButton />}
         {feedback && <Feedback />}

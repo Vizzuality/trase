@@ -5,8 +5,10 @@ import { GET_MARKDOWN_CONTENT_URL, getURLFromParams } from 'utils/getURLFromPara
 
 export const STATIC_CONTENT__SET_MARKDOWN = 'STATIC_CONTENT__SET_MARKDOWN';
 
-export const getStaticContentFilename = ({ type, payload }) =>
-  `${type}${payload.section ? `/${kebabCase(payload.section)}` : '/index'}`;
+export const getStaticContentFilename = ({ type, payload, routesMap }) => {
+  const section = payload.section || (routesMap[type] && routesMap[type].default);
+  return `${type}/${section && kebabCase(section)}`;
+};
 
 export const getStaticContent = () => (dispatch, getState) => {
   const { location, staticContent } = getState();

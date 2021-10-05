@@ -21,8 +21,4 @@ MarkdownRenderer.propTypes = {
   className: PropTypes.string
 };
 
-MarkdownRenderer.defaultProps = {
-  className: 'small-12 medium-9'
-};
-
 export default MarkdownRenderer;

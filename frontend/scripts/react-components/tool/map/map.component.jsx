@@ -164,7 +164,7 @@ function MapBoxMap(props) {
       map.setFeatureState({ ...hoveredGeo.last }, { hover: false });
       hoveredGeo.last = {};
     }
-  }, [layerIds, map, hoveredGeo]);
+  }, [layerIds, map, hoveredGeo.last]);
 
   // Highlight nodes hovered on Sankey
   useHighlightHoveredSankeyNodes({

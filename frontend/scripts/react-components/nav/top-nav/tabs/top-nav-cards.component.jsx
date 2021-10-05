@@ -18,7 +18,7 @@ const TopNavCards = () => {
     ) {
       cardsRef.current[activeCard].scrollIntoView({ inline: 'center', behavior: 'smooth' });
     }
-  }, [activeCard, cardsRef]);
+  }, [activeCard, cardsRef, mobile]);
 
   const cards = [
     {

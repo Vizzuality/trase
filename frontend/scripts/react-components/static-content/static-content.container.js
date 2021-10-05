@@ -11,5 +11,4 @@ function mapStateToProps(state, ownProps) {
     notFound: location.type === NOT_FOUND
   };
 }
-
 export default connect(mapStateToProps)(StaticContent);
