@@ -38,6 +38,7 @@
 
     @media only screen and (min-width: $breakpoint-foundation-small) {
       margin: 25px 0 0;
+      min-width: 260px;
 
       &:only-child {
         margin: 0;
