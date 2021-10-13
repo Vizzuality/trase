@@ -10,8 +10,7 @@ module.exports = {
   GFW_WIDGETS_BASE_URL: undefined,
   MAPBOX_TOKEN: undefined,
   NODE_ENV_DEV: false,
-
-  // feature flags
+  CURRENT_CTA_VERSION: 20213,
   USE_SERVICE_WORKER: true,
   ALWAYS_DISPLAY_DASHBOARD_INFO: true,
   DATA_DOWNLOAD_ENABLED: true,
