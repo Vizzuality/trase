@@ -1,0 +1,41 @@
+@import 'styles/settings';
+
+.c-cta {
+  position: absolute;
+  z-index: $z-above-hero;
+  margin-top: $nav-height;
+  padding: 30px;
+  height: 130px;
+  width: 100%;
+  text-align: center;
+  background: $green-light-gray-gradient;
+
+  .close-button {
+    position: absolute;
+    fill: $gray-600;
+    top: 20px;
+    right: 5%;
+    border: none;
+
+    > svg {
+      height: 60px;
+      width: 60px;
+    }
+  }
+
+  .release-notes-text,
+  .cta-main-text,
+  .cta-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cta-main-text {
+    padding-bottom: 20px;
+  }
+
+  .link-text {
+    margin-left: 5px;
+  }
+}

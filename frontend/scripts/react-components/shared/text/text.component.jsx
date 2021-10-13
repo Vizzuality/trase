@@ -17,6 +17,7 @@ function Text(props) {
     className,
     transform,
     decoration,
+    restyled,
     ...rest
   } = props;
   const textProps = {
@@ -33,6 +34,7 @@ function Text(props) {
         [`transform-${transform}`]: transform,
         [`decoration-${decoration}`]: decoration
       },
+      restyled,
       className
     )
   };
@@ -44,7 +46,8 @@ Text.defaultProps = {
   size: 'rg',
   color: 'grey',
   weight: 'light',
-  variant: 'serif'
+  variant: 'serif',
+  restyled: false
 };
 
 Text.propTypes = {
@@ -57,6 +60,7 @@ Text.propTypes = {
   variant: PropTypes.string,
   transform: PropTypes.string,
   decoration: PropTypes.string,
+  restyled: PropTypes.bool,
   className: PropTypes.string, // Use only for positioning
   as: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
 };
