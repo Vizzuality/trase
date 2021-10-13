@@ -4,7 +4,7 @@ import { CTA_VERSIONS } from './cta-versions-data';
 
 const CTA_VERSION_KEY = 'TRASE_CTA_VIEWED_VERSION';
 
-const CTAContainer = (props) => {
+const CTAContainer = props => {
   const [localCtaVersion, setLocalCtaVersion] = useState(
     JSON.parse(localStorage.getItem(CTA_VERSION_KEY))
   );

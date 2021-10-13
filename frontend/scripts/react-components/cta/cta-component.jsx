@@ -1,12 +1,11 @@
 import React from 'react';
-
+import PropTypes from 'prop-types';
 import Button from 'react-components/shared/button';
 import Icon from 'react-components/shared/icon';
 import './cta-styles.scss';
 
 function CTA({ handleOnRequestClose, data }) {
   const { text, releaseNotesText } = data || {};
-  console.log({ text, releaseNotesText });
   return (
     <div className="c-cta">
       <div className="cta-main-text">{text}</div>
@@ -17,5 +16,13 @@ function CTA({ handleOnRequestClose, data }) {
     </div>
   );
 }
+
+DashboardModalFooter.propTypes = {
+  data: PropTypes.shape({
+    text: PropTypes.node,
+    releaseNotesText: PropTypes.node
+  }),
+  handleOnRequestClose: PropTypes.func.isRequired
+};
 
 export default CTA;
