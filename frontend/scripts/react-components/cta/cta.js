@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { createElement, useState } from 'react';
 import Component from './cta-component';
 import { CTA_VERSIONS } from './cta-versions-data';

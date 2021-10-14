@@ -17,7 +17,7 @@ function CTA({ handleOnRequestClose, data }) {
   );
 }
 
-DashboardModalFooter.propTypes = {
+CTA.propTypes = {
   data: PropTypes.shape({
     text: PropTypes.node,
     releaseNotesText: PropTypes.node
