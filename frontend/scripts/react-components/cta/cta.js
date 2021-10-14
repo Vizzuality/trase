@@ -13,8 +13,9 @@ const mapStateToProps = state => ({
 });
 
 const CTAContainer = ({ contexts }) => {
+  const initialVersionInfo = localStorage.getItem(CTA_VERSION_KEY);
   const [localCtaVersion, setLocalCtaVersion] = useState(
-    JSON.parse(localStorage.getItem(CTA_VERSION_KEY))
+    initialVersionInfo && JSON.parse(initialVersionInfo)
   );
 
   if (!+CURRENT_CTA_VERSION || +localCtaVersion >= +CURRENT_CTA_VERSION) {
