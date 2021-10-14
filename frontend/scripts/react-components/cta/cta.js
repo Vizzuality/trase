@@ -1,11 +1,17 @@
 /* eslint-disable no-undef */
 import { createElement, useState } from 'react';
+import { connect } from 'react-redux';
+import { getContexts } from 'react-components/explore/explore.selectors';
 import Component from './cta-component';
-import { CTA_VERSIONS } from './cta-versions-data';
+import { getCTAData } from './cta-versions-data';
 
 const CTA_VERSION_KEY = 'TRASE_CTA_VIEWED_VERSION';
 
-const CTAContainer = props => {
+const mapStateToProps = state => ({
+  contexts: getContexts(state)
+});
+
+const CTAContainer = ({ contexts }) => {
   const [localCtaVersion, setLocalCtaVersion] = useState(
     JSON.parse(localStorage.getItem(CTA_VERSION_KEY))
   );
@@ -16,11 +22,11 @@ const CTAContainer = props => {
   };
   if (+localCtaVersion >= +CURRENT_CTA_VERSION) return null;
 
+  const data = getCTAData(CURRENT_CTA_VERSION, contexts);
   return createElement(Component, {
-    data: CTA_VERSIONS[CURRENT_CTA_VERSION],
-    handleOnRequestClose,
-    ...props
+    data,
+    handleOnRequestClose
   });
 };
 
-export default CTAContainer;
+export default connect(mapStateToProps, null)(CTAContainer);

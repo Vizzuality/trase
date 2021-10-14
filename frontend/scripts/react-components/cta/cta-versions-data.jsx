@@ -1,62 +1,99 @@
 import React from 'react';
 import Link from 'redux-first-router-link';
 import Text from 'react-components/shared/text';
+import { TOOL_LAYOUT } from 'constants';
 
-const contextLink = (text, url, external) => {
-  const content = (
-    <Text
-      weight="bold"
-      decoration="underline"
-      className="link-text"
-      restyled
-      variant="sans"
-      size="lg"
-    >
-      {text}
-    </Text>
-  );
-  return external ? (
-    <a href={url} target="_blank" rel="noopener noreferrer">
-      {content}
-    </a>
-  ) : (
-    <Link to={url}>{content}</Link>
-  );
-};
+const content = text => (
+  <Text
+    weight="bold"
+    decoration="underline"
+    className="link-text"
+    restyled
+    variant="sans"
+    size="lg"
+  >
+    {text}
+  </Text>
+);
 
 const releaseNotesText = (quarter, year) => (
   <div className="release-notes-text">
     <span>Check out our release notes </span>
     <span>
-      {contextLink(
-        'here',
-        `https://insights.trase.earth/insights/q${quarter}-${year}-release-notes/`,
-        true
-      )}
+      <a
+        href={`https://insights.trase.earth/insights/q${quarter}-${year}-release-notes/`}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {content('here')}
+      </a>
     </span>
     <span>.</span>
   </div>
 );
 
 // CTA version numbers have Year-Quarter with no separators format
-export const CTA_VERSIONS = {
-  20213: {
-    text: (
-      <Text className="cta-text" variant="sans" size="lg">
-        {' '}
-        We released new national level data for Argentina ({contextLink('Soy')}
-        {', '} {contextLink('Corn')}
-        {', '}
-        {contextLink('Cotton')}
-        {', '} {contextLink('Wood Pulp')}
-        {'), '}
-        {contextLink('Bolivian Soy')}
-        {', and  '}
-        {contextLink('Indonesian Shrimp')}.
-      </Text>
-    ),
-    releaseNotesText: releaseNotesText(3, 2021)
-  }
+export const getCTAData = (version, contexts) => {
+  if (!contexts) return null;
+
+  const contextLink = ({ text, commodityName, countryName }) => {
+    const context = contexts.find(
+      c =>
+        c.commodityName === commodityName.toUpperCase() &&
+        c.countryName === countryName.toUpperCase()
+    );
+    const to = context && {
+      type: 'tool',
+      payload: {
+        serializerParams: {
+          toolLayout: TOOL_LAYOUT.splitted,
+          countries: context.countryId,
+          commodities: context.commodityId
+        }
+      }
+    };
+
+    return <Link to={context && to}>{content(text)}</Link>;
+  };
+
+  return {
+    20213: {
+      text: (
+        <Text className="cta-text" variant="sans" size="lg">
+          {' '}
+          We released new national level data for Argentina (
+          {contextLink({ text: 'Soy', commodityName: 'SOY', countryName: 'ARGENTINA' })}
+          {', '} {contextLink({ text: 'Corn', commodityName: 'CORN', countryName: 'ARGENTINA' })}
+          {', '}
+          {contextLink({
+            text: 'Cotton',
+            commodityName: 'COTTON',
+            countryName: 'ARGENTINA'
+          })}
+          {', '}{' '}
+          {contextLink({
+            text: 'Wood Pulp',
+            commodityName: 'WOOD PULP',
+            countryName: 'ARGENTINA'
+          })}
+          {'), '}
+          {contextLink({
+            text: 'Bolivian Soy',
+            commodityName: 'SOY',
+            countryName: 'BOLIVIA'
+          })}
+          {', and  '}
+          {contextLink({
+            text: 'Indonesian Shrimp',
+            commodityName: 'SHRIMP',
+            countryName: 'INDONESIA'
+          })}
+          .
+        </Text>
+      ),
+      releaseNotesText: releaseNotesText(3, 2021)
+    }
+  }[version];
 };
 
-export default { CTA_VERSIONS };
+export default { getCTAData };
