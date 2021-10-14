@@ -17,7 +17,7 @@ const content = text => (
 );
 
 const releaseNotesText = (quarter, year) => (
-  <Text className="release-notes-text" restyled variant="sans" size="md">
+  <Text className="release-notes-text" restyled variant="sans" size="lg">
     <span>Check out our release notes </span>
     <span>
       <a
