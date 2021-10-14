@@ -17,7 +17,7 @@ const content = text => (
 );
 
 const releaseNotesText = (quarter, year) => (
-  <div className="release-notes-text">
+  <Text className="release-notes-text" restyled variant="sans" size="md">
     <span>Check out our release notes </span>
     <span>
       <a
@@ -29,7 +29,7 @@ const releaseNotesText = (quarter, year) => (
       </a>
     </span>
     <span>.</span>
-  </div>
+  </Text>
 );
 
 // CTA version numbers have Year-Quarter with no separators format
