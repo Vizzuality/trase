@@ -45,3 +45,27 @@
   src: url('/fonts/DMSans-Regular.woff2') format('woff2'),
   url('/fonts/DMSans-Regular.woff') format('woff')
 }
+
+@font-face {
+  font-family: 'Crimson Pro';
+  font-display: swap;
+  font-weight: $font-weight-regular;
+  src: url('/fonts/CrimsonPro-Regular.woff2') format('woff2'),
+  url('/fonts/CrimsonPro-Regular.woff') format('woff')
+}
+
+@font-face {
+  font-family: 'Crimson Pro';
+  font-display: swap;
+  font-weight: $font-weight-light;
+  src: url('/fonts/CrimsonPro-Light.woff2') format('woff2'),
+  url('/fonts/CrimsonPro-Light.woff') format('woff')
+}
+
+@font-face {
+  font-family: 'Space Mono';
+  font-display: swap;
+  font-weight: $font-weight-bold;
+  src: url('/fonts/SpaceMono-Bold.woff2') format('woff2'),
+  url('/fonts/SpaceMono-Bold.woff') format('woff')
+}

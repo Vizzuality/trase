@@ -49,7 +49,7 @@ export function mapToVanilla(VanillaComponent, methodProps, callbackProps) {
           );
           if (VanillaComponent.DEBUG) {
             // eslint-disable-next-line
-            console.log(VanillaComponent.name, method, props);
+            console.info(VanillaComponent.name, method, props);
           }
           fn.call(this.instance, props);
         }

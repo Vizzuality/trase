@@ -30,7 +30,7 @@ function VersioningModal({ data, context }) {
             className="summary"
           />{' '}
           <a
-            href="https://www.trase.earth/resources#Methods"
+            href="https://supplychains.trase.earth/about"
             target="_blank"
             rel="noopener noreferrer"
             title="Methods and data"

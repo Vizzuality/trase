@@ -215,6 +215,11 @@
     }
   }
 
+  .social-link {
+    .contact-image {
+      width: 38px;
+    }
+  }
 
   .social-links-list {
     display: flex;
@@ -225,8 +230,8 @@
       margin-bottom: 0;
     }
 
-    :first-child {
-      margin-right: 2px;
+    :not(:last-child) {
+      margin-right: 8px;
     }
   }
 
@@ -283,4 +288,3 @@
     width: 122px;
   }
 }
-

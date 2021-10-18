@@ -10,6 +10,7 @@ function mapStateToProps(state) {
 
   return {
     links,
+    title: location.type,
     filename // forcing to re-render when filename has changed
   };
 }

@@ -24,6 +24,8 @@ $font-family-1: 'DecimaMonoPro', 'Courier New', sans-serif;
 $font-family-2: 'Merriweather', serif;
 $font-family-3: 'DM Sans', sans-serif;
 $font-family-4: 'Crimson Pro', serif;
+$font-family-5: 'Space Mono', 'Courier New', sans-serif;
+
 
 $font-weight-light: 300;
 $font-weight-regular: 400;
@@ -146,6 +148,10 @@ $green-200: #b2ffe5;
 $box-shadow: 0 1px 3px 0 rgba($black, 0.1), 0 1px 2px 0 rgba($black, 0.2);
 $box-shadow-big: 0 3px 6px 0 rgba($black, 0.1), 0 3px 6px 0 rgba($black, 0.2);
 
+// gradients
+
+$green-light-gray-gradient: linear-gradient(to top, $light-gray, $green-200);
+
 // color scales
 $recolorgroup-colors: (
   'recolorgroup-1': $medium-pink,
@@ -238,6 +244,11 @@ $recolorby-qual-thematic-import: #a6611a;
 $recolorby-qual-thematic-community: #e7298a;
 $recolorby-qual-thematic-natural-forest: #7570b3;
 
+$recolorby-qual-thematic-western-guinean-lowland-forests: #80cdc1;
+$recolorby-qual-thematic-eastern-guinean-forests: #a6611a;
+$recolorby-qual-thematic-guinean-forest-savanna-mosaic: #e7298a;
+$recolorby-qual-thematic-guinean-montane-forests: #7570b3;
+
 $recolorby-linear-red-blue-7: #6f0119;
 $recolorby-linear-red-blue-6: #a50026;
 $recolorby-linear-red-blue-5: #d72f27;
@@ -320,6 +331,10 @@ $recolorby-colors: (
   'recolorby-qual-thematic-live-cattle-exports': $recolorby-qual-thematic-live-cattle-exports,
   'recolorby-qual-thematic-processed-beef-products':
     $recolorby-qual-thematic-processed-beef-products,
+  'recolorby-qual-thematic-western-guinean-lowland-forests': $recolorby-qual-thematic-western-guinean-lowland-forests,
+  'recolorby-qual-thematic-eastern-guinean-forests': $recolorby-qual-thematic-eastern-guinean-forests,
+  'recolorby-qual-thematic-guinean-forest-savanna-mosaic': $recolorby-qual-thematic-guinean-forest-savanna-mosaic,
+  'recolorby-qual-thematic-guinean-montane-forests': $recolorby-qual-thematic-guinean-montane-forests,
   'recolorby-qual-thematic-beef': $recolorby-qual-thematic-beef,
   'recolorby-qual-thematic-beef-boneless': $recolorby-qual-thematic-beef-boneless,
   'recolorby-qual-thematic-beef-offals': $recolorby-qual-thematic-beef-offals,

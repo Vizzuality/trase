@@ -19,6 +19,7 @@ module.exports = async ({ config }) =>
       new webpack.DefinePlugin({
         NODE_ENV_DEV: process.env.NODE_ENV === 'development',
         ENABLE_INTERSECTION_OBSERVER: process.env.ENABLE_INTERSECTION_OBSERVER === 'true',
+        CURRENT_CTA_VERSION: JSON.stringify(process.env.CURRENT_CTA_VERSION),
         DATA_DOWNLOAD_ENABLED: process.env.DATA_DOWNLOAD_ENABLED === 'true',
         SHOW_WORLD_MAP_IN_EXPLORE: process.env.SHOW_WORLD_MAP_IN_EXPLORE === 'true',
         ALWAYS_DISPLAY_DASHBOARD_INFO: process.env.ALWAYS_DISPLAY_DASHBOARD_INFO === 'true',

@@ -81,7 +81,7 @@ GEM
     annotate (3.1.1)
       activerecord (>= 3.2, < 7.0)
       rake (>= 10.4, < 14.0)
-    appsignal (3.0.5)
+    appsignal (3.0.11)
       rack
     arbre (1.2.1)
       activesupport (>= 3.0.0)
@@ -199,7 +199,7 @@ GEM
     faraday-excon (1.1.0)
     faraday-net_http (1.0.1)
     faraday-net_http_persistent (1.1.0)
-    ffi (1.15.0)
+    ffi (1.15.3)
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
       rake
@@ -253,7 +253,7 @@ GEM
       activerecord
       kaminari-core (= 1.2.1)
     kaminari-core (1.2.1)
-    listen (3.5.1)
+    listen (3.7.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
     loofah (2.9.1)
@@ -296,7 +296,7 @@ GEM
       mimemagic (~> 0.3.0)
       terrapin (~> 0.6.0)
     parallel (1.20.1)
-    parser (3.0.1.1)
+    parser (3.0.2.0)
       ast (~> 2.4.1)
     pg (0.21.0)
     pg_csv (0.2)
@@ -350,7 +350,7 @@ GEM
       activesupport (>= 5.2.1)
       i18n
       polyamorous (= 2.3.2)
-    rb-fsevent (0.10.4)
+    rb-fsevent (0.11.0)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     redis (4.2.5)
@@ -388,9 +388,9 @@ GEM
       rubocop-ast (>= 1.5.0, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 3.0)
-    rubocop-ast (1.5.0)
+    rubocop-ast (1.10.0)
       parser (>= 3.0.1.1)
-    rubocop-performance (1.11.3)
+    rubocop-performance (1.11.5)
       rubocop (>= 1.7.0, < 2.0)
       rubocop-ast (>= 0.4.0)
     rubocop-rspec (2.3.0)
@@ -531,7 +531,7 @@ DEPENDENCIES
   jbuilder (~> 2.11)
   json-schema
   kaminari
-  listen (~> 3.5.1)
+  listen (~> 3.7.0)
   mailchimp-api
   oj
   paperclip (~> 6.1.0)

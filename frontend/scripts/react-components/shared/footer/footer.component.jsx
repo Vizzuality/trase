@@ -91,6 +91,10 @@ const Footer = () => {
           {
             title: 'About',
             href: 'https://trase.earth/about'
+          },
+          {
+            title: 'Contact us',
+            href: 'https://www.trase.earth/contact-us'
           }
         ]
       },
@@ -225,6 +229,20 @@ const Footer = () => {
                 rel="noopener noreferrer"
               >
                 <Img src="/images/footer/social/linkedin.svg" alt="linkedin link" />
+              </a>
+            </li>
+            <li className="social-link-item">
+              <a
+                className="social-link"
+                href="https://www.trase.earth/contact-us"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Img
+                  src="/images/footer/social/contact.svg"
+                  className="contact-image"
+                  alt="contact mail"
+                />
               </a>
             </li>
           </ul>

@@ -141,7 +141,7 @@ export function* getToolNodesByLink(selectedContext, { fetchAllNodes } = {}) {
     if (difference.size === 0) {
       if (NODE_ENV_DEV) {
         // eslint-disable-next-line
-        console.log('All necessary nodes have been downloaded');
+        console.info('All necessary nodes have been downloaded');
       }
       return;
     }
@@ -184,7 +184,10 @@ export function* getToolNodesByLink(selectedContext, { fetchAllNodes } = {}) {
 
 export function* getToolGeoColumnNodes(selectedContext) {
   const geoColumns = yield select(getAllSelectedGeoColumns);
-  const params = { context_id: selectedContext.id, node_types_ids: geoColumns.map(c => c.id).join(',') };
+  const params = {
+    context_id: selectedContext.id,
+    node_types_ids: geoColumns.map(c => c.id).join(',')
+  };
   if (!params.node_types_ids) {
     return;
   }
@@ -220,13 +223,13 @@ export function* getMissingLockedNodes() {
   if (nodesIds.length === 0) {
     if (NODE_ENV_DEV) {
       // eslint-disable-next-line
-      console.log('No missing nodes.');
+      console.info('No missing nodes.');
     }
     return;
   }
   if (NODE_ENV_DEV) {
     // eslint-disable-next-line
-    console.log('Fetching missing nodes: ', nodesIds);
+    console.info('Fetching missing nodes: ', nodesIds);
   }
 
   const params = {
