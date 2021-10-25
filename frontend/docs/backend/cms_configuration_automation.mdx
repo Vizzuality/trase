@@ -9,7 +9,7 @@ There are two ways to export the configuration data in a JSON format - using the
 
 ## Exporting using the CMS
 
-The configuraton export dashboard is under [Database -> Configuration export](https://staging.trase.earth/content/admin/configuration_export).
+The configuraton export dashboard is under [Database -> Configuration export](https://sandbox.trase.earth/content/admin/configuration_export).
 
 If no export jub is currently running or queued, it is possible to start one using the `Start export` button.
 
@@ -32,7 +32,7 @@ The API uses token authentication built using the `devise_token_auth` gem. The a
 Sign in using the CMS email / password:
 
 ```
-curl -X POST -H "Content-Type: application/json" -d '{"email":"xxx@xxx.xxx","password":"xxxxxxxx"}' -i https://staging.trase.earth/api/private/auth/sign_in
+curl -X POST -H "Content-Type: application/json" -d '{"email":"xxx@xxx.xxx","password":"xxxxxxxx"}' -i https://sandbox.trase.earth/api/private/auth/sign_in
 ```
 
 The response headers contain information needed to authenticate further requests:
@@ -52,7 +52,7 @@ To authenticate requests you need to pass the `uid`, `access-token`, `token-type
 To start a configuration export job use a POST request to `/api/private/configuration_export_events`.
 
 ```
-curl -X POST -H "Content-Type: application/json" -d '' -H "access-token:ACCESS_TOKEN" -H "uid:UID" -H "token-type:Bearer" -H "client:CLIENT" https://staging.trase.earth/api/private/configuration_export_events
+curl -X POST -H "Content-Type: application/json" -d '' -H "access-token:ACCESS_TOKEN" -H "uid:UID" -H "token-type:Bearer" -H "client:CLIENT" https://sandbox.trase.earth/api/private/configuration_export_events
 ```
 
 This will return immediately, since it only schedules the job in the background processor.
@@ -75,7 +75,7 @@ This will return immediately, since it only schedules the job in the background 
 Use the `id` from the response body to check for the status of the job:
 
 ```
-curl -H "Content-Type: application/json" -H "access-token:ACCESS_TOKEN" -H "uid:UID" -H "token-type:Bearer" -H "client:CLIENT" https://staging.trase.earth/api/private/configuration_export_events/5
+curl -H "Content-Type: application/json" -H "access-token:ACCESS_TOKEN" -H "uid:UID" -H "token-type:Bearer" -H "client:CLIENT" https://sandbox.trase.earth/api/private/configuration_export_events/5
 ```
 
 When status is FINISHED, `data` will contain the configuration exported in json format.
