@@ -4,13 +4,15 @@ class ConfigurationExportWorker
   sidekiq_options queue: :low
 
   def perform(event_id)
-    event = Api::Private::ConfigurationExportEvent.find(event_id)
-    event.update_attribute(:jid, self.jid)
+    event = Api::Private::ConfigurationExportEvent.find_by_id(event_id)
+    return jid unless event.present?
+
+    event.update_attribute(:jid, jid)
     Api::Private::Configuration::Exporter.new(event).call
-  rescue ActiveRecord::RecordNotFound
-    # no-op
   rescue => e
     event.fail!(e)
     Appsignal.send_error(e)
+  ensure
+    jid
   end
 end

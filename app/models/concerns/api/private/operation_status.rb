@@ -11,12 +11,13 @@ module Api
       FAILED = 'FAILED'.freeze
 
       included do
+        scope :queued, -> { where(status: QUEUED) }
         scope :started_or_queued, -> { where(status: [STARTED, QUEUED]) }
         scope :finished, -> { where(status: FINISHED) }
       end
 
       def finished_at
-        [FINISHED, FAILED].include?(status) && updated_at || nil
+        ([FINISHED, FAILED].include?(status) && updated_at) || nil
       end
 
       def start!
