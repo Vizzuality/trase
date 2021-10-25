@@ -5,9 +5,7 @@ menu: Backend
 
 # Database update process
 
-The database is updated with new datasets through an import process. There are two implementations in place:
-- the original ("remote import"), which copies data directly between the remote source database (Main database) and the tool's database (Trase database) using `postgres_fdw`;
-- a faster version ("mirror import"), which restores new data into a separate local schema and then runs the same process as above but without the remote connection.
+The database is updated with new datasets through an import process. The current implementation is referred to as "mirror import" in the code. It fetches new data from a database dump stored in S3 and copies it into schema TRASE_LOCAL_MIRROR_SCHEMA. Then it runs the process of updating the live tables in TRASE_LOCAL_SCHEMA, making a best attempt at preserving existing configuration tables (not part of the imported schema.)
 
 Post-update, data is checked using a [validation script](data_validation.md).
 
@@ -15,9 +13,7 @@ There is also a utility to copy the database between instances using an [export 
 
 All of these tools are available via the admin panel.
 
-## Mirror import
-
-### Starting the mirror importer
+## Starting the database update process
 
 The importer can be started in two ways:
 - via a rake task: `SCHEMA_VERSION=... bundle exec rake db:mirror:import`
@@ -25,57 +21,11 @@ The importer can be started in two ways:
 
 In the first case the importer will run synchronously. In the latter case it will be executed as a background job using sidekiq. For that to work you need redis & sidekiq running. If redis is not already running it can be started using `redis-server`. To start sidekiq in development run `bundle exec sidekiq`. In staging / demo / production starting and stopping sidekiq is handled by capistrano.
 
-
-## Remote import
-
-### Connection between the two databases
-
-The connection is established between the Trase and Main databases using a postgres extension `postgres_fdw`. A number of connection properties need to be specified (they need to be defined as environment variables):
-
-```
-TRASE_REMOTE_HOST=localhost
-TRASE_REMOTE_PORT=5432
-TRASE_REMOTE_DATABASE=trase_core
-TRASE_REMOTE_SCHEMA=trase # this schema in remote database
-TRASE_REMOTE_USER=main_ro # this user defined in remote database with read-only access to trase schema
-TRASE_REMOTE_PASSWORD=
-TRASE_REMOTE_SERVER=trase_server
-```
-
-We assume that in Main DB there is a separate schema which contains data ready to be imported into Trase DB, the name of which is configured as `TRASE_REMOTE_SCHEMA`, e.g. `trase`. We also assume there is a user with read-only privileges for that schema, e.g. `main_ro`.
-
-`GRANT SELECT ON ALL TABLES IN SCHEMA trase TO main_ro`
-
-### Foreign table wrappers
-
-The extension `postgres_fdw` allows us to access tables in the Main database directly within the Trase database. It requires that a number of objects are created in the database:
-- the server (name configured as `TRASE_REMOTE_SERVER`, e.g. `trase_server`)
-- user mappings which allow a user of the Trase database to connect to the Main database as the read-only user
-- definitions of foreign tables
-
-All of these can be created using the following rake task:
-`bundle exec rake db:remote:init`
-
-In case anything changes (e.g. table definitions), this can be re-initialized using:
-`bundle exec rake db:remote:reinit`
-
-Foreign tables will be created in a schema configured as `TRASE_LOCAL_FDW_SCHEMA`.
-
-*Note to future self: Because the server and user mappings definitions may contain sensitive information, I needed a way to remove them from the SQL dump. I wasn't able to find a clean way to do it, so there is a monkey-patched version of `PostgreSQLDatabaseTasks.structure_dump` which removes those definitions from the dump. The idea is that after restoring from the dump, the `init` task needs to be run to establish the required objects for the import script.*
-
-### Starting the remote importer
-
-The importer can be started in two ways:
-- via a rake task: `bundle exec rake db:remote:import`
-- via the admin interface: `/content/admin/database_update`
-
-In the first case the importer will run synchronously. In the latter case it will be executed as a background job using sidekiq. For that to work you need redis & sidekiq running. If redis is not already running it can be started using `redis-server`. To start sidekiq in development run `bundle exec sidekiq`. In staging / demo / production starting and stopping sidekiq is handled by capistrano.
-
-## Differences between Main DB and Trase DB
+## Differences between the source dump and Trase database
 
 The differences between the two databases are as follows:
-- the Main database contains the core data regarding flows, nodes and attributes. It contains more data than what is show on Trase.
-- the Trase database contains a subset of the Main database as well as additional tables which describe how to visualise that data.
+- the source dump contains the core data regarding flows, nodes and attributes;
+- the Trase database contains the core data as well as additional tables which describe how to visualise that data.
 
 There is overlap between the two databases, which is the core data to be displayed in Trase. These are the tables which hold that data:
 - `countries`
@@ -100,17 +50,21 @@ They are referred to as "blue tables". The remaining tables in the Trase databas
 
 For example, the blue table `inds` holds basic information about an attribute called `SOY_YIELD` and the yellow table `ind_properties` holds the information about what tooltip to display with that attribute.
 
-The objective of the import process is to copy the blue tables verbatim from Main DB to Trase DB (overwriting previous content), but to preserve any yellow tables information which remains relevant.
+The objective of the import process is to copy the blue tables verbatim into Trase DB (overwriting previous content), but to preserve any yellow tables information which remains relevant.
 
 ## Replacing core data while preserving matching configuration
 
-The importer script code is contained in `lib/api/v3/import/importer.rb`. The script goes over tables in a specific order, whereby each table is preceded by all the tables it depends on. *Note to future self*: for this to continue working as the database grows, cycles in the schema need to be avoided.
+The importer script code is contained in `lib/api/v3/import/importer.rb`. The script goes over tables in a specific order, whereby each table is preceded by all the tables it depends on. *Note to future self*: for this to continue working as the database grows, cycles in the schema must be avoided.
 
 Tables are processed differently depending on whether they are "blue" (core) or "yellow" (configuration). It can be easily recognised which is which based on the subclass of the model: either `Api::V3::BlueTable` or `Api::V3::YellowTable`.
 
 In the first step all the tables are backed up, which means different things in case of blue and yellow tables.
 
-For the blue tables we store a mapping between the old `id` (from local table) and new `id` (from remote table). This is a temporary table with just two columns: `id` and `new_id`. *Note to future self: the assumption here is that each of the blue tables has a unique numeric identifier called `id` in both the local and remote table. We assume those identifiers are not stable across data updates, which is why we create a mapping in this step.* In order to match the local table to the remote table we use columns specified in `import_key`, which is a method that needs to be defined for each blue table. For example, the import key for the `countries` table contains only the `iso2` column (which has a unique constraint set) and so local and remote can be matched on this column. Sometimes the import key contains foreign keys, for example `contexts` has an `import_key` consisting of `country_id` and `commodity_id`; of course those are unstable foreign keys, so they cannot be used to match rows directly in the remote table; instead, we need to match using the id mapping of both `countries` and `commodities` tables. The script knows to do that based on the list of unstable foreign keys which are called `blue_foreign_keys` and detects if the `import_key` overlaps with `blue_foreign_keys`, requiring a lookup in the mapping. That mapping needs to be available at the time, which is why order of processing blue tables matters.
+For the blue tables we store a mapping between the old `id` (from local table) and new `id` (from remote table). This is a temporary table with just two columns: `id` and `new_id`.
+
+*Note to future self: the assumption here is that each of the blue tables has a unique numeric identifier called `id` in both the local and remote table. We assume those identifiers are not stable across data updates, which is why we create a mapping in this step.*
+
+In order to match the local table to the remote table we use columns specified in `import_key`, which is a method that needs to be defined for each blue table. For example, the import key for the `countries` table contains only the `iso2` column (which has a unique constraint set) and so local and remote can be matched on this column. Sometimes the import key contains foreign keys, for example `contexts` has an `import_key` consisting of `country_id` and `commodity_id`; of course those are unstable foreign keys, so they cannot be used to match rows directly in the remote table; instead, we need to match using the id mapping of both `countries` and `commodities` tables. The script knows to do that based on the list of unstable foreign keys which are called `blue_foreign_keys` and detects if the `import_key` overlaps with `blue_foreign_keys`, requiring a lookup in the mapping. That mapping needs to be available at the time, which is why order of processing blue tables matters.
 
 For the yellow tables, we simply back up the entire table in a temporary table.
 

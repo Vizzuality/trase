@@ -1,7 +1,0 @@
-<div class="panel">
-  <h3>Update using a live remote connection</h3>
-
-  <%= form_tag(admin_database_update_start_remote_path, multipart: true) do %>
-    <%= submit_tag 'Start database update', disabled: current_update.present? %>
-  <% end %>
-</div>

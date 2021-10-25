@@ -17,13 +17,6 @@ CREATE SCHEMA content;
 
 
 --
--- Name: main; Type: SCHEMA; Schema: -; Owner: -
---
-
-CREATE SCHEMA main;
-
-
---
 -- Name: maintenance; Type: SCHEMA; Schema: -; Owner: -
 --
 
@@ -13097,6 +13090,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210216183845'),
 ('20210423090628'),
 ('20210423093722'),
-('20210426164057');
+('20210426164057'),
+('20211025073827'),
+('20211025074516');
 
 
