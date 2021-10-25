@@ -26,3 +26,7 @@ every :friday, at: '8pm', roles: [:db] do
   runner 'Api::V3::CountriesWbIndicators::ImporterService.call'
   runner 'Api::V3::CountriesComTradeIndicators::ImporterService.new.call'
 end
+
+every :day, at: '11:30pm', roles: [:db] do
+  rake 'unblock_jobs'
+end
