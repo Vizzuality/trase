@@ -1,13 +1,4 @@
 namespace :db do
-  namespace :remote do
-    desc 'Imports data directly from remote database schema'
-    task import: :environment do
-      with_update_lock do |database_update|
-        Api::V3::Import::RemoteImport.new.call(database_update)
-      end
-    end
-  end
-
   namespace :mirror do
     desc 'Restores data from S3 and imports from local schema'
     task import: :environment do
