@@ -43,7 +43,14 @@ const donors = [
     className: 'ggp-logo',
     href: 'https://goodgrowthpartnership.com/',
     image: '/images/footer/donors/ggp.svg',
-    alt: 'Good growth partnership',
+    alt: 'Good Growth partnership',
+    imageClassName: null
+  },
+  {
+    className: 'quadrature-logo',
+    href: 'https://quadrature.ai/foundation/',
+    image: '/images/footer/donors/quadrature.png',
+    alt: 'Quadrature Climate Foundation partnership',
     imageClassName: null
   }
 ];
