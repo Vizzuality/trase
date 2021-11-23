@@ -53,10 +53,6 @@ $card-min-width: 180px;
   background-color: $strong-pink;
   border-radius: 5px;
 
-  &.recent-card {
-    background-color: $charcoal-grey;
-  }
-
   .featured-card-button {
     height: 100px;
     width: 100%;
@@ -66,12 +62,6 @@ $card-min-width: 180px;
     background-size: auto 90%;
     background-position: center;
     background-repeat: no-repeat;
-  }
-
-  &.recent-card {
-    .featured-card-button {
-      padding: 25px 20px 20px;
-    }
   }
 
   .featured-card-country-name {
@@ -91,11 +81,9 @@ $card-min-width: 180px;
     }
   }
 
-  &:not(.recent-card) {
-    .featured-card-text {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+  .featured-card-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
