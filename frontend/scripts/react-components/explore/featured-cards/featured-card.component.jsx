@@ -7,11 +7,11 @@ import cx from 'classnames';
 import 'react-components/explore/featured-cards/featured-cards.scss';
 
 const FeaturedCard = ({ card, openModal, step }) => {
-  const { recentCard, title, subtitle, countryName, commodityName } = card;
+  const { title, subtitle, countryName, commodityName } = card;
   const stepIds = { 1: '', 2: `-${commodityName}`, 3: `-${commodityName}-${countryName}` };
   const cardStepId = stepIds[step];
   return (
-    <div className={cx("c-featured-card", { "recent-card": recentCard })}>
+    <div className={cx('c-featured-card')}>
       <ImgBackground
         as="button"
         onClick={() => openModal(card)}
@@ -19,7 +19,7 @@ const FeaturedCard = ({ card, openModal, step }) => {
         data-test={`featured-card${cardStepId}`}
         src={`'/images/featured-links/${countryName}.svg'`}
       >
-        {!recentCard && <Text
+        <Text
           variant="mono"
           align="center"
           weight="bold"
@@ -29,15 +29,15 @@ const FeaturedCard = ({ card, openModal, step }) => {
         >
           <span className="featured-card-country-name">{countryName}</span>
           <span className="featured-card-commodity-name">{commodityName}</span>
-        </Text>}
+        </Text>
         <Text
           variant="mono"
           align="center"
           weight="bold"
           transform="uppercase"
           color="white"
-          lineHeight={recentCard ? "md" : "lg"}
-          size={recentCard ? "md" : "rg"}
+          lineHeight="lg"
+          size="rg"
           className="featured-card-text"
           title={title}
         >

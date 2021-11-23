@@ -39,9 +39,6 @@ export const goToTool = (destination, card) => dispatch => {
         linkParams: card
       }
     });
-    const { commodities: commodityId, countries: countryId } = card.links.sankey.payload.serializerParams;
-    const serializedParams = `${countryId}-${commodityId}`;
-    localStorage.setItem('recentCard', serializedParams);
     dispatch(card.links[destination]);
   });
 };
