@@ -53,7 +53,8 @@ module Api
             geo_id: object.country.iso2,
             annotation_position_x_pos: object.country.annotation_position_x_pos,
             annotation_position_y_pos: object.country.annotation_position_y_pos,
-            country_column_id: object['node_types_by_name'][NodeTypeName::COUNTRY],
+            country_column_id:object['node_types_by_name'][NodeTypeName::COUNTRY_OF_DESTINATION] ||
+              object['node_types_by_name'][NodeTypeName::COUNTRY],
             exporter_column_id: object['node_types_by_name'][NodeTypeName::EXPORTER]
           }
         end
