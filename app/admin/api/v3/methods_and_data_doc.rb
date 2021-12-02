@@ -8,6 +8,7 @@ ActiveAdmin.register Api::V3::MethodsAndDataDoc, as: 'MethodsAndDataDoc' do
   controller do
     def clear_cache
       clear_cache_for_regexp('/api/v3/contexts')
+      clear_cache_for_regexp('/api/v3/methods_and_data_docs')
     end
   end
 
