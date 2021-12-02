@@ -17,7 +17,8 @@ ActiveAdmin.register Api::V3::MethodsAndDataDoc, as: 'MethodsAndDataDoc' do
       input :context, as: :select, required: true,
                       collection: Api::V3::Context.select_options
       input :version, as: :string, required: true
-      input :language, as: :string, required: true
+      input :language, as: :select, required: true,
+                      collection: Api::V3::MethodsAndDataDoc.language_options
       input :url, as: :string, required: true
     end
     f.actions
@@ -27,7 +28,7 @@ ActiveAdmin.register Api::V3::MethodsAndDataDoc, as: 'MethodsAndDataDoc' do
     column('Country') { |doc| doc.context&.country&.name }
     column('Commodity') { |doc| doc.context&.commodity&.name }
     column :version
-    column :language
+    column :language_name
     column :url
     actions
   end
