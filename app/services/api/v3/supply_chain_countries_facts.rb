@@ -25,7 +25,7 @@ module Api
 
       def attributes
         Api::V3::Readonly::Attribute.
-          select(:id, :display_name, :unit, :tooltip_text).
+          select(:id, :display_name, :unit, :unit_type, :aggregation_method, :power_of_ten_for_rounding, :tooltip_text).
           find(@query.map(&:attribute_id))
       end
     end
