@@ -388,6 +388,8 @@ tables:
         comment: Generic tooltip text (lowest precedence)
       - name: aggregation_method
         comment: To be used with ranges, one of SUM, AVG, MAX or MIN
+      - name: power_of_ten_for_rounding
+        comment: Values rounded to the nearest 10^n units. So n=0 would be nearest integer, n=1 would be to the nearest ten and n=-1 would be one decimal place.
   - name: map_attribute_groups
     comment: Groups attributes (inds/quals/quants) to display on map
     columns:
@@ -504,6 +506,8 @@ tables:
         comment: Generic tooltip text (lowest precedence)
       - name: aggregation_method
         comment: To be used with ranges, one of SUM, AVG, MAX or MIN
+      - name: power_of_ten_for_rounding
+        comment: Values rounded to the nearest 10^n units. So n=0 would be nearest integer, n=1 would be to the nearest ten and n=-1 would be one decimal place.
   - name: recolor_by_attributes
     comment: Attributes (inds/quals) available for recoloring.
     columns:
