@@ -33,6 +33,7 @@ module Api
         has_many :flows
         has_many :readonly_recolor_by_attributes, class_name: 'Readonly::RecolorByAttribute'
         has_many :readonly_resize_by_attributes, class_name: 'Readonly::ResizeByAttribute'
+        has_many :methods_and_data_docs
 
         def biome_nodes
           return [] unless node_types_by_name[NodeTypeName::BIOME].present?

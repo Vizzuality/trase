@@ -36,7 +36,7 @@ module Api
       has_many :map_attributes, through: :map_attribute_groups
       has_many :flows
       has_many :top_profiles
-
+      has_many :methods_and_data_docs
       has_many :ind_context_properties
       has_many :quant_context_properties
       has_many :qual_context_properties

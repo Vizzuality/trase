@@ -21,6 +21,7 @@ module Api
                  serializer: RecolorByAttributeSerializer, key: :recolor_by
         has_many :readonly_resize_by_attributes,
                  serializer: ResizeByAttributeSerializer, key: :resize_by
+        has_many :methods_and_data_docs
 
         attribute :map do
           {
