@@ -225,6 +225,7 @@ GEM
     http_parser.rb (0.6.0)
     i18n (1.8.10)
       concurrent-ruby (~> 1.0)
+    i18n_data (0.13.1)
     inherited_resources (1.11.0)
       actionpack (>= 5.0, < 6.1)
       has_scope (~> 0.6)
@@ -528,6 +529,7 @@ DEPENDENCIES
   enumerate_it (~> 3.2.0)
   factory_bot_rails
   faraday
+  i18n_data
   jbuilder (~> 2.11)
   json-schema
   kaminari

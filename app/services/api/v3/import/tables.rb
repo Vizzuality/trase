@@ -32,7 +32,8 @@ module Api
               Api::V3::RecolorByAttribute,
               Api::V3::ResizeByAttribute,
               Api::V3::DashboardsAttributeGroup,
-              Api::V3::DashboardsAttribute
+              Api::V3::DashboardsAttribute,
+              Api::V3::MethodsAndDataDoc
             ]
           },
           {
