@@ -36,13 +36,19 @@ module Api
           attribute = map_attribute.readonly_attribute
           attribute_type = attribute.original_type.downcase
           node_values_class = attribute.node_values_class
+          cnt_ids = @context.
+            context_node_types.
+            select(:id).
+            joins(:context_node_type_property).
+            where('context_node_type_properties.is_geo_column' => true).
+            pluck(:id)
           node_values = node_values_class.table_name
           node_values_class.
             select(select_list(map_attribute)).
             joins("JOIN nodes ON nodes.id = #{node_values}.node_id").
             joins("JOIN context_node_types cnt ON cnt.node_type_id = nodes.node_type_id").
             joins("JOIN map_#{attribute_type}s maa ON maa.#{attribute_type}_id = #{node_values}.#{attribute_type}_id").
-            where('cnt.context_id' => @context.id).
+            where('cnt.id' => cnt_ids).
             where(
               "#{node_values}.year IN (?) OR #{node_values}.year IS NULL",
               @years
@@ -53,7 +59,6 @@ module Api
               "#{node_values}.#{attribute_type}_id"
             )
         end
-        # 1191
 
         # @param attribute [Api::V3::Readonly::MapAttribute]
         def select_list(map_attribute)
