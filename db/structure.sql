@@ -199,6 +199,7 @@ INSERT INTO attributes (
   unit,
   unit_type,
   aggregation_method,
+  power_of_ten_for_rounding,
   tooltip_text,
   tooltip_text_by_context_id,
   tooltip_text_by_commodity_id,
@@ -215,6 +216,7 @@ SELECT
   unit,
   unit_type,
   aggregation_method,
+  power_of_ten_for_rounding,
   tooltip_text,
   tooltip_text_by_context_id,
   tooltip_text_by_commodity_id,
@@ -234,6 +236,7 @@ SELECT
   unit,
   unit_type,
   aggregation_method,
+  power_of_ten_for_rounding,
   tooltip_text,
   tooltip_text_by_context_id,
   tooltip_text_by_commodity_id,
@@ -266,6 +269,7 @@ USING (
     unit,
     unit_type,
     aggregation_method,
+    power_of_ten_for_rounding,
     tooltip_text,
     tooltip_text_by_context_id,
     tooltip_text_by_commodity_id,
@@ -285,6 +289,7 @@ USING (
     unit,
     unit_type,
     aggregation_method,
+    power_of_ten_for_rounding,
     tooltip_text,
     tooltip_text_by_context_id,
     tooltip_text_by_commodity_id,
@@ -666,6 +671,7 @@ CREATE TABLE public.attributes (
     display_name_by_country_id jsonb,
     display_name_by_commodity_id jsonb,
     aggregation_method text,
+    power_of_ten_for_rounding integer,
     CONSTRAINT attributes_original_type_check CHECK ((original_type = ANY (ARRAY['Ind'::text, 'Qual'::text, 'Quant'::text])))
 );
 
@@ -880,6 +886,7 @@ CREATE TABLE public.ind_properties (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     aggregation_method text,
+    power_of_ten_for_rounding integer DEFAULT 0 NOT NULL,
     CONSTRAINT ind_properties_unit_type_check CHECK ((unit_type = ANY (ARRAY['currency'::text, 'ratio'::text, 'score'::text, 'unitless'::text])))
 );
 
@@ -910,6 +917,13 @@ COMMENT ON COLUMN public.ind_properties.tooltip_text IS 'Generic tooltip text (l
 --
 
 COMMENT ON COLUMN public.ind_properties.aggregation_method IS 'To be used with ranges, one of SUM, AVG, MAX or MIN';
+
+
+--
+-- Name: COLUMN ind_properties.power_of_ten_for_rounding; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_properties.power_of_ten_for_rounding IS 'Values rounded to the nearest 10^n units. So n=0 would be nearest integer, n=1 would be to the nearest ten and n=-1 would be one decimal place.';
 
 
 --
@@ -1311,6 +1325,7 @@ CREATE TABLE public.quant_properties (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     aggregation_method text,
+    power_of_ten_for_rounding integer DEFAULT 0 NOT NULL,
     CONSTRAINT quant_properties_unit_type_check CHECK ((unit_type = ANY (ARRAY['currency'::text, 'area'::text, 'count'::text, 'volume'::text, 'unitless'::text])))
 );
 
@@ -1341,6 +1356,13 @@ COMMENT ON COLUMN public.quant_properties.tooltip_text IS 'Generic tooltip text 
 --
 
 COMMENT ON COLUMN public.quant_properties.aggregation_method IS 'To be used with ranges, one of SUM, AVG, MAX or MIN';
+
+
+--
+-- Name: COLUMN quant_properties.power_of_ten_for_rounding; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_properties.power_of_ten_for_rounding IS 'Values rounded to the nearest 10^n units. So n=0 would be nearest integer, n=1 would be to the nearest ten and n=-1 would be one decimal place.';
 
 
 --
@@ -1388,6 +1410,7 @@ CREATE VIEW public.attributes_v AS
     s.unit,
     s.unit_type,
     s.aggregation_method,
+    s.power_of_ten_for_rounding,
     s.tooltip_text,
     s.tooltip_text_by_context_id,
     s.tooltip_text_by_country_id,
@@ -1402,6 +1425,7 @@ CREATE VIEW public.attributes_v AS
             quants.unit,
             qp.unit_type,
             COALESCE(qp.aggregation_method, 'SUM'::text) AS aggregation_method,
+            qp.power_of_ten_for_rounding,
             qp.tooltip_text,
             context_p.tooltip_text_by_context_id,
             country_p.tooltip_text_by_country_id,
@@ -1434,6 +1458,7 @@ CREATE VIEW public.attributes_v AS
             inds.unit,
             ip.unit_type,
             COALESCE(ip.aggregation_method, 'AVG'::text) AS aggregation_method,
+            ip.power_of_ten_for_rounding,
             ip.tooltip_text,
             context_p.tooltip_text_by_context_id,
             country_p.tooltip_text_by_country_id,
@@ -1466,6 +1491,7 @@ CREATE VIEW public.attributes_v AS
             NULL::text,
             NULL::text,
             NULL::text,
+            NULL::integer,
             qp.tooltip_text,
             context_p.tooltip_text_by_context_id,
             country_p.tooltip_text_by_country_id,
@@ -4321,6 +4347,51 @@ CREATE TABLE public.partitioned_denormalised_flow_quants (
     known_path_positions boolean[]
 )
 PARTITION BY LIST (context_id);
+
+
+--
+-- Name: download_flows_v; Type: VIEW; Schema: public; Owner: -
+--
+
+CREATE VIEW public.download_flows_v AS
+ SELECT partitioned_denormalised_flow_quants.context_id,
+    partitioned_denormalised_flow_quants.year,
+    partitioned_denormalised_flow_quants.quant_id AS attribute_id,
+    'Quant'::text AS attribute_type,
+    partitioned_denormalised_flow_quants.value AS quant_value,
+    NULL::text AS qual_value,
+    (partitioned_denormalised_flow_quants.value)::text AS total,
+    partitioned_denormalised_flow_quants.row_name,
+    partitioned_denormalised_flow_quants.path,
+    partitioned_denormalised_flow_quants.names
+   FROM public.partitioned_denormalised_flow_quants
+UNION ALL
+ SELECT partitioned_denormalised_flow_quals.context_id,
+    partitioned_denormalised_flow_quals.year,
+    partitioned_denormalised_flow_quals.qual_id AS attribute_id,
+    'Qual'::text AS attribute_type,
+    NULL::double precision AS quant_value,
+    partitioned_denormalised_flow_quals.value AS qual_value,
+    partitioned_denormalised_flow_quals.value AS total,
+    partitioned_denormalised_flow_quals.row_name,
+    partitioned_denormalised_flow_quals.path,
+    partitioned_denormalised_flow_quals.names
+   FROM public.partitioned_denormalised_flow_quals;
+
+
+--
+-- Name: download_flows_stats_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.download_flows_stats_mv AS
+ SELECT download_flows_v.context_id,
+    download_flows_v.year,
+    download_flows_v.attribute_type,
+    download_flows_v.attribute_id,
+    count(*) AS count
+   FROM public.download_flows_v
+  GROUP BY download_flows_v.context_id, download_flows_v.year, download_flows_v.attribute_type, download_flows_v.attribute_id
+  WITH NO DATA;
 
 
 --
@@ -10357,6 +10428,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210426164057'),
 ('20211025073827'),
 ('20211025074516'),
-('20211202112544');
+('20211202112544'),
+('20211202222956');
 
 
