@@ -55,8 +55,7 @@ const mapDispatchToProps = {
   onNodeHighlighted: toolLinksActions.highlightNode,
   onExpandClick: toolLinksActions.expandSankey,
   onChangeExtraColumn: toolLinksActions.changeExtraColumn,
-  onCollapseClick: toolLinksActions.collapseSankey,
-  onClearClick: toolLinksActions.clearSankey
+  onCollapseClick: toolLinksActions.collapseSankey
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Sankey);
