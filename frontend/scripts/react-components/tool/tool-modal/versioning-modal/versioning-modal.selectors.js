@@ -1,4 +1,13 @@
-import versionJson from 'react-components/tool/tool-modal/versioning-modal/versions.json';
+import { createSelector } from 'reselect';
+import { getSelectedContext } from 'app/app.selectors';
 
-// Use context 0 for contexts without version and temporarily prior to adding a backend for this feature
-export const getVersionData = () => versionJson.find(version => version.context_id === 0);
+const getLanguage = state => state.location?.current?.query?.lang || 'en';
+const getMethodsAndData = state => state.methodsAndData?.data || null;
+
+export const getVersionData = createSelector(
+  [getSelectedContext, getLanguage, getMethodsAndData],
+  (context, language, data) => {
+    if (!data || !context) return null;
+    return data.find(d => d.language === language.toUpperCase() && d.contextId === context.id);
+  }
+);
