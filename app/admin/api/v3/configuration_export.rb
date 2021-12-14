@@ -20,9 +20,8 @@ ActiveAdmin.register_page 'Configuration Export' do
       notice = 'Export already started or queued'
     else
       event = Api::Private::ConfigurationExportEvent.create(started_by: current_user.email)
-      @job_id = ConfigurationExportWorker.perform_async(event.id)
-      event.update_attribute(:jid, @job_id)
-      notice = "Configuration export #{@job_id} scheduled. Please check status using \
+      jid = ConfigurationExportWorker.perform_async(event.id)
+      notice = "Configuration export #{jid} scheduled. Please check status using \
   the background job monitor."
     end
     redirect_to admin_configuration_export_path, notice: notice

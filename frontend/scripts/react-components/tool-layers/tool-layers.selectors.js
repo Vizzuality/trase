@@ -29,12 +29,12 @@ const getGeoNodes = (nodesData, columns, selectedContext) => {
       .filter(node => {
         const column = columns[node.columnId];
         return column.isGeo === true && typeof node.geoId !== 'undefined' && node.geoId !== null;
-      }).map(node => {
+      })
+      .map(node => {
         const column = columns[node.columnId];
-        const layerId = selectedContext && `${snakeCase(selectedContext.countryName)}_${snakeCase(
-          column.name
-        )}`;
-        return { ...node, layerId};
+        const layerId =
+          selectedContext && `${snakeCase(selectedContext.countryName)}_${snakeCase(column.name)}`;
+        return { ...node, layerId };
       });
   }
   return [];
@@ -225,14 +225,14 @@ export const getSelectedUnitLayers = createSelector(
   (unitLayers, columns, selectedContext, selectedGeoColumns) => {
     if (!unitLayers || !selectedContext || !selectedGeoColumns) return null;
     // Use geometryNodeTypeId column for columns without own geometry e.g. logistic hubs
-    const geoColumns = selectedGeoColumns.map(c => c.geometryNodeTypeId ? columns[c.geometryNodeTypeId] : c);
+    const geoColumns = selectedGeoColumns.map(c =>
+      c.geometryNodeTypeId ? columns[c.geometryNodeTypeId] : c
+    );
 
     const countryName = snakeCase(selectedContext.countryName);
-    const columnName = (c) => snakeCase(c.name);
+    const columnName = c => snakeCase(c.name);
     const selectedUnitLayers = [];
-    const exceptions = [
-      'indonesia_country_of_production_wood_pulp'
-    ];
+    const exceptions = ['indonesia_country_of_production_wood_pulp'];
     geoColumns.forEach(geoColumn => {
       let layerId = `${countryName}_${columnName(geoColumn)}`;
       const exceptionId = `${layerId}_${snakeCase(selectedContext.commodityName)}`;
@@ -241,7 +241,7 @@ export const getSelectedUnitLayers = createSelector(
       }
       const unitLayer = unitLayers.find(l => l.id === layerId);
       if (unitLayer) {
-        selectedUnitLayers.push({...unitLayer, hasChoropleth: !geoColumn.isChoroplethDisabled } )
+        selectedUnitLayers.push({ ...unitLayer, hasChoropleth: !geoColumn.isChoroplethDisabled });
       }
     });
     return selectedUnitLayers;

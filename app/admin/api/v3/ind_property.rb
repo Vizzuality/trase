@@ -1,7 +1,7 @@
 ActiveAdmin.register Api::V3::IndProperty, as: 'IndProperty' do
   menu parent: 'Tooltips', priority: 4
 
-  permit_params :ind_id, :display_name, :unit_type, :aggregation_method, :tooltip_text
+  permit_params :ind_id, :display_name, :unit_type, :aggregation_method, :power_of_ten_for_rounding, :tooltip_text
 
   after_action :clear_cache, only: [:create, :update, :destroy]
 
@@ -25,6 +25,8 @@ ActiveAdmin.register Api::V3::IndProperty, as: 'IndProperty' do
       input :aggregation_method, as: :select,
                         collection: Api::V3::IndProperty::AGGREGATION_METHOD,
                         hint: object.class.column_comment('aggregation_method')
+      input :power_of_ten_for_rounding, required: true, as: :string,
+                           hint: object.class.column_comment('power_of_ten_for_rounding')
       input :tooltip_text, as: :string,
                            hint: object.class.column_comment('tooltip_text')
     end
@@ -35,8 +37,9 @@ ActiveAdmin.register Api::V3::IndProperty, as: 'IndProperty' do
     column('Name') { |property| property.ind&.name }
     column :display_name
     column :unit_type
-    column :tooltip_text
     column :aggregation_method
+    column :power_of_ten_for_rounding
+    column :tooltip_text
     actions
   end
 

@@ -7,6 +7,12 @@ const getEditPanels = () =>
   import('../../nodes-panel/nodes-panel.register').then(
     module => module.nodesPanelActions.editPanels
   );
+
+const getClearSelection = () =>
+  import('../../tool-links/tool-links.register').then(
+    module => module.toolLinksActions.clearSankey
+  );
+
 const getSetActiveModal = () =>
   import('../../tool-layers/tool-layers.register').then(
     module => module.toolLayersActions.setActiveModal
@@ -63,6 +69,9 @@ const mapDispatchToProps = dispatch => ({
     getSetLogisticsMapActiveModal().then(setLogisticsMapActiveModal =>
       dispatch(setLogisticsMapActiveModal(id))
     );
+  },
+  clearSelection_onClick: () => {
+    getClearSelection().then(clearSelection => dispatch(clearSelection()));
   }
 });
 

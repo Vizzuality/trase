@@ -15,6 +15,7 @@ import { LOGISTICS_MAP_HUBS, LOGISTICS_MAP_INSPECTION_LEVELS } from 'constants';
 
 const getCurrentPage = state => state.location.type;
 const getCurrentSection = state => state.location.payload?.section;
+const getHasSelectedNodes = state => state.location.query && state.location.query.selectedNodesIds;
 const getAppTooltips = state => state.app.tooltips;
 const getToolDetailedView = state => state.toolLinks && state.toolLinks.detailedView;
 
@@ -84,9 +85,13 @@ export const getRecolorByFilter = createSelector(
 export const getVersioningSelected = createSelector(getVersionData, versionData => ({
   id: 'version',
   type: 'optionsMenu',
-  show: versionData,
+  show: true,
   label: 'Version info',
-  value: `${versionData?.title}${versionData?.version ? `v ${versionData?.version}` : ''}`
+  value: versionData?.version
+    ? `${capitalize(versionData?.context?.countryName)} ${capitalize(
+        versionData?.context?.commodityName
+      )} ${versionData?.version ? `v ${versionData?.version}` : ''}`
+    : 'Methods and data'
 }));
 
 export const getViewModeFilter = createSelector(
@@ -136,7 +141,8 @@ export const getToolBar = createSelector(
     getResizeByFilter,
     getLogisticsMapHubsFilter,
     getLogisticsMapInspectionLevelFilter,
-    getVersioningSelected
+    getVersioningSelected,
+    getHasSelectedNodes
   ],
   (
     page,
@@ -146,7 +152,8 @@ export const getToolBar = createSelector(
     resizeByFilter,
     logisticsMapHubs,
     logisticsMapInspectionLevel,
-    versionFilter
+    versionFilter,
+    hasSelectedNodes
   ) => {
     switch (page) {
       case 'tool': {
@@ -160,7 +167,19 @@ export const getToolBar = createSelector(
           right.unshift(versionFilter);
         }
         return {
-          left: [panelFilter],
+          left: [
+            panelFilter,
+            {
+              id: 'clearSelection',
+              type: 'button',
+              show: true,
+              noHover: true,
+              noBorder: true,
+              noPaddingRight: true,
+              className: !hasSelectedNodes && '-not-active',
+              children: 'Clear selection'
+            }
+          ],
           right
         };
       }

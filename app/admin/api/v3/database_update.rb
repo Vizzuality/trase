@@ -16,24 +16,11 @@ ActiveAdmin.register_page 'Database Update' do
         current_update: current_update,
         main_schema_versions: main_schema_versions
       }
-      render partial: 'admin/database_update/remote_form', locals: {
-        current_update: current_update
-      }
     end
     render partial: 'admin/database_update/list', locals: {
       current_update: current_update,
       database_updates: database_updates
     }
-  end
-
-  page_action :start_remote, method: :post do
-    database_update = Api::V3::DatabaseUpdate.new(status: Api::V3::DatabaseUpdate::STARTED)
-    if database_update.save
-      RemoteDatabaseUpdateWorker.perform_async(database_update.id)
-      redirect_to admin_database_update_path, notice: 'Database update scheduled. Please refresh for updates.'
-    else
-      redirect_to admin_database_update_path, notice: 'Database update already in progress.'
-    end
   end
 
   page_action :start_mirror, method: :post do

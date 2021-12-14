@@ -8,6 +8,7 @@
 #  unit_type(Type of unit, e.g. score. One of restricted set of values.)   :text
 #  tooltip_text(Generic tooltip text (lowest precedence))                  :text
 #  aggregation_method(To be used with ranges, one of SUM, AVG, MAX or MIN) :text
+#  power_of_ten_for_rounding                                               :integer          default(0), not null
 #
 # Indexes
 #
@@ -39,6 +40,7 @@ module Api
       validates :ind, presence: true, uniqueness: true
       validates :display_name, presence: true
       validates :unit_type, presence: true, inclusion: {in: UNIT_TYPE}
+      validates :power_of_ten_for_rounding, presence: true
       validates :aggregation_method, presence: true, inclusion: {in: AGGREGATION_METHOD}
 
       def self.blue_foreign_keys

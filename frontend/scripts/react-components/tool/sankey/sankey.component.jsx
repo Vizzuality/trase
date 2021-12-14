@@ -23,7 +23,6 @@ function useMenuOptions(props, hoveredSelectedNode) {
     isReExpand,
     onExpandClick,
     onCollapseClick,
-    onClearClick,
     lastSelectedNodeLink,
     onChangeExtraColumn,
     toolColumns,
@@ -34,10 +33,6 @@ function useMenuOptions(props, hoveredSelectedNode) {
   } = props;
   return useMemo(() => {
     const items = [];
-
-    if (selectedNodesIds.length > 0) {
-      items.push({ id: 'clear', label: 'Clear Selection', onClick: onClearClick });
-    }
 
     let nodeType = null;
     let link = {};
@@ -116,7 +111,6 @@ function useMenuOptions(props, hoveredSelectedNode) {
 
     return items;
   }, [
-    onClearClick,
     lastSelectedNodeLink,
     hoveredSelectedNode,
     toolColumns,
@@ -343,7 +337,7 @@ function Sankey(props) {
         });
       }
     }
-    // Country menu can be enabled if we have country profiles or other node is selected and we can clear or expand
+    // Country menu can be enabled if we have country profiles or other node is selected and we can expand
     const enabledCountryMenu =
       node.type === NODE_TYPES.countryOfProduction &&
       (selectedNodesIds.length || ENABLE_COUNTRY_PROFILES);
@@ -478,7 +472,6 @@ Sankey.propTypes = {
   otherNodes: PropTypes.object,
   nodeAttributes: PropTypes.object,
   selectedMapDimensions: PropTypes.array,
-  onClearClick: PropTypes.func.isRequired, // eslint-disable-line
   onExpandClick: PropTypes.func.isRequired, // eslint-disable-line
   sankeyColumnsWidth: PropTypes.number.isRequired,
   onNodeClicked: PropTypes.func.isRequired,
