@@ -24,6 +24,7 @@ export const GET_MARKDOWN_CONTENT_URL = 'GET_MARKDOWN_CONTENT_URL';
 export const GET_TEAM_URL = 'GET_TEAM_URL';
 export const GET_TOP_NODES_URL = 'GET_TOP_NODES_URL';
 export const GET_TOP_NODE_STATS_URL = 'GET_TOP_NODE_STATS_URL';
+export const GET_METHODS_AND_DATA_URL = 'GET_METHODS_AND_DATA_URL';
 export const GET_NODE_SUMMARY_URL = 'GET_NODE_SUMMARY_URL';
 export const GET_COUNTRY_NODE_SUMMARY_URL = 'GET_COUNTRY_NODE_SUMMARY_URL';
 export const GET_PROFILE_OPTIONS_TABS_URL = 'GET_PROFILE_OPTIONS_TABS_URL';
@@ -150,6 +151,10 @@ const API_ENDPOINTS = {
   [GET_SANKEY_CARD_LINKS]: {
     api: 3,
     endpoint: '/sankey_card_links'
+  },
+  [GET_METHODS_AND_DATA_URL]: {
+    api: 3,
+    endpoint: '/methods_and_data_docs'
   }
 };
 

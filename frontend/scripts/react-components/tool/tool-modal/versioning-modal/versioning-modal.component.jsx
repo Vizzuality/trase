@@ -6,39 +6,63 @@ import 'react-components/tool/tool-modal/versioning-modal/versioning-modal.scss'
 import capitalize from 'lodash/capitalize';
 
 function VersioningModal({ data, context }) {
-  const { title, version, summary } = data;
-  const { countryName, commodityName } = context;
+  const { url, version } = data || {};
+  const { countryName, commodityName } = context || {};
 
   return (
     <div className="c-versioning-modal">
       <div className="row columns">
         <div className="versioning-modal-content">
-          <Heading as="h3" size="lg" weight="bold" className="modal-title">
-            {title}
-            {version && (
-              <>
-                {' '}
-                Data version {version} {capitalize(countryName)} {capitalize(commodityName)})
-              </>
-            )}
+          <Heading as="h3" size="lg" className="modal-title">
+            Methods and data
           </Heading>
-          <Text
-            as="span"
-            size="md"
-            lineHeight="lg"
-            dangerouslySetInnerHTML={{ __html: summary }}
-            className="summary"
-          />{' '}
-          <a
-            href="https://supplychains.trase.earth/about"
-            target="_blank"
-            rel="noopener noreferrer"
-            title="Methods and data"
-          >
-            <Text as="span" className="link-text" size="md" weight="bold" decoration="underline">
-              Methods and data.
-            </Text>
-          </a>
+          {data && (
+            <>
+              <Text as="span" size="md" lineHeight="lg" className="summary">
+                {' '}
+                Download the information for{' '}
+                {`${countryName ? capitalize(countryName) : ''}-${
+                  commodityName ? capitalize(commodityName) : ''
+                }`}{' '}
+                {version ? `- v.${version}` : ''}{' '}
+                <a
+                  title="Download version info"
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  here
+                </a>
+              </Text>
+              <div className="divider" />
+            </>
+          )}
+          <Text as="span" size="md" lineHeight="lg" className="summary">
+            Trase builds on an enhanced form of material flow analysis called Spatially Explicit
+            Information on Production to Consumption Systems (SEI-PCS) originally developed by{' '}
+            <a
+              title="Spatially Explicit Information on Production to Consumption Systems by Godar et al.2015"
+              href="https://www.sciencedirect.com/science/article/abs/pii/S0921800915000427?via%3Dihub"
+              target="_blank"
+              rel="noopener noreferrer"
+              tx-content="translate_urls"
+            >
+              Godar et al. 2015
+            </a>
+            . A description of all the methods and data sources currently used in Trase to apply the
+            SEI-PCS approach to map subnational trade flows can be found for each of the countries
+            and commodities in{' '}
+            <a
+              href="https://supplychains.trase.earth/about"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Methods and data"
+            >
+              <Text as="span" className="link-text" size="md" weight="bold" decoration="underline">
+                Methods and data.
+              </Text>
+            </a>
+          </Text>
         </div>
       </div>
     </div>

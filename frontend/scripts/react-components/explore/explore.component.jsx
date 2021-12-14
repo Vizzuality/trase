@@ -45,18 +45,17 @@ function Explore(props) {
   } = props;
   const [isModalOpen, setModalOpen] = useState(false);
   const [activeCard, setActiveCard] = useState(null);
-
-  useTopDestinationCountries(props);
-  useClearExploreOnUnmount(props);
-  useQuickFacts(props);
-  useSankeyCards(props);
-
   const [
     highlightedCommodityIds,
     highlightedCommoditiesCountryName,
     setHoveredGeometry
   ] = useHighlightedCommodities(props);
   const [highlightedContext, setHoveredCountry] = useHighlightedContext(props);
+  useTopDestinationCountries(props);
+  useClearExploreOnUnmount(props);
+  useQuickFacts(props);
+  useSankeyCards(props);
+
   const destinationCountries = highlightedContext?.id && topNodes[highlightedContext.id];
   const [highlightedCountryIds, setHoveredCommodity] = useHighlightedCountries(props);
   const openModal = card => {
@@ -74,18 +73,14 @@ function Explore(props) {
 
   const renderHighlighted = txt => (
     <Text as="span" size="sm" weight="bold">
-       {translateText(txt)}
+      {translateText(txt)}
     </Text>
   );
 
   const renderBackButton = isMobile => (
     <span>
       {step > EXPLORE_STEPS.selectCommodity && !isMobile && (
-        <button
-          onClick={clearStep}
-          className="back-button"
-          data-test="featured-cards-back-button"
-        >
+        <button onClick={clearStep} className="back-button" data-test="featured-cards-back-button">
           <Text variant="mono" size="lg" weight="bold" className="featured-cards-back">
             <Icon color="pink" icon="icon-arrow" className="arrow-icon" />
             BACK
@@ -93,7 +88,7 @@ function Explore(props) {
         </button>
       )}
     </span>
-  )
+  );
 
   const renderTitle = isMobile => {
     const titleParts = ['commodity', 'source country', 'supply chain to explore'];
@@ -106,7 +101,9 @@ function Explore(props) {
               {renderBackButton(isMobile)}
             </Heading>
             <Heading size="sm" align="center">
-              {translateText('Options marked in')} {renderHighlighted('gray')} {translateText('provide')} {renderHighlighted('national-scale')} {translateText('data only')}
+              {translateText('Options marked in')} {renderHighlighted('gray')}{' '}
+              {translateText('provide')} {renderHighlighted('national-scale')}{' '}
+              {translateText('data only')}
             </Heading>
           </div>
         )}
@@ -197,14 +194,18 @@ function Explore(props) {
                       <div className={cx('explore-grid', { [`rows${rowsNumber}`]: rowsNumber })}>
                         {step < EXPLORE_STEPS.selected &&
                           items.map(item => (
-                           <GridListItem
-                             item={item}
-                             tooltip={item.isSubnational ? null : 'This data is currently only available at a national scale.'}
-                             tooltipCover
-                             enableItem={i => setItemFunction(i.id)}
-                             onHover={onItemHover}
-                             color={!item.isSubnational ? 'transparent' : 'strong-pink'}
-                           />
+                            <GridListItem
+                              item={item}
+                              tooltip={
+                                item.isSubnational
+                                  ? null
+                                  : 'This data is currently only available at a national scale.'
+                              }
+                              tooltipCover
+                              enableItem={i => setItemFunction(i.id)}
+                              onHover={onItemHover}
+                              color={!item.isSubnational ? 'transparent' : 'strong-pink'}
+                            />
                           ))}
                       </div>
                     )}

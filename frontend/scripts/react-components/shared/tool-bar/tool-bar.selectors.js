@@ -85,9 +85,13 @@ export const getRecolorByFilter = createSelector(
 export const getVersioningSelected = createSelector(getVersionData, versionData => ({
   id: 'version',
   type: 'optionsMenu',
-  show: versionData,
+  show: true,
   label: 'Version info',
-  value: `${versionData?.title}${versionData?.version ? `v ${versionData?.version}` : ''}`
+  value: versionData?.version
+    ? `${capitalize(versionData?.context?.countryName)} ${capitalize(
+        versionData?.context?.commodityName
+      )} ${versionData?.version ? `v ${versionData?.version}` : ''}`
+    : 'Methods and data'
 }));
 
 export const getViewModeFilter = createSelector(
