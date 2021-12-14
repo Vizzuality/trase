@@ -232,10 +232,7 @@ export const getSelectedUnitLayers = createSelector(
     const countryName = snakeCase(selectedContext.countryName);
     const columnName = c => snakeCase(c.name);
     const selectedUnitLayers = [];
-    const exceptions = [
-      'indonesia_country_of_production_wood_pulp',
-      'indonesia_concession_wood_pulp'
-    ];
+    const exceptions = ['indonesia_country_of_production_wood_pulp'];
     geoColumns.forEach(geoColumn => {
       let layerId = `${countryName}_${columnName(geoColumn)}`;
       const exceptionId = `${layerId}_${snakeCase(selectedContext.commodityName)}`;
