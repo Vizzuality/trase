@@ -92,6 +92,27 @@ export const getCTAData = (version, contexts) => {
         </Text>
       ),
       releaseNotesText: releaseNotesText(3, 2021)
+    },
+    20214: {
+      text: (
+        <Text className="cta-text" variant="sans" size="lg">
+          {' '}
+          We released new sub-national level data for {' '}
+          {contextLink({
+            text: 'Paraguay Corn ',
+            commodityName: 'CORN',
+            countryName: 'PARAGUAY'
+          })}
+          {', and  '}
+          {contextLink({
+            text: `Côte d'Ivoire Cocoa`,
+            commodityName: 'COCOA',
+            countryName: `COTE D'IVOIRE`
+          })}
+          .
+        </Text>
+      ),
+      releaseNotesText: releaseNotesText(4, 2021)
     }
   }[version];
 };
