@@ -171,6 +171,19 @@ $recolorgroup-colors: (
     #{$name}: #{$color};
   }
 }
+// Default recolorby colors
+$recolorby-qual-default-1: #00D099;
+$recolorby-qual-default-2: #E27227;
+$recolorby-qual-default-3: #FF66CC;
+$recolorby-qual-default-4: #658270;
+$recolorby-qual-default-5: #2548D8;
+$recolorby-qual-default-6: #8B87FF;
+
+// Extra default recolorby colors
+$recolorby-qual-default-7: #61F261;
+$recolorby-qual-default-8: #2EE8C5;
+$recolorby-qual-default-9: #FF8600;
+$recolorby-qual-default-10: #D17EFC;
 
 $recolorby-qual-thematic-amazonia: #43f3f3;
 $recolorby-qual-thematic-cerrado: #517fee;
@@ -289,6 +302,16 @@ $recolorby-percentual-green-red-10: #a50026;
 $recolorby-percentual-green-red-11: #6f001a;
 
 $recolorby-colors: (
+  'recolorby-qual-default-1': $recolorby-qual-default-1,
+  'recolorby-qual-default-2': $recolorby-qual-default-2,
+  'recolorby-qual-default-3': $recolorby-qual-default-3,
+  'recolorby-qual-default-4': $recolorby-qual-default-4,
+  'recolorby-qual-default-5': $recolorby-qual-default-5,
+  'recolorby-qual-default-6': $recolorby-qual-default-6,
+  'recolorby-qual-default-7': $recolorby-qual-default-7,
+  'recolorby-qual-default-8': $recolorby-qual-default-8,
+  'recolorby-qual-default-9': $recolorby-qual-default-9,
+  'recolorby-qual-default-10': $recolorby-qual-default-10,
   'recolorby-qual-thematic-pantanal': $recolorby-qual-thematic-pantanal,
   'recolorby-qual-thematic-cerrado': $recolorby-qual-thematic-cerrado,
   'recolorby-qual-thematic-amazonia': $recolorby-qual-thematic-amazonia,
