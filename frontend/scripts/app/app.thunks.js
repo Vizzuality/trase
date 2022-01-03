@@ -1,6 +1,11 @@
 import axios from 'axios';
 import { appActions } from 'app/app.register';
-import { GET_TOOLTIPS_URL, getURLFromParams, GET_CONTEXTS_URL } from 'utils/getURLFromParams';
+import {
+  GET_TOOLTIPS_URL,
+  getURLFromParams,
+  GET_CONTEXTS_URL,
+  GET_ATTRIBUTES_META
+} from 'utils/getURLFromParams';
 import getPageTitle from 'router/page-title';
 
 function loadTooltipsPromise(dispatch, getState) {
@@ -62,9 +67,34 @@ function loadContextsPromise(dispatch, getState) {
     });
 }
 
+function loadAttributesMeta(dispatch, getState) {
+  const { app } = getState();
+  // Attributets should only load once
+  if (app.loading.attributesMeta || app.attributesMeta.length > 0) {
+    return Promise.resolve();
+  }
+
+  const contextURL = getURLFromParams(GET_ATTRIBUTES_META);
+  dispatch({
+    type: appActions.APP__SET_LOADING,
+    payload: { atttributesMeta: true }
+  });
+
+  return axios
+    .get(contextURL)
+    .then(resp => resp.data)
+    .then(json => {
+      dispatch({
+        type: appActions.SET_ATTRIBUTES_META,
+        payload: json
+      });
+    });
+}
+
 export default function(dispatch, getState) {
   return Promise.all([
     loadTooltipsPromise(dispatch, getState),
+    loadAttributesMeta(dispatch, getState),
     loadContextsPromise(dispatch, getState)
   ]).catch(e => console.error(e));
 }
