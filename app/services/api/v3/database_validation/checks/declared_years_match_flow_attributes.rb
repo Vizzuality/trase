@@ -45,7 +45,7 @@ module Api
                 attribute_id_name => associated_object.send(attribute_id_name)
               ).
               distinct.all.map(&:year)
-            actual_years.sort == declared_years.sort
+            actual_years.compact.sort == declared_years.compact.sort
           end
 
           def self.human_readable(options)
