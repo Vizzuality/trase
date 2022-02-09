@@ -939,15 +939,15 @@
     {
         "tableName": "chart_node_types",
         "tableType": "Table",
-        "keyClass": "foreignKey",
-        "keyTitle": "Foreign Key",
-        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>node_type_id",
-        "type": "int8",
-        "length": 19,
-        "nullable": "√",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "updated_at",
+        "type": "timestamp",
+        "length": 29,
+        "nullable": "",
         "autoUpdated": "",
         "defaultValue": "null",
-        "comments": "<p>Refence to node type<\/p>"
+        "comments": ""
     },
     {
         "tableName": "quant_commodity_properties",
@@ -2733,15 +2733,15 @@
     {
         "tableName": "chart_node_types",
         "tableType": "Table",
-        "keyClass": "foreignKey",
-        "keyTitle": "Foreign Key",
-        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>chart_id",
-        "type": "int8",
-        "length": 19,
-        "nullable": "√",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "created_at",
+        "type": "timestamp",
+        "length": 29,
+        "nullable": "",
         "autoUpdated": "",
         "defaultValue": "null",
-        "comments": "<p>Refence to chart<\/p>"
+        "comments": ""
     },
     {
         "tableName": "dashboards_quals",
@@ -2926,14 +2926,14 @@
         "comments": "<p>Reference to qual<\/p>"
     },
     {
-        "tableName": "quals",
+        "tableName": "partitioned_flow_quals",
         "tableType": "Table",
         "keyClass": "",
         "keyTitle": "",
-        "name": "created_at",
-        "type": "timestamp",
-        "length": 29,
-        "nullable": "",
+        "name": "value",
+        "type": "text",
+        "length": 2147483647,
+        "nullable": "√",
         "autoUpdated": "",
         "defaultValue": "null",
         "comments": ""
@@ -3199,7 +3199,7 @@
         "comments": ""
     },
     {
-        "tableName": "chart_node_types",
+        "tableName": "chart_quals",
         "tableType": "Table",
         "keyClass": "",
         "keyTitle": "",
@@ -3979,17 +3979,17 @@
         "comments": ""
     },
     {
-        "tableName": "chart_quals",
+        "tableName": "chart_node_types",
         "tableType": "Table",
         "keyClass": "foreignKey",
         "keyTitle": "Foreign Key",
-        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>qual_id",
-        "type": "int4",
-        "length": 10,
-        "nullable": "",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>node_type_id",
+        "type": "int8",
+        "length": 19,
+        "nullable": "√",
         "autoUpdated": "",
         "defaultValue": "null",
-        "comments": ""
+        "comments": "<p>Refence to node type<\/p>"
     },
     {
         "tableName": "countries_com_trade_aggregated_indicators",
@@ -4642,16 +4642,16 @@
         "comments": ""
     },
     {
-        "tableName": "chart_quals",
+        "tableName": "chart_node_types",
         "tableType": "Table",
         "keyClass": "primaryKey",
         "keyTitle": "Primary Key",
         "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>id",
-        "type": "serial",
-        "length": 10,
+        "type": "bigserial",
+        "length": 19,
         "nullable": "",
         "autoUpdated": "√",
-        "defaultValue": "nextval('chart_quals_id_seq'::regclass)",
+        "defaultValue": "nextval('chart_node_types_id_seq'::regclass)",
         "comments": ""
     },
     {
@@ -5539,17 +5539,17 @@
         "comments": ""
     },
     {
-        "tableName": "chart_quals",
+        "tableName": "chart_node_types",
         "tableType": "Table",
-        "keyClass": "",
-        "keyTitle": "",
-        "name": "created_at",
-        "type": "timestamp",
-        "length": 29,
-        "nullable": "",
+        "keyClass": "indexedColumn",
+        "keyTitle": "Indexed",
+        "name": "<i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'><\/i>identifier",
+        "type": "text",
+        "length": 2147483647,
+        "nullable": "√",
         "autoUpdated": "",
         "defaultValue": "null",
-        "comments": ""
+        "comments": "<p>Identifier used to map this chart node type to a part of code which contains calculation logic<\/p>"
     },
     {
         "tableName": "dashboard_templates",
@@ -6542,14 +6542,14 @@
     {
         "tableName": "chart_node_types",
         "tableType": "Table",
-        "keyClass": "primaryKey",
-        "keyTitle": "Primary Key",
-        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>id",
-        "type": "bigserial",
-        "length": 19,
-        "nullable": "",
-        "autoUpdated": "√",
-        "defaultValue": "nextval('chart_node_types_id_seq'::regclass)",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "is_total",
+        "type": "bool",
+        "length": 1,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "false",
         "comments": ""
     },
     {
@@ -7281,17 +7281,17 @@
         "comments": ""
     },
     {
-        "tableName": "chart_node_types",
+        "tableName": "chart_quals",
         "tableType": "Table",
-        "keyClass": "indexedColumn",
-        "keyTitle": "Indexed",
-        "name": "<i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'><\/i>position",
+        "keyClass": "foreignKey",
+        "keyTitle": "Foreign Key",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>chart_attribute_id",
         "type": "int4",
         "length": 10,
-        "nullable": "√",
+        "nullable": "",
         "autoUpdated": "",
         "defaultValue": "null",
-        "comments": "<p>Display order in scope of chart; required when more than one<\/p>"
+        "comments": ""
     },
     {
         "tableName": "resize_by_attributes_v",
@@ -8243,16 +8243,16 @@
         "comments": "<p>Numeric value<\/p>"
     },
     {
-        "tableName": "chart_node_types",
+        "tableName": "chart_quals",
         "tableType": "Table",
-        "keyClass": "",
-        "keyTitle": "",
-        "name": "is_total",
-        "type": "bool",
-        "length": 1,
-        "nullable": "√",
+        "keyClass": "foreignKey",
+        "keyTitle": "Foreign Key",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>qual_id",
+        "type": "int4",
+        "length": 10,
+        "nullable": "",
         "autoUpdated": "",
-        "defaultValue": "false",
+        "defaultValue": "null",
         "comments": ""
     },
     {
@@ -9608,16 +9608,16 @@
         "comments": ""
     },
     {
-        "tableName": "partitioned_flow_quals",
+        "tableName": "quals",
         "tableType": "Table",
-        "keyClass": "indexedColumn",
-        "keyTitle": "Indexed",
-        "name": "<i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'><\/i>flow_id",
-        "type": "int4",
+        "keyClass": "primaryKey",
+        "keyTitle": "Primary Key",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>id",
+        "type": "serial",
         "length": 10,
-        "nullable": "√",
-        "autoUpdated": "",
-        "defaultValue": "null",
+        "nullable": "",
+        "autoUpdated": "√",
+        "defaultValue": "nextval('quals_id_seq'::regclass)",
         "comments": ""
     },
     {
@@ -9764,17 +9764,17 @@
         "comments": ""
     },
     {
-        "tableName": "quals",
+        "tableName": "partitioned_flow_quals",
         "tableType": "Table",
         "keyClass": "indexedColumn",
         "keyTitle": "Indexed",
-        "name": "<i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'><\/i>name",
-        "type": "text",
-        "length": 2147483647,
-        "nullable": "",
+        "name": "<i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'><\/i>qual_id",
+        "type": "int4",
+        "length": 10,
+        "nullable": "√",
         "autoUpdated": "",
         "defaultValue": "null",
-        "comments": "<p>Attribute short name, e.g. ZERO_DEFORESTATION; those literals are referred to in code, therefore should not be changed without notice<\/p>"
+        "comments": ""
     },
     {
         "tableName": "countries_com_trade_aggregated_indicators",
@@ -10219,17 +10219,17 @@
         "comments": ""
     },
     {
-        "tableName": "chart_quals",
+        "tableName": "chart_node_types",
         "tableType": "Table",
         "keyClass": "foreignKey",
         "keyTitle": "Foreign Key",
-        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>chart_attribute_id",
-        "type": "int4",
-        "length": 10,
-        "nullable": "",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>chart_id",
+        "type": "int8",
+        "length": 19,
+        "nullable": "√",
         "autoUpdated": "",
         "defaultValue": "null",
-        "comments": ""
+        "comments": "<p>Refence to chart<\/p>"
     },
     {
         "tableName": "country_properties",
@@ -10583,16 +10583,16 @@
         "comments": ""
     },
     {
-        "tableName": "quals",
+        "tableName": "partitioned_flow_quals",
         "tableType": "Table",
-        "keyClass": "primaryKey",
-        "keyTitle": "Primary Key",
-        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>id",
-        "type": "serial",
+        "keyClass": "indexedColumn",
+        "keyTitle": "Indexed",
+        "name": "<i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'><\/i>flow_id",
+        "type": "int4",
         "length": 10,
-        "nullable": "",
-        "autoUpdated": "√",
-        "defaultValue": "nextval('quals_id_seq'::regclass)",
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
         "comments": ""
     },
     {
@@ -11311,17 +11311,17 @@
         "comments": ""
     },
     {
-        "tableName": "chart_quals",
+        "tableName": "chart_node_types",
         "tableType": "Table",
-        "keyClass": "",
-        "keyTitle": "",
-        "name": "updated_at",
-        "type": "timestamp",
-        "length": 29,
-        "nullable": "",
+        "keyClass": "indexedColumn",
+        "keyTitle": "Indexed",
+        "name": "<i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'><\/i>position",
+        "type": "int4",
+        "length": 10,
+        "nullable": "√",
         "autoUpdated": "",
         "defaultValue": "null",
-        "comments": ""
+        "comments": "<p>Display order in scope of chart; required when more than one<\/p>"
     },
     {
         "tableName": "download_attributes",
@@ -11493,17 +11493,17 @@
         "comments": ""
     },
     {
-        "tableName": "partitioned_flow_quals",
+        "tableName": "quals",
         "tableType": "Table",
         "keyClass": "indexedColumn",
         "keyTitle": "Indexed",
-        "name": "<i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'><\/i>qual_id",
-        "type": "int4",
-        "length": 10,
-        "nullable": "√",
+        "name": "<i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'><\/i>name",
+        "type": "text",
+        "length": 2147483647,
+        "nullable": "",
         "autoUpdated": "",
         "defaultValue": "null",
-        "comments": ""
+        "comments": "<p>Attribute short name, e.g. ZERO_DEFORESTATION; those literals are referred to in code, therefore should not be changed without notice<\/p>"
     },
     {
         "tableName": "attributes",
@@ -11870,7 +11870,7 @@
         "comments": ""
     },
     {
-        "tableName": "chart_node_types",
+        "tableName": "chart_quals",
         "tableType": "Table",
         "keyClass": "",
         "keyTitle": "",
@@ -12533,14 +12533,14 @@
         "comments": ""
     },
     {
-        "tableName": "partitioned_flow_quals",
+        "tableName": "quals",
         "tableType": "Table",
         "keyClass": "",
         "keyTitle": "",
-        "name": "value",
-        "type": "text",
-        "length": 2147483647,
-        "nullable": "√",
+        "name": "created_at",
+        "type": "timestamp",
+        "length": 29,
+        "nullable": "",
         "autoUpdated": "",
         "defaultValue": "null",
         "comments": ""
@@ -13196,17 +13196,17 @@
         "comments": "<p>Country-specific tooltips are the second-most specific tooltips that can be defined after context-specific tooltips; in absence of a country-specific tooltip, a commodity-specific tooltip will be used (if any).<\/p>"
     },
     {
-        "tableName": "chart_node_types",
+        "tableName": "chart_quals",
         "tableType": "Table",
-        "keyClass": "indexedColumn",
-        "keyTitle": "Indexed",
-        "name": "<i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'><\/i>identifier",
-        "type": "text",
-        "length": 2147483647,
-        "nullable": "√",
-        "autoUpdated": "",
-        "defaultValue": "null",
-        "comments": "<p>Identifier used to map this chart node type to a part of code which contains calculation logic<\/p>"
+        "keyClass": "primaryKey",
+        "keyTitle": "Primary Key",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>id",
+        "type": "serial",
+        "length": 10,
+        "nullable": "",
+        "autoUpdated": "√",
+        "defaultValue": "nextval('chart_quals_id_seq'::regclass)",
+        "comments": ""
     },
     {
         "tableName": "countries_com_trade_world_indicators",
