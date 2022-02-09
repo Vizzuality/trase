@@ -69,7 +69,7 @@ function loadContextsPromise(dispatch, getState) {
 
 function loadAttributesMeta(dispatch, getState) {
   const { app } = getState();
-  // Attributets should only load once
+  // Attributes should only load once
   if (app.loading.attributesMeta || app.attributesMeta.length > 0) {
     return Promise.resolve();
   }
