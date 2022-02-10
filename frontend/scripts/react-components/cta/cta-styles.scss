@@ -3,12 +3,16 @@
 .c-cta {
   position: absolute;
   z-index: $z-above-hero;
-  margin-top: $nav-height;
   padding: 30px;
-  height: 130px;
   width: 100%;
   text-align: center;
   background: $green-light-gray-gradient;
+  margin-top: $nav-height * 2;
+
+  @media screen and (min-width: $breakpoint-foundation-medium) {
+    margin-top: $nav-height;
+    height: 130px;
+  }
 
   .close-button {
     position: absolute;
@@ -26,13 +30,34 @@
   .release-notes-text,
   .cta-main-text,
   .cta-text {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: block;
+    text-align: center;
+    line-height: $line-height-lg;
+
+    @media screen and (min-width: $breakpoint-foundation-medium) {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: left;
+      line-height: $line-height-regular;
+    }
+
+
+    a {
+      display: inline-block;
+
+      @media screen and (min-width: $breakpoint-foundation-medium) {
+        display: block;
+      }
+    }
   }
 
   .cta-main-text {
-    padding-bottom: 20px;
+    padding: 20px 0;
+
+    @media screen and (min-width: $breakpoint-foundation-medium) {
+      padding: 0 0 20px;
+    }
   }
 
   .link-text {
