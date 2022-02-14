@@ -16,7 +16,9 @@ export default (value, dimensionName) => {
 
   // powerOfTenForRounding: ..., -3 (3 decimal places), -2 (2 decimal places), -1 (1 decimal place), 0, 1(k), 2(M), 3(G), ...
 
-  const attribute = attributesMeta.find(a => a.displayName.toLowerCase() === dimensionNameLower);
+  const attribute = attributesMeta.find(
+    a => a.displayName && a.displayName.toLowerCase() === dimensionNameLower
+  );
   if (attribute && attribute.powerOfTenForRounding) {
     if (attribute.powerOfTenForRounding || attribute.powerOfTenForRounding === 0) {
       const round =
