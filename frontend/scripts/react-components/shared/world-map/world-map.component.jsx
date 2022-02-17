@@ -11,6 +11,7 @@ import {
 import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.component';
 import cx from 'classnames';
 import formatValue from 'utils/formatValue';
+import capitalize from 'lodash/capitalize';
 import isMobile from 'utils/isMobile';
 import { WORLD_MAP_ASPECT_RATIO } from 'constants';
 
@@ -99,10 +100,12 @@ const WorldMap = ({
       if (isDestinationCountry(geoId, flows)) {
         const volume = geometry.value || (flows.find(flow => flow.geoId === geoId) || {}).value;
         const percentage = (volume / totalValue) * 100;
+        const name = geometry.name || geometry.properties.name;
+        const text = name && capitalize(name.toLowerCase());
         const updatedTooltipConfig = {
           x: e.nativeEvent.offsetX + 10,
           y: e.nativeEvent.offsetY - 20,
-          text: geometry.name || geometry.properties.name,
+          text,
           items: [
             { title: 'Trade Volume', value: formatValue(volume, 'tons'), unit: 't' },
             { value: Math.round(percentage * 10) / 10, unit: '%' }

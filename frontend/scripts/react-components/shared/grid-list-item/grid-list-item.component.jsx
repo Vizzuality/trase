@@ -10,7 +10,12 @@ import './grid-list-item.scss';
 function WrapWithTooltip({ tooltip, wrap, children }) {
   if (wrap) {
     return (
-      <HelpTooltip theme="black-padding" showInfoIcon={false} className="size-sm" text={tooltip}>
+      <HelpTooltip
+        theme="gradient-padding-sm"
+        showInfoIcon={false}
+        className="size-sm"
+        text={tooltip}
+      >
         {children}
       </HelpTooltip>
     );
@@ -93,6 +98,7 @@ function GridListItem(props) {
                 disabled={isDisabled}
               >
                 <HelpTooltip
+                  theme="gradient-padding"
                   text={tooltip}
                   referenceComponent={forwardRef((_, ref) => (
                     <button

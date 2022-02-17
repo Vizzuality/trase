@@ -97,14 +97,14 @@ function Explore(props) {
         <>
           <Heading
             variant="sans"
-            size="md"
+            size="rg"
             align="center"
             data-test="step-title"
             className="notranslate step-title"
           >
             <div>
               {translateText(`${step}. Choose a `)}{' '}
-              <Heading as="span" size="md" weight="bold">
+              <Heading as="span" size="rg" weight="bold">
                 {titleParts[step - 1]}
                 {step === 2 ? ' or a ' : ''}
               </Heading>

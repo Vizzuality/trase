@@ -17,11 +17,19 @@ function tooltipContent(children, showInfoIcon, ReferenceComponent) {
     <svg className="icon tooltip-react-icon">
       <use xlinkHref="#icon-layer-info" />
     </svg>
-  )
+  );
 }
 
 function HelpTooltipComponent(props) {
-  const { theme, showInfoIcon, children, referenceComponent: ReferenceComponent, position, text, interactive } = props;
+  const {
+    theme,
+    showInfoIcon,
+    children,
+    referenceComponent: ReferenceComponent,
+    position,
+    text,
+    interactive
+  } = props;
   const parsedText = interactive ? <div dangerouslySetInnerHTML={{ __html: text }} /> : text;
 
   return (
@@ -30,7 +38,7 @@ function HelpTooltipComponent(props) {
         content={parsedText}
         animation="none"
         placement={position}
-        arrow
+        arrow={false}
         theme={theme}
         duration={0}
         offset={20}

@@ -86,7 +86,7 @@ function CountrySummary(props) {
       <div className="stat-item" key={`${indicatorKey}${name}`}>
         <Text transform="uppercase" variant="mono" as="div" className="legend">
           {name}
-          {tooltip && <HelpTooltip text={tooltip} />}
+          {tooltip && <HelpTooltip theme="gradient-padding" text={tooltip} />}
         </Text>
         {prefix && (
           <Text as="span" variant="mono" size="lg" weight="bold">

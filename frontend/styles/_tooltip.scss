@@ -58,15 +58,27 @@
   line-height: $line-height-md;
 }
 
-// Black Theme with padding
-.tippy-tooltip.black-padding-theme .tippy-content {
-  background-color: $charcoal-grey;
-  color: $white;
+// Gradient Theme with padding
+.tippy-tooltip.gradient-padding-theme .tippy-content {
+  background: $green-light-gray-gradient;
+  color: $main-dark-blue;
   border-radius: 0;
-  padding: 7px;
+  padding: 12px;
   font-family: $font-family-2;
   font-size: $font-size-regular;
   font-weight: $font-weight-light;
   line-height: $line-height-md;
 }
 
+.tippy-tooltip.gradient-padding-sm-theme .tippy-content {
+  background: $green-light-gray-gradient;
+  color: $main-dark-blue;
+  border-radius: 0;
+  padding: 12px;
+  font-family: $font-family-2;
+  font-size: $font-size-regular;
+  font-weight: $font-weight-light;
+  line-height: $line-height-md;
+
+  max-width: 190px;
+}
