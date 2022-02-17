@@ -9,18 +9,31 @@ import 'react-components/explore/tool-links-modal/tool-links-modal.scss';
 function ToolLinksModal({ goToTool }) {
   const bulletPoints = {
     left: [
-      'Visualise commodity flows',
-      'Select and deselect flows to explore relationships between supply and demand'
+      'Follow trade flows to identify sourcing regions.',
+      'Highlight and manage the data as you wish.',
+      'Expand and explore concrete actors of the flow.'
     ],
-    right: ['Get a chart-based overview of our data', 'Make comparisons between places and actors']
+    right: [
+      'Compare the data between different actors.',
+      'Explore all kind of rankings.',
+      'See all and particular data in every widget.'
+    ]
   };
+  const renderBulletPoint = (point, i) => (
+    <li className="bullet-point" key={i}>
+      <Text color="blue" variant="sans" lineHeight="lg">
+        {point}
+      </Text>
+    </li>
+  );
+
   return (
     <div className="c-tool-links-modal">
       <div className="row columns">
-        <Heading size="md" className="modal-title" align="center">
-          Choose how you would like to{' '}
-          <Heading as="span" size="md" weight="bold">
-            view the data
+        <Heading size="md" variant="sans" className="modal-title" align="center">
+          Choose{' '}
+          <Heading as="span" size="md" variant="sans" weight="bold">
+            type of visualization
           </Heading>
         </Heading>
       </div>
@@ -34,7 +47,7 @@ function ToolLinksModal({ goToTool }) {
               onClick={() => goToTool('sankey')}
               data-test="explore-link-to-sankey"
             >
-              <Heading size="md" weight="bold" variant="mono">
+              <Heading size="md" weight="bold" variant="sans">
                 FLOW VIEW
               </Heading>
             </ImgBackground>
@@ -47,7 +60,7 @@ function ToolLinksModal({ goToTool }) {
               onClick={() => goToTool('dashboard')}
               data-test="explore-link-to-dashboard"
             >
-              <Heading size="md" weight="bold" variant="mono">
+              <Heading size="md" weight="bold" variant="sans">
                 DATA VIEW
               </Heading>
             </ImgBackground>
@@ -56,26 +69,10 @@ function ToolLinksModal({ goToTool }) {
       </div>
       <div className="row">
         <div className="column small-12 medium-6">
-          <ul className="description-list">
-            {bulletPoints.left.map((point, i) => (
-              <li className="bullet-point" key={i}>
-                <Text size="rg" weight="bold" lineHeight="lg">
-                  {point}
-                </Text>
-              </li>
-            ))}
-          </ul>
+          <ul className="description-list">{bulletPoints.left.map(renderBulletPoint)}</ul>
         </div>
         <div className="column small-12 medium-6">
-          <ul className="description-list">
-            {bulletPoints.right.map((point, i) => (
-              <li className="bullet-point" key={i}>
-                <Text size="rg" weight="bold" lineHeight="lg">
-                  {point}
-                </Text>
-              </li>
-            ))}
-          </ul>
+          <ul className="description-list">{bulletPoints.right.map(renderBulletPoint)}</ul>
         </div>
       </div>
     </div>
