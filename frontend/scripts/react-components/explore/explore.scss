@@ -155,6 +155,11 @@ $explore-heading: 66px;
     align-items: center;
     height: 100px;
     padding-bottom: 10px;
+    margin-top: $nav-height * 2;
+
+    @media screen and (min-width: $breakpoint-laptop) {
+      margin-top: 0;
+    }
 
     .step-title {
       display: flex;
