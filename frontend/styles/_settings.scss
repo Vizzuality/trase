@@ -110,7 +110,7 @@ $charcoal-extra-dark: #1b2a32;
 
 // secondary colors
 $medium-pink: #ea6869;
-$strong-pink: #f65e6e;
+$strong-pink: #ff615f;
 $medium-pink-faded: lighten($medium-pink, 20%);
 $manilla: #ffeb8b;
 $egg-shell: #fff0c2;
@@ -136,12 +136,16 @@ $carbon-gray: #333; // barely used
 
 // Redesign colors
 $orange-500: #ff615f;
+$blue-700: #19404C;
 $gray-700: #12282e;
 $gray-600: #1f434e;
 $gray-500: #1a3841;
 $gray-400: #5d767d;
 $gray-300: #8B9DA2; // gray-600 opacity 0.5
 $gray-200: #dadada;
+
+$main: $orange-500;
+$main-dark-blue: $blue-700;
 
 $green-200: #b2ffe5;
 // Miscellaneous

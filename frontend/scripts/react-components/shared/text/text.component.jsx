@@ -34,7 +34,7 @@ function Text(props) {
         [`transform-${transform}`]: transform,
         [`decoration-${decoration}`]: decoration
       },
-      restyled,
+      { restyled },
       className
     )
   };

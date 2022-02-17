@@ -73,7 +73,7 @@ function GridListItem(props) {
               >
                 <Text
                   as="p"
-                  variant="mono"
+                  variant="sans"
                   weight="bold"
                   align="center"
                   title={item.name}

@@ -118,7 +118,7 @@ $explore-heading: 66px;
 
   .explore-grid-container {
     display: flex;
-    margin: 30px auto 0;
+    margin: 5px auto 0;
     max-width: 900px;
 
     .explore-grid {
@@ -150,8 +150,18 @@ $explore-heading: 66px;
 
   .step-title-container {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    height: 100px;
+    padding-bottom: 10px;
+
+    .step-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+    }
   }
 
   .featured-cards-back {
