@@ -45,7 +45,7 @@ class ActorSummary extends React.PureComponent {
             {name}
           </Text>
           <span id="forest-500-tooltip">
-            <HelpTooltip text={tooltip} />
+            <HelpTooltip theme="gradient-padding" text={tooltip} />
           </span>
         </div>
         <div className="value forest-500-score">
@@ -66,7 +66,7 @@ class ActorSummary extends React.PureComponent {
         <Text transform="uppercase" variant="mono" as="div" className="legend">
           {name}
           <span>
-            <HelpTooltip text={tooltip} />
+            <HelpTooltip theme="gradient-padding" text={tooltip} />
           </span>
         </Text>
         {value.toLowerCase() !== 'none' ? (

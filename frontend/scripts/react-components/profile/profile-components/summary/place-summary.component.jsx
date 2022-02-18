@@ -81,7 +81,7 @@ function PlaceSummary(props) {
             <div className="stat-item" key={indicatorKey}>
               <Text variant="mono" color="grey-faded" transform="uppercase" className="legend">
                 {name}
-                {tooltip && <HelpTooltip text={tooltip} />}
+                {tooltip && <HelpTooltip theme="gradient-padding" text={tooltip} />}
               </Text>
               <Text as="span" variant="mono" size="lg" weight="bold">
                 {formatValue(value, name)}
