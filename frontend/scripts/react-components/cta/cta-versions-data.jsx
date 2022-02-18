@@ -4,20 +4,13 @@ import Text from 'react-components/shared/text';
 import { TOOL_LAYOUT } from 'constants';
 
 const content = text => (
-  <Text
-    weight="bold"
-    decoration="underline"
-    className="link-text"
-    restyled
-    variant="sans"
-    size="lg"
-  >
+  <Text weight="bold" decoration="underline" className="link-text" variant="sans" size="lg">
     {text}
   </Text>
 );
 
 const releaseNotesText = (quarter, year) => (
-  <Text className="release-notes-text" restyled variant="sans" size="lg">
+  <Text className="release-notes-text" variant="sans" size="lg">
     <span>Check out our release notes </span>
     <span>
       <a

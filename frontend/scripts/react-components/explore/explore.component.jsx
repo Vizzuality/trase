@@ -81,7 +81,7 @@ function Explore(props) {
     <span>
       {step > EXPLORE_STEPS.selectCommodity && !isMobile && (
         <button onClick={clearStep} className="back-button" data-test="featured-cards-back-button">
-          <Text variant="mono" size="md" weight="bold" className="featured-cards-back" restyled>
+          <Text variant="mono" size="md" weight="bold" className="featured-cards-back">
             <Icon color="pink" icon="icon-arrow" className="arrow-icon" />
             BACK
           </Text>
@@ -247,7 +247,6 @@ function Explore(props) {
                                   color="blue"
                                   lineHeight="md"
                                   className="quick-facts-label notranslate"
-                                  restyled
                                 >
                                   {translateText(`${indicator.name} ${indicator.year}`)}
                                 </Text>
@@ -279,7 +278,6 @@ function Explore(props) {
                                     lineHeight="md"
                                     className="quick-facts-label notranslate"
                                     color="blue"
-                                    restyled
                                   >
                                     {translateText(
                                       highlightedCommodityIds.length > 0

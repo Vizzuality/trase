@@ -28,7 +28,7 @@ class SidebarNav extends React.PureComponent {
     const { links, title } = this.props;
     return (
       <div className="c-sidebar-nav">
-        <Heading variant="mono" color="pink" weight="bold" restyled>
+        <Heading variant="mono" color="pink" weight="bold">
           {title}
         </Heading>
         <ul className="nav-sidebar-link-list">

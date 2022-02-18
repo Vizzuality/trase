@@ -15,9 +15,9 @@ const ProfileRoot = props => {
     if (!context) return nodeType;
     const substitutions = {
       'COUNTRY OF PRODUCTION': 'EXPORTER COUNTRY',
-      'COUNTRY': 'IMPORTER COUNTRY',
-    }
-    const nodeTypeLabel = substitutions[nodeType] || nodeType
+      COUNTRY: 'IMPORTER COUNTRY'
+    };
+    const nodeTypeLabel = substitutions[nodeType] || nodeType;
     return `${nodeTypeLabel} - ${context?.commodityName} - ${context?.countryName}`;
   };
 
@@ -31,7 +31,7 @@ const ProfileRoot = props => {
         <div className="row column">
           <div className="profiles-search-container">
             <h2 className="profiles-description">
-              Explore the trade linkages between countries, regions and traders
+              Explore the trade activity of countries, regions or traders
             </h2>
             <div className="profiles-actions">
               <Button

@@ -107,18 +107,18 @@
 .slide-prev {
   position: absolute;
   top: 50%;
-  height: 40px;
-  width: 40px;
+  height: 32px;
+  width: 32px;
   border-radius: 100%;
-  background-color: #f65e6e;
+  background-color: $main-dark-blue;
   cursor: pointer;
 
   &:hover {
-    background-color: darken($strong-pink, 4%);
+    background-color: darken($main-dark-blue, 4%);
   }
 
   &:active {
-    background-color: $strong-pink;
+    background-color: $main-dark-blue;
   }
 
   &::after {

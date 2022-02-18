@@ -130,6 +130,10 @@
   &.-with-icon {
     justify-content: space-between;
 
+    .icon {
+      margin-left: 20px;
+    }
+
     &.v-circle {
       .icon {
         margin-left: 0;

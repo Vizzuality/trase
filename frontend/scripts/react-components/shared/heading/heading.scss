@@ -4,17 +4,13 @@
   text-align: left;
 
   &.mono {
-    font-family: $font-family-1;
+    font-family: $font-family-3;
     letter-spacing: $letter-spacing-x-narrow;
     text-transform: uppercase;
-
-    &.restyled {
-      font-family: $font-family-5;
-    }
   }
 
   &.sans {
-    font-family: $font-family-3;
+    font-family: $font-family-1;
   }
 
   &.serif {
