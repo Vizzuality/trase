@@ -71,7 +71,7 @@ const API_ENDPOINTS = {
   },
   [GET_MARKDOWN_CONTENT_URL]: { api: 'markdown', endpoint: 'content' },
   [GET_TOP_NODES_URL]: { api: 3, endpoint: '/contexts/$context_id$/top_nodes' },
-  [GET_TOP_NODE_STATS_URL]: { api: 3, endpoint: '/nodes_stats' },
+  [GET_TOP_NODE_STATS_URL]: { api: 3, endpoint: '/destination_stats' },
   [GET_NODE_SUMMARY_URL]: {
     api: 3,
     endpoint: '/contexts/$context_id$/$profile_type$/$node_id$/basic_attributes'
