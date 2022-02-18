@@ -42,7 +42,7 @@ function ToolLinksModal({ goToTool }) {
           <div className="small-12 medium-6 column">
             <ImgBackground
               as="button"
-              src="/images/backgrounds/SANKEY_MODE.png"
+              src="/images/backgrounds/sankey_mode.png"
               className="tool-link"
               onClick={() => goToTool('sankey')}
               data-test="explore-link-to-sankey"
@@ -55,7 +55,7 @@ function ToolLinksModal({ goToTool }) {
           <div className="small-12 medium-6 column">
             <ImgBackground
               as="button"
-              src="/images/backgrounds/DATA_VIEW_MODE.png"
+              src="/images/backgrounds/data_view_mode.png"
               className="tool-link"
               onClick={() => goToTool('dashboard')}
               data-test="explore-link-to-dashboard"
