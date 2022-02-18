@@ -14,10 +14,10 @@
     position: relative;
     cursor: pointer;
     line-height: $line-height-regular;
-    border: 1px solid $charcoal-grey;
+    border: 1px solid $main-dark-blue;
     text-transform: uppercase;
     padding: 6px 25px;
-    opacity: 0.3;
+    opacity: 0.6;
 
     &:first-child {
       border-radius: 5px 0 0 5px;
@@ -34,7 +34,7 @@
     &.-selected {
       opacity: 1;
       cursor: default;
-      background-color: $charcoal-grey;
+      background-color: $main-dark-blue;
     }
 
     &[disabled=""] {

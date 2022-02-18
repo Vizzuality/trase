@@ -31,7 +31,12 @@ class BlockSwitch extends React.PureComponent {
               onClick={() => selectBlock(block.id)}
               disabled={isActive}
             >
-              <Heading variant="mono" weight="bold" color={isActive ? 'white' : 'grey'}>
+              <Heading
+                variant="sans"
+                weight="bold"
+                transform="uppercase"
+                color={isActive ? 'white' : 'blue'}
+              >
                 {block.title}
               </Heading>
               <ImgBackground className="block-switch-image" src={backgroundImage} />

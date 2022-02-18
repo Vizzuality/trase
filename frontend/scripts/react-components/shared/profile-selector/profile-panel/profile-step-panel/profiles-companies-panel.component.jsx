@@ -72,6 +72,7 @@ function ProfilesCompaniesPanel(props) {
                   {itemProps => (
                     <GridListItem
                       {...itemProps}
+                      variant="profiles"
                       isActive={activeCompanies.includes(itemProps.item?.id)}
                       enableItem={onSelectCompany}
                       disableItem={onSelectCompany}

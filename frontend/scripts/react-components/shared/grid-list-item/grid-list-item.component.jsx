@@ -80,7 +80,7 @@ function GridListItem(props) {
                   as="p"
                   variant="sans"
                   weight="bold"
-                  align="center"
+                  align={variant === 'profiles' ? 'left' : 'center'}
                   title={item.name}
                   transform="capitalize"
                   className="grid-list-item-text"
