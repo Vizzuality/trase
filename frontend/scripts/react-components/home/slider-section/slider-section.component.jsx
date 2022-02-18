@@ -116,8 +116,10 @@ class SliderSection extends React.PureComponent {
     const numColumns = slides.length <= visiblePages && visiblePages < 3 ? 6 : 4;
     const headingProps = {
       as: 'h3',
-      variant: 'mono',
-      color: variant === 'profiles' ? 'grey' : 'pink',
+      variant: 'sans',
+      weight: 'bold',
+      transform: 'uppercase',
+      color: variant === 'profiles' ? 'blue' : 'pink',
       size: 'sm'
     };
     if (variant === 'profiles') headingProps.weight = 'bold';

@@ -12,7 +12,7 @@ $menuOffset: 15vh;
   width: 100vw;
   height: $nav-height;
   background: $light-gray;
-  font-family: $font-family-3;
+  font-family: $font-family-1;
   z-index: $z-nav;
   transition: all 50ms ease-in;
 
@@ -155,7 +155,7 @@ $menuOffset: 15vh;
     }
 
     .top-nav-link {
-      font-family: $font-family-3;
+      font-family: $font-family-1;
       font-size: $font-size-regular;
       font-weight: $font-weight-medium;
       transition: opacity 50ms ease-in;

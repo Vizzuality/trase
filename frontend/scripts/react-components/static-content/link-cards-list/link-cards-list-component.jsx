@@ -7,18 +7,11 @@ const Card = ({ data }) => {
   const { title, href } = data;
   return (
     <a className="c-link-card" href={href} target="_blank" rel="noopener noreferrer">
-      <Text size="xl" weight="bold" variant="sans" lineHeight="md" className="title" restyled>
+      <Text size="xl" weight="bold" variant="sans" lineHeight="md" className="title">
         {title}
       </Text>
       <div className="view-pdf-container">
-        <Text
-          variant="mono"
-          color="pink"
-          weight="bold"
-          className="link-card-pdf-text"
-          as="span"
-          restyled
-        >
+        <Text variant="mono" color="pink" weight="bold" className="link-card-pdf-text" as="span">
           VIEW PDF
         </Text>
         <div className="round-button">

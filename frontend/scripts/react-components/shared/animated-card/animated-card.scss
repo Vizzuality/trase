@@ -5,6 +5,14 @@ $content-height-collapsed: 82px;
 $card-min-height: 200px;
 
 .c-animated-card {
+  .category-text {
+    margin-bottom: 10px;
+  }
+
+  .title-text {
+    margin-bottom: 20px;
+  }
+
   .card-link {
     width: 100%;
     display: block;
@@ -33,7 +41,7 @@ $card-min-height: 200px;
       width: 100%;
       min-height: $card-min-height;
       max-height: 100%;
-      padding: 20px;
+      padding: 17px 20px;
       background-color: $light-gray;
       transform: translateY(calc(100% - #{$content-height-collapsed}));
       transition: transform 350ms ease-out;

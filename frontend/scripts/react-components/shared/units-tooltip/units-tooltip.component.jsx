@@ -57,7 +57,6 @@ function UnitsTooltip(props) {
             weight="light"
             transform="uppercase"
             className="units-tooltip-unit"
-            restyled
           >
             {item.title}
           </Text>
