@@ -111,7 +111,7 @@ class TopDestinationsChart extends React.PureComponent {
               lines={lines}
               style={style}
               xValues={includedYears}
-              useBottomLegend
+              useTopLegend
               year={year}
               showTooltipCallback={this.onMouseMove}
               hideTooltipCallback={this.onMouseLeave}

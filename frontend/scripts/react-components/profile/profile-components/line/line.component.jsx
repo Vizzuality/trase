@@ -392,7 +392,7 @@ class Line extends Component {
       this.chart.querySelector(`#${lineData.geo_id}`).classList.remove('selected');
     };
     return (
-      <ul className="line-bottom-legend">
+      <ul className="line-top-legend">
         {lines.map((lineData, index) => {
           const lineStyle = typeof style !== 'undefined' ? style.style : lineData.style;
           const lineIndex = lines.length - index - 1;
@@ -410,16 +410,13 @@ class Line extends Component {
 
           return (
             <li
+              className="link-container"
               key={index}
               onMouseEnter={() => lineOnMouseEnter(lineData)}
               onMouseLeave={() => lineOnMouseLeave(lineData)}
             >
-              <svg height="6" width="20" className="line-color">
-                <g className={lineClassName}>
-                  <path d="M0 3 20 3" />
-                </g>
-              </svg>
-              <span>{index + 1}.</span>
+              {/* height="6" width="20"  */}
+              <span className={`dot-color ${lineClassName}`} />
               {isLink ? (
                 <span className="link" onClick={linkOnClick}>
                   {translateText(lineData.name)}
@@ -439,12 +436,12 @@ class Line extends Component {
 
     return (
       <div className="c-line" data-test={testId}>
+        {this.props.useTopLegend && this.renderLegend()}
         <div
           ref={elem => {
             this.chart = elem;
           }}
         />
-        {this.props.useBottomLegend && this.renderLegend()}
       </div>
     );
   }
@@ -461,7 +458,7 @@ Line.propTypes = {
   width: PropTypes.number,
   contextId: PropTypes.number,
   xValues: PropTypes.array,
-  useBottomLegend: PropTypes.bool,
+  useTopLegend: PropTypes.bool,
   year: PropTypes.number,
   margin: PropTypes.object,
   ticks: PropTypes.object,

@@ -1,13 +1,11 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import cx from 'classnames';
-import capitalize from 'lodash/capitalize';
 import PropTypes from 'prop-types';
 import Button from 'react-components/shared/button';
 import 'react-components/profile/profile-components/summary/summary.scss';
 
 function SummaryTitle(props) {
   const { name, activity, sticky, openModal } = props;
-  const capitalizedName = useMemo(() => capitalize(name.toLowerCase()), [name]);
   return (
     <div
       className={cx({
@@ -16,7 +14,7 @@ function SummaryTitle(props) {
       })}
     >
       <h2 className="profiles-title" data-test="profiles-title">
-        {capitalizedName}
+        {name}
         {activity && <span className="profiles-activity">{` (${activity})`}</span>}
       </h2>
       <Button

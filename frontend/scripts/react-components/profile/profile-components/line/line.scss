@@ -122,11 +122,12 @@
   }
 }
 
-ul.line-bottom-legend {
-  column-count: 2;
-  padding-left: 40px;
+ul.line-top-legend {
+  display: flex;
+  padding-left: 20px;
+  margin: 25px 0;
   font-family: $font-family-1;
-  font-size: $font-size-x-regular;
+  font-size: $font-size-regular;
   font-weight: $font-weight-bold;
   line-height: 1.5;
   letter-spacing: -0.6px;
@@ -139,8 +140,26 @@ ul.line-bottom-legend {
     }
   }
 
-  .line-color {
-    margin-right: 5px;
+  .link-container {
+    display: flex;
+  }
+
+  .dot-color {
+    display: block;
+    margin: 3px 5px 0 30px;
+    height: 12px;
+    width: 12px;
+    max-width: 12px;
+    border-radius: 50%;
+
+    &.line-0 { background-color: $ch-profile-legend-0; };
+    &.line-1 { background-color: $ch-profile-legend-1; };
+    &.line-2 { background-color: $ch-profile-legend-2; };
+    &.line-3 { background-color: $ch-profile-legend-3; };
+    &.line-4 { background-color: $ch-profile-legend-4; };
+    &.line-5 { background-color: $ch-profile-legend-5; };
+    &.line-6 { background-color: $ch-profile-legend-6; };
+    &.line-7 { background-color: $ch-profile-legend-7; };
   }
 }
 
