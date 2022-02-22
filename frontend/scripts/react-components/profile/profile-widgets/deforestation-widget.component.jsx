@@ -72,7 +72,7 @@ class DeforestationWidget extends React.PureComponent {
               <div className="row">
                 <div className="small-12 columns">
                   <Heading
-                    variant="mono"
+                    variant="sans"
                     weight="bold"
                     size="md"
                     as="h3"

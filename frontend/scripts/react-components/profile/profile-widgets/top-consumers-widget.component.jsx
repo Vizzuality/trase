@@ -93,7 +93,7 @@ class TopConsumersWidget extends React.PureComponent {
               <div className="row">
                 <div className="small-12 columns">
                   <Heading
-                    variant="mono"
+                    variant="sans"
                     weight="bold"
                     as="h3"
                     size="md"

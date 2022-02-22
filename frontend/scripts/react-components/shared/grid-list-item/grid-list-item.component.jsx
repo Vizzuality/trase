@@ -98,7 +98,6 @@ function GridListItem(props) {
                 disabled={isDisabled}
               >
                 <HelpTooltip
-                  theme="gradient-padding"
                   text={tooltip}
                   referenceComponent={forwardRef((_, ref) => (
                     <button

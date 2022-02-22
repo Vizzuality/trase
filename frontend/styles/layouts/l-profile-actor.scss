@@ -7,7 +7,7 @@ $large-line-chart-width: 840px;
   position: relative;
   min-height: 100vh;
   padding-top: calc(44px + #{$nav-height});
-  background-color: $egg-shell;
+  background-color: $green-100;
 
   &.-error {
     position: relative;

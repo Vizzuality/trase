@@ -10,20 +10,20 @@
   .axis {
     line {
       fill: none;
-      stroke: $charcoal-grey;
+      stroke: $main-dark-blue;
       stroke-opacity: .1;
     }
 
     text {
-      font-family: $font-family-1;
+      font-family: $font-family-3;
       font-size: $font-size-x-regular;
       line-height: 0.92;
       letter-spacing: -1px;
-      fill: rgba($charcoal-grey, .6);
+      fill: rgba($main-dark-blue, .6);
     }
 
     &.axis--x path {
-      stroke: $charcoal-grey;
+      stroke: $main-dark-blue;
       stroke-width: 2px;
     }
   }
@@ -33,7 +33,7 @@
   }
 
   .area-black {
-    fill: rgba($charcoal-grey, .3);
+    fill: rgba($main-dark-blue, .3);
   }
 
   .line-area-pink {
@@ -54,12 +54,12 @@
   }
 
   .line-area-black {
-    stroke: $charcoal-grey;
+    stroke: $main-dark-blue;
     stroke-width: 3px;
   }
 
   .line-dashed-black {
-    stroke: $charcoal-grey;
+    stroke: $main-dark-blue;
     stroke-width: 3px;
     stroke-dasharray: 1,8;
     stroke-linecap: round;
@@ -102,7 +102,7 @@
       font-weight: $font-weight-bold;
       line-height: 1.15;
       letter-spacing: -0.6px;
-      color: $charcoal-grey;
+      color: $main-dark-blue;
 
       &.link {
         cursor: pointer;
@@ -130,7 +130,7 @@ ul.line-bottom-legend {
   font-weight: $font-weight-bold;
   line-height: 1.5;
   letter-spacing: -0.6px;
-  color: $charcoal-grey;
+  color: $main-dark-blue;
 
   .link {
     &:hover {
@@ -165,9 +165,8 @@ ul.line-bottom-legend {
     span {
       font-family: $font-family-1;
       font-size: $font-size-small;
-      letter-spacing: -1px;
       line-height: 10px;
-      color: $charcoal-grey;
+      color: $main-dark-blue;
       text-transform: uppercase;
     }
 

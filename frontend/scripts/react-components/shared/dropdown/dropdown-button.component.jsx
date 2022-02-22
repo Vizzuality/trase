@@ -32,6 +32,7 @@ function DropdownButton(props) {
     {
       mono: { variant: 'mono' },
       column: { variant: 'sans', size: 'sm' },
+      profiles: { variant: 'sans', weight: 'regular' },
       panel: { size: 'rg', variant: 'sans', transform: 'uppercase' },
       legend: { size: 'sm', variant: 'sans', transform: 'uppercase', color: 'grey-faded' }
     }[variant] || {};
