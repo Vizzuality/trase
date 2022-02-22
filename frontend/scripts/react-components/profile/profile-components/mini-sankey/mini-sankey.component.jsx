@@ -32,7 +32,6 @@ const MiniSankey = props => {
   const [tooltipConfig, setTooltipConfig] = useState();
   const showTooltipCallback = (source, indicator, value, unit, x, y) => {
     const text = source;
-    console.log(source, indicator, value);
     const items = [
       {
         title: indicator,
