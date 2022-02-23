@@ -50,7 +50,7 @@
   .axis {
     line {
       fill: none;
-      stroke: $charcoal-grey;
+      stroke: $gray-350;
       stroke-opacity: .1;
     }
 
@@ -59,22 +59,22 @@
       font-size: $font-size-x-regular;
       line-height: 0.92;
       letter-spacing: -1px;
-      fill: rgba($charcoal-grey, .6);
+      fill: $gray-350;
     }
 
     .axis--label-text {
-      fill: black;
+      fill: $gray-350;
       text-anchor: end;
     }
 
     path {
-      stroke: $charcoal-grey;
+      stroke: $gray-350;
       stroke-opacity: .1;
       stroke-width: 1px;
     }
 
     &.axis-line path {
-      stroke: $charcoal-grey;
+      stroke: $gray-350;
       stroke-width: 2px;
       stroke-opacity: 1;
     }
@@ -82,17 +82,17 @@
 
   .dot {
     fill: $charcoal-grey;
-    stroke: $egg-shell;
+    stroke: $green-100;
     stroke-width: 2;
     transition: opacity 150ms linear;
 
     &:hover {
-      fill: $medium-pink;
+      fill: $gray-350;
     }
 
     &.current {
-      fill: $medium-pink;
-      stroke: rgba($medium-pink, .4);
+      fill: $gray-350;
+      stroke: rgba($gray-350, .4);
       stroke-width: 16px;
     }
 

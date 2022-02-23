@@ -56,6 +56,14 @@
 
         border-bottom: 1px solid rgba($main-dark-blue, .2);
 
+        .cell-name {
+          &:not(._text-align-right) {
+            .node-name {
+              font-weight: $font-weight-bold;
+            }
+          }
+        }
+
         > .cell-name,
         > .cell-score {
           color: $main-dark-blue;
@@ -83,6 +91,8 @@
             opacity: 1;
             overflow: hidden;
             vertical-align: bottom;
+
+            font-weight: $font-weight-regular;
           }
 
           .node-link {
@@ -120,8 +130,8 @@
           min-width: 70px;
 
           > .unit {
-            margin-left: 8px;
             color: rgba($main-dark-blue, .6);
+            margin-left: 2px;
           }
         }
       }

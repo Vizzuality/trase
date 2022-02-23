@@ -31,8 +31,8 @@ $large-line-chart-width: 840px;
     }
   }
 
-  section:nth-of-type(2n-1) {
-    background-color: rgba($white, 0.3);
+  section {
+    border-top: 1px solid rgba($blue-700, 0.3);
   }
 
   .top-logo {

@@ -46,8 +46,8 @@ $transition: all 0.2s;
   }
 
   .profiles-selector-button {
-    vertical-align: text-bottom;
-    margin-top: 20px;
+    vertical-align: top;
+    margin-top: 8px;
 
     @media print {
       display: none;
