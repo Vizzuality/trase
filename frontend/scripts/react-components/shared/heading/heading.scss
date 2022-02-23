@@ -6,7 +6,6 @@
   &.mono {
     font-family: $font-family-3;
     letter-spacing: $letter-spacing-x-narrow;
-    text-transform: uppercase;
   }
 
   &.sans {
@@ -47,11 +46,11 @@
   }
 
   &.color-grey-faded {
-    color: $charcoal-grey-faded;
+    color: $main-faded-blue
   }
 
   &.color-grey {
-    color: $charcoal-grey;
+    color: $main-dark-blue
   }
 
   &.color-gray-700 {
@@ -59,7 +58,7 @@
   }
 
   &.color-pink {
-    color: $strong-pink;
+    color: $main;
   }
 
   &.text-align-center {

@@ -31,9 +31,10 @@ function DropdownButton(props) {
   const valueProps =
     {
       mono: { variant: 'mono' },
-      column: { variant: 'mono', size: 'sm' },
-      panel: { size: 'rg', variant: 'mono', transform: 'uppercase' },
-      legend: { size: 'sm', variant: 'mono', transform: 'uppercase', color: 'grey-faded' }
+      column: { variant: 'sans', size: 'sm' },
+      profiles: { variant: 'sans', weight: 'regular' },
+      panel: { size: 'rg', variant: 'sans', transform: 'uppercase' },
+      legend: { size: 'sm', variant: 'sans', transform: 'uppercase', color: 'grey-faded' }
     }[variant] || {};
 
   return (
@@ -51,7 +52,7 @@ function DropdownButton(props) {
       <Text
         as="span"
         size="sm"
-        variant="mono"
+        variant="sans"
         color={color}
         transform="uppercase"
         {...labelProps}

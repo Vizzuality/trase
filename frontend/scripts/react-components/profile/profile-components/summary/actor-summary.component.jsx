@@ -45,7 +45,7 @@ class ActorSummary extends React.PureComponent {
             {name}
           </Text>
           <span id="forest-500-tooltip">
-            <HelpTooltip theme="gradient-padding" text={tooltip} />
+            <HelpTooltip text={tooltip} />
           </span>
         </div>
         <div className="value forest-500-score">
@@ -66,7 +66,7 @@ class ActorSummary extends React.PureComponent {
         <Text transform="uppercase" variant="mono" as="div" className="legend">
           {name}
           <span>
-            <HelpTooltip theme="gradient-padding" text={tooltip} />
+            <HelpTooltip text={tooltip} />
           </span>
         </Text>
         {value.toLowerCase() !== 'none' ? (
@@ -74,7 +74,7 @@ class ActorSummary extends React.PureComponent {
             <Icon color="grey" icon="icon-check-circle" className="icon-check-circle" />
             <Text
               transform="uppercase"
-              variant="mono"
+              variant="sans"
               as="span"
               weight="bold"
               size="lg"
@@ -169,11 +169,10 @@ class ActorSummary extends React.PureComponent {
             className={cx('small-12', 'columns', { 'large-12': printMode, 'large-10': !printMode })}
           >
             <Text
-              variant="serif"
+              variant="sans"
               size="md"
-              weigth="light"
-              lineHeight="lg"
-              color="grey"
+              lineHeight="md"
+              color="blue"
               className="summary"
               dangerouslySetInnerHTML={{ __html: summary }}
             />

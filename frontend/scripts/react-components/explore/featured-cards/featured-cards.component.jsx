@@ -74,12 +74,11 @@ const FeaturedCards = props => {
     unique: true
   });
 
-  const renderName = name =>
-    console.log(name) || (
-      <Text as="span" size="lg" weight="bold">
-        {capitalize(name)}
-      </Text>
-    );
+  const renderName = name => (
+    <Text as="span" size="lg" weight="bold">
+      {capitalize(name)}
+    </Text>
+  );
 
   const renderCards = isSmall =>
     transitions.map(transition => (

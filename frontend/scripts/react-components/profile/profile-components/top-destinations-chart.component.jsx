@@ -90,7 +90,7 @@ class TopDestinationsChart extends React.PureComponent {
         <div className="top-destinations-chart-container">
           <div>
             {type === 'actor_top_countries' ? (
-              <Heading variant="mono" weight="bold" as="h3" size="md" data-test={`${testId}-title`}>
+              <Heading variant="sans" weight="bold" as="h3" size="md" data-test={`${testId}-title`}>
                 {this.getTitle()}
               </Heading>
             ) : (
@@ -111,7 +111,7 @@ class TopDestinationsChart extends React.PureComponent {
               lines={lines}
               style={style}
               xValues={includedYears}
-              useBottomLegend
+              useTopLegend
               year={year}
               showTooltipCallback={this.onMouseMove}
               hideTooltipCallback={this.onMouseLeave}

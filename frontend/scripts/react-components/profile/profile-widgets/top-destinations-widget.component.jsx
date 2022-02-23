@@ -19,7 +19,7 @@ class TopDestinationsWidget extends React.PureComponent {
   getActiveTabProps(data) {
     const { activeTabIndex } = this.state;
 
-    const tabs = [...data.tabs].reverse();
+    const tabs = [...data.tabs].reverse().sort(a => (a === 'municipality' ? -1 : 1));
     const activeTab = tabs[activeTabIndex];
     const linesData = data[camelCase(activeTab)];
     const { includedYears, buckets, legendTitle } = data;

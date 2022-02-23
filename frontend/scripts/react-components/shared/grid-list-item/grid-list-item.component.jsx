@@ -80,7 +80,7 @@ function GridListItem(props) {
                   as="p"
                   variant="sans"
                   weight="bold"
-                  align="center"
+                  align={variant === 'profiles' ? 'left' : 'center'}
                   title={item.name}
                   transform="capitalize"
                   className="grid-list-item-text"
@@ -98,7 +98,6 @@ function GridListItem(props) {
                 disabled={isDisabled}
               >
                 <HelpTooltip
-                  theme="gradient-padding"
                   text={tooltip}
                   referenceComponent={forwardRef((_, ref) => (
                     <button

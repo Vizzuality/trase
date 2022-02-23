@@ -15,7 +15,7 @@ function ProfilePanelFooter(props) {
       <div className="profile-panel-footer-actions">
         {onBack && (
           <button type="button" onClick={onBack} className="profile-panel-back-button">
-            <Text as="span" size="rg" variant="mono">
+            <Text as="span" size="rg" variant="sans">
               Back
             </Text>
           </button>
@@ -27,7 +27,7 @@ function ProfilePanelFooter(props) {
           disabled={isDisabled}
           testId="dashboard-modal-actions-continue"
         >
-          <Text as="span" size="rg" color="white" variant="mono">
+          <Text as="span" size="rg" color="white" variant="sans">
             {isLastStep ? 'Go to profile' : 'Continue'}
           </Text>
         </Button>

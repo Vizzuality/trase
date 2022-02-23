@@ -19,7 +19,7 @@ class TitleGroup extends React.PureComponent {
           {!sticky && (
             <Text
               as="span"
-              variant="mono"
+              variant="sans"
               color="grey"
               transform="uppercase"
               className="title-group-label"
@@ -29,7 +29,7 @@ class TitleGroup extends React.PureComponent {
           )}
           <Heading
             size={sticky ? 'md' : 'lg'}
-            weight="bold"
+            variant="sans"
             className="title-group-content"
             data-test={`title-group-el-${i}`}
           >
@@ -50,6 +50,7 @@ class TitleGroup extends React.PureComponent {
         >
           <Dropdown
             variant="profiles"
+            className="title-group-content"
             size={sticky ? 'md' : 'lg'}
             label={!sticky ? title.label : null}
             options={title.options}

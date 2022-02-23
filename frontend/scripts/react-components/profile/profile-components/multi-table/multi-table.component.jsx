@@ -37,7 +37,7 @@ class MultiTable extends Component {
       testId
     } = this.props;
     const { selectedTableIndex } = this.state;
-    const indicatorNames = data.map(d => d.name);
+    const indicatorNames = data.map(d => d.name).reverse(); // Put Municipalities first
     return (
       <div className="c-multi-table">
         <DropdownTabSwitcher

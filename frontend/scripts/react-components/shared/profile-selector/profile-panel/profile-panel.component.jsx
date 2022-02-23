@@ -33,8 +33,9 @@ function ProfilePanel(props) {
           <Heading key={`panel-heading${step}`} align="center" size="md" weight="light">
             Choose the{' '}
             <Heading as="span" size="md" weight="bold">
-              type of profile
+              type of{' '}
             </Heading>
+            profile
           </Heading>
           <div className="row profile-panel-content">
             <BlockSwitch

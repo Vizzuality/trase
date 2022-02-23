@@ -86,18 +86,18 @@ function CountrySummary(props) {
       <div className="stat-item" key={`${indicatorKey}${name}`}>
         <Text transform="uppercase" variant="mono" as="div" className="legend">
           {name}
-          {tooltip && <HelpTooltip theme="gradient-padding" text={tooltip} />}
+          {tooltip && <HelpTooltip text={tooltip} />}
         </Text>
         {prefix && (
-          <Text as="span" variant="mono" size="lg" weight="bold">
+          <Text as="span" variant="sans" size="lg" weight="bold">
             {prefix}
           </Text>
         )}
-        <Text as="span" variant="mono" size="lg" weight="bold">
+        <Text as="span" variant="sans" size="lg" weight="bold">
           {formatValue(value, name)}
         </Text>
         {suffix && suffix !== 'people' && (
-          <Text as="span" variant="mono" size="lg" weight="bold">
+          <Text as="span" variant="sans" size="lg" weight="bold">
             {' '}
             {suffix === 'km2' ? 'km²' : suffix}
           </Text>
@@ -156,11 +156,10 @@ function CountrySummary(props) {
           className={cx('small-12', 'columns', { 'large-12': printMode, 'large-10': !printMode })}
         >
           <Text
-            variant="serif"
+            variant="sans"
             size="md"
-            weigth="light"
-            lineHeight="lg"
-            color="grey"
+            lineHeight="md"
+            color="blue"
             className="summary"
             dangerouslySetInnerHTML={{ __html: summary }}
           />

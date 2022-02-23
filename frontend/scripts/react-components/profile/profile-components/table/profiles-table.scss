@@ -13,7 +13,7 @@
 
     > thead {
       > .table-row {
-        border-bottom: 2px solid $charcoal-grey;
+        border-bottom: 2px solid $main-dark-blue;
       }
 
 
@@ -23,16 +23,16 @@
           padding: 0 0 10px 0;
         }
 
-        color: $charcoal-grey;
+        color: $main-dark-blue;
         font-family: $font-family-1;
-        font-size: $font-size-x-regular;
+        font-size: $font-size-xxx-regular;
         font-weight: $font-weight-bold;
         letter-spacing: -.6px;
         line-height: 1.23;
         text-align: left;
-        text-transform: uppercase;
         vertical-align: middle;
         min-width: 150px;
+        padding-bottom: 8px;
 
         .align-content-right {
           display: flex;
@@ -54,13 +54,19 @@
           background: rgba($white, .5);
         }
 
-        &:not(:last-child) {
-          border-bottom: 1px solid rgba($charcoal-grey, .2);
+        border-bottom: 1px solid rgba($main-dark-blue, .2);
+
+        .cell-name {
+          &:not(._text-align-right) {
+            .node-name {
+              font-weight: $font-weight-bold;
+            }
+          }
         }
 
         > .cell-name,
         > .cell-score {
-          color: $charcoal-grey;
+          color: $main-dark-blue;
           font-family: $font-family-1;
           font-size: $font-size-xx-regular;
           letter-spacing: -.8px;
@@ -85,6 +91,8 @@
             opacity: 1;
             overflow: hidden;
             vertical-align: bottom;
+
+            font-weight: $font-weight-regular;
           }
 
           .node-link {
@@ -100,14 +108,14 @@
               margin: 0 10px 0 0;
               vertical-align: text-bottom;
               cursor: pointer;
-              fill: rgba($charcoal-grey, .2);
+              fill: rgba($main-dark-blue, .2);
             }
 
             &:hover {
               text-decoration: underline;
 
               .icon-outside-link {
-                fill: $charcoal-grey;
+                fill: $main-dark-blue;
               }
             }
           }
@@ -122,8 +130,8 @@
           min-width: 70px;
 
           > .unit {
-            margin-left: 8px;
-            color: rgba($charcoal-grey, .6);
+            color: rgba($main-dark-blue, .6);
+            margin-left: 2px;
           }
         }
       }

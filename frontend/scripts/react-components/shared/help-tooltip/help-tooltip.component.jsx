@@ -65,7 +65,7 @@ HelpTooltipComponent.propTypes = {
 
 HelpTooltipComponent.defaultProps = {
   position: 'bottom',
-  theme: 'blue',
+  theme: 'gradient-padding',
   showInfoIcon: true
 };
 

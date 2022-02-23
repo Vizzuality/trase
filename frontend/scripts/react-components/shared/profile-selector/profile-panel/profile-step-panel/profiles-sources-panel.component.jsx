@@ -63,8 +63,12 @@ function ProfilesSourcesPanel(props) {
               {itemProps => (
                 <GridListItem
                   {...itemProps}
+                  variant="profiles"
                   isActive={
-                    !!(activeCountryItems && activeCountryItems.find(i => i.id === itemProps.item?.id))
+                    !!(
+                      activeCountryItems &&
+                      activeCountryItems.find(i => i.id === itemProps.item?.id)
+                    )
                   }
                   enableItem={onSelectCountry}
                   disableItem={() => onSelectCountry(null)}
@@ -96,8 +100,7 @@ function ProfilesSourcesPanel(props) {
                   itemTabRenderer={i => i.name}
                   getTabId={item => item.id}
                 >
-                  {isCountryOfProductionSelected ?
-                    null :
+                  {isCountryOfProductionSelected ? null : (
                     <GridList
                       className="profile-sources-panel-pill-list"
                       items={sources}
@@ -114,13 +117,14 @@ function ProfilesSourcesPanel(props) {
                       {itemProps => (
                         <GridListItem
                           {...itemProps}
+                          variant="profiles"
                           isActive={activeSourceItem.includes(itemProps.item?.id)}
                           enableItem={onSelectSourceValue}
                           disableItem={onSelectSourceValue}
                         />
                       )}
                     </GridList>
-                  }
+                  )}
                 </Tabs>
               </Accordion>
             )}
