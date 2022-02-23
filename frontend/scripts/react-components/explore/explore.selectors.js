@@ -26,7 +26,7 @@ export const getCommodities = createSelector([getContexts], contexts => {
   return Object.keys(groupedContexts).map(name => ({
     name,
     id: groupedContexts[name][0].commodityId,
-    isSubnational: groupedContexts[name].some(c => !!c.subnationalYears)
+    isSubnational: groupedContexts[name].some(c => c.isSubnational)
   }));
 });
 
@@ -54,7 +54,7 @@ export const getCountries = createSelector(
       .map(c => ({
         name: c.countryName,
         id: c.countryId,
-        isSubnational: !!c.subnationalYears
+        isSubnational: c.isSubnational
       }));
   }
 );
@@ -87,6 +87,7 @@ export const getCountry = createSelector(
 export const getItems = createSelector(
   [getStep, getCommodities, getCountries],
   (step, commodities, countries) => {
+    console.log('..', commodities, countries, step);
     if (step === EXPLORE_STEPS.selectCommodity) return commodities;
     if (step === EXPLORE_STEPS.selectCountry) return countries;
     return [];
