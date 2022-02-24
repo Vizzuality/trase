@@ -12,7 +12,8 @@ import {
   TOOL_LINKS__SET_COLUMNS,
   TOOL_LINKS__COLLAPSE_SANKEY,
   TOOL_LINKS__SELECT_COLUMN,
-  TOOL_LINKS_RESET_SANKEY
+  TOOL_LINKS_RESET_SANKEY,
+  TOOL_LINKS__CLEAR_SANKEY
 } from 'react-components/tool-links/tool-links.actions';
 
 import {
@@ -575,6 +576,9 @@ const nodesPanelReducer = {
     });
   },
   [TOOL_LINKS_RESET_SANKEY](state) {
+    return immer(state, draft => clearSelectedNodes(draft));
+  },
+  [TOOL_LINKS__CLEAR_SANKEY](state) {
     return immer(state, draft => clearSelectedNodes(draft));
   }
 };
