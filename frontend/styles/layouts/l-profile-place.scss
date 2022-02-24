@@ -3,8 +3,12 @@
 .l-profile-place {
   position: relative;
   min-height: 100vh;
-  padding-top: calc(44px + #{$nav-height});
   background-color: $green-100;
+  padding-top: calc(44px + #{$nav-height * 2});
+
+  @media (min-width: $breakpoint-laptop) {
+    padding-top: calc(44px + #{$nav-height});
+  }
 
   &.-error {
     position: relative;
