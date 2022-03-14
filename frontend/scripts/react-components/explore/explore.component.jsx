@@ -26,6 +26,9 @@ import {
 
 import 'react-components/explore/explore.scss';
 
+import useWindowSize from 'utils/hooks/useWindowSize';
+import NotSupportedComponent from 'react-components/mobile/not-supported.component';
+
 const ToolLinksModal = React.lazy(() => import(/* webpackPreload: true */ './tool-links-modal'));
 
 function Explore(props) {
@@ -55,6 +58,8 @@ function Explore(props) {
   useClearExploreOnUnmount(props);
   useQuickFacts(props);
   useSankeyCards(props);
+
+  const { width } = useWindowSize();
 
   const destinationCountries = highlightedContext?.id && topNodes[highlightedContext.id];
   const [highlightedCountryIds, setHoveredCommodity] = useHighlightedCountries(props);
@@ -179,6 +184,10 @@ function Explore(props) {
       )}
     </>
   );
+
+  if (width <= BREAKPOINTS.tablet) {
+    return <NotSupportedComponent />;
+  }
 
   return (
     <div className="c-explore">
