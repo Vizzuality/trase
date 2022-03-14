@@ -87,7 +87,6 @@ export const getCountry = createSelector(
 export const getItems = createSelector(
   [getStep, getCommodities, getCountries],
   (step, commodities, countries) => {
-    console.log('..', commodities, countries, step);
     if (step === EXPLORE_STEPS.selectCommodity) return commodities;
     if (step === EXPLORE_STEPS.selectCountry) return countries;
     return [];
