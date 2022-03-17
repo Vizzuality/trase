@@ -19,26 +19,21 @@ export default (value, dimensionName) => {
   const attribute = attributesMeta.find(
     a => a.displayName && a.displayName.toLowerCase() === dimensionNameLower
   );
-  if (attribute && attribute.powerOfTenForRounding) {
-    if (attribute.powerOfTenForRounding || attribute.powerOfTenForRounding === 0) {
-      const round =
-        attribute.powerOfTenForRounding < 0 ? Math.abs(attribute.powerOfTenForRounding) : 0;
-      const exponent = attribute.powerOfTenForRounding > 0 ? attribute.powerOfTenForRounding : 0;
-      return formatPrefix(`,.${round}`, parseFloat(`1e${exponent}`))(value);
-    }
 
+  if (attribute && (attribute.powerOfTenForRounding || attribute.powerOfTenForRounding === 0)) {
     if (attribute.powerOfTenForRounding === 0 && value < 1 && value > 0) {
       return '< 1';
     }
 
-    return value.toLocaleString('en', {
-      minimumFractionDigits: 0,
-      maximumFractionDigits: Math.abs(attribute.powerOfTenForRounding)
-    });
+    const round =
+      attribute.powerOfTenForRounding < 0 ? Math.abs(attribute.powerOfTenForRounding) : 3;
+    const exponent = attribute.powerOfTenForRounding > 0 ? attribute.powerOfTenForRounding * 3 : 0;
+
+    return formatPrefix(`,.${round}`, parseFloat(`1e${exponent}`))(value);
   }
 
   return value.toLocaleString('en', {
     minimumFractionDigits: 0,
-    maximumFractionDigits: 0
+    maximumFractionDigits: 2
   });
 };
