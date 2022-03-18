@@ -251,6 +251,7 @@ ON CONFLICT (name, original_type) DO UPDATE SET
   unit = excluded.unit,
   unit_type = excluded.unit_type,
   aggregation_method = excluded.aggregation_method,
+  power_of_ten_for_rounding = excluded.power_of_ten_for_rounding,
   tooltip_text = excluded.tooltip_text,
   tooltip_text_by_context_id = excluded.tooltip_text_by_context_id,
   tooltip_text_by_commodity_id = excluded.tooltip_text_by_commodity_id,
@@ -10429,6 +10430,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20211025073827'),
 ('20211025074516'),
 ('20211202112544'),
-('20211202222956');
+('20211202222956'),
+('20220318110509');
 
 
