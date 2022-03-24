@@ -39,17 +39,19 @@ function ColumnSelector(props) {
     );
   }
 
+  // TODO: Improve column selector position
+  const columnPosition =
+    selectedColumnItem.group === 3
+      ? { right: '-3%' }
+      : {
+          left:
+            position * sankeyColumnsWidth +
+            position * gapBetweenColumns +
+            SANKEY_LATERAL_MARGIN -
+            COLUMN_SELECTOR_CENTER_OFFSET
+        };
   return (
-    <div
-      className="c-column-selector"
-      style={{
-        left:
-          position * sankeyColumnsWidth +
-          position * gapBetweenColumns +
-          SANKEY_LATERAL_MARGIN -
-          COLUMN_SELECTOR_CENTER_OFFSET
-      }}
-    >
+    <div className="c-column-selector" style={columnPosition}>
       {content}
     </div>
   );
