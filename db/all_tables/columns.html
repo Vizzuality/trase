@@ -261,13 +261,13 @@
         "comments": ""
     },
     {
-        "tableName": "map_inds",
+        "tableName": "methods_and_data_docs",
         "tableType": "Table",
-        "keyClass": "foreignKey",
-        "keyTitle": "Foreign Key",
-        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>ind_id",
-        "type": "int4",
-        "length": 10,
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "updated_at",
+        "type": "timestamp",
+        "length": 29,
         "nullable": "",
         "autoUpdated": "",
         "defaultValue": "null",
@@ -473,9 +473,9 @@
         "tableType": "Table",
         "keyClass": "",
         "keyTitle": "",
-        "name": "created_at",
-        "type": "timestamp",
-        "length": 29,
+        "name": "url",
+        "type": "text",
+        "length": 2147483647,
         "nullable": "",
         "autoUpdated": "",
         "defaultValue": "null",
@@ -1210,13 +1210,13 @@
         "comments": "<p>Commodity-specific tooltips are the third-most specific tooltips that can be defined after context and country-specific tooltips; in absence of a commodity-specific tooltip, a generic tooltip will be used.<\/p>"
     },
     {
-        "tableName": "methods_and_data_docs",
+        "tableName": "map_inds",
         "tableType": "Table",
         "keyClass": "foreignKey",
         "keyTitle": "Foreign Key",
-        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>context_id",
-        "type": "int8",
-        "length": 19,
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>map_attribute_id",
+        "type": "int4",
+        "length": 10,
         "nullable": "",
         "autoUpdated": "",
         "defaultValue": "null",
@@ -1392,13 +1392,13 @@
         "comments": ""
     },
     {
-        "tableName": "map_inds",
+        "tableName": "methods_and_data_docs",
         "tableType": "Table",
-        "keyClass": "foreignKey",
-        "keyTitle": "Foreign Key",
-        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>map_attribute_id",
-        "type": "int4",
-        "length": 10,
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "created_at",
+        "type": "timestamp",
+        "length": 29,
         "nullable": "",
         "autoUpdated": "",
         "defaultValue": "null",
@@ -1849,15 +1849,15 @@
     {
         "tableName": "sankey_card_links",
         "tableType": "Table",
-        "keyClass": "",
-        "keyTitle": "",
-        "name": "query_params",
-        "type": "json",
-        "length": 2147483647,
+        "keyClass": "primaryKey",
+        "keyTitle": "Primary Key",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>id",
+        "type": "bigserial",
+        "length": 19,
         "nullable": "",
-        "autoUpdated": "",
-        "defaultValue": "null",
-        "comments": "<p>query params included on the link of the quick sankey card<\/p>"
+        "autoUpdated": "√",
+        "defaultValue": "nextval('sankey_card_links_id_seq'::regclass)",
+        "comments": ""
     },
     {
         "tableName": "node_types",
@@ -1925,13 +1925,13 @@
         "comments": "<p>Generic tooltip text (lowest precedence)<\/p>"
     },
     {
-        "tableName": "methods_and_data_docs",
+        "tableName": "map_inds",
         "tableType": "Table",
         "keyClass": "",
         "keyTitle": "",
-        "name": "url",
-        "type": "text",
-        "length": 2147483647,
+        "name": "updated_at",
+        "type": "timestamp",
+        "length": 29,
         "nullable": "",
         "autoUpdated": "",
         "defaultValue": "null",
@@ -2510,17 +2510,17 @@
         "comments": ""
     },
     {
-        "tableName": "chart_node_types",
+        "tableName": "chart_quals",
         "tableType": "Table",
         "keyClass": "foreignKey",
         "keyTitle": "Foreign Key",
-        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>chart_id",
-        "type": "int8",
-        "length": 19,
-        "nullable": "√",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>chart_attribute_id",
+        "type": "int4",
+        "length": 10,
+        "nullable": "",
         "autoUpdated": "",
         "defaultValue": "null",
-        "comments": "<p>Refence to chart<\/p>"
+        "comments": ""
     },
     {
         "tableName": "dashboards_sources_v",
@@ -2939,16 +2939,16 @@
         "comments": "<p>Type of display, only used for trajectory deforestation plot in place profiles; e.g. area, line<\/p>"
     },
     {
-        "tableName": "chart_quals",
+        "tableName": "chart_node_types",
         "tableType": "Table",
-        "keyClass": "foreignKey",
-        "keyTitle": "Foreign Key",
-        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>qual_id",
-        "type": "int4",
-        "length": 10,
-        "nullable": "",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "is_total",
+        "type": "bool",
+        "length": 1,
+        "nullable": "√",
         "autoUpdated": "",
-        "defaultValue": "null",
+        "defaultValue": "false",
         "comments": ""
     },
     {
@@ -3177,13 +3177,13 @@
         "tableType": "Table",
         "keyClass": "",
         "keyTitle": "",
-        "name": "created_at",
-        "type": "timestamp",
-        "length": 29,
-        "nullable": "",
+        "name": "subtitle",
+        "type": "text",
+        "length": 2147483647,
+        "nullable": "√",
         "autoUpdated": "",
         "defaultValue": "null",
-        "comments": ""
+        "comments": "<p>subtitle of the quick sankey card<\/p>"
     },
     {
         "tableName": "chart_attributes",
@@ -3825,11 +3825,11 @@
     {
         "tableName": "sankey_card_links",
         "tableType": "Table",
-        "keyClass": "",
-        "keyTitle": "",
-        "name": "link",
-        "type": "text",
-        "length": 2147483647,
+        "keyClass": "foreignKey",
+        "keyTitle": "Foreign Key",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>commodity_id",
+        "type": "int8",
+        "length": 19,
         "nullable": "√",
         "autoUpdated": "",
         "defaultValue": "null",
@@ -3864,14 +3864,14 @@
     {
         "tableName": "methods_and_data_docs",
         "tableType": "Table",
-        "keyClass": "primaryKey",
-        "keyTitle": "Primary Key",
-        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>id",
-        "type": "bigserial",
-        "length": 19,
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "language",
+        "type": "text",
+        "length": 2147483647,
         "nullable": "",
-        "autoUpdated": "√",
-        "defaultValue": "nextval('methods_and_data_docs_id_seq'::regclass)",
+        "autoUpdated": "",
+        "defaultValue": "null",
         "comments": ""
     },
     {
@@ -4369,16 +4369,16 @@
         "comments": ""
     },
     {
-        "tableName": "map_inds",
+        "tableName": "methods_and_data_docs",
         "tableType": "Table",
         "keyClass": "primaryKey",
         "keyTitle": "Primary Key",
         "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>id",
-        "type": "serial",
-        "length": 10,
+        "type": "bigserial",
+        "length": 19,
         "nullable": "",
         "autoUpdated": "√",
-        "defaultValue": "nextval('map_inds_id_seq'::regclass)",
+        "defaultValue": "nextval('methods_and_data_docs_id_seq'::regclass)",
         "comments": ""
     },
     {
@@ -4436,15 +4436,15 @@
     {
         "tableName": "sankey_card_links",
         "tableType": "Table",
-        "keyClass": "foreignKey",
-        "keyTitle": "Foreign Key",
-        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>country_id",
-        "type": "int8",
-        "length": 19,
-        "nullable": "√",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "level3",
+        "type": "bool",
+        "length": 1,
+        "nullable": "",
         "autoUpdated": "",
-        "defaultValue": "null",
-        "comments": ""
+        "defaultValue": "false",
+        "comments": "<p>level used when commodity and country are selected<\/p>"
     },
     {
         "tableName": "inds",
@@ -4525,17 +4525,17 @@
         "comments": ""
     },
     {
-        "tableName": "chart_node_types",
+        "tableName": "chart_quals",
         "tableType": "Table",
         "keyClass": "foreignKey",
         "keyTitle": "Foreign Key",
-        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>node_type_id",
-        "type": "int8",
-        "length": 19,
-        "nullable": "√",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>qual_id",
+        "type": "int4",
+        "length": 10,
+        "nullable": "",
         "autoUpdated": "",
         "defaultValue": "null",
-        "comments": "<p>Refence to node type<\/p>"
+        "comments": ""
     },
     {
         "tableName": "nodes_with_flows_per_year_v",
@@ -5123,14 +5123,14 @@
         "comments": ""
     },
     {
-        "tableName": "schema_migrations",
+        "tableName": "sankey_card_links",
         "tableType": "Table",
-        "keyClass": "primaryKey",
-        "keyTitle": "Primary Key",
-        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>version",
-        "type": "varchar",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "link",
+        "type": "text",
         "length": 2147483647,
-        "nullable": "",
+        "nullable": "√",
         "autoUpdated": "",
         "defaultValue": "null",
         "comments": ""
@@ -5543,7 +5543,7 @@
         "tableType": "Table",
         "keyClass": "",
         "keyTitle": "",
-        "name": "updated_at",
+        "name": "created_at",
         "type": "timestamp",
         "length": 29,
         "nullable": "",
@@ -6072,16 +6072,16 @@
         "comments": ""
     },
     {
-        "tableName": "chart_node_types",
+        "tableName": "chart_quals",
         "tableType": "Table",
         "keyClass": "primaryKey",
         "keyTitle": "Primary Key",
         "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>id",
-        "type": "bigserial",
-        "length": 19,
+        "type": "serial",
+        "length": 10,
         "nullable": "",
         "autoUpdated": "√",
-        "defaultValue": "nextval('chart_node_types_id_seq'::regclass)",
+        "defaultValue": "nextval('chart_quals_id_seq'::regclass)",
         "comments": ""
     },
     {
@@ -6215,13 +6215,13 @@
         "comments": ""
     },
     {
-        "tableName": "map_inds",
+        "tableName": "methods_and_data_docs",
         "tableType": "Table",
-        "keyClass": "",
-        "keyTitle": "",
-        "name": "created_at",
-        "type": "timestamp",
-        "length": 29,
+        "keyClass": "foreignKey",
+        "keyTitle": "Foreign Key",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>context_id",
+        "type": "int8",
+        "length": 19,
         "nullable": "",
         "autoUpdated": "",
         "defaultValue": "null",
@@ -6306,13 +6306,13 @@
         "comments": ""
     },
     {
-        "tableName": "methods_and_data_docs",
+        "tableName": "map_inds",
         "tableType": "Table",
         "keyClass": "",
         "keyTitle": "",
-        "name": "language",
-        "type": "text",
-        "length": 2147483647,
+        "name": "created_at",
+        "type": "timestamp",
+        "length": 29,
         "nullable": "",
         "autoUpdated": "",
         "defaultValue": "null",
@@ -7660,14 +7660,14 @@
     {
         "tableName": "chart_node_types",
         "tableType": "Table",
-        "keyClass": "",
-        "keyTitle": "",
-        "name": "is_total",
-        "type": "bool",
-        "length": 1,
-        "nullable": "√",
-        "autoUpdated": "",
-        "defaultValue": "false",
+        "keyClass": "primaryKey",
+        "keyTitle": "Primary Key",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>id",
+        "type": "bigserial",
+        "length": 19,
+        "nullable": "",
+        "autoUpdated": "√",
+        "defaultValue": "nextval('chart_node_types_id_seq'::regclass)",
         "comments": ""
     },
     {
@@ -8011,15 +8011,15 @@
     {
         "tableName": "chart_node_types",
         "tableType": "Table",
-        "keyClass": "",
-        "keyTitle": "",
-        "name": "updated_at",
-        "type": "timestamp",
-        "length": 29,
-        "nullable": "",
+        "keyClass": "foreignKey",
+        "keyTitle": "Foreign Key",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>node_type_id",
+        "type": "int8",
+        "length": 19,
+        "nullable": "√",
         "autoUpdated": "",
         "defaultValue": "null",
-        "comments": ""
+        "comments": "<p>Refence to node type<\/p>"
     },
     {
         "tableName": "download_flows_v",
@@ -8087,16 +8087,16 @@
         "comments": ""
     },
     {
-        "tableName": "sankey_card_links",
+        "tableName": "schema_migrations",
         "tableType": "Table",
         "keyClass": "primaryKey",
         "keyTitle": "Primary Key",
-        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>id",
-        "type": "bigserial",
-        "length": 19,
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>version",
+        "type": "varchar",
+        "length": 2147483647,
         "nullable": "",
-        "autoUpdated": "√",
-        "defaultValue": "nextval('sankey_card_links_id_seq'::regclass)",
+        "autoUpdated": "",
+        "defaultValue": "null",
         "comments": ""
     },
     {
@@ -8884,13 +8884,13 @@
         "tableType": "Table",
         "keyClass": "",
         "keyTitle": "",
-        "name": "level2",
+        "name": "level1",
         "type": "bool",
         "length": 1,
         "nullable": "",
         "autoUpdated": "",
         "defaultValue": "false",
-        "comments": "<p>level used when commodity is selected<\/p>"
+        "comments": "<p>level used when commodity and country are not selected<\/p>"
     },
     {
         "tableName": "flow_quant_totals_mv",
@@ -9075,13 +9075,13 @@
         "comments": ""
     },
     {
-        "tableName": "map_inds",
+        "tableName": "methods_and_data_docs",
         "tableType": "Table",
-        "keyClass": "",
-        "keyTitle": "",
-        "name": "updated_at",
-        "type": "timestamp",
-        "length": 29,
+        "keyClass": "foreignKey",
+        "keyTitle": "Foreign Key",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>version",
+        "type": "text",
+        "length": 2147483647,
         "nullable": "",
         "autoUpdated": "",
         "defaultValue": "null",
@@ -9101,13 +9101,13 @@
         "comments": ""
     },
     {
-        "tableName": "methods_and_data_docs",
+        "tableName": "map_inds",
         "tableType": "Table",
         "keyClass": "foreignKey",
         "keyTitle": "Foreign Key",
-        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>version",
-        "type": "text",
-        "length": 2147483647,
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>ind_id",
+        "type": "int4",
+        "length": 10,
         "nullable": "",
         "autoUpdated": "",
         "defaultValue": "null",
@@ -9491,7 +9491,7 @@
         "comments": ""
     },
     {
-        "tableName": "chart_quals",
+        "tableName": "chart_node_types",
         "tableType": "Table",
         "keyClass": "",
         "keyTitle": "",
@@ -9647,17 +9647,17 @@
         "comments": ""
     },
     {
-        "tableName": "chart_quals",
+        "tableName": "chart_node_types",
         "tableType": "Table",
-        "keyClass": "foreignKey",
-        "keyTitle": "Foreign Key",
-        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>chart_attribute_id",
+        "keyClass": "indexedColumn",
+        "keyTitle": "Indexed",
+        "name": "<i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'><\/i>position",
         "type": "int4",
         "length": 10,
-        "nullable": "",
+        "nullable": "√",
         "autoUpdated": "",
         "defaultValue": "null",
-        "comments": ""
+        "comments": "<p>Display order in scope of chart; required when more than one<\/p>"
     },
     {
         "tableName": "download_attributes_v",
@@ -9714,15 +9714,15 @@
     {
         "tableName": "chart_node_types",
         "tableType": "Table",
-        "keyClass": "",
-        "keyTitle": "",
-        "name": "created_at",
-        "type": "timestamp",
-        "length": 29,
-        "nullable": "",
+        "keyClass": "foreignKey",
+        "keyTitle": "Foreign Key",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>chart_id",
+        "type": "int8",
+        "length": 19,
+        "nullable": "√",
         "autoUpdated": "",
         "defaultValue": "null",
-        "comments": ""
+        "comments": "<p>Refence to chart<\/p>"
     },
     {
         "tableName": "dashboards_destinations",
@@ -10132,7 +10132,7 @@
         "tableType": "Table",
         "keyClass": "foreignKey",
         "keyTitle": "Foreign Key",
-        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>commodity_id",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>country_id",
         "type": "int8",
         "length": 19,
         "nullable": "√",
@@ -10158,13 +10158,13 @@
         "tableType": "Table",
         "keyClass": "",
         "keyTitle": "",
-        "name": "title",
-        "type": "text",
+        "name": "query_params",
+        "type": "json",
         "length": 2147483647,
         "nullable": "",
         "autoUpdated": "",
         "defaultValue": "null",
-        "comments": "<p>title of the quick sankey card<\/p>"
+        "comments": "<p>query params included on the link of the quick sankey card<\/p>"
     },
     {
         "tableName": "dashboards_commodities_v",
@@ -10340,13 +10340,13 @@
         "tableType": "Table",
         "keyClass": "",
         "keyTitle": "",
-        "name": "level3",
+        "name": "level2",
         "type": "bool",
         "length": 1,
         "nullable": "",
         "autoUpdated": "",
         "defaultValue": "false",
-        "comments": "<p>level used when commodity and country are selected<\/p>"
+        "comments": "<p>level used when commodity is selected<\/p>"
     },
     {
         "tableName": "partitioned_denormalised_flow_inds",
@@ -10622,17 +10622,17 @@
         "comments": "<p>Version symbol (included in downloaded file name)<\/p>"
     },
     {
-        "tableName": "chart_quals",
+        "tableName": "chart_node_types",
         "tableType": "Table",
-        "keyClass": "primaryKey",
-        "keyTitle": "Primary Key",
-        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>id",
-        "type": "serial",
-        "length": 10,
-        "nullable": "",
-        "autoUpdated": "√",
-        "defaultValue": "nextval('chart_quals_id_seq'::regclass)",
-        "comments": ""
+        "keyClass": "indexedColumn",
+        "keyTitle": "Indexed",
+        "name": "<i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'><\/i>identifier",
+        "type": "text",
+        "length": 2147483647,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": "<p>Identifier used to map this chart node type to a part of code which contains calculation logic<\/p>"
     },
     {
         "tableName": "dashboards_attribute_groups",
@@ -10869,17 +10869,17 @@
         "comments": ""
     },
     {
-        "tableName": "chart_node_types",
+        "tableName": "chart_quals",
         "tableType": "Table",
-        "keyClass": "indexedColumn",
-        "keyTitle": "Indexed",
-        "name": "<i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'><\/i>position",
-        "type": "int4",
-        "length": 10,
-        "nullable": "√",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "updated_at",
+        "type": "timestamp",
+        "length": 29,
+        "nullable": "",
         "autoUpdated": "",
         "defaultValue": "null",
-        "comments": "<p>Display order in scope of chart; required when more than one<\/p>"
+        "comments": ""
     },
     {
         "tableName": "context_properties",
@@ -11064,17 +11064,17 @@
         "comments": ""
     },
     {
-        "tableName": "chart_node_types",
+        "tableName": "chart_quals",
         "tableType": "Table",
-        "keyClass": "indexedColumn",
-        "keyTitle": "Indexed",
-        "name": "<i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'><\/i>identifier",
-        "type": "text",
-        "length": 2147483647,
-        "nullable": "√",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "created_at",
+        "type": "timestamp",
+        "length": 29,
+        "nullable": "",
         "autoUpdated": "",
         "defaultValue": "null",
-        "comments": "<p>Identifier used to map this chart node type to a part of code which contains calculation logic<\/p>"
+        "comments": ""
     },
     {
         "tableName": "download_flows_stats_mv",
@@ -11090,16 +11090,16 @@
         "comments": ""
     },
     {
-        "tableName": "methods_and_data_docs",
+        "tableName": "map_inds",
         "tableType": "Table",
-        "keyClass": "",
-        "keyTitle": "",
-        "name": "updated_at",
-        "type": "timestamp",
-        "length": 29,
+        "keyClass": "primaryKey",
+        "keyTitle": "Primary Key",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>id",
+        "type": "serial",
+        "length": 10,
         "nullable": "",
-        "autoUpdated": "",
-        "defaultValue": "null",
+        "autoUpdated": "√",
+        "defaultValue": "nextval('map_inds_id_seq'::regclass)",
         "comments": ""
     },
     {
@@ -11662,7 +11662,7 @@
         "comments": ""
     },
     {
-        "tableName": "chart_quals",
+        "tableName": "chart_node_types",
         "tableType": "Table",
         "keyClass": "",
         "keyTitle": "",
@@ -12082,13 +12082,13 @@
         "tableType": "Table",
         "keyClass": "",
         "keyTitle": "",
-        "name": "subtitle",
+        "name": "title",
         "type": "text",
         "length": 2147483647,
-        "nullable": "√",
+        "nullable": "",
         "autoUpdated": "",
         "defaultValue": "null",
-        "comments": "<p>subtitle of the quick sankey card<\/p>"
+        "comments": "<p>title of the quick sankey card<\/p>"
     },
     {
         "tableName": "flow_inds",
@@ -13707,13 +13707,13 @@
         "tableType": "Table",
         "keyClass": "",
         "keyTitle": "",
-        "name": "level1",
-        "type": "bool",
-        "length": 1,
+        "name": "updated_at",
+        "type": "timestamp",
+        "length": 29,
         "nullable": "",
         "autoUpdated": "",
-        "defaultValue": "false",
-        "comments": "<p>level used when commodity and country are not selected<\/p>"
+        "defaultValue": "null",
+        "comments": ""
     },
     {
         "tableName": "nodes_with_flows_or_geo",
