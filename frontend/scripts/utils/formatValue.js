@@ -25,8 +25,15 @@ export default (value, dimensionName) => {
       return '< 1';
     }
 
-    const round =
-      attribute.powerOfTenForRounding < 0 ? Math.abs(attribute.powerOfTenForRounding) : 3;
+    const getRound = () => {
+      if (attribute.powerOfTenForRounding === 0) {
+        return 0;
+      }
+
+      return attribute.powerOfTenForRounding < 0 ? Math.abs(attribute.powerOfTenForRounding) : 3;
+    };
+
+    const round = getRound();
     const exponent = attribute.powerOfTenForRounding > 0 ? attribute.powerOfTenForRounding * 3 : 0;
 
     return formatPrefix(`,.${round}`, parseFloat(`1e${exponent}`))(value);
