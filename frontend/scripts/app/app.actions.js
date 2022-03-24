@@ -12,6 +12,7 @@ import { getSelectedContext } from 'app/app.selectors';
 import axios from 'axios';
 
 export const SET_CONTEXT = 'SET_CONTEXT';
+export const SET_ATTRIBUTES_META = 'SET_ATTRIBUTES_META';
 export const LOAD_TOOLTIP = 'LOAD_TOOLTIP';
 export const SET_TOOLTIPS = 'SET_TOOLTIPS';
 export const SHOW_DISCLAIMER = 'SHOW_DISCLAIMER';

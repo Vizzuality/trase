@@ -98,5 +98,28 @@ RSpec.describe Api::V3::Dashboards::FilterSources do
       nodes = filter.call_with_query_term('GOIAS')
       expect(nodes.first.name).to eq(api_v3_municipality_goias.name)
     end
+
+    context 'when SQL injection' do
+      let(:filter) {
+        Api::V3::Dashboards::FilterSources.new(
+          node_types_ids: [api_v3_municipality_node_type.id],
+          order_by: 'volume',
+          countries_ids: [api_v3_brazil.id],
+          commodities_ids: [api_v3_soy.id],
+          start_year: 2015
+        )
+      }
+      before(:each) {
+        api_v3_municipality_goias.update_attribute(:name, "l'oreal")
+        Api::V3::Readonly::FlowNode.refresh(sync: true, skip_dependents: true)
+        Api::V3::Readonly::NodeWithFlowsPerYear.refresh(sync: true, skip_dependents: true)
+        Api::V3::Readonly::NodesPerContextRankedByVolumePerYear.refresh(sync: true, skip_dependents: true)
+        Api::V3::Readonly::Dashboards::Source.refresh(sync: true)
+      }
+      it 'exact match is on top' do
+        nodes = filter.call_with_query_term("l'oreal")
+        expect(nodes.first.name).to eq(api_v3_municipality_goias.name)
+      end
+    end
   end
 end

@@ -19,24 +19,16 @@ const FeaturedCard = ({ card, openModal, step }) => {
         data-test={`featured-card${cardStepId}`}
         src={`'/images/featured-links/${countryName}.svg'`}
       >
-        <Text
-          variant="mono"
-          align="center"
-          weight="bold"
-          size="lg"
-          transform="uppercase"
-          color="white"
-        >
+        <Text variant="sans" align="center" weight="bold" size="lg" color="blue">
           <span className="featured-card-country-name">{countryName}</span>
           <span className="featured-card-commodity-name">{commodityName}</span>
         </Text>
         <Text
-          variant="mono"
+          variant="sans"
           align="center"
           weight="bold"
-          transform="uppercase"
-          color="white"
-          lineHeight="lg"
+          color="blue"
+          lineHeight="md"
           size="rg"
           className="featured-card-text"
           title={title}
@@ -44,9 +36,8 @@ const FeaturedCard = ({ card, openModal, step }) => {
           {title}
         </Text>
         <Text
-          variant="mono"
+          variant="sans"
           align="center"
-          transform="uppercase"
           color="white"
           weight="bold"
           className="featured-card-text"

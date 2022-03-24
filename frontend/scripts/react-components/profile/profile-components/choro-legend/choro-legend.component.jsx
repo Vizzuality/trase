@@ -12,14 +12,12 @@ class ChoroLegend extends Component {
   }
 
   render() {
-    const { title, unit, bucket, testId } = this.props;
-
+    const { title, bucket, testId } = this.props;
     return (
       <div className="c-choro-legend" data-test={testId}>
         <div className="bucket-container -horizontal -profile">
           <div className="bucket-names">
             <div className="layer-name">{title}</div>
-            <div className="layer-name">{unit}</div>
           </div>
           <ul className="bucket-legend">
             {PROFILE_CHOROPLETH_CLASSES.map((color, index) => (
@@ -35,8 +33,11 @@ class ChoroLegend extends Component {
 
           <ul className="bullets">
             <li>
-              <div className="bullet ch-default" />
-              N/A
+              <div className="bullet ch-na" />
+              No data
+            </li>
+            <li>
+              <div className="bullet ch-zero" />0
             </li>
           </ul>
         </div>
@@ -48,7 +49,6 @@ class ChoroLegend extends Component {
 ChoroLegend.propTypes = {
   testId: PropTypes.string,
   title: PropTypes.object,
-  unit: PropTypes.string,
   bucket: PropTypes.array
 };
 

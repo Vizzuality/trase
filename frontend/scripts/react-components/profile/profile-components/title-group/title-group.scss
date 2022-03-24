@@ -9,6 +9,10 @@
     margin-top: initial;
   }
 
+  .title-group-content {
+    margin-top: 10px;
+  }
+
   .title-group-element-container {
     display: inline-flex;
     margin-bottom: 10px;
@@ -31,6 +35,10 @@
   .title-group-element {
     &:not(:last-child) {
       margin-right: 40px;
+    }
+
+    .dropdown-value {
+      margin-top: 6px;
     }
   }
 }

@@ -18,13 +18,13 @@
 
     height: 80px;
     padding: 0 10px 0 20px;
-    border: solid 2px $charcoal-grey-faded-a-lot;
+    border: solid 2px rgba($main-dark-blue, 0.2);
     border-radius: 5px;
     margin: 0 15px 0 0;
     cursor: pointer;
 
     &:hover {
-      border: solid 2px $charcoal-grey-faded;
+      border: solid 2px rgba($main-dark-blue, 0.5);
     }
 
     &:last-child {
@@ -32,7 +32,7 @@
     }
 
     &.-active {
-      background-color: $charcoal-grey;
+      background-color: $main-dark-blue;
     }
   }
 

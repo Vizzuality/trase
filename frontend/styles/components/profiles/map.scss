@@ -6,14 +6,14 @@
 }
 
 .polygon {
-  fill: $charcoal-grey-faded-a-lot;
-  stroke: $egg-shell;
+  fill: $ch-na;
+  stroke: $main-dark-blue;
 
   &.-isCurrent {
     fill: $medium-pink;
   }
 
-  &.ch-n-a { fill: $ch-profile-n-a; }
+  &.ch-n-a { fill: $ch-na; }
   &.ch-0 { fill: $ch-profile-red-0; };
   &.ch-1 { fill: $ch-profile-red-1; };
   &.ch-2 { fill: $ch-profile-red-2; };

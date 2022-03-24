@@ -67,7 +67,7 @@ function ProfileStepPanel(props) {
           onSelectDestinationValue={item => setProfilesActiveItem(item, 'destinations')}
           setSearchResult={item => setProfilesSearchResult(item, 'destinations')}
         />
-      )
+      );
     }
     case 'companies': {
       const toOption = d => ({ label: d.name, value: d.id });
@@ -89,7 +89,7 @@ function ProfileStepPanel(props) {
         <ProfilesCompaniesPanel
           actionComponent={
             <div className="profile-panel-dropdown-container">
-              <Text as="span" color="grey-faded" weight="bold">
+              <Text variant="sans" as="span" color="grey-faded" weight="bold">
                 country:
               </Text>
               <Dropdown
@@ -97,7 +97,10 @@ function ProfileStepPanel(props) {
                 options={options}
                 value={selectedCountry}
                 onChange={item =>
-                  setProfilesActiveItem(data.countries.find(i => i.id === item.value), 'countries')
+                  setProfilesActiveItem(
+                    data.countries.find(i => i.id === item.value),
+                    'countries'
+                  )
                 }
               />
             </div>

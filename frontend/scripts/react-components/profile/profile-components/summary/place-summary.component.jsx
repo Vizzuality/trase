@@ -83,10 +83,10 @@ function PlaceSummary(props) {
                 {name}
                 {tooltip && <HelpTooltip text={tooltip} />}
               </Text>
-              <Text as="span" variant="mono" size="lg" weight="bold">
+              <Text as="span" variant="sans" size="lg" weight="bold">
                 {formatValue(value, name)}
               </Text>
-              <Text as="span" variant="mono" size="lg" weight="bold">
+              <Text as="span" variant="sans" size="lg" weight="bold">
                 {' '}
                 {unit === 'km2' ? 'km²' : unit}
               </Text>
@@ -132,11 +132,10 @@ function PlaceSummary(props) {
       <div className="row">
         <div className="small-12 columns">
           <Text
-            variant="serif"
+            variant="sans"
             size="md"
-            weigth="light"
-            lineHeight="lg"
-            color="grey"
+            lineHeight="md"
+            color="blue"
             className="summary"
             dangerouslySetInnerHTML={{ __html: summary }}
           />

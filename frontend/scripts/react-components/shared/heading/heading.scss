@@ -4,17 +4,12 @@
   text-align: left;
 
   &.mono {
-    font-family: $font-family-1;
+    font-family: $font-family-3;
     letter-spacing: $letter-spacing-x-narrow;
-    text-transform: uppercase;
-
-    &.restyled {
-      font-family: $font-family-5;
-    }
   }
 
   &.sans {
-    font-family: $font-family-3;
+    font-family: $font-family-1;
   }
 
   &.serif {
@@ -51,11 +46,11 @@
   }
 
   &.color-grey-faded {
-    color: $charcoal-grey-faded;
+    color: $main-faded-blue
   }
 
   &.color-grey {
-    color: $charcoal-grey;
+    color: $main-dark-blue
   }
 
   &.color-gray-700 {
@@ -63,7 +58,7 @@
   }
 
   &.color-pink {
-    color: $strong-pink;
+    color: $main;
   }
 
   &.text-align-center {

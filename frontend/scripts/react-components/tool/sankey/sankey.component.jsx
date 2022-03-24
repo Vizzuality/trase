@@ -233,7 +233,10 @@ function Sankey(props) {
       }
       const legendTypeClass = selectedRecolorBy.legendType.toString().toLowerCase();
       const legendColorThemeClass = selectedRecolorBy.legendColorTheme.toString().toLowerCase();
-      classPath = `${classPath} -recolorby-${legendTypeClass}-${legendColorThemeClass}-${recolorBy}`;
+      const { nodes } = selectedRecolorBy;
+      const recolorDefaultIndex = nodes.indexOf(link.recolorBy);
+
+      classPath = `${classPath} -recolorby-qual-default-${recolorDefaultIndex} -recolorby-${legendTypeClass}-${legendColorThemeClass}-${recolorBy}`;
     } else {
       classPath = `${classPath} -recolorgroup-${link.recolorGroup}`;
     }
@@ -355,7 +358,6 @@ function Sankey(props) {
   };
 
   const loading = !columns || columns.length === 0 || !links || flowsLoading;
-
   const regularloadingPos = gapBetweenColumns + 2 * sankeyColumnsWidth + gapBetweenColumns / 2;
   const extraColumnLoadingPos =
     2 * sankeyColumnsWidth + 2 * gapBetweenColumns + sankeyColumnsWidth / 2;

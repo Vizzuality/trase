@@ -19,7 +19,6 @@ class GfwWidget extends React.PureComponent {
   render() {
     const { year, nodeId, contextId, profileType, renderIframes } = this.props;
     const params = { node_id: nodeId, context_id: contextId, profile_type: profileType, year };
-
     const renderIframe = path => (
       <React.Fragment>
         <section className="gfw-widget-container">
@@ -27,7 +26,7 @@ class GfwWidget extends React.PureComponent {
             <div className="column small-10">
               <ReactIframeResizer
                 title={() => 'Glad alerts'}
-                src={`//${GFW_WIDGETS_BASE_URL}/embed/dashboards/country/${path}?widget=gladAlerts&trase=true`}
+                src={`//${GFW_WIDGETS_BASE_URL}/embed/widget/gladAlertsSimple/country/${path}?widget=gladAlertsSimple&trase=true`}
                 style={{
                   width: '100%',
                   minHeight: 520

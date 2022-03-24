@@ -18,6 +18,7 @@ export default {
   selectedContextId: null,
   selectedYears: null,
   contexts: [],
+  attributesMeta: [],
   topNodes: {},
   loading: {
     contexts: false,

@@ -23,7 +23,7 @@ function Tabs(props) {
   const isSelected = item => getTabId(item) === selectedTab;
   const variantText = {
     'plain-text': {
-      color: 'grey'
+      color: 'blue'
     }
   }[variant];
   return (
@@ -44,10 +44,10 @@ function Tabs(props) {
             >
               <Text
                 as="span"
-                color={isSelected(item) ? variantText?.color || color : 'grey'}
+                color={isSelected(item) ? variantText?.color || color : 'blue'}
                 weight="bold"
                 size="rg"
-                variant="mono"
+                variant="sans"
               >
                 {itemTabRenderer ? itemTabRenderer(item, index) : item}
               </Text>

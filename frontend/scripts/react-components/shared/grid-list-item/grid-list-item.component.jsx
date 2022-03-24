@@ -10,7 +10,12 @@ import './grid-list-item.scss';
 function WrapWithTooltip({ tooltip, wrap, children }) {
   if (wrap) {
     return (
-      <HelpTooltip theme="black-padding" showInfoIcon={false} className="size-sm" text={tooltip}>
+      <HelpTooltip
+        theme="gradient-padding-sm"
+        showInfoIcon={false}
+        className="size-sm"
+        text={tooltip}
+      >
         {children}
       </HelpTooltip>
     );
@@ -73,9 +78,9 @@ function GridListItem(props) {
               >
                 <Text
                   as="p"
-                  variant="mono"
+                  variant="sans"
                   weight="bold"
-                  align="center"
+                  align={variant === 'profiles' ? 'left' : 'center'}
                   title={item.name}
                   transform="capitalize"
                   className="grid-list-item-text"

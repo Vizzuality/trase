@@ -38,7 +38,7 @@ class DropdownTabSwitcher extends Component {
       <div className="c-dropdown-tab-switcher" data-test={testId}>
         <div className="tab-switcher hide-for-small">
           <div className="tab-switcher-title" data-test={`${testId}-title`}>
-            <Heading variant="mono" as="h3" weight="bold" size="md">
+            <Heading variant="sans" as="h3" weight="bold" size="md">
               {title}
             </Heading>
             {titleTooltip && <Tooltip text={titleTooltip} />}

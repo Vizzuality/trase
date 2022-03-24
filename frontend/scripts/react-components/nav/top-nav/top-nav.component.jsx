@@ -221,7 +221,7 @@ class TopNav extends React.PureComponent {
   render() {
     const { className, page } = this.props;
     const { backgroundVisible, menuOpen } = this.state;
-    const YELLOW_PAGES = ['profiles', 'profile', 'data'];
+    const YELLOW_PAGES = ['data'];
     return (
       <div
         className={cx(

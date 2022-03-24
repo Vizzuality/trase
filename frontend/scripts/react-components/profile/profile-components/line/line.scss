@@ -10,20 +10,20 @@
   .axis {
     line {
       fill: none;
-      stroke: $charcoal-grey;
+      stroke: $main-dark-blue;
       stroke-opacity: .1;
     }
 
     text {
-      font-family: $font-family-1;
+      font-family: $font-family-3;
       font-size: $font-size-x-regular;
       line-height: 0.92;
       letter-spacing: -1px;
-      fill: rgba($charcoal-grey, .6);
+      fill: rgba($main-dark-blue, .6);
     }
 
     &.axis--x path {
-      stroke: $charcoal-grey;
+      stroke: $main-dark-blue;
       stroke-width: 2px;
     }
   }
@@ -33,7 +33,7 @@
   }
 
   .area-black {
-    fill: rgba($charcoal-grey, .3);
+    fill: rgba($main-dark-blue, .3);
   }
 
   .line-area-pink {
@@ -54,12 +54,12 @@
   }
 
   .line-area-black {
-    stroke: $charcoal-grey;
+    stroke: $main-dark-blue;
     stroke-width: 3px;
   }
 
   .line-dashed-black {
-    stroke: $charcoal-grey;
+    stroke: $main-dark-blue;
     stroke-width: 3px;
     stroke-dasharray: 1,8;
     stroke-linecap: round;
@@ -102,7 +102,7 @@
       font-weight: $font-weight-bold;
       line-height: 1.15;
       letter-spacing: -0.6px;
-      color: $charcoal-grey;
+      color: $main-dark-blue;
 
       &.link {
         cursor: pointer;
@@ -122,15 +122,16 @@
   }
 }
 
-ul.line-bottom-legend {
-  column-count: 2;
-  padding-left: 40px;
+ul.line-top-legend {
+  display: flex;
+  padding-left: 20px;
+  margin: 25px 0;
   font-family: $font-family-1;
-  font-size: $font-size-x-regular;
+  font-size: $font-size-regular;
   font-weight: $font-weight-bold;
   line-height: 1.5;
   letter-spacing: -0.6px;
-  color: $charcoal-grey;
+  color: $main-dark-blue;
 
   .link {
     &:hover {
@@ -139,8 +140,26 @@ ul.line-bottom-legend {
     }
   }
 
-  .line-color {
-    margin-right: 5px;
+  .link-container {
+    display: flex;
+  }
+
+  .dot-color {
+    display: block;
+    margin: 3px 5px 0 30px;
+    height: 12px;
+    width: 12px;
+    max-width: 12px;
+    border-radius: 50%;
+
+    &.line-0 { background-color: $ch-profile-legend-0; };
+    &.line-1 { background-color: $ch-profile-legend-1; };
+    &.line-2 { background-color: $ch-profile-legend-2; };
+    &.line-3 { background-color: $ch-profile-legend-3; };
+    &.line-4 { background-color: $ch-profile-legend-4; };
+    &.line-5 { background-color: $ch-profile-legend-5; };
+    &.line-6 { background-color: $ch-profile-legend-6; };
+    &.line-7 { background-color: $ch-profile-legend-7; };
   }
 }
 
@@ -165,9 +184,8 @@ ul.line-bottom-legend {
     span {
       font-family: $font-family-1;
       font-size: $font-size-small;
-      letter-spacing: -1px;
       line-height: 10px;
-      color: $charcoal-grey;
+      color: $main-dark-blue;
       text-transform: uppercase;
     }
 

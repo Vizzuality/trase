@@ -3,6 +3,7 @@ import qs from 'qs';
 import pluralize from 'utils/pluralize';
 
 export const GET_CONTEXTS_URL = 'GET_CONTEXTS_URL';
+export const GET_ATTRIBUTES_META = 'GET_ATTRIBUTES_META';
 export const GET_TOP_PROFILES = 'GET_TOP_PROFILES';
 export const GET_TOOLTIPS_URL = 'GET_TOOLTIPS_URL';
 export const GET_ALL_NODES_URL = 'GET_ALL_NODES_URL';
@@ -70,7 +71,7 @@ const API_ENDPOINTS = {
   },
   [GET_MARKDOWN_CONTENT_URL]: { api: 'markdown', endpoint: 'content' },
   [GET_TOP_NODES_URL]: { api: 3, endpoint: '/contexts/$context_id$/top_nodes' },
-  [GET_TOP_NODE_STATS_URL]: { api: 3, endpoint: '/nodes_stats' },
+  [GET_TOP_NODE_STATS_URL]: { api: 3, endpoint: '/destination_stats' },
   [GET_NODE_SUMMARY_URL]: {
     api: 3,
     endpoint: '/contexts/$context_id$/$profile_type$/$node_id$/basic_attributes'
@@ -155,6 +156,10 @@ const API_ENDPOINTS = {
   [GET_METHODS_AND_DATA_URL]: {
     api: 3,
     endpoint: '/methods_and_data_docs'
+  },
+  [GET_ATTRIBUTES_META]: {
+    api: 3,
+    endpoint: '/attributes'
   }
 };
 

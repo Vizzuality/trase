@@ -105,7 +105,7 @@ if (typeof window !== 'undefined') {
   window._TRASE_CANDY_SANKEY = params.candyMode;
 }
 
-const store = createStore(
+export const store = createStore(
   combinedReducers,
   {
     app: deserialize({

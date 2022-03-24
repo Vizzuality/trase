@@ -10,14 +10,14 @@
   &.color-transparent {
     .grid-list-item-button {
       background-color: transparent;
-      border: 1px solid $charcoal-grey;
+      border: 1px solid $main-dark-blue;
 
       .grid-list-item-text {
-        color: $charcoal-grey;
+        color: $main-dark-blue;
       }
 
       &:hover {
-        background-color: $charcoal-grey;
+        background-color: $main-dark-blue;
 
         .grid-list-item-text {
           color: $white;
@@ -32,7 +32,7 @@
       border: 2px solid $strong-pink;
 
       .grid-list-item-text {
-        color: $charcoal-grey;
+        color: $main-dark-blue;
       }
 
       &:hover {
@@ -50,11 +50,11 @@
       background-color: $white;
 
       .grid-list-item-text {
-        color: $charcoal-grey;
+        color: $main-dark-blue;
       }
 
       &:hover {
-        background-color: $charcoal-grey;
+        background-color: $main-dark-blue;
 
         .grid-list-item-text {
           color: $white;
@@ -86,12 +86,10 @@
     height: 100%;
     width: 100%;
     flex: 1;
-    padding: 0 20px;
     cursor: pointer;
-    overflow: hidden;
 
     &.-active {
-      background-color: $charcoal-grey;
+      background-color: $main-dark-blue;
 
       .grid-list-item-text {
         color: $white;
@@ -137,7 +135,7 @@
 
     button {
       font-weight: $font-weight-bold;
-      color: $charcoal-grey-faded;
+      color: rgba($main-dark-blue, 0.5);
       background: $white;
       height: 20px;
       width: 20px;
@@ -145,18 +143,18 @@
       cursor: default;
 
       &:hover {
-        background-color: $charcoal-grey;
+        background-color: $main-dark-blue;
         color: $white;
       }
     }
 
     &.-active button {
-      background-color: $charcoal-grey;
+      background-color: $main-dark-blue;
       color: $white;
     }
 
     &.-item-active {
-      background-color: $charcoal-grey;
+      background-color: $main-dark-blue;
 
       button {
         &:hover {
@@ -169,7 +167,7 @@
 
 .-all-selected {
   .grid-list-item-button {
-    background-color: $charcoal-grey;
+    background-color: $main-dark-blue;
 
     .grid-list-item-text {
       color: $white;
@@ -178,8 +176,14 @@
     &.-active {
       background-color: $medium-gray;
       .grid-list-item-text {
-        color: $charcoal-grey;
+        color: $main-dark-blue;
       }
     }
+  }
+}
+
+.v-profiles {
+  .grid-list-item-text {
+    padding-left: 20px;
   }
 }

@@ -26,6 +26,9 @@ import {
 
 import 'react-components/explore/explore.scss';
 
+import useWindowSize from 'utils/hooks/useWindowSize';
+import NotSupportedComponent from 'react-components/mobile/not-supported.component';
+
 const ToolLinksModal = React.lazy(() => import(/* webpackPreload: true */ './tool-links-modal'));
 
 function Explore(props) {
@@ -56,6 +59,8 @@ function Explore(props) {
   useQuickFacts(props);
   useSankeyCards(props);
 
+  const { width } = useWindowSize();
+
   const destinationCountries = highlightedContext?.id && topNodes[highlightedContext.id];
   const [highlightedCountryIds, setHoveredCommodity] = useHighlightedCountries(props);
   const openModal = card => {
@@ -81,7 +86,7 @@ function Explore(props) {
     <span>
       {step > EXPLORE_STEPS.selectCommodity && !isMobile && (
         <button onClick={clearStep} className="back-button" data-test="featured-cards-back-button">
-          <Text variant="mono" size="lg" weight="bold" className="featured-cards-back">
+          <Text variant="mono" size="md" weight="bold" className="featured-cards-back">
             <Icon color="pink" icon="icon-arrow" className="arrow-icon" />
             BACK
           </Text>
@@ -91,30 +96,35 @@ function Explore(props) {
   );
 
   const renderTitle = isMobile => {
-    const titleParts = ['commodity', 'source country', 'supply chain to explore'];
+    const titleParts = ['commodity', 'source country', 'supply chain below the map'];
     return (
       <div className="step-title-container">
-        {(step === 1 || step === 2) && (
-          <div className="row column">
-            <Heading size="lg" align="center" data-test="step-title" className="notranslate">
-              {translateText(`${step}. Choose a ${titleParts[step - 1]}`)}
-              {renderBackButton(isMobile)}
-            </Heading>
-            <Heading size="sm" align="center">
+        <>
+          <Heading
+            variant="sans"
+            size="rg"
+            align="center"
+            data-test="step-title"
+            className="notranslate step-title"
+          >
+            <div>
+              {translateText(`${step}. Choose a `)}{' '}
+              <Heading as="span" size="rg" weight="bold">
+                {titleParts[step - 1]}
+                {step === 2 ? ' or a ' : ''}
+              </Heading>
+              {step === 2 ? translateText('supply chain below the map') : ''}
+            </div>
+            {renderBackButton(isMobile)}
+          </Heading>
+          {(step === 1 || step === 2) && (
+            <Heading variant="sans" size="sm" align="center">
               {translateText('Options marked in')} {renderHighlighted('gray')}{' '}
               {translateText('provide')} {renderHighlighted('national-scale')}{' '}
               {translateText('data only')}
             </Heading>
-          </div>
-        )}
-        {step === 3 && (
-          <>
-            <Heading size="lg" align="center" data-test="step-title" className="notranslate">
-              {translateText(`${step}. Choose a ${titleParts[step - 1]}`)}
-            </Heading>
-            {renderBackButton(isMobile)}
-          </>
-        )}
+          )}
+        </>
       </div>
     );
   };
@@ -174,6 +184,10 @@ function Explore(props) {
       )}
     </>
   );
+
+  if (width <= BREAKPOINTS.tablet) {
+    return <NotSupportedComponent />;
+  }
 
   return (
     <div className="c-explore">
@@ -239,6 +253,8 @@ function Explore(props) {
                                   variant="mono"
                                   weight="bold"
                                   transform="uppercase"
+                                  color="blue"
+                                  lineHeight="md"
                                   className="quick-facts-label notranslate"
                                 >
                                   {translateText(`${indicator.name} ${indicator.year}`)}
@@ -247,6 +263,7 @@ function Explore(props) {
                                   size="md"
                                   weight="bold"
                                   align="center"
+                                  variant="sans"
                                   className="quick-facts-value notranslate"
                                 >
                                   {translateText(
@@ -267,7 +284,9 @@ function Explore(props) {
                                     variant="mono"
                                     weight="bold"
                                     transform="uppercase"
+                                    lineHeight="md"
                                     className="quick-facts-label notranslate"
+                                    color="blue"
                                   >
                                     {translateText(
                                       highlightedCommodityIds.length > 0

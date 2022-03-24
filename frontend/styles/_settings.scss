@@ -20,11 +20,10 @@ $padding-wrap-tablet: 80px;
 $padding-wrap-desktop: 120px;
 
 // typography
-$font-family-1: 'DecimaMonoPro', 'Courier New', sans-serif;
+$font-family-1: 'DM Sans', sans-serif;
 $font-family-2: 'Merriweather', serif;
-$font-family-3: 'DM Sans', sans-serif;
+$font-family-3: 'Space Mono', 'Courier New', sans-serif;
 $font-family-4: 'Crimson Pro', serif;
-$font-family-5: 'Space Mono', 'Courier New', sans-serif;
 
 
 $font-weight-light: 300;
@@ -110,10 +109,10 @@ $charcoal-extra-dark: #1b2a32;
 
 // secondary colors
 $medium-pink: #ea6869;
-$strong-pink: #f65e6e;
+$strong-pink: #ff615f;
 $medium-pink-faded: lighten($medium-pink, 20%);
 $manilla: #ffeb8b;
-$egg-shell: #fff0c2;
+$egg-shell: #F8F4EA;
 $orange: #ffa500;
 $tab-red: #c60006;
 
@@ -136,14 +135,23 @@ $carbon-gray: #333; // barely used
 
 // Redesign colors
 $orange-500: #ff615f;
+$blue-700: #19404C;
 $gray-700: #12282e;
 $gray-600: #1f434e;
 $gray-500: #1a3841;
 $gray-400: #5d767d;
+$gray-350: #798B85;
 $gray-300: #8B9DA2; // gray-600 opacity 0.5
 $gray-200: #dadada;
 
+$main: $orange-500;
+$main-dark-blue: $blue-700;
+$main-faded-blue: rgba($main-dark-blue, 0.6);
+
+
 $green-200: #b2ffe5;
+$green-100: #F1FEFB;
+
 // Miscellaneous
 $box-shadow: 0 1px 3px 0 rgba($black, 0.1), 0 1px 2px 0 rgba($black, 0.2);
 $box-shadow-big: 0 3px 6px 0 rgba($black, 0.1), 0 3px 6px 0 rgba($black, 0.2);
@@ -171,6 +179,19 @@ $recolorgroup-colors: (
     #{$name}: #{$color};
   }
 }
+// Default recolorby colors
+$recolorby-qual-default-1: #00D099;
+$recolorby-qual-default-2: #E27227;
+$recolorby-qual-default-3: #FF66CC;
+$recolorby-qual-default-4: #658270;
+$recolorby-qual-default-5: #2548D8;
+$recolorby-qual-default-6: #8B87FF;
+
+// Extra default recolorby colors
+$recolorby-qual-default-7: #61F261;
+$recolorby-qual-default-8: #2EE8C5;
+$recolorby-qual-default-9: #FF8600;
+$recolorby-qual-default-10: #D17EFC;
 
 $recolorby-qual-thematic-amazonia: #43f3f3;
 $recolorby-qual-thematic-cerrado: #517fee;
@@ -289,6 +310,16 @@ $recolorby-percentual-green-red-10: #a50026;
 $recolorby-percentual-green-red-11: #6f001a;
 
 $recolorby-colors: (
+  'recolorby-qual-default-1': $recolorby-qual-default-1,
+  'recolorby-qual-default-2': $recolorby-qual-default-2,
+  'recolorby-qual-default-3': $recolorby-qual-default-3,
+  'recolorby-qual-default-4': $recolorby-qual-default-4,
+  'recolorby-qual-default-5': $recolorby-qual-default-5,
+  'recolorby-qual-default-6': $recolorby-qual-default-6,
+  'recolorby-qual-default-7': $recolorby-qual-default-7,
+  'recolorby-qual-default-8': $recolorby-qual-default-8,
+  'recolorby-qual-default-9': $recolorby-qual-default-9,
+  'recolorby-qual-default-10': $recolorby-qual-default-10,
   'recolorby-qual-thematic-pantanal': $recolorby-qual-thematic-pantanal,
   'recolorby-qual-thematic-cerrado': $recolorby-qual-thematic-cerrado,
   'recolorby-qual-thematic-amazonia': $recolorby-qual-thematic-amazonia,
@@ -401,8 +432,8 @@ $recolorby-colors: (
 }
 
 // choropleth
-$ch-zero: $white;
-$ch-na: #d8cca1;
+$ch-zero: #d8cca1;
+$ch-na: $metal-grey;
 
 $ch-red-0: #f5b7ad;
 $ch-red-1: #f28789;

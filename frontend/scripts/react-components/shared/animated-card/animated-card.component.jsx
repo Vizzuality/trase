@@ -34,20 +34,35 @@ function AnimatedCard(props) {
         <ImgBackground as="figure" alt={title} className="card-image" src={imageUrl} />
         <figcaption className="card-content">
           <div className="card-details-container">
-            <Heading as="h4" variant="mono" color="pink" size="sm" weight="bold">
+            <Heading
+              as="h4"
+              variant="mono"
+              color="pink"
+              size="sm"
+              weight="bold"
+              className="category-text"
+            >
               {category}
             </Heading>
-            <Heading as="h3" color="grey" size="lg" weight="bold">
+            <Heading
+              as="h3"
+              color="grey"
+              size="md"
+              variant="sans"
+              weight="bold"
+              className="title-text"
+            >
               {title}
             </Heading>
             <div className="cards-details-text-container">
               <Text
                 as="span"
+                variant="sans"
                 color="grey"
                 size="md"
                 weight="light"
                 className="card-title"
-                lineHeight="lg"
+                lineHeight="md"
               >
                 {/* eslint-disable-next-line react/no-danger */}
                 {parseHtml ? <div dangerouslySetInnerHTML={{ __html: subtitle }} /> : subtitle}

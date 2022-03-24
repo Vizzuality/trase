@@ -62,7 +62,7 @@ module Api
               @activity
             )
             val_with_year = external_attribute_value.call 'com_trade.value.value'
-            val_with_year.dig(:value)
+            val_with_year&.dig(:value)
           end
         end
       end

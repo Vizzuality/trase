@@ -23,30 +23,6 @@
     }
   }
 
-  &.slim {
-    display: inline-block;
-    vertical-align: bottom;
-    height: 45px;
-    width: 270px;
-
-    .search-input-field {
-      font-size: $font-size-x-regular;
-      text-transform: uppercase;
-    }
-
-    .search-input-results {
-      text-align: left;
-    }
-
-    .profile-search-result {
-      padding: 14px 15px;
-
-      .search-input-item-name {
-        font-size: 17px;
-      }
-    }
-  }
-
   &.size {
     &-sm {
       height: 40px;
@@ -61,7 +37,6 @@
     justify-content: space-between;
     width: 100%;
     height: 100%;
-    padding: 2px 16px 0 0;
     background-color: $white;
     box-shadow: $box-shadow;
     border-radius: 4px;
@@ -71,6 +46,7 @@
     .icon-search {
       height: 20px;
       width: 20px;
+      margin: 0 12px 0 0;
       fill: $charcoal-grey;
       flex: none;
     }
@@ -93,21 +69,65 @@
 
   .search-input-field {
     flex: 1;
-    padding: 0 5px 0 20px;
-    font-family: $font-family-1;
+    padding-right: 5px;
     font-size: 18px;
-    letter-spacing: $letter-spacing-x-narrow;
     text-align: left;
-    color: $charcoal-grey;
+    color: $main-dark-blue;
     outline: none;
     min-width: 0;
     background-color: transparent;
 
     &::placeholder {
-      transition: color 150ms ease-out;
+      color: $main-dark-blue;
     }
   }
 
+  &.bordered {
+    .search-input-bar {
+      flex-direction: row-reverse;
+      padding: 2px 0 0 16px;
+      box-shadow: none;
+      border: solid 2px $charcoal-grey-faded-a-lot;
+      background-color: $light-gray;
+
+      input {
+        padding: 9px;
+        color: $charcoal-grey;
+        font-size: $font-size-x-regular;
+        letter-spacing: $letter-spacing-x-narrow;
+        background-color: $light-gray;
+        text-transform: uppercase;
+      }
+    }
+  }
+  &.slim {
+    display: inline-block;
+    vertical-align: bottom;
+    height: 45px;
+    width: 270px;
+
+    .search-input-field {
+      font-size: $font-size-x-regular;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+
+    .search-input-bar {
+      padding: 0 5px 0 10px;
+    }
+
+    .search-input-results {
+      text-align: left;
+    }
+
+    .profile-search-result {
+      padding: 14px 15px;
+
+      .search-input-item-name {
+        font-size: 17px;
+      }
+    }
+  }
   .search-input-results {
     background: $white;
     box-shadow: $box-shadow;
@@ -136,11 +156,14 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    font-family: $font-family-1;
   }
 
   .search-input-item-type {
     @include smallcaps;
     display: block;
+
+    font-family: $font-family-1;
   }
 
   mark {

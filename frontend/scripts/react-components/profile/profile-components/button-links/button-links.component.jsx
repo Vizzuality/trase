@@ -62,11 +62,11 @@ function ButtonLinks(props) {
               }}
             >
               <div>
-                <Heading weight="bold" as="h4" variant="mono" size="rg">
+                <Heading weight="bold" as="h4" variant="sans" size="rg">
                   {link.heading}
                 </Heading>
                 <div className="link-text">
-                  <Text variant="mono" color="grey-faded" size="md" as="span">
+                  <Text variant="sans" color="grey-faded" size="md" as="span">
                     {link.subtitle}
                   </Text>
                   <Icon icon="icon-external-link" color="elephant" />

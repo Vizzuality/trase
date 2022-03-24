@@ -12,7 +12,8 @@ import {
   APP__SET_LOADING,
   APP__TRANSIFEX_LANGUAGES_LOADED,
   APP__SET_TOP_DESTINATION_COUNTRIES,
-  APP__SET_TOP_DESTINATION_COUNTRIES_LOADING
+  APP__SET_TOP_DESTINATION_COUNTRIES_LOADING,
+  SET_ATTRIBUTES_META
 } from 'app/app.actions';
 import { COUNTRIES_COORDINATES } from 'scripts/countries';
 import createReducer from 'utils/createReducer';
@@ -80,6 +81,13 @@ const appReducer = {
     return {
       ...state,
       search: { ...state.search, results: action.payload.results, isLoading: false }
+    };
+  },
+  [SET_ATTRIBUTES_META](state, action) {
+    return {
+      ...state,
+      attributesMeta: action.payload.data,
+      loading: { ...state.loading, attributesMeta: false }
     };
   },
   [SET_CONTEXTS](state, action) {
@@ -152,6 +160,7 @@ const appReducer = {
 
 const appReducerTypes = PropTypes => ({
   contexts: PropTypes.arrayOf(PropTypes.object).isRequired,
+  attributesMeta: PropTypes.arrayOf(PropTypes.object).isRequired,
   contextIsUserSelected: PropTypes.bool.isRequired,
   currentDropdown: PropTypes.string,
   isMapLayerVisible: PropTypes.bool,

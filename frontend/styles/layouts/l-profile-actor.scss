@@ -6,8 +6,12 @@ $large-line-chart-width: 840px;
 .l-profile-actor {
   position: relative;
   min-height: 100vh;
-  padding-top: calc(44px + #{$nav-height});
-  background-color: $egg-shell;
+  background-color: $green-100;
+  padding-top: calc(44px + #{$nav-height * 2});
+
+  @media (min-width: $breakpoint-laptop) {
+    padding-top: calc(44px + #{$nav-height});
+  }
 
   &.-error {
     position: relative;
@@ -31,8 +35,8 @@ $large-line-chart-width: 840px;
     }
   }
 
-  section:nth-of-type(2n-1) {
-    background-color: rgba($white, 0.3);
+  section {
+    border-top: 1px solid rgba($blue-700, 0.3);
   }
 
   .top-logo {
@@ -110,6 +114,16 @@ $large-line-chart-width: 840px;
     }
   }
 
+  .legend-title {
+    display: inline;
+    text-transform: uppercase;
+    color: $main-dark-blue;
+  }
+
+  .legend-unit {
+    display: inline;
+  }
+
   .c-top-municipalities {
     .top-destinations-map-container {
       overflow: hidden;
@@ -140,7 +154,6 @@ $large-line-chart-width: 840px;
     font-family: $font-family-1;
     font-weight: $font-weight-bold;
     letter-spacing: -0.6px;
-    text-transform: uppercase;
   }
 
   .municipalities-table,

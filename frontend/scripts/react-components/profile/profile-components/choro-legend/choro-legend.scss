@@ -62,7 +62,6 @@
       font-family: $font-family-1;
       letter-spacing: -1.1px;
       color: $charcoal-grey;
-      text-transform: uppercase;
       font-size: 13px;
 
       &:last-child {
@@ -78,8 +77,8 @@
       display: inline-flex;
       justify-content: flex-end;
       height: 14px;
-      margin: 4px 0 0;
-      width: calc(100% - 40px);
+      margin: 4px 0 0 60px;
+      width: calc(100% - 60px);
       border: 1px solid #6C787D;
 
       .bucket-item {
@@ -98,7 +97,7 @@
     .bullets {
       position: absolute;
       left: 0;
-      bottom: 0;
+      top: 4px;
 
       li {
         font-family: $font-family-1;
@@ -112,6 +111,14 @@
           width: 8px;
           height: 8px;
           border: solid 1px $charcoal-grey-faded;
+
+          &.ch-na {
+            background-color: $ch-na;
+          }
+
+          &.ch-zero {
+            background-color: $ch-zero;
+          }
         }
       }
     }

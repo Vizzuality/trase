@@ -10,7 +10,7 @@ const webpackBaseConfig = require('./webpack.config');
 
 module.exports = merge(webpackBaseConfig, {
   mode: 'production',
-  devtool: false,
+  devtool: '#eval-source-map',
   plugins: [
     new MiniCssExtractPlugin(),
     new webpack.optimize.ModuleConcatenationPlugin(),

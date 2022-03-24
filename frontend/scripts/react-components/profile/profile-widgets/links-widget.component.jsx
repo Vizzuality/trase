@@ -32,7 +32,7 @@ function LinksWidget(props) {
         return (
           <section className="c-links-widget">
             <div className="row links-widget-title columns">
-              <Heading as="h3" weight="bold" variant="mono" size="md">
+              <Heading as="h3" weight="bold" variant="sans" size="md">
                 Explore other information relevant to {translateText(name)}
               </Heading>
             </div>

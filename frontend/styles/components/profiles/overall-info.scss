@@ -7,7 +7,7 @@
       padding: 0 40px;
       transform: translate(-20px, 0);
       position: relative;
-      background: $egg-shell;
+      background: $green-100;
     }
   }
 
@@ -17,7 +17,7 @@
     margin-right: 20px;
 
     >.legend {
-      margin-bottom: 5px;
+      margin-bottom: 10px;
     }
 
     @media screen and (max-width: $breakpoint-foundation-small) {

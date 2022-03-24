@@ -19,7 +19,7 @@
 
     .simple-modal-close {
       position: absolute;
-      top: 26px;
+      top: 32px;
       right: 30px;
       z-index: $z-above;
 
@@ -55,7 +55,7 @@
   height: 100%;
   top: 0;
   left: 0;
-  background-color: rgba($charcoal-grey, 0.9);
+  background-color: rgba($main-dark-blue, 0.9);
   z-index: $z-veil;
 }
 

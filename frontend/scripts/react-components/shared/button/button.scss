@@ -6,9 +6,9 @@
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid rgba($charcoal-grey, .3);
+  border: 1px solid rgba($main-dark-blue, .3);
   border-radius: 4px;
-  color: $charcoal-grey;
+  color: $main-dark-blue;
   font-family: $font-family-1;
   font-size: $font-size-x-regular;
   line-height: 1;
@@ -71,7 +71,7 @@
 
   &.color-pink {
     border-color: transparent;
-    background-color: $strong-pink;
+    background-color: $main;
     color: $white;
   }
 
@@ -84,25 +84,25 @@
   &.color-white {
     border-color: transparent;
     background-color: $white;
-    color: $medium-pink;
+    color: $main;
   }
 
   &.color-gray {
     border-color: transparent;
     background-color: $gray;
-    color: $charcoal-grey;
+    color: $main-dark-blue;
   }
 
   &.color-charcoal {
     border-color: transparent;
-    background-color: $charcoal-grey;
+    background-color: $main-dark-blue;
     color: $white;
   }
 
   &.color-pink-transparent {
-    border-color: $medium-pink;
+    border-color: $main;
     background-color: transparent;
-    color: $medium-pink;
+    color: $main;
   }
 
   &.color-gray-transparent {
@@ -112,16 +112,16 @@
   }
 
   &.color-charcoal-transparent {
-    border-color: $charcoal-grey-faded;
+    border-color: $main-faded-blue;
     background-color: transparent;
-    color: $charcoal-grey;
+    color: $main-dark-blue;
   }
 
   &.disabled,
   // backwards compat
   &.-disabled {
-    border-color: rgba($charcoal-grey, .3);
-    color: rgba($charcoal-grey, .3);
+    border-color: rgba($main-dark-blue, .3);
+    color: rgba($main-dark-blue, .3);
     pointer-events: none;
   }
 
@@ -129,6 +129,10 @@
   // backwards compat
   &.-with-icon {
     justify-content: space-between;
+
+    .icon {
+      margin-left: 20px;
+    }
 
     &.v-circle {
       .icon {
@@ -145,7 +149,7 @@
     &.color-gray {
       .icon {
         margin: 0;
-        fill: $charcoal-grey;
+        fill: $main-dark-blue;
       }
     }
   }

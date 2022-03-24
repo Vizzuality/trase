@@ -5,13 +5,8 @@
   text-align: left;
 
   &.mono {
-    font-family: $font-family-1;
-    letter-spacing: $letter-spacing-x-narrow;
-
-    &.restyled {
-      font-family: $font-family-5;
-      letter-spacing: $letter-spacing;
-    }
+    font-family: $font-family-3;
+    letter-spacing: $letter-spacing;
   }
 
   &.serif {
@@ -19,7 +14,7 @@
   }
 
   &.sans {
-    font-family: $font-family-3;
+    font-family: $font-family-1;
   }
 
   &.size-xs {
@@ -66,16 +61,20 @@
     color: $white;
   }
 
+  &.color-blue {
+    color: $main-dark-blue;
+  }
+
   &.color-egg {
     color: $egg-shell;
   }
 
   &.color-grey-faded {
-    color: $charcoal-grey-faded;
+    color: $main-faded-blue
   }
 
   &.color-grey {
-    color: $charcoal-grey;
+    color: $main-dark-blue;
   }
 
   &.color-pink {

@@ -15,13 +15,13 @@ $transition: all 0.2s;
     font-family: $font-family-2;
     font-size: $font-size-huge;
     display: inline;
-    color: $charcoal-grey;
-    font-weight: bold;
+    color: $main-dark-blue;
     margin-right: 30px;
     transition: $transition;
 
     .profiles-activity {
       font-size: $font-size-x-big;
+      font-weight: bold;
     }
   }
 
@@ -46,8 +46,8 @@ $transition: all 0.2s;
   }
 
   .profiles-selector-button {
-    vertical-align: text-bottom;
-    margin-top: 20px;
+    vertical-align: top;
+    margin-top: 8px;
 
     @media print {
       display: none;

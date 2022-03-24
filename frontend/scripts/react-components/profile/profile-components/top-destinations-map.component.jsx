@@ -6,6 +6,7 @@ import ChoroLegend from 'react-components/profile/profile-components/choro-legen
 import cx from 'classnames';
 import Map from 'react-components/profile/profile-components/map.component';
 import ProfileTitle from 'react-components/profile/profile-components/profile-title.component';
+import Text from 'react-components/shared/text';
 
 class TopDestinationsMap extends React.PureComponent {
   state = { tooltipConfig: null };
@@ -52,7 +53,7 @@ class TopDestinationsMap extends React.PureComponent {
   getActiveTabName() {
     const { activeTab } = this.props;
     const ACTIVE_TAB_NAME_CHANGES = {
-      'WOOD SUPPLIER' : 'CONCESSION'
+      'WOOD SUPPLIER': 'CONCESSION'
     };
     return ACTIVE_TAB_NAME_CHANGES[activeTab.toUpperCase()] || activeTab.toUpperCase();
   }
@@ -82,7 +83,6 @@ class TopDestinationsMap extends React.PureComponent {
       year,
       printMode,
       buckets,
-      title,
       summary,
       activeTab,
       height,
@@ -104,12 +104,19 @@ class TopDestinationsMap extends React.PureComponent {
             <ChoroLegend
               testId={`${testId}-legend`}
               title={
-                <ProfileTitle
-                  template={title}
-                  summary={summary}
-                  year={year}
-                  commodityName={commodityName}
-                />
+                <div>
+                  <div className="legend-title">
+                    <ProfileTitle
+                      template={'{{commodity_name}} imported in {{year}}'}
+                      summary={summary}
+                      year={year}
+                      commodityName={commodityName}
+                    />{' '}
+                  </div>
+                  <Text className="legend-unit" color="grey-faded" variant="sans">
+                    (tonnes)
+                  </Text>
+                </div>
               }
               bucket={[buckets[0], ...buckets]}
             />
@@ -142,7 +149,6 @@ TopDestinationsMap.propTypes = {
   profileType: PropTypes.string,
   lines: PropTypes.array.isRequired,
   year: PropTypes.number.isRequired,
-  title: PropTypes.object,
   height: PropTypes.number.isRequired,
   buckets: PropTypes.array.isRequired,
   summary: PropTypes.object.isRequired,

@@ -2,13 +2,13 @@
 #
 # Table name: ind_properties
 #
-#  id                                                                      :integer          not null, primary key
-#  ind_id                                                                  :integer          not null
-#  display_name(Name of attribute for display)                             :text             not null
-#  unit_type(Type of unit, e.g. score. One of restricted set of values.)   :text
-#  tooltip_text(Generic tooltip text (lowest precedence))                  :text
-#  aggregation_method(To be used with ranges, one of SUM, AVG, MAX or MIN) :text
-#  power_of_ten_for_rounding                                               :integer          default(0), not null
+#  id                                                                                                                                                                         :integer          not null, primary key
+#  ind_id                                                                                                                                                                     :integer          not null
+#  display_name(Name of attribute for display)                                                                                                                                :text             not null
+#  unit_type(Type of unit, e.g. score. One of restricted set of values.)                                                                                                      :text
+#  tooltip_text(Generic tooltip text (lowest precedence))                                                                                                                     :text
+#  aggregation_method(To be used with ranges, one of SUM, AVG, MAX or MIN)                                                                                                    :text
+#  power_of_ten_for_rounding(Values rounded to the nearest 10^n units. So n=0 would be nearest integer, n=1 would be to the nearest ten and n=-1 would be one decimal place.) :integer          default(0), not null
 #
 # Indexes
 #

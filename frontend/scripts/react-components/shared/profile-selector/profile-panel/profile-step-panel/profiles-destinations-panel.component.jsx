@@ -25,7 +25,6 @@ function ProfilesDestinationsPanel(props) {
 
   const itemToScrollTo = useFirstItem(destinations);
 
-
   return (
     <ResizeListener>
       {({ windowWidth }) => {
@@ -61,6 +60,7 @@ function ProfilesDestinationsPanel(props) {
               {itemProps => (
                 <GridListItem
                   {...itemProps}
+                  variant="profiles"
                   isActive={activeDestinationsItem.includes(itemProps.item?.id)}
                   enableItem={onSelectDestinationValue}
                   disableItem={onSelectDestinationValue}
