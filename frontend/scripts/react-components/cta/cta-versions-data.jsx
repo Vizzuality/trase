@@ -10,7 +10,7 @@ const content = text => (
 );
 
 const releaseNotesText = (quarter, year) => (
-  <Text className="release-notes-text" variant="sans" size="lg">
+  <Text className="release-notes-text" variant="sans" size="lg" as="div">
     <span>Check out our release notes </span>
     <span>
       <a
