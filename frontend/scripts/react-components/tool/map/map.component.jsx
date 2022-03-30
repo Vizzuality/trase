@@ -224,7 +224,7 @@ function MapBoxMap(props) {
     if (layersLoading && !unitLayersNotInMap) {
       setLayersLoading(false);
     }
-  }, [unitLayersNotInMap, setLayersLoading]);
+  }, [unitLayersNotInMap, setLayersLoading, layersLoading]);
 
   const orderedLayers = layers.map(l => ({ ...l, zIndex: layerOrder[l.id] }));
   const minimized = toolLayout === TOOL_LAYOUT.right;

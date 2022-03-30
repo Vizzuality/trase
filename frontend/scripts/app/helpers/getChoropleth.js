@@ -23,7 +23,6 @@ export default function(
 ) {
   const uids = [...new Set(selectedMapDimensionsUids.filter(Boolean))];
   const selectedMapDimensions = uids.map(uid => mapDimensions[uid]);
-
   if (!selectedMapDimensions.length) {
     return {
       choropleth: {},

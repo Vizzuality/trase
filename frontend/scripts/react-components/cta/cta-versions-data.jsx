@@ -10,7 +10,7 @@ const content = text => (
 );
 
 const releaseNotesText = (quarter, year) => (
-  <Text className="release-notes-text" variant="sans" size="lg">
+  <Text className="release-notes-text" variant="sans" size="lg" as="div">
     <span>Check out our release notes </span>
     <span>
       <a
@@ -106,6 +106,16 @@ export const getCTAData = (version, contexts) => {
         </Text>
       ),
       releaseNotesText: releaseNotesText(4, 2021)
+    },
+    20221: {
+      text: (
+        <Text className="cta-text" variant="sans" size="lg">
+          {' '}
+          We released design updates to Supply Chains frontend and worked on some backend
+          improvements.
+        </Text>
+      ),
+      releaseNotesText: releaseNotesText(1, 2022)
     }
   }[version];
 };

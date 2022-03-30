@@ -1,5 +1,5 @@
 import upperCase from 'lodash/upperCase';
-import { INDONESIA_MILL_LAYER_ID } from './map-constants'
+import { INDONESIA_MILL_LAYER_ID } from './map-constants';
 
 export const handleHover = ({
   event,
@@ -123,6 +123,7 @@ export const handleClick = ({ event, onPolygonClicked, sourceLayer }) => {
   const notSelectableGeometry = target.classList?.contains('-disabled');
   if (notSelectableGeometry) return;
   if (geoFeature?.properties) {
+    console.log('hi', geoFeature?.properties);
     onPolygonClicked(geoFeature.properties.geoid);
   }
 };

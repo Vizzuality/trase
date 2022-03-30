@@ -59,11 +59,6 @@ export const handleUnnecesaryRequests = (server, BASE_URL) => {
     res.sendStatus(200);
     res.json({});
   });
-
-  server.any('https://tag.userreport.com/whoami').intercept((_, res) => {
-    res.sendStatus(200);
-    res.json({});
-  });
 };
 
 export const expectToContain = async (page, selector, text) => {
