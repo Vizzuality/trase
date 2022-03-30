@@ -34,7 +34,7 @@ export function* getLinkedGeoIds() {
   const selectedNonGeoNodeIds = selectedNodesIds.filter(
     nodeId => nodes && nodes[nodeId] && (nodes[nodeId].type === 'COUNTRY' || !nodes[nodeId].geoId)
   );
-
+  console.log('sss', selectedNodesIds, selectedNonGeoNodeIds);
   // when selection only contains geo nodes (non geo-nodes === 0)
   // and the parent geo column is not selected
   if (selectedNonGeoNodeIds.length === 0 && !extraColumn) {
@@ -49,6 +49,7 @@ export function* getLinkedGeoIds() {
     target_column_id: selectedGeoColumn?.id
   };
   const url = getURLFromParams(GET_LINKED_GEO_IDS_URL, params);
+  console.log(url);
   const { source, fetchPromise } = fetchWithCancel(url);
 
   try {
