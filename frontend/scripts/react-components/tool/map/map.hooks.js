@@ -46,7 +46,10 @@ export function useChoroplethFeatureState(
             { ...choroplethFeatureState },
             {
               color:
-                hasLinkedIds && !isLinked ? CHOROPLETH_COLORS.fill_not_linked : choropleth[geoId],
+                hasLinkedIds && !isLinked
+                  ? CHOROPLETH_COLORS.fill_not_linked
+                  : console.log('ccc', choroplethFeatureState, choropleth[geoId]) ||
+                    choropleth[geoId],
               fillOpacity,
               lineColor,
               lineWidth: isLinked ? 1.2 : lineWidth

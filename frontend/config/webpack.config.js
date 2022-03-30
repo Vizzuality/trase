@@ -41,7 +41,6 @@ module.exports = {
         `https://${process.env.CARTO_ACCOUNT}.carto.com`,
         'https://sample-api-v2.crazyegg.com',
         'https://live-detector.svc.transifex.net',
-        'https://audex.userreport.com',
         'https://dmp.adform.net'
       ]
     }),
