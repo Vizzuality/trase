@@ -234,8 +234,8 @@ function Sankey(props) {
       const legendTypeClass = selectedRecolorBy.legendType.toString().toLowerCase();
       const legendColorThemeClass = selectedRecolorBy.legendColorTheme.toString().toLowerCase();
       const { nodes } = selectedRecolorBy;
-      const recolorDefaultIndex = nodes.indexOf(link.recolorBy);
-
+      const recolorDefaultIndex =
+        nodes.indexOf(link.recolorBy) !== -1 && nodes.indexOf(link.recolorBy) + 1;
       classPath = `${classPath} -recolorby-qual-default-${recolorDefaultIndex} -recolorby-${legendTypeClass}-${legendColorThemeClass}-${recolorBy}`;
     } else {
       classPath = `${classPath} -recolorgroup-${link.recolorGroup}`;
