@@ -17,6 +17,7 @@ export function useChoroplethFeatureState(
   useEffect(() => {
     if (map && choropleth && !layersLoading) {
       const choroplethLayerIds = unitLayers?.filter(l => l.hasChoropleth).map(u => u.id);
+
       const source = choroplethLayerIds && choroplethLayerIds[0]; // Only first choropleth layer is highlighted
       const geoIds = Object.keys(choropleth);
       const hasLinkedIds = linkedGeoIds.length > 0;
@@ -46,10 +47,7 @@ export function useChoroplethFeatureState(
             { ...choroplethFeatureState },
             {
               color:
-                hasLinkedIds && !isLinked
-                  ? CHOROPLETH_COLORS.fill_not_linked
-                  : console.log('ccc', choroplethFeatureState, choropleth[geoId]) ||
-                    choropleth[geoId],
+                hasLinkedIds && !isLinked ? CHOROPLETH_COLORS.fill_not_linked : choropleth[geoId],
               fillOpacity,
               lineColor,
               lineWidth: isLinked ? 1.2 : lineWidth
