@@ -2,6 +2,7 @@ import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import CookieBanner from 'react-components/shared/cookie-banner';
+import GoogleTranslateScript from 'react-components/shared/google-translate-script';
 import FullScreenButton from 'react-components/shared/full-screen-button';
 import Feedback from 'react-components/shared/feedback';
 import Footer from 'react-components/shared/footer/footer.component';
@@ -21,6 +22,8 @@ const pageContent = {
   )
 };
 
+const isSandbox = process.env.NODE_ENV === 'sandbox';
+
 function App() {
   const { routesMap, type, query } = useSelector(state => state.location);
   const { Component, layout, footer = true, feedback = true } = routesMap[type];
@@ -36,6 +39,7 @@ function App() {
 
   return (
     <Suspense fallback={null}>
+      {isSandbox && <GoogleTranslateScript />}
       <SeoHandler />
       <nav>
         <TopNav />
