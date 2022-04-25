@@ -22,8 +22,6 @@ const pageContent = {
   )
 };
 
-const isSandbox = process.env.NODE_ENV === 'sandbox';
-
 function App() {
   const { routesMap, type, query } = useSelector(state => state.location);
   const { Component, layout, footer = true, feedback = true } = routesMap[type];
@@ -39,7 +37,7 @@ function App() {
 
   return (
     <Suspense fallback={null}>
-      {isSandbox && <GoogleTranslateScript />}
+      <GoogleTranslateScript />
       <SeoHandler />
       <nav>
         <TopNav />
