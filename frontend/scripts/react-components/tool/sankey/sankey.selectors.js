@@ -42,6 +42,7 @@ export const getVisibleNodesByColumn = createSelector(
     if (!visibleNodes || !columns) {
       return [];
     }
+    console.log(visibleNodes, columns, columnsNumber, extraColumnId);
     const byColumn = splitVisibleNodesByColumn(visibleNodes, columns, extraColumnId, columnsNumber);
     return sortVisibleNodes(byColumn, nodeHeights);
   }
@@ -138,6 +139,7 @@ export const getSankeyColumns = createSelector(
     gapBetweenColumns
   ) => {
     const sankeyColumns = [];
+    console.log('v', visibleNodesByColumn);
 
     visibleNodesByColumn.forEach((column, columnIndex) => {
       const newColumn = { ...column };
@@ -176,7 +178,7 @@ export const getSankeyColumns = createSelector(
       newColumn.y = cumulativeY;
       sankeyColumns.push(newColumn);
     });
-
+    console.log('s', sankeyColumns);
     return sankeyColumns;
   }
 );
@@ -273,11 +275,13 @@ export const getSankeyLinks = createSelector(
         newLink.renderedHeight = link.height * sankeySize[1];
       }
       const sId = link.sourceNodeId;
-      newLink.sy = cumulativeYByNodeId.source[sId] || _getNode(newLink.sourceColumnPosition, sId).y;
+      newLink.sy =
+        cumulativeYByNodeId.source[sId] || _getNode(newLink.sourceColumnPosition, sId)?.y;
       cumulativeYByNodeId.source[sId] = newLink.sy + newLink.renderedHeight;
 
       const tId = link.targetNodeId;
-      newLink.ty = cumulativeYByNodeId.target[tId] || _getNode(newLink.targetColumnPosition, tId).y;
+      newLink.ty =
+        cumulativeYByNodeId.target[tId] || _getNode(newLink.targetColumnPosition, tId)?.y;
       cumulativeYByNodeId.target[tId] = newLink.ty + newLink.renderedHeight;
 
       sankeyLinks.push(newLink);
