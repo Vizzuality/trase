@@ -42,7 +42,6 @@ export const getVisibleNodesByColumn = createSelector(
     if (!visibleNodes || !columns) {
       return [];
     }
-    console.log(visibleNodes, columns, columnsNumber, extraColumnId);
     const byColumn = splitVisibleNodesByColumn(visibleNodes, columns, extraColumnId, columnsNumber);
     return sortVisibleNodes(byColumn, nodeHeights);
   }
@@ -139,7 +138,6 @@ export const getSankeyColumns = createSelector(
     gapBetweenColumns
   ) => {
     const sankeyColumns = [];
-    console.log('v', visibleNodesByColumn);
 
     visibleNodesByColumn.forEach((column, columnIndex) => {
       const newColumn = { ...column };
@@ -178,7 +176,6 @@ export const getSankeyColumns = createSelector(
       newColumn.y = cumulativeY;
       sankeyColumns.push(newColumn);
     });
-    console.log('s', sankeyColumns);
     return sankeyColumns;
   }
 );
