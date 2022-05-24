@@ -26,7 +26,7 @@ function Legend(props) {
           <button className="legend-layers-toggle" onClick={openLayerModal}>
             <Icon icon="icon-layers" />
             <Text variant="mono" transform="uppercase" color="white">
-              Edit Map Layers
+              Explore regional indicators
             </Text>
           </button>
         </div>
@@ -41,11 +41,7 @@ function Legend(props) {
             )
           }}
         />
-        {logisticLayers && (
-          <LogisticLegend
-            layers={logisticLayers}
-          />
-        )}
+        {logisticLayers && <LogisticLegend layers={logisticLayers} />}
         {choroplethLegend && (
           <ChoroplethLegend
             bucket={choroplethLegend.bucket}
