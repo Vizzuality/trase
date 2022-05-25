@@ -248,7 +248,6 @@ export const getSelectedUnitLayers = createSelector(
         selectedUnitLayers.push({ ...unitLayer, hasChoropleth: !geoColumn.isChoroplethDisabled });
       }
     });
-    console.log(selectedUnitLayers);
     return selectedUnitLayers;
   }
 );
