@@ -29,8 +29,8 @@ export const loadDataDownloadLists = () => (dispatch, getState) => {
   const selectedContext = getDataDownloadContext(state);
 
   const contextFiltersURL = getURLFromParams(GET_DASHBOARD_OPTIONS_TABS_URL, {
-    country_id: selectedContext.countryId,
-    commodity_id: selectedContext.commodityId
+    countries_ids: selectedContext.countryId,
+    commodities_ids: selectedContext.commodityId
   });
 
   axios
@@ -39,7 +39,9 @@ export const loadDataDownloadLists = () => (dispatch, getState) => {
     .then(({ data }) => {
       const columnIds = {};
       data.forEach(item => {
-        const tab = item.tabs.find(t => ['EXPORTER', 'COUNTRY'].includes(t.name));
+        const tab = item.tabs.find(t =>
+          ['EXPORTER', 'COUNTRY OF DESTINATION', 'COUNTRY OF IMPORT', 'COUNTRY'].includes(t.name)
+        );
         if (tab) {
           columnIds[tab.name] = tab.id;
         }
@@ -52,7 +54,10 @@ export const loadDataDownloadLists = () => (dispatch, getState) => {
 
       const destinationsURL = getURLFromParams(GET_ALL_NODES_URL, {
         context_id: selectedContext.id,
-        node_types_ids: columnIds.COUNTRY
+        node_types_ids:
+          columnIds['COUNTRY OF DESTINATION'] ||
+          columnIds['COUNTRY OF IMPORT'] ||
+          columnIds.COUNTRY
       });
 
       const indicatorsURL = getURLFromParams(GET_INDICATORS_URL, {
