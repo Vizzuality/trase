@@ -56,9 +56,7 @@ module Api
           destination_context_node_types = Api::V3::ContextNodeType.
             joins(:node_type).
             where(
-              'node_types.name' => [
-                NodeTypeName::COUNTRY, NodeTypeName::COUNTRY_OF_IMPORT, NodeTypeName::COUNTRY_OF_DESTINATION
-              ]
+              'node_types.name' => NodeTypeName.destination_country_names
             ).
             pluck(:context_id, :node_type_id)
           @context_destination_node_types = Hash[destination_context_node_types]

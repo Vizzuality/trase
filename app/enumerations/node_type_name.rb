@@ -17,4 +17,8 @@ class NodeTypeName < EnumerateIt::Base
     CUSTOMS_DEPARTMENT: 'CUSTOMS DEPARTMENT',
     ECONOMIC_BLOC: 'ECONOMIC BLOC'
   )
+
+  def self.destination_country_names
+    [COUNTRY, COUNTRY_OF_IMPORT, COUNTRY_OF_DESTINATION]
+  end
 end

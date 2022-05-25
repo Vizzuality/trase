@@ -24,9 +24,9 @@ module Api
             node_types_by_name = Hash[
               context_node_types.map { |cnt| nt = cnt.node_type; [nt.name, nt] }
             ]
-            @all_node_types = [
-              NodeTypeName::COUNTRY, NodeTypeName::EXPORTER, NodeTypeName::IMPORTER
-            ].map do |sticky_node_type|
+            @all_node_types = (NodeTypeName.destination_country_names + [
+              NodeTypeName::EXPORTER, NodeTypeName::IMPORTER
+            ]).map do |sticky_node_type|
               node_types_by_name.delete(sticky_node_type)
             end.compact + node_types_by_name.values
           end
