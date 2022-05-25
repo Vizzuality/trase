@@ -258,6 +258,7 @@ export const PROFILE_TYPES = {
 
 export const NODE_TYPES = {
   countryOfProduction: 'COUNTRY OF PRODUCTION',
+  countryOfDestination: 'COUNTRY OF DESTINATION',
   country: 'COUNTRY',
   economicBloc: 'ECONOMIC BLOC',
   biome: 'BIOME',
