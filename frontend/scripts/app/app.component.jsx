@@ -2,7 +2,6 @@ import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import CookieBanner from 'react-components/shared/cookie-banner';
-import GoogleTranslateScript from 'react-components/shared/google-translate-script';
 import FullScreenButton from 'react-components/shared/full-screen-button';
 import Feedback from 'react-components/shared/feedback';
 import Footer from 'react-components/shared/footer/footer.component';
@@ -36,26 +35,27 @@ function App() {
   }, []);
 
   return (
-    <Suspense fallback={null}>
-      <GoogleTranslateScript />
-      <SeoHandler />
-      <nav>
-        <TopNav />
-      </nav>
-      <main>
-        <Component key={pageKey} content={layout && layout(pageContent[type])} />
-        {!isInIframe && <CookieBanner />}
-        {isInIframe && <FullScreenButton />}
-        {feedback && <Feedback />}
-      </main>
+    <>
+      <Suspense fallback={null}>
+        <SeoHandler />
+        <nav>
+          <TopNav />
+        </nav>
+        <main>
+          <Component key={pageKey} content={layout && layout(pageContent[type])} />
+          {!isInIframe && <CookieBanner />}
+          {isInIframe && <FullScreenButton />}
+          {feedback && <Feedback />}
+        </main>
 
-      {footer && (
-        <footer>
-          <Footer />
-        </footer>
-      )}
-      <div id="recharts-tooltip-portal" />
-    </Suspense>
+        {footer && (
+          <footer>
+            <Footer />
+          </footer>
+        )}
+        <div id="recharts-tooltip-portal" />
+      </Suspense>
+    </>
   );
 }
 

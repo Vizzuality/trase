@@ -3,7 +3,7 @@ import Helmet from 'react-helmet';
 
 const GoogleTranslateScript = () => (
   <>
-    <div id="google_translate_element" />
+    <div id="google_translate_element" className="google-translate" />
     <Helmet
       script={[
         {

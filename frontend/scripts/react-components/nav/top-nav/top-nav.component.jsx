@@ -12,6 +12,7 @@ import ToolSearch from 'react-components/tool/tool-search/tool-search.container'
 import Img from 'react-components/shared/img';
 import { BREAKPOINTS } from 'constants';
 import ResizeListener from 'react-components/shared/resize-listener.component';
+import GoogleTranslateScript from 'react-components/shared/google-translate-script';
 
 import 'scripts/react-components/nav/top-nav/top-nav.scss';
 
@@ -168,7 +169,11 @@ class TopNav extends React.PureComponent {
                       />
                     </ul>
                   )}
-                  <ul className="top-nav-item-list">
+                  <ul
+                    className={cx('top-nav-item-list', {
+                      'with-google-translate': ENABLE_GOOGLE_TRANSLATE
+                    })}
+                  >
                     <li className="top-nav-item search-container">
                       <span className="search-icon">
                         {page === 'tool' ? (
@@ -188,6 +193,11 @@ class TopNav extends React.PureComponent {
                     <li className="top-nav-item">
                       <LocaleSelector />
                     </li>
+                    {ENABLE_GOOGLE_TRANSLATE && (
+                      <li className="top-nav-item">
+                        <GoogleTranslateScript />
+                      </li>
+                    )}
                     {printable && (
                       <li className="top-nav-item">
                         <Suspense fallback={null}>
