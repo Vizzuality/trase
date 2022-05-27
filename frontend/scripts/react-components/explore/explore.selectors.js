@@ -144,12 +144,13 @@ export const getCardsWithDefault = createSelector(
     const availableContexts = contexts.filter(
       ctx => ctx.commodityId === commodityId && (countryId ? ctx.countryId === countryId : true)
     );
-
     const availableContextsCards = availableContexts
       .map((context, index) => {
         const options = {
           id: `${context.commodityId}_${context.countryId}_full_supply_chain`,
-          title: 'Full supply chain',
+          title: context.isSubnational
+            ? 'Sub-national level available'
+            : 'National level available',
           countryId: context.countryId,
           commodityId: context.commodityId,
           queryParams: {
