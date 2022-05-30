@@ -289,27 +289,29 @@ module Api
             group(group_clause)
 
           node_type = @active_node_types.find { |nt| nt.column_position == position }
-          unknown_nodes_ids =
-            if node_type
-              Api::V3::Node.where(node_type_id: node_type.id, is_unknown: true).pluck(:id)
-            else
-              []
-            end
+          # unknown_nodes_ids =
+          #   if node_type
+          #     Api::V3::Node.where(node_type_id: node_type.id, is_unknown: true).pluck(:id)
+          #   else
+          #     []
+          #   end
 
-          if unknown_nodes_ids.any?
-            order_by_unknown_clause = ActiveRecord::Base.send(
-              :sanitize_sql_array,
-              [
-                'CASE WHEN node_id = ANY(ARRAY[?]) THEN 2 ELSE 1 END',
-                unknown_nodes_ids
-              ]
-            )
-            order_by_unknown_clause = Arel.sql(order_by_unknown_clause)
-          end
+          # if unknown_nodes_ids.any?
+          #   order_by_unknown_clause = ActiveRecord::Base.send(
+          #     :sanitize_sql_array,
+          #     [
+          #       'CASE WHEN node_id = ANY(ARRAY[?]) THEN 2 ELSE 1 END',
+          #       unknown_nodes_ids
+          #     ]
+          #   )
+          #   order_by_unknown_clause = Arel.sql(order_by_unknown_clause)
+          # end
 
-          order_clause = [
-            order_by_unknown_clause, 'total DESC'
-          ].compact
+          # order_clause = [
+          #   order_by_unknown_clause, 'total DESC'
+          # ].compact
+
+          order_clause = ['total DESC']
 
           Api::V3::Flow.
             from("(#{subquery.to_sql}) s").
