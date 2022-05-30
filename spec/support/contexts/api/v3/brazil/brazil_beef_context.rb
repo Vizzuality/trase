@@ -11,7 +11,6 @@ shared_context 'api v3 brazil beef context' do
         country: api_v3_brazil,
         commodity: api_v3_beef,
         years: [2014, 2015],
-        subnational_years: [],
         default_year: 2015
       )
   end
@@ -22,7 +21,8 @@ shared_context 'api v3 brazil beef context' do
         context: api_v3_brazil_beef_context,
         is_disabled: false,
         is_default: false,
-        is_highlighted: false
+        is_highlighted: false,
+        subnational_years: []
       )
   end
 end
