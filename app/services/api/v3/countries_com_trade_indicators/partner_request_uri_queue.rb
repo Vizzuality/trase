@@ -32,7 +32,7 @@ module Api
         def reporter_codes
           trase_country_iso2s = Api::V3::Node.where(
             node_type_id: Api::V3::NodeType.where(
-              name: [NodeTypeName::COUNTRY, NodeTypeName::COUNTRY_OF_PRODUCTION]
+              name: NodeTypeName.destination_country_names + [NodeTypeName::COUNTRY_OF_PRODUCTION]
             )
           ).select(:geo_id).distinct.pluck(:geo_id)
 

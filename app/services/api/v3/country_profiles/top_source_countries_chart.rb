@@ -95,7 +95,7 @@ module Api
           country_nodes = Api::V3::Node.
             joins(:node_type).
             where(
-              'node_types.name' => [NodeTypeName::COUNTRY, NodeTypeName::COUNTRY_OF_PRODUCTION]
+              'node_types.name' => NodeTypeName.destination_country_names + [NodeTypeName::COUNTRY_OF_PRODUCTION]
             )
           country_names_by_iso2 = Hash[
             country_nodes.map { |n| [n.geo_id, n.name] }

@@ -33,7 +33,7 @@ module Api
       end
 
       def top_consumer_actors
-        if @node.node_type == NodeTypeName::COUNTRY
+        if NodeTypeName.destination_country_names.include? @node.node_type
           @contexts = Api::V3::Context.where(commodity_id: @node.commodity_id)
         end
         @result = Api::V3::Profiles::CrossContextTopNodesChart.new(
@@ -51,7 +51,7 @@ module Api
       end
 
       def top_consumer_countries
-        if @node.node_type == NodeTypeName::COUNTRY
+        if NodeTypeName.destination_country_names.include? @node.node_type
           @contexts = Api::V3::Context.where(commodity_id: @node.commodity_id)
         end
         @result =
