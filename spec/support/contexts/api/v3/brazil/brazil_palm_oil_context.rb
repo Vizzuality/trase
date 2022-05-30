@@ -11,7 +11,6 @@ shared_context 'api v3 brazil palm oil context' do
         country: api_v3_brazil,
         commodity: api_v3_palm_oil,
         years: [2014, 2015],
-        subnational_years: [],
         default_year: 2015
       )
   end
@@ -21,7 +20,8 @@ shared_context 'api v3 brazil palm oil context' do
         :api_v3_context_property,
         context: api_v3_brazil_palm_oil_context,
         is_disabled: false,
-        is_default: false
+        is_default: false,
+        subnational_years: []
       )
   end
 end
