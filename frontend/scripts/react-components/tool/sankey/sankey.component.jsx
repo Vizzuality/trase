@@ -60,10 +60,12 @@ function Sankey(props) {
     onNodeHighlighted,
     selectedNodesIds,
     toolLayout,
-    extraColumnId
+    extraColumnId,
+    selectedContext
   } = props;
   const [hoveredLink, setHoveredLink] = useState(null);
   const [tooltipContent, setTooltipContent] = useState(null);
+  const [tooltipDisclaimer, setTooltipDisclaimer] = useState(null);
   const svgRef = useRef(null);
   const layoutRects = useRef([]);
   const getRect = layout => {
@@ -150,12 +152,16 @@ function Sankey(props) {
       y: node.y - tooltipPadding - scrollY
     };
 
+    const lastColumnNodeTypes = [
+      NODE_TYPES.country,
+      NODE_TYPES.countryOfDestination,
+      NODE_TYPES.economicBloc
+    ];
+    const hasDimensionSelected =
+      nodeAttributes && selectedMapDimensions && selectedMapDimensions.length > 0;
+
     // Last column nodes should only show the trade volume on the tooltip
-    if (
-      [NODE_TYPES.country, NODE_TYPES.countryOfDestination, NODE_TYPES.economicBloc].includes(
-        node.type
-      )
-    ) {
+    if (lastColumnNodeTypes.includes(node.type)) {
       const associatedLinks = links.filter(l => l.targetNodeId === node.id);
       const value = associatedLinks.reduce((acc, curr) => acc + curr.quant, 0);
       const formattedValue = formatValue(value, selectedResizeBy.label);
@@ -168,7 +174,7 @@ function Sankey(props) {
         },
         { ...resizeByItem, title: 'Total volume' }
       ];
-    } else if (nodeAttributes && selectedMapDimensions && selectedMapDimensions.length > 0) {
+    } else if (hasDimensionSelected) {
       const nodeIndicators = selectedMapDimensions
         .map(dimension => {
           const meta = getNodeMeta(dimension, node, nodeAttributes, selectedResizeBy, nodeHeights);
@@ -193,10 +199,20 @@ function Sankey(props) {
       }
     }
 
+    // Tooltip disclaimer only for Argentina Soy Other node
+    const { commodityName, countryName } = selectedContext;
+    if (commodityName === 'SOY' && countryName === 'ARGENTINA' && node.name === 'OTHER SOURCES') {
+      setTooltipDisclaimer(
+        'Sources include soybean imports from other countries and Argentina’s production that is part of the soybean stock'
+      );
+    } else {
+      setTooltipDisclaimer(null);
+    }
     // Country menu can be enabled if we have country profiles or other node is selected and we can expand
     const enabledCountryMenu =
       node.type === NODE_TYPES.countryOfProduction &&
       (selectedNodesIds.length || ENABLE_COUNTRY_PROFILES);
+
     if (selectedNodesIds.includes(node.id) || enabledCountryMenu) {
       setHoveredSelectedNode(node);
     }
@@ -216,7 +232,12 @@ function Sankey(props) {
     2 * sankeyColumnsWidth + 2 * gapBetweenColumns + sankeyColumnsWidth / 2;
   return (
     <div className={cx('c-sankey', { '-full-screen': toolLayout === TOOL_LAYOUT.right })}>
-      <UnitsTooltip {...tooltipContent} show={!!tooltipContent} />
+      <UnitsTooltip
+        {...tooltipContent}
+        disclaimer={tooltipDisclaimer}
+        className="tooltip-max-width"
+        show={!!tooltipContent}
+      />
       <div
         ref={scrollContainerRef}
         className={cx('sankey-scroll-container', { '-detailed': detailedView })}
@@ -327,6 +348,7 @@ Sankey.propTypes = {
   gapBetweenColumns: PropTypes.number,
   nodeHeights: PropTypes.object,
   otherNodes: PropTypes.object,
+  selectedContext: PropTypes.object,
   nodeAttributes: PropTypes.object,
   selectedMapDimensions: PropTypes.array,
   onExpandClick: PropTypes.func.isRequired, // eslint-disable-line

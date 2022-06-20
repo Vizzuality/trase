@@ -6,7 +6,7 @@ import Text from 'react-components/shared/text';
 import './units-tooltip.scss';
 
 function UnitsTooltip(props) {
-  const { className, text, items, show, x, y, height, width } = props;
+  const { className, text, items, show, x, y, height, width, disclaimer } = props;
   const ref = useRef(null);
   const [position, setPosition] = useState({
     left: 0,
@@ -68,6 +68,11 @@ function UnitsTooltip(props) {
           {!item.value && item.children}
         </div>
       ))}
+      {disclaimer && (
+        <Text variant="sans" size="sm" className="disclaimer-text">
+          {disclaimer}
+        </Text>
+      )}
     </div>
   );
 }
@@ -83,6 +88,7 @@ UnitsTooltip.propTypes = {
   height: PropTypes.number,
   width: PropTypes.number,
   text: PropTypes.string,
+  disclaimer: PropTypes.string,
   items: PropTypes.array,
   show: PropTypes.bool
 };
