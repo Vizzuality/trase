@@ -85,8 +85,9 @@ const Profile = props => {
   const renderSection = chart => {
     const commodityName =
       context?.commodityName ||
-      profileMetadata.commodities.find(comm => comm.id === commodityId)?.name;
-
+      profileMetadata.commodities.find(
+        comm => comm.id === commodityId || profileMetadata.commodityId
+      )?.name;
     switch (chart.chart_type) {
       case 'line_chart_with_map': {
         const isCountries = chart.identifier === 'actor_top_countries';
