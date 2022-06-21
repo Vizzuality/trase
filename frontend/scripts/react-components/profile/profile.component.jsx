@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useState, useRef } from 'react';
+import React, { Suspense, useRef } from 'react';
 import PropTypes from 'prop-types';
 import SummaryWidget from 'react-components/profile/profile-widgets/summary-widget.component';
 import LinksWidget from 'react-components/profile/profile-widgets/links-widget.component';
@@ -36,8 +36,6 @@ const MapFlowsWidget = React.lazy(() => import('./profile-widgets/map-flows-widg
 
 const TableWidget = React.lazy(() => import('./profile-widgets/table.component'));
 
-const GfwWidget = React.lazy(() => import('./profile-widgets/gfw-widget.component'));
-
 const Profile = props => {
   const {
     year,
@@ -52,24 +50,6 @@ const Profile = props => {
     updateQueryParams,
     openModal
   } = props;
-  // if requestIdleCallback is not supported (Edge, IE) we render the iframe immediately
-  const [renderIframes, setRenderIframes] = useState(
-    typeof window.requestIdleCallback === 'undefined'
-  );
-
-  const allowRenderIframes = () => setRenderIframes(true);
-  useEffect(() => {
-    if (window.requestIdleCallback) {
-      // http://www.aaronpeters.nl/blog/iframe-loading-techniques-performance
-      window.addEventListener('load', allowRenderIframes, false);
-      if (document.readyState === 'complete') {
-        window.requestIdleCallback(allowRenderIframes);
-      }
-      return window.removeEventListener('load', allowRenderIframes);
-    }
-    return undefined;
-  }, [document.readyState]);
-
   const anchorRef = useRef(null);
 
   const updateQuery = (key, value) => {
@@ -288,23 +268,6 @@ const Profile = props => {
             <Suspense fallback={null}>{renderSection(chart)}</Suspense>
           </ErrorCatch>
         ))}
-      {ready &&
-        GFW_WIDGETS_BASE_URL &&
-        ((profileType === 'place' && context?.countryName === 'BRAZIL') ||
-          profileType === 'country') && (
-          <Suspense fallback={null}>
-            <GfwWidget
-              year={year}
-              nodeId={nodeId}
-              contextId={context?.id}
-              renderIframes={renderIframes}
-              profileType={profileType}
-              countryName={
-                profileType === 'country' ? context?.countryName || profileMetadata.name : null
-              }
-            />
-          </Suspense>
-        )}
       {showLinks && (
         <LinksWidget
           year={year}
