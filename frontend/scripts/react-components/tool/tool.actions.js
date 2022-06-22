@@ -184,7 +184,6 @@ export function loadMapChoropleth() {
     const state = getState();
 
     const uids = getSelectedMapDimensionsUids(state);
-    console.log('loadMapChoropleth', uids);
     if (new Set(uids.filter(Boolean)).size === 0) {
       dispatch({
         type: SET_NODE_ATTRIBUTES,
