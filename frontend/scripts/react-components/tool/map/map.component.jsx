@@ -68,6 +68,7 @@ function MapBoxMap(props) {
   const [viewport, setViewport] = useState({ ...defaultMapView });
   const [loaded, setLoaded] = useState(false);
   const [updatedTooltipValues, updateTooltipValues] = useState(tooltipValues);
+  const [layersLoading, setLayersLoading] = useState(false);
   const [mapAttribution, setMapAttribution] = useState(null);
   const [tooltipData, setTooltip] = useState(null);
 
@@ -146,7 +147,8 @@ function MapBoxMap(props) {
     sourceLayer,
     linkedGeoIds,
     baseLayerInfo,
-    darkBasemap
+    darkBasemap,
+    layersLoading
   );
 
   // Start Tooltip values
@@ -210,6 +212,19 @@ function MapBoxMap(props) {
       flatMap(unitLayers, u => getUnitLayerStyle(u, sourceLayer, darkBasemap, getGeoIdName(u.id)))
     );
   }
+
+  // TODO: Find a better solution to fix the race condition not loading the unit layer choropleth on time
+  const unitLayersNotInMap =
+    map && !map.getStyle().layers.some(l => l['source-layer'] === sourceLayer);
+
+  useEffect(() => {
+    if (unitLayersNotInMap) {
+      setLayersLoading(true);
+    }
+    if (layersLoading && !unitLayersNotInMap) {
+      setLayersLoading(false);
+    }
+  }, [unitLayersNotInMap, setLayersLoading, layersLoading]);
 
   const orderedLayers = layers.map(l => ({ ...l, zIndex: layerOrder[l.id] }));
   const minimized = toolLayout === TOOL_LAYOUT.right;

@@ -11,7 +11,8 @@ export function useChoroplethFeatureState(
   sourceLayer,
   linkedGeoIds,
   baseLayerInfo,
-  darkBasemap
+  darkBasemap,
+  layersLoading
 ) {
   useEffect(() => {
     if (map && choropleth) {
@@ -74,7 +75,16 @@ export function useChoroplethFeatureState(
         });
       }
     }
-  }, [choropleth, map, unitLayers, sourceLayer, linkedGeoIds, baseLayerInfo, darkBasemap]);
+  }, [
+    choropleth,
+    map,
+    unitLayers,
+    sourceLayer,
+    linkedGeoIds,
+    baseLayerInfo,
+    darkBasemap,
+    layersLoading
+  ]);
 }
 
 export function useFitToBounds({
