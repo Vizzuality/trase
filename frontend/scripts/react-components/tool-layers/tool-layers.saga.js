@@ -56,7 +56,12 @@ function* fetchMapDimensions() {
 
     yield call(getMapDimensions, selectedContext, selectedYears);
 
+    console.log('fetchMapDimensions');
+    yield put(loadMapChoropleth());
+
     if (type !== appActions.APP__SAGA_REGISTERED || prev.type !== page) {
+      console.log('fetchMapDimensions only if registed', prev.type, page);
+
       // TODO remove this when mapbox comes
       yield put(loadMapChoropleth());
     }
