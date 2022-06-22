@@ -55,6 +55,7 @@ function* fetchMapDimensions() {
     }
 
     yield call(getMapDimensions, selectedContext, selectedYears);
+    console.log('loadMapChoropleth');
     yield put(loadMapChoropleth());
   }
   yield takeLatest(

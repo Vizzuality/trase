@@ -119,6 +119,13 @@ export const getChoroplethOptions = createSelector(
     getToolMapDimensions
   ],
   (selectedMapDimensions, nodes, attributes, selectedColumnsIds, columns, mapDimensions) => {
+    console.log('getChoroplethOptions', {
+      nodes,
+      attributes,
+      columns,
+      mapDimensions,
+      selectedMapDimensions
+    });
     if (!nodes || !attributes || !columns) {
       return { choropleth: {}, choroplethLegend: null };
     }
