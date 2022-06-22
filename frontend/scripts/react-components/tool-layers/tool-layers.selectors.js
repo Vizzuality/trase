@@ -119,6 +119,7 @@ export const getChoroplethOptions = createSelector(
     getToolMapDimensions
   ],
   (selectedMapDimensions, nodes, attributes, selectedColumnsIds, columns, mapDimensions) => {
+    console.log({ nodes, attributes, columns });
     if (!nodes || !attributes || !columns) {
       return { choropleth: {}, choroplethLegend: null };
     }
@@ -242,6 +243,10 @@ export const getSelectedUnitLayers = createSelector(
       const exceptionId = `${layerId}_${snakeCase(selectedContext.commodityName)}`;
       if (exceptions.includes(exceptionId)) {
         layerId = exceptionId;
+      }
+      // columns of production are the same than their respective without the of_production part
+      if (layerId.endsWith('_of_production')) {
+        layerId = layerId.replace('_of_production', '');
       }
       const unitLayer = unitLayers.find(l => l.id === layerId);
       if (unitLayer) {
