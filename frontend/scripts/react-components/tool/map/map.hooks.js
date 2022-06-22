@@ -15,6 +15,7 @@ export function useChoroplethFeatureState(
   layersLoading
 ) {
   useEffect(() => {
+    console.log('useChoroplethFeatureState', { choropleth, layersLoading, map });
     if (map && choropleth && !layersLoading) {
       const choroplethLayerIds = unitLayers?.filter(l => l.hasChoropleth).map(u => u.id);
 
