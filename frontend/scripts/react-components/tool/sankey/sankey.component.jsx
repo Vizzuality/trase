@@ -201,7 +201,7 @@ function Sankey(props) {
 
     // Tooltip disclaimer only for Argentina Soy Other node
     const { commodityName, countryName } = selectedContext;
-    if (commodityName === 'SOY' && countryName === 'ARGENTINA' && node.name === 'OTHER SOURCES') {
+    if (commodityName === 'SOY' && countryName === 'ARGENTINA' && node.name === 'IMPORTS + STOCK') {
       setTooltipDisclaimer(
         'Sources include soybean imports from other countries and Argentina’s production that is part of the soybean stock'
       );
