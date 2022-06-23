@@ -32,11 +32,8 @@ module Api
 
       private
 
-      # TODO: country profiles
       def initialize_profiles_query
-        return base_query.joins(:profile) unless Rails.env.production?
-
-        base_query.joins(:profile).where.not('profiles.name' => 'country')
+        base_query.joins(:profile)
       end
 
       def initialize_dashboards_query
