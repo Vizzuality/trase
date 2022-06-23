@@ -105,17 +105,17 @@
                 <script>
                     var tableData = [
     {
-        "tableName": "node_quants",
+        "tableName": "nodes",
         "tableType": "Table",
         "keyClass": "",
         "keyTitle": "",
-        "name": "created_at",
-        "type": "timestamp",
-        "length": 29,
-        "nullable": "",
+        "name": "main_id",
+        "type": "int4",
+        "length": 10,
+        "nullable": "√",
         "autoUpdated": "",
         "defaultValue": "null",
-        "comments": ""
+        "comments": "<p>Node identifier from Main DB<\/p>"
     },
     {
         "tableName": "node_inds",
@@ -131,17 +131,17 @@
         "comments": ""
     },
     {
-        "tableName": "nodes",
+        "tableName": "node_quants",
         "tableType": "Table",
-        "keyClass": "",
-        "keyTitle": "",
-        "name": "geo_id",
-        "type": "text",
-        "length": 2147483647,
+        "keyClass": "indexedColumn",
+        "keyTitle": "Indexed",
+        "name": "<i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'><\/i>year",
+        "type": "int4",
+        "length": 10,
         "nullable": "√",
         "autoUpdated": "",
         "defaultValue": "null",
-        "comments": "<p>2-letter iso code in case of country nodes; other geo identifiers possible for other node types<\/p>"
+        "comments": "<p>Year; empty (NULL) for all years<\/p>"
     },
     {
         "tableName": "flow_quals",
@@ -222,24 +222,24 @@
         "comments": ""
     },
     {
+        "tableName": "nodes",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "geo_id",
+        "type": "text",
+        "length": 2147483647,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": "<p>2-letter iso code in case of country nodes; other geo identifiers possible for other node types<\/p>"
+    },
+    {
         "tableName": "node_quants",
         "tableType": "Table",
         "keyClass": "foreignKey",
         "keyTitle": "Foreign Key",
-        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>quant_id",
-        "type": "int4",
-        "length": 10,
-        "nullable": "",
-        "autoUpdated": "",
-        "defaultValue": "null",
-        "comments": ""
-    },
-    {
-        "tableName": "nodes",
-        "tableType": "Table",
-        "keyClass": "indexedColumn",
-        "keyTitle": "Indexed",
-        "name": "<i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'><\/i>node_type_id",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>node_id",
         "type": "int4",
         "length": 10,
         "nullable": "",
@@ -261,17 +261,17 @@
         "comments": "<p>Attribute short name, e.g. ZERO_DEFORESTATION; those literals are referred to in code, therefore should not be changed without notice<\/p>"
     },
     {
-        "tableName": "node_quants",
+        "tableName": "nodes",
         "tableType": "Table",
         "keyClass": "",
         "keyTitle": "",
-        "name": "value",
-        "type": "float8",
-        "length": 17,
+        "name": "created_at",
+        "type": "timestamp",
+        "length": 29,
         "nullable": "",
         "autoUpdated": "",
         "defaultValue": "null",
-        "comments": "<p>Numeric value<\/p>"
+        "comments": ""
     },
     {
         "tableName": "contexts",
@@ -313,11 +313,11 @@
         "comments": ""
     },
     {
-        "tableName": "flow_quants",
+        "tableName": "node_quals",
         "tableType": "Table",
         "keyClass": "foreignKey",
         "keyTitle": "Foreign Key",
-        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>quant_id",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>qual_id",
         "type": "int4",
         "length": 10,
         "nullable": "",
@@ -326,7 +326,7 @@
         "comments": ""
     },
     {
-        "tableName": "node_quals",
+        "tableName": "flow_quants",
         "tableType": "Table",
         "keyClass": "",
         "keyTitle": "",
@@ -378,7 +378,7 @@
         "comments": ""
     },
     {
-        "tableName": "nodes",
+        "tableName": "node_quants",
         "tableType": "Table",
         "keyClass": "",
         "keyTitle": "",
@@ -482,7 +482,7 @@
         "comments": "<p>Index of node of this type in flows.path<\/p>"
     },
     {
-        "tableName": "nodes",
+        "tableName": "node_quants",
         "tableType": "Table",
         "keyClass": "primaryKey",
         "keyTitle": "Primary Key",
@@ -491,7 +491,7 @@
         "length": 10,
         "nullable": "",
         "autoUpdated": "√",
-        "defaultValue": "nextval('nodes_id_seq'::regclass)",
+        "defaultValue": "nextval('node_quants_id_seq'::regclass)",
         "comments": ""
     },
     {
@@ -521,6 +521,19 @@
         "comments": ""
     },
     {
+        "tableName": "flow_quants",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "value",
+        "type": "float8",
+        "length": 17,
+        "nullable": "",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": "<p>Numeric value<\/p>"
+    },
+    {
         "tableName": "node_quals",
         "tableType": "Table",
         "keyClass": "",
@@ -536,22 +549,9 @@
     {
         "tableName": "flow_quants",
         "tableType": "Table",
-        "keyClass": "",
-        "keyTitle": "",
-        "name": "created_at",
-        "type": "timestamp",
-        "length": 29,
-        "nullable": "",
-        "autoUpdated": "",
-        "defaultValue": "null",
-        "comments": ""
-    },
-    {
-        "tableName": "node_quals",
-        "tableType": "Table",
-        "keyClass": "foreignKey",
-        "keyTitle": "Foreign Key",
-        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>qual_id",
+        "keyClass": "indexedColumn",
+        "keyTitle": "Indexed",
+        "name": "<i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'><\/i>flow_id",
         "type": "int4",
         "length": 10,
         "nullable": "",
@@ -612,17 +612,17 @@
         "comments": "<p>Version symbol (included in downloaded file name)<\/p>"
     },
     {
-        "tableName": "flow_quants",
+        "tableName": "node_quals",
         "tableType": "Table",
-        "keyClass": "",
-        "keyTitle": "",
-        "name": "value",
-        "type": "float8",
-        "length": 17,
-        "nullable": "",
+        "keyClass": "indexedColumn",
+        "keyTitle": "Indexed",
+        "name": "<i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'><\/i>year",
+        "type": "int4",
+        "length": 10,
+        "nullable": "√",
         "autoUpdated": "",
         "defaultValue": "null",
-        "comments": "<p>Numeric value<\/p>"
+        "comments": "<p>Year; empty (NULL) for all years<\/p>"
     },
     {
         "tableName": "flow_inds",
@@ -651,16 +651,16 @@
         "comments": ""
     },
     {
-        "tableName": "node_quals",
+        "tableName": "flow_quants",
         "tableType": "Table",
-        "keyClass": "foreignKey",
-        "keyTitle": "Foreign Key",
-        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>node_id",
-        "type": "int4",
+        "keyClass": "primaryKey",
+        "keyTitle": "Primary Key",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>id",
+        "type": "serial",
         "length": 10,
         "nullable": "",
-        "autoUpdated": "",
-        "defaultValue": "null",
+        "autoUpdated": "√",
+        "defaultValue": "nextval('flow_quants_id_seq'::regclass)",
         "comments": ""
     },
     {
@@ -677,11 +677,11 @@
         "comments": "<p>Year; empty (NULL) for all years<\/p>"
     },
     {
-        "tableName": "flow_quants",
+        "tableName": "node_quals",
         "tableType": "Table",
-        "keyClass": "indexedColumn",
-        "keyTitle": "Indexed",
-        "name": "<i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'><\/i>flow_id",
+        "keyClass": "foreignKey",
+        "keyTitle": "Foreign Key",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>node_id",
         "type": "int4",
         "length": 10,
         "nullable": "",
@@ -729,7 +729,7 @@
         "comments": "<p>Numeric value<\/p>"
     },
     {
-        "tableName": "flow_quants",
+        "tableName": "node_quals",
         "tableType": "Table",
         "keyClass": "primaryKey",
         "keyTitle": "Primary Key",
@@ -738,21 +738,21 @@
         "length": 10,
         "nullable": "",
         "autoUpdated": "√",
-        "defaultValue": "nextval('flow_quants_id_seq'::regclass)",
+        "defaultValue": "nextval('node_quals_id_seq'::regclass)",
         "comments": ""
     },
     {
-        "tableName": "node_quants",
+        "tableName": "nodes",
         "tableType": "Table",
-        "keyClass": "foreignKey",
-        "keyTitle": "Foreign Key",
-        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>node_id",
-        "type": "int4",
-        "length": 10,
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "name",
+        "type": "text",
+        "length": 2147483647,
         "nullable": "",
         "autoUpdated": "",
         "defaultValue": "null",
-        "comments": ""
+        "comments": "<p>Name of node<\/p>"
     },
     {
         "tableName": "download_versions",
@@ -781,7 +781,20 @@
         "comments": ""
     },
     {
-        "tableName": "node_quants",
+        "tableName": "nodes",
+        "tableType": "Table",
+        "keyClass": "indexedColumn",
+        "keyTitle": "Indexed",
+        "name": "<i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'><\/i>node_type_id",
+        "type": "int4",
+        "length": 10,
+        "nullable": "",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "nodes",
         "tableType": "Table",
         "keyClass": "primaryKey",
         "keyTitle": "Primary Key",
@@ -790,21 +803,8 @@
         "length": 10,
         "nullable": "",
         "autoUpdated": "√",
-        "defaultValue": "nextval('node_quants_id_seq'::regclass)",
+        "defaultValue": "nextval('nodes_id_seq'::regclass)",
         "comments": ""
-    },
-    {
-        "tableName": "nodes",
-        "tableType": "Table",
-        "keyClass": "",
-        "keyTitle": "",
-        "name": "main_id",
-        "type": "int4",
-        "length": 10,
-        "nullable": "√",
-        "autoUpdated": "",
-        "defaultValue": "null",
-        "comments": "<p>Node identifier from Main DB<\/p>"
     },
     {
         "tableName": "contexts",
@@ -833,17 +833,17 @@
         "comments": ""
     },
     {
-        "tableName": "node_quals",
+        "tableName": "flow_quants",
         "tableType": "Table",
-        "keyClass": "indexedColumn",
-        "keyTitle": "Indexed",
-        "name": "<i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'><\/i>year",
+        "keyClass": "foreignKey",
+        "keyTitle": "Foreign Key",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>quant_id",
         "type": "int4",
         "length": 10,
-        "nullable": "√",
+        "nullable": "",
         "autoUpdated": "",
         "defaultValue": "null",
-        "comments": "<p>Year; empty (NULL) for all years<\/p>"
+        "comments": ""
     },
     {
         "tableName": "countries",
@@ -885,17 +885,17 @@
         "comments": ""
     },
     {
-        "tableName": "nodes",
+        "tableName": "node_quants",
         "tableType": "Table",
-        "keyClass": "",
-        "keyTitle": "",
-        "name": "name",
-        "type": "text",
-        "length": 2147483647,
+        "keyClass": "foreignKey",
+        "keyTitle": "Foreign Key",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>quant_id",
+        "type": "int4",
+        "length": 10,
         "nullable": "",
         "autoUpdated": "",
         "defaultValue": "null",
-        "comments": "<p>Name of node<\/p>"
+        "comments": ""
     },
     {
         "tableName": "inds",
@@ -924,17 +924,17 @@
         "comments": "<p>Commodity name; unique across commodities<\/p>"
     },
     {
-        "tableName": "node_quants",
+        "tableName": "nodes",
         "tableType": "Table",
-        "keyClass": "indexedColumn",
-        "keyTitle": "Indexed",
-        "name": "<i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'><\/i>year",
-        "type": "int4",
-        "length": 10,
-        "nullable": "√",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "is_unknown",
+        "type": "bool",
+        "length": 1,
+        "nullable": "",
         "autoUpdated": "",
-        "defaultValue": "null",
-        "comments": "<p>Year; empty (NULL) for all years<\/p>"
+        "defaultValue": "false",
+        "comments": "<p>When set, node was not possible to identify<\/p>"
     },
     {
         "tableName": "node_inds",
@@ -1004,14 +1004,14 @@
     {
         "tableName": "node_quals",
         "tableType": "Table",
-        "keyClass": "primaryKey",
-        "keyTitle": "Primary Key",
-        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>id",
-        "type": "serial",
-        "length": 10,
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "created_at",
+        "type": "timestamp",
+        "length": 29,
         "nullable": "",
-        "autoUpdated": "√",
-        "defaultValue": "nextval('node_quals_id_seq'::regclass)",
+        "autoUpdated": "",
+        "defaultValue": "null",
         "comments": ""
     },
     {
@@ -1054,17 +1054,17 @@
         "comments": ""
     },
     {
-        "tableName": "nodes",
+        "tableName": "node_quants",
         "tableType": "Table",
         "keyClass": "",
         "keyTitle": "",
-        "name": "is_unknown",
-        "type": "bool",
-        "length": 1,
+        "name": "value",
+        "type": "float8",
+        "length": 17,
         "nullable": "",
         "autoUpdated": "",
-        "defaultValue": "false",
-        "comments": "<p>When set, node was not possible to identify<\/p>"
+        "defaultValue": "null",
+        "comments": "<p>Numeric value<\/p>"
     },
     {
         "tableName": "download_versions",
