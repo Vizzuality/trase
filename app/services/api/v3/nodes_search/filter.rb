@@ -24,10 +24,6 @@ module Api
           @rel = @rel.where('context_id' => context_id) if context_id
           if profile_only
             @rel = @rel.where.not(profile: nil)
-            # TODO: country profiles
-            if Rails.env.production?
-              @rel = @rel.where.not(profile: 'country')
-            end
           end
           @rel.
             search_by_name(query).
