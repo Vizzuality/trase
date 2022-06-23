@@ -46,20 +46,16 @@ function* fetchLinkedGeoIds() {
 }
 
 function* fetchMapDimensions() {
-  function* performFetch({ type }) {
+  function* performFetch() {
     const selectedYears = yield select(getSelectedYears);
     const selectedContext = yield select(getSelectedContext);
-    const { type: page, prev } = yield select(state => state.location);
+    const { type: page } = yield select(state => state.location);
     if (page !== 'tool' || selectedContext === null) {
       return;
     }
 
     yield call(getMapDimensions, selectedContext, selectedYears);
-
-    if (type !== appActions.APP__SAGA_REGISTERED || prev.type !== page) {
-      // TODO remove this when mapbox comes
-      yield put(loadMapChoropleth());
-    }
+    yield put(loadMapChoropleth());
   }
   yield takeLatest(
     [

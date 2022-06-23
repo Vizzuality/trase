@@ -232,12 +232,20 @@ export const getSelectedUnitLayers = createSelector(
     const countryName = snakeCase(selectedContext.countryName);
     const columnName = c => snakeCase(c.name);
     const selectedUnitLayers = [];
-    const exceptions = ['indonesia_country_of_production_wood_pulp'];
+    const exceptions = [
+      'indonesia_country_of_production_wood_pulp',
+      'indonesia_province_wood_pulp',
+      'indonesia_province_of_production_wood_pulp'
+    ];
     geoColumns.forEach(geoColumn => {
       let layerId = `${countryName}_${columnName(geoColumn)}`;
       const exceptionId = `${layerId}_${snakeCase(selectedContext.commodityName)}`;
       if (exceptions.includes(exceptionId)) {
         layerId = exceptionId;
+      }
+      // columns of production are the same than their respective without the of_production part
+      if (layerId.endsWith('_of_production')) {
+        layerId = layerId.replace('_of_production', '');
       }
       const unitLayer = unitLayers.find(l => l.id === layerId);
       if (unitLayer) {

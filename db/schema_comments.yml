@@ -256,6 +256,8 @@ tables:
         comment: When set, show this context as default (only use for one)
       - name: is_highlighted
         comment: When set, shows the context on the context picker suggestions
+      - name: subnational_years
+        comment: 'Defines which years light up as subnational in the sankey'
   - name: contextual_layers
     comment: Additional layers shown on map coming from CartoDB
     columns:

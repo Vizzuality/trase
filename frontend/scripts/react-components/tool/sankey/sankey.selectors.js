@@ -176,7 +176,6 @@ export const getSankeyColumns = createSelector(
       newColumn.y = cumulativeY;
       sankeyColumns.push(newColumn);
     });
-
     return sankeyColumns;
   }
 );
@@ -273,11 +272,13 @@ export const getSankeyLinks = createSelector(
         newLink.renderedHeight = link.height * sankeySize[1];
       }
       const sId = link.sourceNodeId;
-      newLink.sy = cumulativeYByNodeId.source[sId] || _getNode(newLink.sourceColumnPosition, sId).y;
+      newLink.sy =
+        cumulativeYByNodeId.source[sId] || _getNode(newLink.sourceColumnPosition, sId)?.y;
       cumulativeYByNodeId.source[sId] = newLink.sy + newLink.renderedHeight;
 
       const tId = link.targetNodeId;
-      newLink.ty = cumulativeYByNodeId.target[tId] || _getNode(newLink.targetColumnPosition, tId).y;
+      newLink.ty =
+        cumulativeYByNodeId.target[tId] || _getNode(newLink.targetColumnPosition, tId)?.y;
       cumulativeYByNodeId.target[tId] = newLink.ty + newLink.renderedHeight;
 
       sankeyLinks.push(newLink);

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useMemo } from 'react';
+import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import formatValue from 'utils/formatValue';
@@ -8,6 +8,7 @@ import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.co
 import { TOOL_LAYOUT, MIN_COLUMNS_NUMBER, NODE_TYPES } from 'constants';
 import pluralize from 'utils/pluralize';
 
+import { useNodeRefHeight, useMenuOptions, useMenuPosition } from './sankey-hooks';
 import RecolorByLegend from './recolor-by-legend';
 import SankeyColumn from './sankey-column.component';
 import NodeMenu from './node-menu.component';
@@ -16,168 +17,28 @@ import * as Defs from './sankey-defs.component';
 
 import 'react-components/tool/sankey/sankey.scss';
 
-function useMenuOptions(props, hoveredSelectedNode) {
-  const {
-    goToProfile,
-    hasExpandedNodesIds,
-    isReExpand,
-    onExpandClick,
-    onCollapseClick,
-    lastSelectedNodeLink,
-    onChangeExtraColumn,
-    toolColumns,
-    columns,
-    extraColumnId,
-    extraColumnNodeId,
-    selectedNodesIds
-  } = props;
-  return useMemo(() => {
-    const items = [];
-
-    let nodeType = null;
-    let link = {};
-    if (lastSelectedNodeLink) {
-      const { type, ...params } = lastSelectedNodeLink;
-      nodeType = type;
-      link = {
-        ...params
-      };
+const getLinkColor = (selectedRecolorBy, link) => {
+  let classPath = 'sankey-link';
+  if (selectedRecolorBy) {
+    if (link.recolorBy === null) {
+      return classPath;
     }
-
-    if (
-      hoveredSelectedNode &&
-      hoveredSelectedNode.isUnknown !== true &&
-      hoveredSelectedNode.isDomesticConsumption !== true
-    ) {
-      nodeType = hoveredSelectedNode.type;
-      link.profileType = hoveredSelectedNode.profileType;
-      link.nodeId = hoveredSelectedNode.id;
+    let recolorBy = link.recolorBySlug || link.recolorBy;
+    if (selectedRecolorBy.divisor) {
+      recolorBy = Math.floor(link.recolorBy / selectedRecolorBy.divisor);
     }
-    const DISALLOW_NODE_TYPES = [
-      NODE_TYPES.economicBloc,
-      NODE_TYPES.districtOfExport,
-      NODE_TYPES.biome
-    ];
-    if (!ENABLE_COUNTRY_PROFILES) {
-      DISALLOW_NODE_TYPES.push(NODE_TYPES.countryOfProduction);
-      DISALLOW_NODE_TYPES.push(NODE_TYPES.country);
-    }
-    if (link.profileType && !DISALLOW_NODE_TYPES.includes(nodeType)) {
-      items.splice(2, 0, {
-        id: 'profile-link',
-        label: `Go To The ${
-          nodeType === NODE_TYPES.countryOfProduction ? 'Country' : nodeType
-        } Profile`,
-        onClick: () => goToProfile(link)
-      });
-    }
+    const legendTypeClass = selectedRecolorBy.legendType.toString().toLowerCase();
+    const legendColorThemeClass = selectedRecolorBy.legendColorTheme.toString().toLowerCase();
+    const { nodes } = selectedRecolorBy;
+    const recolorDefaultIndex =
+      nodes.indexOf(link.recolorBy) !== -1 && nodes.indexOf(link.recolorBy) + 1;
+    classPath = `${classPath} -recolorby-qual-default-${recolorDefaultIndex} -recolorby-${legendTypeClass}-${legendColorThemeClass}-${recolorBy}`;
+  } else {
+    classPath = `${classPath} -recolorgroup-${link.recolorGroup}`;
+  }
 
-    const activeColumn = toolColumns && Object.values(toolColumns).find(c => c.name === nodeType);
-    const selectedNode =
-      columns?.length &&
-      activeColumn &&
-      columns[activeColumn.group].values.find(node => node.id === link.nodeId);
-
-    if (nodeType && activeColumn?.filterTo && columns?.length) {
-      const columnToExpand = toolColumns[activeColumn.filterTo];
-
-      if (extraColumnId) {
-        items.push({
-          id: 'remove-column',
-          label: `Close ${pluralize(columnToExpand.name)}`,
-          onClick: () => onChangeExtraColumn(null)
-        });
-      } else {
-        items.push({
-          id: 'expand-column',
-          label: `See ${pluralize(columnToExpand.name)}`,
-          onClick: () => onChangeExtraColumn(columnToExpand.id, activeColumn.id, selectedNode?.id)
-        });
-      }
-    }
-    const hasExtraColumn = extraColumnId && selectedNode?.id === extraColumnNodeId;
-
-    if ((isReExpand || !hasExpandedNodesIds) && !hasExtraColumn && selectedNodesIds.length > 0) {
-      items.push({
-        id: 'expand',
-        label: isReExpand ? 'Re-Expand' : 'Expand',
-        onClick: onExpandClick
-      });
-    }
-
-    if (hasExpandedNodesIds && !hasExtraColumn && selectedNodesIds.length > 0) {
-      items.push({ id: 'collapse', label: 'Collapse', onClick: onCollapseClick });
-    }
-
-    return items;
-  }, [
-    lastSelectedNodeLink,
-    hoveredSelectedNode,
-    toolColumns,
-    columns,
-    extraColumnNodeId,
-    isReExpand,
-    hasExpandedNodesIds,
-    goToProfile,
-    extraColumnId,
-    onChangeExtraColumn,
-    onExpandClick,
-    onCollapseClick,
-    selectedNodesIds
-  ]);
-}
-
-function useMenuPosition(props) {
-  const { selectedNodesIds, isReExpand, columns } = props;
-  const [hoveredSelectedNode, setHoveredSelectedNode] = useState(null);
-  const [menuPos, setMenuPos] = useState({ x: 0, y: 0 });
-  const ref = useRef(null);
-
-  const getCoordinates = n => ({
-    x: n.x,
-    y: Math.max(0, n.y) + (ref.current?.scrollTop || 0)
-  });
-
-  useEffect(() => {
-    setHoveredSelectedNode(null);
-  }, [selectedNodesIds]);
-
-  useEffect(() => {
-    if (!columns) {
-      return;
-    }
-    if (hoveredSelectedNode) {
-      const coordinates = getCoordinates(hoveredSelectedNode);
-      setMenuPos(coordinates);
-    } else {
-      // use some to stop iterating once its found
-      columns.some(column =>
-        column.values.some(node => {
-          const last = selectedNodesIds.length - 1;
-          if (node.id === selectedNodesIds[last]) {
-            const coordinates = getCoordinates(node);
-            setMenuPos(coordinates);
-            return true;
-          }
-          return false;
-        })
-      );
-    }
-  }, [selectedNodesIds, columns, isReExpand, hoveredSelectedNode]);
-
-  return [menuPos, ref, hoveredSelectedNode, setHoveredSelectedNode];
-}
-
-function useNodeRefHeight(ref) {
-  const [height, setHeight] = useState(undefined);
-  useEffect(() => {
-    if (ref.current) {
-      setHeight(ref.current.clientHeight);
-    }
-  }, [ref]);
-
-  return height;
-}
+  return classPath;
+};
 
 function Sankey(props) {
   const {
@@ -199,10 +60,12 @@ function Sankey(props) {
     onNodeHighlighted,
     selectedNodesIds,
     toolLayout,
-    extraColumnId
+    extraColumnId,
+    selectedContext
   } = props;
   const [hoveredLink, setHoveredLink] = useState(null);
   const [tooltipContent, setTooltipContent] = useState(null);
+  const [tooltipDisclaimer, setTooltipDisclaimer] = useState(null);
   const svgRef = useRef(null);
   const layoutRects = useRef([]);
   const getRect = layout => {
@@ -220,29 +83,6 @@ function Sankey(props) {
   ] = useMenuPosition(props);
   const menuOptions = useMenuOptions(props, hoveredSelectedNode);
   const placeholderHeight = useNodeRefHeight(scrollContainerRef);
-
-  const getLinkColor = link => {
-    let classPath = 'sankey-link';
-    if (selectedRecolorBy) {
-      if (link.recolorBy === null) {
-        return classPath;
-      }
-      let recolorBy = link.recolorBySlug || link.recolorBy;
-      if (selectedRecolorBy.divisor) {
-        recolorBy = Math.floor(link.recolorBy / selectedRecolorBy.divisor);
-      }
-      const legendTypeClass = selectedRecolorBy.legendType.toString().toLowerCase();
-      const legendColorThemeClass = selectedRecolorBy.legendColorTheme.toString().toLowerCase();
-      const { nodes } = selectedRecolorBy;
-      const recolorDefaultIndex = nodes.indexOf(link.recolorBy);
-
-      classPath = `${classPath} -recolorby-qual-default-${recolorDefaultIndex} -recolorby-${legendTypeClass}-${legendColorThemeClass}-${recolorBy}`;
-    } else {
-      classPath = `${classPath} -recolorgroup-${link.recolorGroup}`;
-    }
-
-    return classPath;
-  };
 
   const onLinkOver = (e, link) => {
     const rect = getRect(toolLayout);
@@ -292,15 +132,16 @@ function Sankey(props) {
     const scrollY = scrollContainerRef?.current?.scrollTop || 0;
     const tooltipPadding = 10;
     const minTooltipWidth = 180;
+
+    const resizeByItem = {
+      title: selectedResizeBy.label,
+      unit: selectedResizeBy.unit,
+      value: `${formatValue(nodeHeight.quant, selectedResizeBy.label)}`
+    };
+
     const tooltip = {
       text: node.name,
-      items: [
-        {
-          title: selectedResizeBy.label,
-          unit: selectedResizeBy.unit,
-          value: `${formatValue(nodeHeight.quant, selectedResizeBy.label)}`
-        }
-      ],
+      items: [resizeByItem],
       width: rect.width,
       height: rect.height,
       x:
@@ -310,13 +151,30 @@ function Sankey(props) {
           : node.x + sankeyColumnsWidth,
       y: node.y - tooltipPadding - scrollY
     };
-    // Importing countries (Country of import) should only show the trade volume on the tooltip
-    if (
-      nodeAttributes &&
-      selectedMapDimensions &&
-      selectedMapDimensions.length > 0 &&
-      node.type !== NODE_TYPES.country
-    ) {
+
+    const lastColumnNodeTypes = [
+      NODE_TYPES.country,
+      NODE_TYPES.countryOfDestination,
+      NODE_TYPES.economicBloc
+    ];
+    const hasDimensionSelected =
+      nodeAttributes && selectedMapDimensions && selectedMapDimensions.length > 0;
+
+    // Last column nodes should only show the trade volume on the tooltip
+    if (lastColumnNodeTypes.includes(node.type)) {
+      const associatedLinks = links.filter(l => l.targetNodeId === node.id);
+      const value = associatedLinks.reduce((acc, curr) => acc + curr.quant, 0);
+      const formattedValue = formatValue(value, selectedResizeBy.label);
+
+      tooltip.items = [
+        {
+          title: 'Selection volume',
+          unit: selectedResizeBy.unit,
+          value: formattedValue
+        },
+        { ...resizeByItem, title: 'Total volume' }
+      ];
+    } else if (hasDimensionSelected) {
       const nodeIndicators = selectedMapDimensions
         .map(dimension => {
           const meta = getNodeMeta(dimension, node, nodeAttributes, selectedResizeBy, nodeHeights);
@@ -340,10 +198,21 @@ function Sankey(props) {
         });
       }
     }
+
+    // Tooltip disclaimer only for Argentina Soy Other node
+    const { commodityName, countryName } = selectedContext;
+    if (commodityName === 'SOY' && countryName === 'ARGENTINA' && node.name === 'IMPORTS + STOCK') {
+      setTooltipDisclaimer(
+        'Sources include soybean imports from other countries and Argentina’s production that is part of the soybean stock'
+      );
+    } else {
+      setTooltipDisclaimer(null);
+    }
     // Country menu can be enabled if we have country profiles or other node is selected and we can expand
     const enabledCountryMenu =
       node.type === NODE_TYPES.countryOfProduction &&
       (selectedNodesIds.length || ENABLE_COUNTRY_PROFILES);
+
     if (selectedNodesIds.includes(node.id) || enabledCountryMenu) {
       setHoveredSelectedNode(node);
     }
@@ -363,7 +232,12 @@ function Sankey(props) {
     2 * sankeyColumnsWidth + 2 * gapBetweenColumns + sankeyColumnsWidth / 2;
   return (
     <div className={cx('c-sankey', { '-full-screen': toolLayout === TOOL_LAYOUT.right })}>
-      <UnitsTooltip {...tooltipContent} show={!!tooltipContent} />
+      <UnitsTooltip
+        {...tooltipContent}
+        disclaimer={tooltipDisclaimer}
+        className="tooltip-max-width"
+        show={!!tooltipContent}
+      />
       <div
         ref={scrollContainerRef}
         className={cx('sankey-scroll-container', { '-detailed': detailedView })}
@@ -415,7 +289,9 @@ function Sankey(props) {
                     link={link}
                     onMouseOut={onLinkOut}
                     onMouseOver={e => onLinkOver(e, link)}
-                    className={cx(getLinkColor(link), { '-hover': hoveredLink === link.id })}
+                    className={cx(getLinkColor(selectedRecolorBy, link), {
+                      '-hover': hoveredLink === link.id
+                    })}
                   />
                 ))}
               {loading && (
@@ -472,6 +348,7 @@ Sankey.propTypes = {
   gapBetweenColumns: PropTypes.number,
   nodeHeights: PropTypes.object,
   otherNodes: PropTypes.object,
+  selectedContext: PropTypes.object,
   nodeAttributes: PropTypes.object,
   selectedMapDimensions: PropTypes.array,
   onExpandClick: PropTypes.func.isRequired, // eslint-disable-line

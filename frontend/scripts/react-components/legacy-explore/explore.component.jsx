@@ -10,11 +10,10 @@ import SentenceSelector from 'react-components/shared/sentence-selector/sentence
 import Button from 'react-components/shared/button/button.component';
 import Heading from 'react-components/shared/heading/heading.component';
 import Text from 'react-components/shared/text/text.component';
-import { EXPLORE_COLUMN_LIST, TOOL_LAYOUT , BREAKPOINTS } from 'constants';
+import { EXPLORE_COLUMN_LIST, TOOL_LAYOUT, BREAKPOINTS } from 'constants';
 
 import useWindowSize from 'utils/hooks/useWindowSize';
 import NotSupportedComponent from 'react-components/mobile/not-supported.component';
-
 
 import 'scripts/react-components/legacy-explore/explore.scss';
 
@@ -43,7 +42,6 @@ function Explore(props) {
   }, [topNodesKey, selectedTableColumnType, getTableElements]);
 
   const { width } = useWindowSize();
-  console.log('-----', width);
   const units = useRef([
     {
       label: '%',

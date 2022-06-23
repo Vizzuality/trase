@@ -82,7 +82,12 @@ export const handleHover = ({
     if (source === INDONESIA_MILL_LAYER_ID) {
       const logisticsTooltipValues = [];
 
-      const logisticTooltipFields = [{ name: 'company' }, { name: 'uml_id' }];
+      const logisticTooltipFields = [
+        { name: 'company' },
+        { name: 'uml_id' },
+        { name: 'rspo_status' },
+        { name: 'rspo_type' }
+      ];
       logisticTooltipFields.forEach(l => {
         if (properties[l.name]) {
           logisticsTooltipValues.push({
@@ -105,7 +110,7 @@ export const handleHover = ({
       // Reset last and current tooltip
       hoveredGeo.set({});
       setTooltip(null);
-      updateTooltipValues(null);
+      // updateTooltipValues(null);
       clearHoveredFeatureState('hover');
     }
   }
@@ -123,7 +128,6 @@ export const handleClick = ({ event, onPolygonClicked, sourceLayer }) => {
   const notSelectableGeometry = target.classList?.contains('-disabled');
   if (notSelectableGeometry) return;
   if (geoFeature?.properties) {
-    console.log('hi', geoFeature?.properties);
     onPolygonClicked(geoFeature.properties.geoid);
   }
 };

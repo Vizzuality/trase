@@ -112,4 +112,8 @@ $columns-selector-group-height: 50px;
     padding: 10px 8px;
     transform: translate(-50%, -50%);
   }
+
+  .tooltip-max-width {
+    max-width: 300px;
+  }
 }

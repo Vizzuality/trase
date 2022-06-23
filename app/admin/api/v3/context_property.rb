@@ -2,7 +2,7 @@ ActiveAdmin.register Api::V3::ContextProperty, as: 'ContextProperty' do
   menu parent: 'General', priority: 2
 
   permit_params :context_id, :default_basemap, :is_disabled, :is_default,
-                :is_highlighted
+                :is_highlighted, :subnational_years_str
 
   after_action :clear_cache, only: [:create, :update, :destroy]
 
@@ -26,6 +26,8 @@ ActiveAdmin.register Api::V3::ContextProperty, as: 'ContextProperty' do
                          hint: object.class.column_comment('is_default')
       input :is_highlighted, as: :boolean, required: true,
                              hint: object.class.column_comment('is_highlighted')
+      input :subnational_years_str, label: 'Subnational years',
+                        hint: (object.class.column_comment('subnational_years') || '') + ' (comma-separated list)'
     end
     f.actions
   end
@@ -36,6 +38,7 @@ ActiveAdmin.register Api::V3::ContextProperty, as: 'ContextProperty' do
     column :is_disabled
     column :is_default
     column :is_highlighted
+    column :subnational_years
     actions
   end
 

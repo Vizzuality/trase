@@ -2265,7 +2265,8 @@ CREATE TABLE public.context_properties (
     is_default boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    is_highlighted boolean
+    is_highlighted boolean,
+    subnational_years integer[]
 );
 
 
@@ -2536,7 +2537,7 @@ CREATE VIEW public.contexts_v AS
     contexts.country_id,
     contexts.commodity_id,
     contexts.years,
-    contexts.subnational_years,
+    context_properties.subnational_years,
     contexts.default_year,
     commodities.name AS commodity_name,
     countries.name AS country_name,
@@ -2545,7 +2546,7 @@ CREATE VIEW public.contexts_v AS
     context_properties.is_disabled,
     context_properties.is_default,
         CASE
-            WHEN ((contexts.subnational_years IS NOT NULL) AND (public.icount(contexts.subnational_years) > 0)) THEN true
+            WHEN ((context_properties.subnational_years IS NOT NULL) AND (public.icount(context_properties.subnational_years) > 0)) THEN true
             ELSE false
         END AS is_subnational,
     context_properties.is_highlighted,
@@ -10431,6 +10432,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20211025074516'),
 ('20211202112544'),
 ('20211202222956'),
-('20220318110509');
+('20220318110509'),
+('20220530131615');
 
 

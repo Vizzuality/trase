@@ -35,25 +35,27 @@ function App() {
   }, []);
 
   return (
-    <Suspense fallback={null}>
-      <SeoHandler />
-      <nav>
-        <TopNav />
-      </nav>
-      <main>
-        <Component key={pageKey} content={layout && layout(pageContent[type])} />
-        {!isInIframe && <CookieBanner />}
-        {isInIframe && <FullScreenButton />}
-        {feedback && <Feedback />}
-      </main>
+    <>
+      <Suspense fallback={null}>
+        <SeoHandler />
+        <nav>
+          <TopNav />
+        </nav>
+        <main>
+          <Component key={pageKey} content={layout && layout(pageContent[type])} />
+          {!isInIframe && <CookieBanner />}
+          {isInIframe && <FullScreenButton />}
+          {feedback && <Feedback />}
+        </main>
 
-      {footer && (
-        <footer>
-          <Footer />
-        </footer>
-      )}
-      <div id="recharts-tooltip-portal" />
-    </Suspense>
+        {footer && (
+          <footer>
+            <Footer />
+          </footer>
+        )}
+        <div id="recharts-tooltip-portal" />
+      </Suspense>
+    </>
   );
 }
 

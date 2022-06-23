@@ -13,6 +13,7 @@ import {
   getLastSelectedNodeLink,
   getToolColumns
 } from 'react-components/tool/sankey/sankey.selectors';
+import { getSelectedContext } from 'app/app.selectors';
 import { connect } from 'react-redux';
 import Sankey from 'react-components/tool/sankey/sankey.component';
 import { toolLinksActions } from 'react-components/tool-links/tool-links.register';
@@ -46,7 +47,8 @@ const mapStateToProps = state => ({
   selectedMapDimensions: getSelectedMapDimensionsData(state),
   toolLayout: state.toolLayers.toolLayout,
   extraColumnId: (getHasExtraColumn(state) && state.toolLinks.extraColumn?.id) || null,
-  extraColumnNodeId: state.toolLinks.extraColumnNodeId
+  extraColumnNodeId: state.toolLinks.extraColumnNodeId,
+  selectedContext: getSelectedContext(state)
 });
 
 const mapDispatchToProps = {
