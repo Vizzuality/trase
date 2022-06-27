@@ -50,72 +50,20 @@ export const getCTAData = (version, contexts) => {
   };
 
   return {
-    20213: {
+    20222: {
       text: (
         <Text className="cta-text" variant="sans" size="lg">
           {' '}
-          We released new national level data for Argentina (
-          {contextLink({ text: 'Soy', commodityName: 'SOY', countryName: 'ARGENTINA' })}
-          {', '} {contextLink({ text: 'Corn', commodityName: 'CORN', countryName: 'ARGENTINA' })}
-          {', '}
+          We released updated sub-national level data for{' '}
           {contextLink({
-            text: 'Cotton',
-            commodityName: 'COTTON',
-            countryName: 'ARGENTINA'
-          })}
-          {', '}{' '}
-          {contextLink({
-            text: 'Wood Pulp',
-            commodityName: 'WOOD PULP',
-            countryName: 'ARGENTINA'
-          })}
-          {'), '}
-          {contextLink({
-            text: 'Bolivian Soy',
+            text: `Argentina Soy`,
             commodityName: 'SOY',
-            countryName: 'BOLIVIA'
-          })}
-          {', and  '}
-          {contextLink({
-            text: 'Indonesian Shrimp',
-            commodityName: 'SHRIMP',
-            countryName: 'INDONESIA'
+            countryName: `ARGENTINA`
           })}
           .
         </Text>
       ),
-      releaseNotesText: releaseNotesText(3, 2021)
-    },
-    20214: {
-      text: (
-        <Text className="cta-text" variant="sans" size="lg">
-          {' '}
-          We released new sub-national level data for {' '}
-          {contextLink({
-            text: 'Paraguay Corn ',
-            commodityName: 'CORN',
-            countryName: 'PARAGUAY'
-          })}
-          {', and  '}
-          {contextLink({
-            text: `Côte d'Ivoire Cocoa`,
-            commodityName: 'COCOA',
-            countryName: `COTE D'IVOIRE`
-          })}
-          .
-        </Text>
-      ),
-      releaseNotesText: releaseNotesText(4, 2021)
-    },
-    20221: {
-      text: (
-        <Text className="cta-text" variant="sans" size="lg">
-          {' '}
-          We released design updates to Supply Chains frontend and worked on some backend
-          improvements.
-        </Text>
-      ),
-      releaseNotesText: releaseNotesText(1, 2022)
+      releaseNotesText: releaseNotesText(2, 2022)
     }
   }[version];
 };
