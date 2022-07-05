@@ -100,6 +100,8 @@ export const handleHover = ({
 
       updateTooltipValues(logisticsTooltipValues);
       setTooltip({ x: center.x, y: center.y, name: id, values: properties });
+
+      return undefined;
     }
 
     const node = highlightedNodesData[0];
