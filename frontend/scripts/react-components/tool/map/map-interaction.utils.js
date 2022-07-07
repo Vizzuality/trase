@@ -86,7 +86,11 @@ export const handleHover = ({
         { name: 'company' },
         { name: 'uml_id' },
         { name: 'rspo_status' },
-        { name: 'rspo_type' }
+        { name: 'rspo_type' },
+        { name: 'ispo_certified' },
+        { name: 'rspo_certified_2018' },
+        { name: 'rspo_certified_2019' },
+        { name: 'rspo_certified_2020' }
       ];
       logisticTooltipFields.forEach(l => {
         if (properties[l.name]) {
