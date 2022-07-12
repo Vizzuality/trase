@@ -64,6 +64,37 @@ export const getCTAData = (version, contexts) => {
         </Text>
       ),
       releaseNotesText: releaseNotesText(2, 2022)
+    },
+    202221: {
+      fixed: true,
+      text: (
+        <Text className="cta-text cta-text-fixed" variant="sans" size="lg" weight="bold">
+          Explore, display and download Trase data in a new, easy-to-use way.
+        </Text>
+      ),
+      releaseNotesText: (
+        <Text className="release-notes-text" variant="sans" size="lg" weight="bold" as="div">
+          <span>Try the beta version of </span>
+          <a
+            href="http://explore.trase.earth/"
+            title="Trase Data Explorer link"
+            target="__blank"
+            rel="noopener noreferrer"
+          >
+            <Text
+              color="pink"
+              weight="bold"
+              decoration="underline"
+              className="link-text"
+              variant="sans"
+              size="lg"
+            >
+              Trase Data Explorer
+            </Text>
+          </a>
+          <span className="with-margin-left"> and let us know what you think.</span>
+        </Text>
+      )
     }
   }[version];
 };
