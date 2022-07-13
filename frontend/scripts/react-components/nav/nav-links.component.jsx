@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { NavLink } from 'redux-first-router-link';
 
 function mapLinksToRouter(link) {
-  return typeof link.page === 'string' && link.external !== true
+  return typeof link.page === 'string' && !link.external
     ? { ...link, page: { type: link.page, payload: {} } }
     : link;
 }
@@ -32,10 +32,11 @@ const NavLinks = props => {
             <a
               href={link.page}
               className={link.linkClassName || linkClassName}
-              target="_blank"
+              target={link.target || '_blank'}
               rel="noopener noreferrer"
             >
               {link.children || link.name}
+              {link.subtitle && <span className={link.subtitleClassName}>{link.subtitle}</span>}
             </a>
           )}
           {!link.external && (

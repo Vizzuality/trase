@@ -78,7 +78,6 @@ export const getCTAData = (version, contexts) => {
           <a
             href="http://explore.trase.earth/"
             title="Trase Data Explorer link"
-            target="__blank"
             rel="noopener noreferrer"
           >
             <Text
