@@ -96,7 +96,7 @@ $menuOffset: 15vh;
 
       .nav-menu-main-navigation {
         width: auto;
-        max-width: 600px;
+        max-width: 740px;
 
         @media screen and (min-width: $breakpoint-laptop) {
           flex: 1;
@@ -116,7 +116,15 @@ $menuOffset: 15vh;
         justify-content: space-around;
 
         .top-nav-link {
-          font-size: $font-size-xx-regular;
+          font-size: $font-size-small;
+
+          @media screen and (min-width: $breakpoint-mobile) {
+            font-size: $font-size-x-regular
+          }
+
+          @media screen and (min-width: $breakpoint-tablet) {
+            font-size: $font-size-xx-regular;
+          }
         }
       }
     }
@@ -528,5 +536,11 @@ $menuOffset: 15vh;
 
   .icon-download-pdf {
     stroke: gray;
+  }
+
+  .beta {
+    color: $strong-pink;
+    margin-left: 5px;
+    font-size: $font-size-regular;
   }
 }

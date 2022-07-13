@@ -1,6 +1,16 @@
 import { TOOL_LAYOUT } from 'constants';
 
-const supplyChainNavs = [];
+const supplyChainNavs = [
+  {
+    name: 'Data Explorer',
+    subtitle: 'beta',
+    external: true,
+    target: '_parent',
+    page: 'https://explore.trase.earth/',
+    subtitleClassName: 'beta'
+  }
+];
+
 if (ENABLE_TOOL_PANEL) {
   supplyChainNavs.push({
     name: 'Data Tools',

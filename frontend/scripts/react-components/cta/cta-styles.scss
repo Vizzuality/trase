@@ -60,7 +60,19 @@
     }
   }
 
+  .cta-main-text-fixed  {
+    padding: 20px 0;
+
+    @media screen and (min-width: $breakpoint-foundation-medium) {
+      padding: 0 0 10px;
+    }
+  }
+
   .link-text {
+    margin-left: 5px;
+  }
+
+  .with-margin-left {
     margin-left: 5px;
   }
 }
