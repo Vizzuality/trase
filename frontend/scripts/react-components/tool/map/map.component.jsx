@@ -226,13 +226,6 @@ function Map(props) {
     }
   }, [unitLayersNotInMap, setLayersLoading, layersLoading]);
 
-  console.log('unitLayersNotInMap', {
-    layersLoading,
-    unitLayersNotInMap,
-    layers: map && map.getStyle().layers,
-    sourceLayer
-  });
-
   const orderedLayers = layers.map(l => ({ ...l, zIndex: layerOrder[l.id] }));
   const minimized = toolLayout === TOOL_LAYOUT.right;
   return (

@@ -99,12 +99,6 @@ const MapContainer = props => {
       !isEqual(selectedMapDimensions, previousSelectedMapDimensions) &&
       selectedMapDimensions.filter(Boolean).length > 0
     ) {
-      console.log(
-        `%cmapdimensionschanged`,
-        'font-size: 12px; color: green; font-weight: bold',
-        selectedMapDimensions,
-        previousSelectedMapDimensions
-      );
       loadMapChoropleth();
     }
   }, [selectedMapDimensions, loadMapChoropleth, previousSelectedMapDimensions]);

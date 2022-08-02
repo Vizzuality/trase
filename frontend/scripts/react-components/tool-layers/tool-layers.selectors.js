@@ -73,12 +73,10 @@ export const getSelectedGeoColumn = createSelector(
 export const getSelectedMapDimensionsUids = createSelector(
   [getSelectedGeoColumn, getToolMapDimensions, getToolSelectedMapDimensions],
   (selectedGeoColumn, mapDimensions, selectedMapDimensions) => {
-    console.log(
-      'getSelectedMapDimensionsUids',
-      selectedGeoColumn,
-      mapDimensions,
-      selectedMapDimensions
-    );
+    if (!selectedGeoColumn || selectedGeoColumn.isChoroplethDisabled) {
+      return [null, null];
+    }
+
     if (selectedGeoColumn && selectedGeoColumn.isChoroplethDisabled === false) {
       const allAvailableMapDimensionsUids = new Set(Object.keys(mapDimensions));
       const selectedMapDimensionsSet = new Set(selectedMapDimensions?.filter(Boolean));
@@ -125,14 +123,6 @@ export const getChoroplethOptions = createSelector(
     getToolMapDimensions
   ],
   (selectedMapDimensions, nodes, attributes, selectedColumnsIds, columns, mapDimensions) => {
-    console.log('getChoroplethOptions', {
-      nodes,
-      attributes,
-      columns,
-      mapDimensions,
-      selectedMapDimensions
-    });
-
     if (!nodes || !attributes || !columns) {
       return { choropleth: {}, choroplethLegend: null };
     }
