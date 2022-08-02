@@ -41,7 +41,7 @@ const hoveredGeo = {
   }
 };
 
-function MapBoxMap(props) {
+function Map(props) {
   const {
     defaultMapView,
     toolLayout,
@@ -291,7 +291,7 @@ function MapBoxMap(props) {
   );
 }
 
-MapBoxMap.propTypes = {
+Map.propTypes = {
   defaultMapView: PropTypes.object,
   toolLayout: PropTypes.number,
   basemapId: PropTypes.string,
@@ -313,8 +313,8 @@ MapBoxMap.propTypes = {
   setMap: PropTypes.func
 };
 
-MapBoxMap.defaultProps = {
+Map.defaultProps = {
   bounds: {}
 };
 
-export default MapBoxMap;
+export default Map;
