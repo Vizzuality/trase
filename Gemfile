@@ -95,7 +95,7 @@ group :development do
   gem 'capistrano-rails', '~> 1.6', require: false
   gem 'capistrano-rvm'
   gem 'ed25519', '~> 1.2'
-  gem 'rubocop', '~> 1.15.0', require: false
+  gem 'rubocop', '~> 1.33.0', require: false
   gem 'rubocop-performance', require: false
 end
 
