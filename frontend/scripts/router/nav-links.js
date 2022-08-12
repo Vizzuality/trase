@@ -6,7 +6,7 @@ const supplyChainNavs = [
     subtitle: 'beta',
     external: true,
     target: '_parent',
-    page: 'https://explore.trase.earth/',
+    page: 'https://explore.trase.earth/?utm_source=supply-chains-navbar',
     subtitleClassName: 'beta'
   }
 ];
