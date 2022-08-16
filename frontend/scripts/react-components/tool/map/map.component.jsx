@@ -41,7 +41,7 @@ const hoveredGeo = {
   }
 };
 
-function MapBoxMap(props) {
+function Map(props) {
   const {
     defaultMapView,
     toolLayout,
@@ -226,13 +226,6 @@ function MapBoxMap(props) {
     }
   }, [unitLayersNotInMap, setLayersLoading, layersLoading]);
 
-  console.log('unitLayersNotInMap', {
-    layersLoading,
-    unitLayersNotInMap,
-    layers: map && map.getStyle().layers,
-    sourceLayer
-  });
-
   const orderedLayers = layers.map(l => ({ ...l, zIndex: layerOrder[l.id] }));
   const minimized = toolLayout === TOOL_LAYOUT.right;
   return (
@@ -291,7 +284,7 @@ function MapBoxMap(props) {
   );
 }
 
-MapBoxMap.propTypes = {
+Map.propTypes = {
   defaultMapView: PropTypes.object,
   toolLayout: PropTypes.number,
   basemapId: PropTypes.string,
@@ -313,8 +306,8 @@ MapBoxMap.propTypes = {
   setMap: PropTypes.func
 };
 
-MapBoxMap.defaultProps = {
+Map.defaultProps = {
   bounds: {}
 };
 
-export default MapBoxMap;
+export default Map;

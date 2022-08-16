@@ -1,7 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
-import { selectNodeFromGeoId, highlightNodeFromGeoId } from 'react-components/tool/tool.actions';
+import isEqual from 'lodash/isEqual';
+import {
+  selectNodeFromGeoId,
+  highlightNodeFromGeoId,
+  loadMapChoropleth as loadMapChoroplethAction
+} from 'react-components/tool/tool.actions';
 import { toolLayersActions } from 'react-components/tool-layers/tool-layers.register';
+
 import {
   getHighlightedNodesData,
   getSelectedColumnsIds,
@@ -26,10 +33,20 @@ import {
   getSelectedMapContextualLayersData,
   getShouldFitBoundsSelectedPolygons,
   getMapDimensionsWarnings,
+  getSelectedMapDimensionsUids,
   getSelectedUnitLayers
 } from 'react-components/tool-layers/tool-layers.selectors';
 import { getSelectedContext } from 'app/app.selectors';
 import MapComponent from 'react-components/tool/map/map.component';
+
+function usePrevious(value) {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = value;
+  }, [value]);
+  // Return previous value (happens before update in useEffect above)
+  return ref.current;
+}
 
 const mapStateToProps = state => {
   const { choropleth } = getChoroplethOptions(state);
@@ -59,28 +76,39 @@ const mapStateToProps = state => {
     unitLayers: getSelectedUnitLayers(state),
     countryName: getCountryName(state),
     contextualLayers: getContextualLayers(state),
-    logisticLayers: getLogisticLayers(state)
+    logisticLayers: getLogisticLayers(state),
+    selectedMapDimensions: getSelectedMapDimensionsUids(state)
   };
 };
 
 const mapDispatchToProps = {
   onPolygonClicked: geoId => selectNodeFromGeoId(geoId),
   onPolygonHighlighted: (geoId, coordinates) => highlightNodeFromGeoId(geoId, coordinates),
-  onMoveEnd: (latlng, zoom) => toolLayersActions.saveMapView(latlng, zoom)
+  onMoveEnd: (latlng, zoom) => toolLayersActions.saveMapView(latlng, zoom),
+  loadMapChoropleth: loadMapChoroplethAction
 };
 
-const MapContainer = (props) => {
+const MapContainer = props => {
   const [map, setMap] = useState(null);
-  return React.createElement(
-    MapComponent,
-    {...props,
-      map,
-      setMap
-    },
-    )
+  const { selectedMapDimensions, loadMapChoropleth } = props;
+  const previousSelectedMapDimensions = usePrevious(selectedMapDimensions);
+
+  // Make sure we load the choropleth when the dimensions update. This fixes a race condition
+  useEffect(() => {
+    if (
+      !isEqual(selectedMapDimensions, previousSelectedMapDimensions) &&
+      selectedMapDimensions.filter(Boolean).length > 0
+    ) {
+      loadMapChoropleth();
+    }
+  }, [selectedMapDimensions, loadMapChoropleth, previousSelectedMapDimensions]);
+
+  return React.createElement(MapComponent, { ...props, map, setMap });
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(MapContainer);
+MapContainer.propTypes = {
+  loadMapChoropleth: PropTypes.func.isRequired,
+  selectedMapDimensions: PropTypes.array
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MapContainer);

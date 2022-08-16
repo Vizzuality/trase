@@ -76,7 +76,7 @@ export const getCTAData = (version, contexts) => {
         <Text className="release-notes-text" variant="sans" size="lg" weight="bold" as="div">
           <span>Try the beta version of </span>
           <a
-            href="http://explore.trase.earth/"
+            href="http://explore.trase.earth/?utm_source=supply-chains-banner"
             title="Trase Data Explorer link"
             rel="noopener noreferrer"
           >
