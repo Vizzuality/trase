@@ -16,7 +16,7 @@ on:
 jobs:
   gh_pages:
     name: DB and API docs
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     services:
       postgres:
         image: postgres:11
@@ -79,7 +79,7 @@ jobs:
 
   surge:
     name: FE and BE docs
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
       - name: Publish to trase.surge.sh 🚀
         uses: dswistowski/surge-sh-action@v1
@@ -88,4 +88,3 @@ jobs:
           project: './frontend/docs/'
           login: ${{ secrets.SURGE_LOGIN }}
           token: ${{ secrets.SURGE_TOKEN }}
-

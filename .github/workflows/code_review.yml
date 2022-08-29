@@ -8,7 +8,7 @@ on:
 jobs:
   rubo_cop:
     name: RuboCop
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v1
@@ -20,7 +20,7 @@ jobs:
 
   # brakeman:
   #   name: Brakeman
-  #   runs-on: ubuntu-18.04
+  #   runs-on: ubuntu-latest
   #   steps:
   #     - name: Checkout 🛎️
   #       uses: actions/checkout@v2

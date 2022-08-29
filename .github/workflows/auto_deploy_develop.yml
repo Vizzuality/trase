@@ -15,7 +15,7 @@ on:
 jobs:
   front_end:
     name: Front end tests and build
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./frontend
@@ -33,7 +33,7 @@ jobs:
         run: yarn build
   rspec:
     name: RSpec
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     services:
       postgres:
         image: postgres:11
@@ -101,7 +101,7 @@ jobs:
   staging:
     needs: [rspec, front_end]
     name: Deploy to staging
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout 🛎️
@@ -131,7 +131,7 @@ jobs:
   sandbox:
     needs: [rspec, front_end]
     name: Deploy to sandbox
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout 🛎️
