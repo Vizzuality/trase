@@ -6,9 +6,6 @@ export default function(visibleNodesByColumn, nodeHeights) {
   };
 
   const byHeightOthersLast = (nodeA, nodeB) => {
-    if (nodeA.name && nodeA.name.startsWith('UNKNOWN')) {
-      console.log(nodeA, nodeB);
-    }
     if (nodeA.isDomesticConsumption || nodeB.isDomesticConsumption) {
       if (nodeA.isDomesticConsumption) {
         return 1;
