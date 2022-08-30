@@ -53,6 +53,7 @@ module.exports = {
       NODE_ENV_DEV: process.env.NODE_ENV === 'development',
       ENABLE_COUNTRY_PROFILES: process.env.ENABLE_COUNTRY_PROFILES === 'true',
       ENABLE_LOGISTIC_LAYERS_TAB: process.env.ENABLE_LOGISTIC_LAYERS_TAB === 'true',
+      DISABLE_TOOL_RANGE: process.env.DISABLE_TOOL_RANGE === 'true',
       ENABLE_GOOGLE_TRANSLATE: process.env.ENABLE_GOOGLE_TRANSLATE === 'true',
       CURRENT_CTA_VERSION: JSON.stringify(process.env.CURRENT_CTA_VERSION),
       ENABLE_INTERSECTION_OBSERVER: process.env.ENABLE_INTERSECTION_OBSERVER === 'true',
