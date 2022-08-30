@@ -6,6 +6,7 @@ import ModalContainer from 'react-components/tool/story-modal/story-modal.contai
 import SplittedView from 'react-components/tool/splitted-view';
 import MapBoxMap from 'react-components/tool/map/map';
 import Timeline from 'react-components/tool/timeline';
+import TimelineLegacy from 'react-components/tool/timeline-legacy';
 import ToolBar from 'react-components/shared/tool-bar';
 import UrlSerializer from 'react-components/shared/url-serializer';
 import useWindowSize from 'utils/hooks/useWindowSize';
@@ -51,6 +52,8 @@ function renderDataView() {
     </Suspense>
   );
 }
+
+const TimelineComponent = DISABLE_TOOL_RANGE ? Timeline : TimelineLegacy;
 
 const Tool = props => {
   const {
@@ -100,7 +103,7 @@ const Tool = props => {
               rightSlot={section === 'data-view' ? renderDataView() : renderSankeyView()}
             />
           </div>
-          <Timeline
+          <TimelineComponent
             {...toolYearProps}
             showBackground={section === 'data-view'}
             selectYears={selectYears}
