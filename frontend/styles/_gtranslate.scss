@@ -3,7 +3,10 @@
   margin-left: 9px;
 }
 
-
-// :global .goog-te-combo {
-//   max-width: 50px;
-// }
+// Remove top google translate navbar
+.goog-te-banner-frame.skiptranslate {
+  display: none !important;
+}
+body {
+  top: 0px !important;
+}

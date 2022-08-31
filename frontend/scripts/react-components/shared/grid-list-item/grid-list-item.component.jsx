@@ -45,76 +45,74 @@ function GridListItem(props) {
   const testId = item.name && item.name.split(' ').join('-');
   const isToggleAll = item.id === 'TOGGLE_ALL';
   return (
-    <React.Fragment>
-      <div
-        style={style}
-        className={cx('c-grid-list-item', {
-          [`v-${variant}`]: variant,
-          [`color-${color}`]: color
-        })}
-      >
-        {isGroup && (
-          <Heading as="h3" weight="regular" className="grid-list-item-heading">
-            {item.name}
-          </Heading>
-        )}
-        {!isGroup && (
-          <div
-            className="grid-list-item-content"
-            data-test={isToggleAll ? 'grid-list-item-toggle-all' : 'grid-list-item-button'}
+    <div
+      style={style}
+      key={`grid-list-item-${item.id}`}
+      className={cx('c-grid-list-item', {
+        [`v-${variant}`]: variant,
+        [`color-${color}`]: color
+      })}
+    >
+      {isGroup && (
+        <Heading as="h3" weight="regular" className="grid-list-item-heading">
+          {item.name}
+        </Heading>
+      )}
+      {!isGroup && (
+        <div
+          className="grid-list-item-content"
+          data-test={isToggleAll ? 'grid-list-item-toggle-all' : 'grid-list-item-button'}
+        >
+          <WrapWithTooltip
+            tooltip={tooltip}
+            wrap={tooltip && tooltipCover && !ENABLE_GOOGLE_TRANSLATE}
           >
-            <WrapWithTooltip tooltip={tooltip} wrap={tooltip && tooltipCover}>
-              <button
-                type="button"
-                disabled={isDisabled}
-                onClick={isToggleAll ? item.setExcludingMode : () => onClick(item)}
-                onMouseEnter={onHover && !isToggleAll ? () => onHover(item) : undefined}
-                onMouseLeave={onHover && !isToggleAll ? () => onHover(null) : undefined}
-                className={cx('grid-list-item-button', {
-                  '-active': !isToggleAll && isActive,
-                  '-has-info': !isToggleAll && !!tooltip && !tooltipCover
-                })}
-                data-test={`grid-list-item-button-${testId}`}
+            <button
+              type="button"
+              disabled={isDisabled}
+              onClick={isToggleAll ? item.setExcludingMode : () => onClick(item)}
+              onMouseEnter={onHover && !isToggleAll ? () => onHover(item) : undefined}
+              onMouseLeave={onHover && !isToggleAll ? () => onHover(null) : undefined}
+              className={cx('grid-list-item-button', {
+                '-active': !isToggleAll && isActive,
+                '-has-info': !isToggleAll && !!tooltip && !tooltipCover
+              })}
+              data-test={`grid-list-item-button-${testId}`}
+            >
+              <Text
+                as="p"
+                variant="sans"
+                weight="bold"
+                align={variant === 'profiles' ? 'left' : 'center'}
+                title={item.name}
+                transform="capitalize"
+                className="grid-list-item-text"
               >
-                <Text
-                  as="p"
-                  variant="sans"
-                  weight="bold"
-                  align={variant === 'profiles' ? 'left' : 'center'}
-                  title={item.name}
-                  transform="capitalize"
-                  className="grid-list-item-text"
-                >
-                  {item.name}
-                </Text>
-              </button>
-            </WrapWithTooltip>
-            {tooltip && !tooltipCover && (
-              <div
-                className={cx('grid-list-item-info', {
-                  '-item-active': !isToggleAll && isActive,
-                  '-active': isInfoActive
-                })}
-                disabled={isDisabled}
-              >
-                <HelpTooltip
-                  text={tooltip}
-                  referenceComponent={forwardRef((_, ref) => (
-                    <button
-                      ref={ref}
-                      type="button"
-                      onClick={() => onInfoClick && onInfoClick(item)}
-                    >
-                      i
-                    </button>
-                  ))}
-                />
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-    </React.Fragment>
+                {item.name}
+              </Text>
+            </button>
+          </WrapWithTooltip>
+          {tooltip && !tooltipCover && (
+            <div
+              className={cx('grid-list-item-info', {
+                '-item-active': !isToggleAll && isActive,
+                '-active': isInfoActive
+              })}
+              disabled={isDisabled}
+            >
+              <HelpTooltip
+                text={tooltip}
+                referenceComponent={forwardRef((_, ref) => (
+                  <button ref={ref} type="button" onClick={() => onInfoClick && onInfoClick(item)}>
+                    i
+                  </button>
+                ))}
+              />
+            </div>
+          )}
+        </div>
+      )}
+    </div>
   );
 }
 

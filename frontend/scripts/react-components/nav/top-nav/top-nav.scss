@@ -16,10 +16,6 @@ $menuOffset: 15vh;
   z-index: $z-nav;
   transition: all 50ms ease-in;
 
-  &.with-google-translate {
-    margin-top: 35px;
-  }
-
   .locale-selector-selected-item,
   .locale-selector-menu-item {
     color: $gray-300;
