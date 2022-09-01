@@ -19,9 +19,9 @@ $menuOffset: 15vh;
   .locale-selector-selected-item,
   .locale-selector-menu-item {
     color: $gray-300;
-    font-family: $font-family-1;
-    font-size: $font-size-xx-regular;
-    font-weight: $font-weight-bold;
+    font-family: $font-family-3;
+    font-size: $font-size-x-regular;
+    font-weight: $font-weight-regular;
     text-transform: uppercase;
   }
 
@@ -55,9 +55,9 @@ $menuOffset: 15vh;
     .top-nav-link,
     .locale-selector-selected-item {
       color: $gray-300;
-      font-family: $font-family-1;
-      font-size: $font-size-xx-regular;
-      font-weight: $font-weight-bold;
+      font-family: $font-family-3;
+      font-size: $font-size-x-regular;
+      font-weight: $font-weight-regular;
     }
 
     .locale-selector-selected-item:after {
@@ -89,6 +89,7 @@ $menuOffset: 15vh;
       justify-content: space-between;
       align-items: center;
       height: 100%;
+      background-color: $white;
 
       .nav-menu-main-navigation {
         width: auto;
@@ -205,9 +206,9 @@ $menuOffset: 15vh;
     display: inline-block;
     transform: translateY(-5px);
     color: $gray-300;
-    font-family: $font-family-1;
-    font-size: $font-size-xx-regular;
-    font-weight: $font-weight-bold;
+    font-family: $font-family-3;
+    font-size: $font-size-x-regular;
+    font-weight: $font-weight-regular;
   }
 
   .top-nav-item-list {
@@ -234,9 +235,9 @@ $menuOffset: 15vh;
   .top-nav-item-collapse {
     display: block;
     padding: 12px 0px;
-    font-family: $font-family-1;
-    font-size: $font-size-xx-regular;
-    font-weight: $font-weight-bold;
+    font-family: $font-family-3;
+    font-size: $font-size-x-regular;
+    font-weight: $font-weight-regular;
     letter-spacing: 0.5px;
 
     .c-locale-selector {
@@ -258,7 +259,7 @@ $menuOffset: 15vh;
 
   .top-nav-logo {
     transform: translate(0, -1px);
-    margin-left: 10px;
+    margin: 2px 0 0 10px;
 
     @media screen and (min-width: $breakpoint-tablet) {
       margin-left: 0;
