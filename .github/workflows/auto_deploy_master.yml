@@ -87,6 +87,8 @@ jobs:
           bundle exec rails db:migrate RAILS_ENV=test
 
       - name: Setup code coverage
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         run: cc-test-reporter before-build
 
       - name: Run tests 🔧
@@ -98,6 +100,8 @@ jobs:
         run: bundle exec rspec spec --fail-fast
 
       - name: Publish code coverage 🚀
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         run: cc-test-reporter after-build
 
   demo:
