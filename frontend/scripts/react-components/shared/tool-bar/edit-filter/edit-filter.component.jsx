@@ -11,10 +11,10 @@ function EditFilter(props) {
 
   return (
     <button onClick={() => onClick(id)} className={cx('c-edit-filter', className)}>
-      <Text as="span" size="sm" variant="mono" transform="uppercase" className="options-menu-label">
+      <Text as="span" size="sm" variant="sans" transform="uppercase" className="options-menu-label">
         {label}
       </Text>
-      <Heading as="h2" color="white" weight="bold" size="md" className="edit-title">
+      <Heading as="h2" color="white" weight="bold" size="rg" className="edit-title">
         <span className="title-text">{title}</span>
         {subtitle && (
           <Heading as="span" color="white" size="sm" weight="bold" className="edit-subtitle">

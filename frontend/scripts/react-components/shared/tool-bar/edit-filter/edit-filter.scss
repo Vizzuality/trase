@@ -22,14 +22,17 @@
   }
 
   &.-hovered {
+    background-color: $green-200;
+
+    .options-menu-label,
     .title-text {
-      text-decoration: underline;
+      color: $gray-500;
     }
   }
 
   .options-menu-label {
     display: block;
-    color: rgba($white, 0.6);
-    margin-top: 4px;
+    color: $gray-300;
+    margin-top: 7px;
   }
 }
