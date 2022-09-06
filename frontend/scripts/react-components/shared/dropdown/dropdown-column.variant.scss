@@ -5,12 +5,22 @@
   background-color: $white;
   box-shadow: $box-shadow;
   border-radius: 4px;
-  padding: 7px 5px;
+  padding: 12px 16px;
   white-space: nowrap;
 
   .dropdown-selected-item {
     &::after {
       border-color: $charcoal-grey-faded;
+    }
+  }
+
+  .dropdown-menu-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+
+    &.-highlighted {
+      background-color: $green-200;
     }
   }
 

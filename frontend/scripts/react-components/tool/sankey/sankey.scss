@@ -5,7 +5,7 @@ $columns-selector-group-height: 50px;
 .c-sankey {
   position: relative;
   height: calc(100% - #{$columns-selector-group-height});
-  margin: 0 $sankey-x-margin;
+  margin-left: $sankey-x-margin;
 
   .sankey-scroll-container {
     width: 100%;
@@ -27,7 +27,7 @@ $columns-selector-group-height: 50px;
 
     .sankey-node-rect {
       fill: $white-two;
-      stroke: $pinkish-grey-two;
+      stroke: $gray-100;
       stroke-width: 1px;
     }
 
@@ -57,13 +57,13 @@ $columns-selector-group-height: 50px;
     &.-selected {
       .sankey-node-rect {
         fill: $white;
-        stroke: $charcoal-grey;
+        stroke: $gray-100;
       }
     }
 
     &.-highlighted {
       .sankey-node-rect {
-        fill: $manilla;
+        fill: $green-200;
       }
     }
   }
@@ -71,7 +71,7 @@ $columns-selector-group-height: 50px;
   .sankey-links .sankey-link {
     opacity: 0.1;
     fill: none;
-    stroke: $charcoal-grey;
+    stroke: $gray-500;
 
     &.-hover {
       opacity: 0.7;
