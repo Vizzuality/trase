@@ -22,7 +22,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Setup Node
-        uses: actions/setup-node@v3.1.0
+        uses: actions/setup-node@v3.4.1
         with:
           node-version: '12.16.3'
       - name: Install modules
