@@ -311,7 +311,7 @@ GEM
     puma (5.3.1)
       nio4r (~> 2.0)
     racc (1.6.0)
-    rack (2.2.3)
+    rack (2.2.4)
     rack-cors (1.1.1)
       rack (>= 2.0.0)
     rack-test (1.1.0)
@@ -541,7 +541,7 @@ DEPENDENCIES
   pg_csv
   pg_search
   puma (~> 5.3)
-  rack (~> 2.2.3)
+  rack (~> 2.2.4)
   rack-cors (~> 1.1)
   rails (~> 5.2.6)
   rails-controller-testing
