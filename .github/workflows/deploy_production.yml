@@ -65,6 +65,7 @@ jobs:
 
       - name: Install gems 💎
         run: |
+          sudo apt-get install libffi-dev
           bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
 
@@ -117,6 +118,7 @@ jobs:
 
       - name: Install gems 💎
         run: |
+          sudo apt-get install libffi-dev
           bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
 
