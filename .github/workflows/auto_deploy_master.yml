@@ -21,7 +21,7 @@ jobs:
       run:
         working-directory: ./frontend
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Setup Node
         uses: actions/setup-node@v3.1.0
         with:
@@ -47,7 +47,7 @@ jobs:
 
     steps:
       - name: Checkout 🛎️
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Install PostgreSQL client 🐘
         run: |
           sudo apt update
@@ -111,7 +111,7 @@ jobs:
 
     steps:
       - name: Checkout 🛎️
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install Ruby 💎
         uses: ruby/setup-ruby@v1
@@ -142,7 +142,7 @@ jobs:
 
     steps:
       - name: Checkout 🛎️
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install Ruby 💎
         uses: ruby/setup-ruby@v1
