@@ -19,6 +19,8 @@ const GoogleTranslateScript = () => {
   // Back to english was retranslating the app so we have to clear the cookies and reload
   if (readCookie('googtrans') === '/en/en') {
     document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
+    // Delete also cookies on every trase domain
+    document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; domain=trase.earth';
     window.location.reload();
   }
   return (
