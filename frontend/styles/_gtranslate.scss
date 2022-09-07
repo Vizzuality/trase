@@ -1,0 +1,8 @@
+// Remove top google translate navbar
+.goog-te-banner-frame.skiptranslate {
+  display: none !important;
+}
+
+body {
+  top: 0px !important;
+}
