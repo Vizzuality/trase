@@ -169,11 +169,7 @@ class TopNav extends React.PureComponent {
                       />
                     </ul>
                   )}
-                  <ul
-                    className={cx('top-nav-item-list', {
-                      'with-google-translate': ENABLE_GOOGLE_TRANSLATE
-                    })}
-                  >
+                  <ul className={cx('top-nav-item-list')}>
                     <li className="top-nav-item search-container">
                       <span className="search-icon">
                         {page === 'tool' ? (
@@ -239,8 +235,7 @@ class TopNav extends React.PureComponent {
           {
             '-has-background': backgroundVisible || menuOpen,
             '-yellow-background': YELLOW_PAGES.includes(page) && !backgroundVisible && !menuOpen,
-            '-no-shadow': className === '-egg-shell',
-            'with-google-translate': ENABLE_GOOGLE_TRANSLATE
+            '-no-shadow': className === '-egg-shell'
           },
           className
         )}
