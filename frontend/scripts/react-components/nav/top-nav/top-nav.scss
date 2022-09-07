@@ -219,6 +219,11 @@ $menuOffset: 15vh;
 
     @media screen and (min-width: $breakpoint-laptop) {
       width: 135px;
+
+      &.with-google-translate {
+        width: 245px;
+      }
+
     }
   }
 

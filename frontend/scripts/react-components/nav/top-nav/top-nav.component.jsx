@@ -169,7 +169,11 @@ class TopNav extends React.PureComponent {
                       />
                     </ul>
                   )}
-                  <ul className={cx('top-nav-item-list')}>
+                  <ul
+                    className={cx('top-nav-item-list', {
+                      'with-google-translate': ENABLE_GOOGLE_TRANSLATE
+                    })}
+                  >
                     <li className="top-nav-item search-container">
                       <span className="search-icon">
                         {page === 'tool' ? (

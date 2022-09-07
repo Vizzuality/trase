@@ -1,41 +1,29 @@
-import React, { useMemo } from 'react';
+import React, { useEffect } from 'react';
 import Helmet from 'react-helmet';
-import LanguageSelector from './language-selector.component';
 
 function readCookie(name) {
-  const stringCookies = document.cookie.split('; ');
+  const c = document.cookie.split('; ');
   const cookies = {};
   let i;
-  let parsedCookie;
-  for (i = stringCookies.length - 1; i >= 0; i--) {
-    parsedCookie = stringCookies[i].split('=');
-    cookies[parsedCookie[0]] = parsedCookie[1];
+  let C;
+
+  for (i = c.length - 1; i >= 0; i--) {
+    C = c[i].split('=');
+    cookies[C[0]] = C[1];
   }
 
   return cookies[name];
 }
-const LANGUAGES = ['en', 'pt', 'id', 'fr', 'es', 'zh-CN'];
-
-const handleChangeCode = code => {
-  if (code === 'en') {
-    // delete cookie
-    document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-  } else {
-    // set cookie
-    document.cookie = `googtrans=/en/${code}`;
-  }
-  window.location.reload();
-};
 
 const GoogleTranslateScript = () => {
-  const lang = useMemo(() => {
-    const cookieLang = readCookie('googtrans');
-    return cookieLang ? cookieLang.replace('/en/', '') : 'en';
-  }, []);
-
+  // Back to english was retranslating the app so we have to clear the cookies and reload
+  if (readCookie('googtrans') === '/en/en') {
+    document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
+    window.location.reload();
+  }
   return (
     <>
-      <LanguageSelector lang={lang} languages={LANGUAGES} onTranslate={handleChangeCode} />
+      <div id="google_translate_element" className="google-translate" />
       <Helmet>
         <script
           src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
