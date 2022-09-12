@@ -7,7 +7,12 @@
   align-items: center;
   justify-content: flex-start;
   padding: 0 40px;
-  bottom: 0;
+  bottom: -70px;
+
+  @media screen and (min-width: $breakpoint-laptop) {
+    bottom: 0;
+  }
+
   left: 0;
   width: 100%;
   height: $timeline-height;

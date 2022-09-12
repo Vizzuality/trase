@@ -7,6 +7,13 @@
   width: 100%;
   height: 100%;
 
+  overflow-y: scroll;
+  overflow-x: hidden;
+
+  @media screen and (min-width: $breakpoint-laptop) {
+    overflow-y: hidden;
+  }
+
   .tool-nav-right-column {
     display: flex;
   }

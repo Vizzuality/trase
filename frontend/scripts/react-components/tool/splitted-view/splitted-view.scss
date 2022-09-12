@@ -2,7 +2,12 @@
 
 .c-splitted-view {
   position: absolute;
-  top: $nav-height + $tool-bar-height;
+  top: $nav-height * 2 + $tool-bar-height;
+
+  @media screen and (min-width: $breakpoint-laptop) {
+    top: $nav-height + $tool-bar-height;
+  }
+
   left: 0;
   width: calc(100% + #{$layer-map-width});
   height: calc(100% - #{$nav-height + $tool-bar-height});
