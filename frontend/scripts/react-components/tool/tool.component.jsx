@@ -15,7 +15,6 @@ import { BREAKPOINTS } from 'constants';
 
 import 'styles/components/shared/veil.scss';
 import 'styles/components/shared/dropdown.scss';
-import 'styles/components/tool/map/map-sidebar.scss';
 
 const Sankey = React.lazy(() =>
   import(/* webpackChunkName: "sankey" */ /* webpackPreload: true */ './sankey')
