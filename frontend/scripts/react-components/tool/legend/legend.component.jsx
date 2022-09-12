@@ -25,7 +25,7 @@ function Legend(props) {
         <div className="legend-header">
           <button className="legend-layers-toggle" onClick={openLayerModal}>
             <Icon icon="icon-layers" />
-            <Text variant="mono" transform="uppercase" color="white">
+            <Text variant="sans" transform="uppercase" color="white" weight="bold">
               Explore regional indicators
             </Text>
           </button>

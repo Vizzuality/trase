@@ -19,13 +19,18 @@
   }
 
   .navigation-control {
-    margin: 10px 8px 0;
-    width: 30px;
+    margin: 28px 10px 8px 30px;
+    width: 32px;
     z-index: $z-nav;
+    box-shadow: $box-shadow !important;
   }
 
   .mapboxgl-ctrl-attrib-inner {
     display: none;
+  }
+
+  .mapboxgl-ctrl-icon {
+    margin: auto;
   }
 
   > .c-map-legend {
@@ -47,12 +52,13 @@
     position: absolute;
     bottom: 0;
     width: 319px;
-    padding: 6px 8px;
+    padding: 6px 30px;
     background: $white;
-    color: $charcoal-grey;
-    font-family: Helvetica Neue, Arial, Helvetica, sans-serif;
+    color: $gray-500;
+    font-family: $font-family-1;
     font-size: 11px;
     z-index: 1001;
+    border-top: 1px solid $gray-100;
 
     a,
     span {
