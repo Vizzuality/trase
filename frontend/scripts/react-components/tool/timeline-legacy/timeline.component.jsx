@@ -164,13 +164,23 @@ function Timeline(props) {
                       )}
                       className="size-sm"
                     >
-                      <Text as="span" weight="bold" color={statusClassName ? 'white' : 'grey'}>
+                      <Text
+                        as="span"
+                        variant="sans"
+                        weight="bold"
+                        color={statusClassName ? 'white' : 'grey'}
+                      >
                         {year}
                       </Text>
                     </Tooltip>
                   )}
                   {isSubNational && (
-                    <Text as="span" weight="bold" color={statusClassName ? 'white' : 'grey'}>
+                    <Text
+                      as="span"
+                      variant="sans"
+                      weight="bold"
+                      color={statusClassName ? 'white' : 'grey'}
+                    >
                       {year}
                     </Text>
                   )}
