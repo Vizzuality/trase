@@ -11,8 +11,8 @@ export default function ListModal(props) {
   const COLUMN_COUNT = 3;
   return (
     <div className="c-base-modal">
-      <div className="row columns">
-        <Heading size="md" className="modal-title">
+      <div className="row">
+        <Heading size="md" variant="sans" weight="bold" className="modal-title">
           {heading}
         </Heading>
         <GridList
