@@ -11,6 +11,7 @@ $circle-dot-size: $circle-size / 2;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 40px 0 20px;
 
   .steps-tracker-item-wrapper {
     position: relative;
@@ -129,6 +130,12 @@ $circle-dot-size: $circle-size / 2;
       .steps-tracker-item {
         cursor: pointer;
         outline: none;
+
+        .steps-tracker-label:not(.-choose-step){
+          > span {
+            color: $gray-200;
+          }
+        }
 
         &:hover {
           .steps-tracker-circle-dot {

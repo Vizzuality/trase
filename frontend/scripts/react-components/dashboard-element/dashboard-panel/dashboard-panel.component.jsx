@@ -70,13 +70,18 @@ class DashboardPanel extends Component {
 
   renderTitleSentence() {
     const { step } = this.props;
+    const titleSentenceProps = {
+      size: 'md',
+      as: 'span',
+      variant: 'sans',
+      weight: 'bold',
+      className: 'dashboard-panel-sentence'
+    };
     if (step === DASHBOARD_STEPS.welcome) {
       return (
         <>
           {translateText('Choose the ')}
-          <Heading size="lg" as="span" weight="bold" className="dashboard-panel-sentence">
-            {translateText('step ')}
-          </Heading>
+          <Heading {...titleSentenceProps}>{translateText('step ')}</Heading>
           {translateText('you want to edit')}
         </>
       );
@@ -85,12 +90,7 @@ class DashboardPanel extends Component {
       return (
         <>
           {translateText('Choose one ')}{' '}
-          <Heading
-            size="lg"
-            as="span"
-            className="dashboard-panel-sentence"
-            data-test="dashboard-panel-sentence"
-          >
+          <Heading {...titleSentenceProps} data-test="dashboard-panel-sentence">
             {translateText(singularize(getPanelLabel(step)))}
           </Heading>
         </>
@@ -106,12 +106,7 @@ class DashboardPanel extends Component {
           <Heading size="lg" as="span" weight="bold">{`${translateText('(Optional)')} `}</Heading>
         )}
         {translateText('Choose one or several')}
-        <Heading
-          size="lg"
-          as="span"
-          className="dashboard-panel-sentence"
-          data-test="dashboard-panel-sentence"
-        >
+        <Heading {...titleSentenceProps} data-test="dashboard-panel-sentence">
           {' '}
           {translateText(getPanelLabel(step))}
         </Heading>
@@ -146,7 +141,12 @@ class DashboardPanel extends Component {
             activeStep={step - 1}
             onSelectStep={canProceed ? setStep : undefined}
           />
-          <Heading className="dashboard-panel-title notranslate" align="center" size="lg">
+          <Heading
+            className="dashboard-panel-title notranslate"
+            variant="sans"
+            align="center"
+            size="md"
+          >
             {this.renderTitleSentence()}
           </Heading>
           {this.renderPanel()}
