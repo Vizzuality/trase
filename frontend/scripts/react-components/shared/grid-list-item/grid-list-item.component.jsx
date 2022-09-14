@@ -50,11 +50,12 @@ function GridListItem(props) {
       key={`grid-list-item-${item.id}`}
       className={cx('c-grid-list-item', {
         [`v-${variant}`]: variant,
-        [`color-${color}`]: color
+        [`color-${color}`]: color,
+        'heading-container': isGroup
       })}
     >
       {isGroup && (
-        <Heading as="h3" weight="regular" className="grid-list-item-heading">
+        <Heading as="h3" weight="bold" variant="sans" className="grid-list-item-heading">
           {item.name}
         </Heading>
       )}
@@ -83,9 +84,9 @@ function GridListItem(props) {
                 as="p"
                 variant="sans"
                 weight="bold"
-                align={variant === 'profiles' ? 'left' : 'center'}
+                align={variant === 'profiles' || variant === 'layers' ? 'left' : 'center'}
                 title={item.name}
-                transform="capitalize"
+                transform={variant === 'layers' ? 'uppercase' : 'capitalize'}
                 className="grid-list-item-text"
               >
                 {item.name}

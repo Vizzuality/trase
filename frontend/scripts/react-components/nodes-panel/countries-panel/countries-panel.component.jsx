@@ -41,6 +41,7 @@ function CountriesPanel(props) {
             isActive={selectedNodeId === itemProps.item?.id}
             enableItem={setSelectedItem}
             disableItem={() => setSelectedItem(null)}
+            color="transparent"
           />
         )}
       </GridList>

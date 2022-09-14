@@ -6,7 +6,7 @@ $column-width: 100px;
 .c-columns-selector-group {
   position: relative;
   height: 40px;
-  margin-top: 10px;
+  margin: 10px 0 15px;
   transition: left .45s $ease-in-out-sine;
 
   display: flex;

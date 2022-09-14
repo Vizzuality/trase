@@ -66,7 +66,7 @@ function ToolBar(props) {
         placement="bottom-start"
         arrow={false}
         animation="none"
-        theme="black"
+        theme="green"
         duration={0}
         zIndex={102}
         distance={0}

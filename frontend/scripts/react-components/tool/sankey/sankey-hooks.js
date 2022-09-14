@@ -88,6 +88,7 @@ export const useMenuOptions = (props, hoveredSelectedNode) => {
       items.push({
         id: 'expand',
         label: isReExpand ? 'Re-Expand' : 'Expand',
+        icon: 'expand',
         onClick: onExpandClick
       });
     }

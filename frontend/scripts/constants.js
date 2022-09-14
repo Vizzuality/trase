@@ -15,8 +15,8 @@ const COLORS = {
   charcoalGrey: '#34444C',
   charcoalGreyTonedDown: '#536269',
   charcoalGreyFadedALot: '#D6DADB',
-  manilla: '#FFEB8B',
-  strongPink: '#f65e6e'
+  strongPink: '#f65e6e',
+  green: '#b2ffe5'
 };
 
 export const CHOROPLETH_CLASS_ZERO = '#FFFFFF';
@@ -62,7 +62,7 @@ export const CHOROPLETH_COLORS = {
   error_no_metadata: COLORS.gray,
   error_no_metadata_for_layer: COLORS.gray,
   default_fill: COLORS.white,
-  fill_linked: COLORS.manilla,
+  fill_linked: COLORS.green,
   fill_not_linked: COLORS.gray,
   bright_stroke: COLORS.white,
   dark_stroke: COLORS.charcoalGreyTonedDown,

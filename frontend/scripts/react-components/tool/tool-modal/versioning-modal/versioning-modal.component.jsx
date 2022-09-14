@@ -11,14 +11,14 @@ function VersioningModal({ data, context }) {
 
   return (
     <div className="c-versioning-modal">
-      <div className="row columns">
+      <div className="row">
         <div className="versioning-modal-content">
-          <Heading as="h3" size="lg" className="modal-title">
+          <Heading as="h3" size="md" variant="sans" weight="bold" className="modal-title">
             Methods and data
           </Heading>
           {data && (
             <>
-              <Text as="span" size="md" lineHeight="lg" className="summary">
+              <Text as="span" variant="sans" size="rg" lineHeight="md" className="summary">
                 {' '}
                 Download the information for{' '}
                 {`${countryName ? capitalize(countryName) : ''}-${
@@ -37,7 +37,7 @@ function VersioningModal({ data, context }) {
               <div className="divider" />
             </>
           )}
-          <Text as="span" size="md" lineHeight="lg" className="summary">
+          <Text as="span" variant="sans" size="rg" lineHeight="md" className="summary">
             Trase builds on an enhanced form of material flow analysis called Spatially Explicit
             Information on Production to Consumption Systems (SEI-PCS) originally developed by{' '}
             <a
@@ -58,7 +58,14 @@ function VersioningModal({ data, context }) {
               rel="noopener noreferrer"
               title="Methods and data"
             >
-              <Text as="span" className="link-text" size="md" weight="bold" decoration="underline">
+              <Text
+                as="span"
+                variant="sans"
+                className="link-text"
+                size="rg"
+                weight="bold"
+                decoration="underline"
+              >
                 Methods and data.
               </Text>
             </a>

@@ -7,7 +7,12 @@
   align-items: center;
   justify-content: flex-start;
   padding: 0 40px;
-  bottom: 0;
+  bottom: -70px;
+
+  @media screen and (min-width: $breakpoint-laptop) {
+    bottom: 0;
+  }
+
   left: 0;
   width: 100%;
   height: $timeline-height;
@@ -123,7 +128,7 @@
     border: 1px solid $charcoal-grey-faded;
     margin: 0 6px; // matches MARGIN_BETWEEN_ITEMS inside useSlider
     height: 30px;
-    width: 58px;
+    width: 75px;
     border-radius: 4px;
     background-color: $white;
 
@@ -151,6 +156,7 @@
     .timeline-year-button {
       display: flex;
       align-items: center;
+      justify-content: center;
       padding: 6px 12px;
       height: 100%;
       width: 100%;

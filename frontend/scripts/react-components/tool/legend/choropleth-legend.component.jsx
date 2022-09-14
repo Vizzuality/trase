@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import abbreviateNumber from 'utils/abbreviateNumber';
+import Text from 'react-components/shared/text';
 import ChoroArrow from './choro-arrow.component';
 
 import 'react-components/tool/legend/choropleth-legend.scss';
@@ -19,9 +20,17 @@ function ChoroplethLegend(props) {
       >
         <div className="bucket-names">
           {titles.map(title => (
-            <div key={title} className="layer-name">
+            <Text
+              size="rg"
+              color="gray"
+              variant="sans"
+              align="center"
+              transform="uppercase"
+              key={title}
+              className="bucket-label"
+            >
               {title}
-            </div>
+            </Text>
           ))}
         </div>
         <ul className="bucket-legend">
@@ -77,12 +86,17 @@ function ChoroplethLegend(props) {
         )}
 
         <ul className="bullets">
-          <li>
+          <li className="bullet-container">
             <div className="bullet -color-gray" />
-            N/A
+            <Text className="bullet-text" variant="mono" color="grey-faded" size="sm">
+              N/A
+            </Text>
           </li>
-          <li>
-            <div className="bullet -color-white" />0
+          <li className="bullet-container">
+            <div className="bullet -color-white" />{' '}
+            <Text className="bullet-text" variant="mono" color="grey-faded" size="sm">
+              0
+            </Text>
           </li>
         </ul>
       </div>

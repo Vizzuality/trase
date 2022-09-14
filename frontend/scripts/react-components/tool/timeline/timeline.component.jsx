@@ -76,6 +76,7 @@ function Timeline(props) {
                       <Text
                         as="span"
                         weight="bold"
+                        variant="sans"
                         color={isActive || isHovered ? 'white' : 'grey'}
                       >
                         {year}
@@ -83,7 +84,12 @@ function Timeline(props) {
                     </Tooltip>
                   )}
                   {isSubNational && (
-                    <Text as="span" weight="bold" color={isActive || isHovered ? 'white' : 'grey'}>
+                    <Text
+                      as="span"
+                      weight="bold"
+                      variant="sans"
+                      color={isActive || isHovered ? 'white' : 'grey'}
+                    >
                       {year}
                     </Text>
                   )}

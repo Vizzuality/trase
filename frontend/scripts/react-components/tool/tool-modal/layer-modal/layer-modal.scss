@@ -4,13 +4,12 @@ $footer-height: 86px;
 
 .c-layer-modal {
   .layer-modal-content {
-    width: 750px;
     height: 90vh;
-    padding: 15px 5px $footer-height + 20px;
+    padding: 45px 5px $footer-height + 20px 45px;
 
     .modal-title,
     .info-message {
-      margin-bottom: 15px;
+      margin-bottom: 30px;
     }
   }
 

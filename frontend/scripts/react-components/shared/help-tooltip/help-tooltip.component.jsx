@@ -20,6 +20,7 @@ function tooltipContent(children, showInfoIcon, ReferenceComponent) {
   );
 }
 
+// Tooltip used for info mostly
 function HelpTooltipComponent(props) {
   const {
     theme,

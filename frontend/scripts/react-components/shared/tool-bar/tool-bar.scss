@@ -5,7 +5,12 @@
   align-items: center;
   justify-content: space-between;
   position: relative;
-  margin: $nav-height 0 0;
+  margin-top: $nav-height * 2;
+
+  @media screen and (min-width: $breakpoint-laptop) {
+    margin-top: $nav-height;
+  }
+
   width: 100%;
   height: $tool-bar-height;
   background-color: $charcoal-grey;
@@ -38,7 +43,7 @@
     }
 
     &:last-child {
-      justify-content: flex-end;
+      justify-content: space-around;
 
       .slot-item {
         border-left: 1px solid rgba($white, 0.4);
@@ -94,7 +99,7 @@
 
           &:first-child {
             > * {
-              padding: 0 24px 0 40px;
+              padding: 0 24px 0 30px;
             }
           }
         }

@@ -7,7 +7,6 @@ import 'react-components/shared/steps-tracker/steps-tracker.scss';
 
 function StepsTracker(props) {
   const { steps, activeStep, onSelectStep } = props;
-
   const ItemComponent = itemProps =>
     onSelectStep && !itemProps.isActive ? (
       <button onClick={() => onSelectStep(itemProps.stepIndex + 1)} className={itemProps.className}>
@@ -33,8 +32,8 @@ function StepsTracker(props) {
             })}
           >
             <ItemComponent stepIndex={i} isActive={isActive} className="steps-tracker-item">
-              <div className="steps-tracker-label">
-                <Text as="span" variant="mono" transform="uppercase" weight="bold">
+              <div className={cx('steps-tracker-label', { '-choose-step': activeStep < 0 })}>
+                <Text as="span" variant="sans" transform="uppercase" weight="bold">
                   {step.label}
                 </Text>
               </div>
