@@ -11,8 +11,8 @@ import Legend from 'react-components/tool/legend';
 import { easeCubic } from 'd3-ease';
 import flatMap from 'lodash/flatMap';
 import capitalize from 'lodash/capitalize';
+import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.component';
 import Warnings from './map-warnings';
-import Tooltip from './map-tooltip';
 import { getLayerOrder } from './layers/layer-config';
 import { getBaseLayer } from './layers/base-layer';
 import getUnitLayerStyle from './layers/unit-layers';
@@ -164,6 +164,7 @@ function Map(props) {
       map.setFeatureState({ ...hoveredGeo.last }, { hover: false });
       hoveredGeo.last = {};
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [layerIds, map, hoveredGeo.last]);
 
   // Highlight nodes hovered on Sankey
@@ -279,7 +280,11 @@ function Map(props) {
         <span dangerouslySetInnerHTML={{ __html: mapAttribution }} />
       </div>
       <Legend />
-      <Tooltip data={tooltipData} values={updatedTooltipValues} />
+      <UnitsTooltip
+        show={!!tooltipData && !!tooltipData.text}
+        items={updatedTooltipValues}
+        {...tooltipData}
+      />
     </div>
   );
 }

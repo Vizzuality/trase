@@ -14,6 +14,10 @@
   transition: transform 1s ease;
   z-index: $z-base;
 
+  .map-unit-tooltip {
+    z-index: 9999999 !important;
+  }
+
   .overlays {
     z-index: $z-nav;
   }

@@ -16,6 +16,7 @@ const FILTER_OPTIONS_MAP = {
   eq: 'equals'
 };
 
+// Tooltip only for downloads
 export default class FilterTooltipComponent extends Component {
   constructor(props) {
     super(props);

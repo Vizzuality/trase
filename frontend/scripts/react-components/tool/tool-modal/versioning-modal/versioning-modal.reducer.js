@@ -27,7 +27,7 @@ const methodsAndDataReducerTypes = PropTypes => ({
       data: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
       loading: PropTypes.bool.isRequired
     })
-  ).isRequired
+  )
 });
 
 export default createReducer(initialState, methodsAndDataReducer, methodsAndDataReducerTypes);
