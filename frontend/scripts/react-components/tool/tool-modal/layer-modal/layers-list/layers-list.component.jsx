@@ -8,10 +8,11 @@ export default function LayersList(props) {
   const { items, currentSelection, selectedTab, changeSelection } = props;
   const COLUMN_COUNT = 3;
   const selectedItemIds = currentSelection[selectedTab];
-  const idAttribute = {
-    [LAYER_TAB_NAMES.unit]: 'uid',
-    [LAYER_TAB_NAMES.contextual]: 'id'
-  }[selectedTab] || 'id';
+  const idAttribute =
+    {
+      [LAYER_TAB_NAMES.unit]: 'uid',
+      [LAYER_TAB_NAMES.contextual]: 'id'
+    }[selectedTab] || 'id';
   const enableItem = item =>
     changeSelection({
       ...currentSelection,
@@ -45,6 +46,7 @@ export default function LayersList(props) {
           isActive={isActive(itemProps)}
           enableItem={enableItem}
           disableItem={disableItem}
+          variant="layers"
           isDisabled={
             selectedTab === LAYER_TAB_NAMES.unit &&
             !isActive(itemProps) &&

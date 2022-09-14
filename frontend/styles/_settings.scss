@@ -129,7 +129,6 @@ $gray-text: #515253; // barely used
 $yellow-gray: #d9d9d9;
 $white-two: #fbfafa; // barely used
 $elephant: #6f7b80; // barely used
-$metal-grey: #ebebeb; // barely used
 $yet-another-gray: #999999; // barely used
 $carbon-gray: #333; // barely used
 
@@ -144,6 +143,7 @@ $gray-350: #798B85;
 $gray-300: #8B9dA2; // gray-600 opacity 0.5
 $gray-200: #dadada;
 $gray-100: #d1d9db;
+$gray-50: #E8ECED;
 
 $main: $orange-500;
 $main-dark-blue: $blue-700;
@@ -434,7 +434,7 @@ $recolorby-colors: (
 
 // choropleth
 $ch-zero: #d8cca1;
-$ch-na: $metal-grey;
+$ch-na: $gray-50;
 
 $ch-red-0: #f5b7ad;
 $ch-red-1: #f28789;

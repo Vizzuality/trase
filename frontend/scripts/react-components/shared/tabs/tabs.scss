@@ -55,6 +55,12 @@
     }
   }
 
+  &.margin-xxs {
+    .tabs-container {
+      margin-bottom: 14px;
+    }
+  }
+
   &.v-toolbar {
     .tab {
       border: 0;
@@ -66,6 +72,12 @@
         background-color: $strong-pink;
         border: 0;
       }
+    }
+  }
+
+  &.v-wide {
+    .tab {
+      min-width: 156px;
     }
   }
 
