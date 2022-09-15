@@ -47,42 +47,25 @@
     transition: left 0.45s $ease-in-out-sine;
   }
 
-  .invisible-link {
-    position: absolute;
-    height: 100%;
-    width: $map-width-closed;
-    z-index: $z-above;
-    cursor: pointer;
-
-    &.-left {
-      left: $layer-map-width;
-    }
-
-    &.-right {
-      width: 4%;
-      right: 0;
-    }
-  }
-
   &.-left-fullscreen {
     .left {
-      width: calc(100% - #{$layer-map-width} - #{$map-width-closed});
+      width: calc(100% - #{$layer-map-width});
       z-index: $z-above;
     }
 
     .right {
-      left: calc(100% - #{$map-width-closed} - 15px);
+      left: calc(100% - 15px);
     }
   }
 
   &.-right-fullscreen {
     .left {
-      width: $map-width-closed;
+      width: 0;
     }
 
     .right {
-      left: $map-width-closed + $layer-map-width;
-      width: calc(100% - #{$map-width-closed + $layer-map-width});
+      left: $layer-map-width;
+      width: calc(100% - #{$layer-map-width});
     }
   }
 }

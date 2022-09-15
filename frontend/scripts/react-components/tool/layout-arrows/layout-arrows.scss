@@ -40,6 +40,14 @@
 
   &.-centered-arrow {
     top: 0;
+    right: 0;
+    border-radius: 100% 0 0 100%;
+
+    &.-right-layout
+     {
+      border-radius: 0 100% 100% 0;
+      right: -32px;
+    }
   }
 
   &.-disabled {

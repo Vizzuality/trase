@@ -14,12 +14,6 @@ const SplittedView = ({ leftSlot, rightSlot, layout, sidebarOpen, changeLayout }
       { '-sidebar-open': sidebarOpen }
     )}
   >
-    {layout === TOOL_LAYOUT.right && (
-      <button className="invisible-link -left" onClick={() => changeLayout(layout - 1)} />
-    )}
-    {layout === TOOL_LAYOUT.left && (
-      <button className="invisible-link -right" onClick={() => changeLayout(layout + 1)} />
-    )}
     <div className="left">
       {leftSlot}
       <LayoutArrows changeLayout={changeLayout} layout={layout} />
