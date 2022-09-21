@@ -15,7 +15,7 @@ export function useChoroplethFeatureState(
   layersLoading
 ) {
   useEffect(() => {
-    if (map && choropleth) {
+    if (map && choropleth && !isEmpty(choropleth)) {
       const choroplethLayerIds = unitLayers?.filter(l => l.hasChoropleth).map(u => u.id);
 
       const source = choroplethLayerIds && choroplethLayerIds[0]; // Only first choropleth layer is highlighted
