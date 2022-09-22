@@ -6,6 +6,7 @@ export const useMenuOptions = (props, hoveredSelectedNode) => {
   const {
     goToProfile,
     hasExpandedNodesIds,
+    isReExpand,
     onExpandClick,
     onCollapseClick,
     lastSelectedNodeLink,
@@ -83,7 +84,7 @@ export const useMenuOptions = (props, hoveredSelectedNode) => {
     }
     const hasExtraColumn = extraColumnId && selectedNode?.id === extraColumnNodeId;
 
-    if ((!hasExpandedNodesIds) && !hasExtraColumn && selectedNodesIds.length > 0) {
+    if ((isReExpand || !hasExpandedNodesIds) && !hasExtraColumn && selectedNodesIds.length > 0) {
       items.push({
         id: 'expand',
         label: 'Expand selection',
@@ -103,6 +104,7 @@ export const useMenuOptions = (props, hoveredSelectedNode) => {
     toolColumns,
     columns,
     extraColumnNodeId,
+    isReExpand,
     hasExpandedNodesIds,
     goToProfile,
     extraColumnId,
