@@ -6,7 +6,6 @@ export const useMenuOptions = (props, hoveredSelectedNode) => {
   const {
     goToProfile,
     hasExpandedNodesIds,
-    isReExpand,
     onExpandClick,
     onCollapseClick,
     lastSelectedNodeLink,
@@ -84,17 +83,17 @@ export const useMenuOptions = (props, hoveredSelectedNode) => {
     }
     const hasExtraColumn = extraColumnId && selectedNode?.id === extraColumnNodeId;
 
-    if ((isReExpand || !hasExpandedNodesIds) && !hasExtraColumn && selectedNodesIds.length > 0) {
+    if ((!hasExpandedNodesIds) && !hasExtraColumn && selectedNodesIds.length > 0) {
       items.push({
         id: 'expand',
-        label: isReExpand ? 'Re-Expand' : 'Expand',
+        label: 'Expand selection',
         icon: 'expand',
         onClick: onExpandClick
       });
     }
 
     if (hasExpandedNodesIds && !hasExtraColumn && selectedNodesIds.length > 0) {
-      items.push({ id: 'collapse', label: 'Collapse', onClick: onCollapseClick });
+      items.push({ id: 'collapse', label: 'Collapse selection', icon: 'collapse', onClick: onCollapseClick });
     }
 
     return items;
@@ -104,7 +103,6 @@ export const useMenuOptions = (props, hoveredSelectedNode) => {
     toolColumns,
     columns,
     extraColumnNodeId,
-    isReExpand,
     hasExpandedNodesIds,
     goToProfile,
     extraColumnId,
