@@ -86,7 +86,7 @@ function Explore(props) {
     <span>
       {step > EXPLORE_STEPS.selectCommodity && !isMobile && (
         <button onClick={clearStep} className="back-button" data-test="featured-cards-back-button">
-          <Text variant="mono" size="md" weight="bold" className="featured-cards-back">
+          <Text size="md" weight="bold" className="featured-cards-back">
             <Icon color="pink" icon="icon-arrow" className="arrow-icon" />
             BACK
           </Text>
@@ -101,24 +101,31 @@ function Explore(props) {
       <div className="step-title-container">
         <>
           <Heading
-            variant="sans"
             size="rg"
             align="center"
             data-test="step-title"
             className="notranslate step-title"
           >
             <div>
-              {translateText(`${step}. Choose a `)}{' '}
+              <Heading as="span" size="rg">
+                {translateText(`${step}. Choose a `)}
+              </Heading>{' '}
               <Heading as="span" size="rg" weight="bold">
                 {titleParts[step - 1]}
                 {step === 2 ? ' or a ' : ''}
               </Heading>
-              {step === 2 ? translateText('supply chain below the map') : ''}
+              {step === 2 ? (
+                <Heading as="span" size="rg">
+                  {translateText('supply chain below the map')}
+                </Heading>
+              ) : (
+                ''
+              )}
             </div>
             {renderBackButton(isMobile)}
           </Heading>
           {(step === 1 || step === 2) && (
-            <Heading variant="sans" size="sm" align="center">
+            <Heading size="sm" align="center">
               {translateText('Options marked in')} {renderHighlighted('gray')}{' '}
               {translateText('provide')} {renderHighlighted('national-scale')}{' '}
               {translateText('data only')}
@@ -250,7 +257,6 @@ function Explore(props) {
                                 <Text
                                   size="rg"
                                   align="center"
-                                  variant="mono"
                                   weight="bold"
                                   transform="uppercase"
                                   color="blue"
@@ -263,7 +269,6 @@ function Explore(props) {
                                   size="md"
                                   weight="bold"
                                   align="center"
-                                  variant="sans"
                                   className="quick-facts-value notranslate"
                                 >
                                   {translateText(
@@ -281,7 +286,6 @@ function Explore(props) {
                                   <Text
                                     size="rg"
                                     align="center"
-                                    variant="mono"
                                     weight="bold"
                                     transform="uppercase"
                                     lineHeight="md"

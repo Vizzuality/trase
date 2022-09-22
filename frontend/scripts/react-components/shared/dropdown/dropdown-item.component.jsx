@@ -20,7 +20,7 @@ function DropdownItem(props) {
   const itemCustomClassName = getItemClassName && getItemClassName(item);
   const itemTextProps =
     {
-      column: { variant: 'mono', size: 'rg' }
+      column: { variant: 'sans', size: 'rg' }
     }[variant] || {};
   return (
     <>
