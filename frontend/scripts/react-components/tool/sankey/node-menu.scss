@@ -85,12 +85,12 @@
         padding: 8px 16px;
         display: flex;
         flex-direction: row;
-        justify-content: space-between;
         white-space: nowrap;
 
         .option-icon {
           width: 20px;
           height: 20px;
+          margin-left: 0;
         }
 
         &:hover {

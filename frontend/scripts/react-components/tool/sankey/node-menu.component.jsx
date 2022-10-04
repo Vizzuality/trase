@@ -34,14 +34,14 @@ function NodeMenu(props) {
         {options.map(option => (
           <li key={option.id} className={cx('menu-item', option.className)}>
             <button className="menu-item-button" onClick={option.onClick}>
-              <Text color="grey" variant="mono" weight="light" className="option-text">
-                {option.label?.toUpperCase()}
-              </Text>
               {option.icon && (
                 <svg className="icon option-icon">
                   <use xlinkHref={`#icon-${option.icon}`} />
                 </svg>
               )}
+              <Text color="grey" variant="mono" weight="light" className="option-text">
+                {option.label?.toUpperCase()}
+              </Text>
             </button>
           </li>
         ))}
