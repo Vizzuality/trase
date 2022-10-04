@@ -54,7 +54,7 @@
   }
 
   &.size-rg {
-    padding: 15px 24px;
+    padding: 12px 16px;
   }
 
   &.size-md {
@@ -89,7 +89,7 @@
 
   &.color-gray {
     border-color: transparent;
-    background-color: $gray;
+    background-color: $gray-100;
     color: $main-dark-blue;
   }
 
@@ -106,13 +106,19 @@
   }
 
   &.color-gray-transparent {
-    border-color: $gray;
+    border-color: $gray-100;
     background-color: transparent;
-    color: $gray;
+    color: $gray-100;
   }
 
   &.color-charcoal-transparent {
     border-color: $main-faded-blue;
+    background-color: transparent;
+    color: $main-dark-blue;
+  }
+
+  &.color-transparent {
+    border-color: transparent;
     background-color: transparent;
     color: $main-dark-blue;
   }
