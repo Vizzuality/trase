@@ -44,7 +44,13 @@ function DropdownItem(props) {
             <use xlinkHref={`#icon-${item.icon}`} />
           </svg>
         )}
-        <Text title={item.label} weight="regular" className="item-label" {...itemTextProps}>
+        <Text
+          title={item.label}
+          weight="regular"
+          className="item-label"
+          transform="uppercase"
+          {...itemTextProps}
+        >
           {item.label}
         </Text>
         {item.tooltip && (
