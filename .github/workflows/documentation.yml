@@ -43,7 +43,7 @@ jobs:
         uses: ruby/setup-ruby@v1
 
       - name: Setup gems cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3.0.11
         with:
           path: vendor/bundle
           key: ${{ runner.os }}-gem-use-ruby-${{ hashFiles('**/Gemfile.lock') }}
