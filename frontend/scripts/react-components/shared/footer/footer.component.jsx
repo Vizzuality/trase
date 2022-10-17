@@ -40,13 +40,6 @@ const donors = [
     imageClassName: null
   },
   {
-    className: 'ggp-logo',
-    href: 'https://goodgrowthpartnership.com/',
-    image: '/images/footer/donors/ggp.svg',
-    alt: 'Good Growth partnership',
-    imageClassName: null
-  },
-  {
     className: 'quadrature-logo',
     href: 'https://quadrature.ai/foundation/',
     image: '/images/footer/donors/quadrature.png',
