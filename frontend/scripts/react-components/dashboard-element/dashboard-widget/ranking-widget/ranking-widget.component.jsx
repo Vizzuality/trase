@@ -113,7 +113,7 @@ function RankingWidget(props) {
                   </div>
                   {renderItemName(item)}
                 </div>
-                <Text className="item-value" color={textColor} variant="mono" size="md">
+                <Text className="item-value notranslate" color={textColor} variant="mono" size="md">
                   {formatValue(item.x0)} {config.xAxisLabel && config.xAxisLabel.suffix} /{' '}
                   {formatDynamicSentenceValue(
                     totalValue.x0,

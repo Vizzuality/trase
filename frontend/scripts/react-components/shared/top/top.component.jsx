@@ -31,7 +31,7 @@ class Top extends Component {
             </Link>
           )}
         </div>
-        <span className="item-value" data-unit={unit.value}>
+        <span className="item-value notranslate" data-unit={unit.value}>
           {unit.format(item)}
         </span>
       </li>
