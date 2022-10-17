@@ -34,6 +34,7 @@ class SidebarNav extends React.PureComponent {
         <ul className="nav-sidebar-link-list">
           <NavLinks
             links={links}
+            parseHtml={ENABLE_GOOGLE_TRANSLATE}
             itemClassName="nav-sidebar-link-list-item"
             linkClassName="nav-sidebar-link-list-item-link"
             linkActiveClassName="-pink active-link"

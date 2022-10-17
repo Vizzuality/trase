@@ -101,7 +101,12 @@ function GridListItem(props) {
               <HelpTooltip
                 text={tooltip}
                 referenceComponent={forwardRef((_, ref) => (
-                  <button ref={ref} type="button" onClick={() => onInfoClick && onInfoClick(item)}>
+                  <button
+                    className="notranslate"
+                    ref={ref}
+                    type="button"
+                    onClick={() => onInfoClick && onInfoClick(item)}
+                  >
                     i
                   </button>
                 ))}
