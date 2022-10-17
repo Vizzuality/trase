@@ -64,10 +64,7 @@ function GridListItem(props) {
           className="grid-list-item-content"
           data-test={isToggleAll ? 'grid-list-item-toggle-all' : 'grid-list-item-button'}
         >
-          <WrapWithTooltip
-            tooltip={tooltip}
-            wrap={tooltip && tooltipCover && !ENABLE_GOOGLE_TRANSLATE}
-          >
+          <WrapWithTooltip tooltip={tooltip} wrap={tooltip && tooltipCover}>
             <button
               type="button"
               disabled={isDisabled}
