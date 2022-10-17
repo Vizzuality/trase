@@ -62,7 +62,12 @@ function UnitsTooltip(props) {
               {item.title}
             </Text>
             {item.value && (
-              <Text variant="sans" size="sm" weight="bold" className="units-tooltip-data">
+              <Text
+                variant="sans"
+                size="sm"
+                weight="bold"
+                className="units-tooltip-data notranslate"
+              >
                 {item.value} {item.unit}
               </Text>
             )}
