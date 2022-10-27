@@ -110,10 +110,10 @@ Timeline.defaultProps = {
 Timeline.propTypes = {
   showBackground: PropTypes.bool,
   years: PropTypes.array.isRequired,
-  subNationalYears: PropTypes.array.isRequired,
+  subNationalYears: PropTypes.array,
   disabled: PropTypes.bool,
-  selectYears: PropTypes.func.isRequired, // eslint-disable-line
-  selectedYears: PropTypes.array.isRequired // eslint-disable-line
+  selectYears: PropTypes.func.isRequired,
+  selectedYears: PropTypes.array.isRequired
 };
 
 export default Timeline;

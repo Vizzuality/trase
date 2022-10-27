@@ -23,6 +23,12 @@ function WrapWithTooltip({ tooltip, wrap, children }) {
   return children;
 }
 
+WrapWithTooltip.propTypes = {
+  children: PropTypes.node,
+  wrap: PropTypes.bool,
+  tooltip: PropTypes.string
+};
+
 function GridListItem(props) {
   const {
     item,

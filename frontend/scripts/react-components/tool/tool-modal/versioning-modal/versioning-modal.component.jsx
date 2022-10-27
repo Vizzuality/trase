@@ -45,6 +45,7 @@ function VersioningModal({ data, context }) {
               href="https://www.sciencedirect.com/science/article/abs/pii/S0921800915000427?via%3Dihub"
               target="_blank"
               rel="noopener noreferrer"
+              // eslint-disable-next-line react/no-unknown-property
               tx-content="translate_urls"
             >
               Godar et al. 2015

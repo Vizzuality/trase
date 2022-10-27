@@ -156,6 +156,7 @@ export function useHighlightHoveredSankeyNodes({
       }
     }
     return undefined;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [map, loaded, highlightedGeoNodes, layerIds, sourceLayer, clearHoveredFeatureState]);
 }
 
@@ -199,5 +200,6 @@ export function useSetSelectedFeatureState({
       unselectNodes();
     }
     return undefined;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedGeoNodes, map, loaded, sourceLayer, layerIds]);
 }

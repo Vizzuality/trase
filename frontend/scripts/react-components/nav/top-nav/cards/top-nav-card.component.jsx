@@ -19,7 +19,7 @@ const TopNavCard = ({
 }) => (
   <a
     className={cx('top-nav-card', { active, inactive })}
-    arealabel={title}
+    aria-label={title}
     href={url}
     onMouseOver={() => setActiveCard(id)}
     onMouseLeave={() => setActiveCard(false)}

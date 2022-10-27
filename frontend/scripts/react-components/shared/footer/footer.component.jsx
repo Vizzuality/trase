@@ -70,7 +70,7 @@ const Footer = () => {
           title="Parners and funders info"
           // eslint-disable-next-line react/jsx-no-target-blank
           target="_blank"
-          rel="noopener"
+          rel="noopener noreferrer"
         >
           Click for more information about our partners and funders.
         </a>
@@ -254,7 +254,7 @@ const Footer = () => {
                 title="Terms of use page"
                 // eslint-disable-next-line react/jsx-no-target-blank
                 target="_blank"
-                rel="noopener"
+                rel="noopener noreferrer"
               >
                 Terms of use
               </a>
@@ -268,7 +268,7 @@ const Footer = () => {
                   title="Terms of use page"
                   // eslint-disable-next-line react/jsx-no-target-blank
                   target="_blank"
-                  rel="noopener"
+                  rel="noopener noreferrer"
                 >
                   Privacy policy
                 </a>
@@ -281,7 +281,7 @@ const Footer = () => {
                   title="Terms of use page"
                   // eslint-disable-next-line react/jsx-no-target-blank
                   target="_blank"
-                  rel="noopener"
+                  rel="noopener noreferrer"
                 >
                   Cookie policy
                 </a>

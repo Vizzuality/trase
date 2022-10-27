@@ -5,7 +5,7 @@ $segment-width-tablet: 110px;
 $label-height: 25px;
 $circle-size: 32px;
 $item-height: $label-height + $circle-size;
-$circle-dot-size: $circle-size / 2;
+$circle-dot-size: calc($circle-size / 2);
 
 .c-steps-tracker {
   display: flex;

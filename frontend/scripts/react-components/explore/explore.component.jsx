@@ -104,7 +104,7 @@ function Explore(props) {
             size="rg"
             align="center"
             data-test="step-title"
-            className="notranslate step-title"
+            className={cx('step-title', { notranslate: !ENABLE_GOOGLE_TRANSLATE })}
           >
             <div>
               <Heading as="span" size="rg">
@@ -261,7 +261,9 @@ function Explore(props) {
                                   transform="uppercase"
                                   color="blue"
                                   lineHeight="md"
-                                  className="quick-facts-label notranslate"
+                                  className={cx('quick-facts-label', {
+                                    notranslate: !ENABLE_GOOGLE_TRANSLATE
+                                  })}
                                 >
                                   {translateText(`${indicator.name} ${indicator.year}`)}
                                 </Text>
@@ -269,7 +271,9 @@ function Explore(props) {
                                   size="md"
                                   weight="bold"
                                   align="center"
-                                  className="quick-facts-value notranslate"
+                                  className={cx('quick-facts-value', {
+                                    notranslate: !ENABLE_GOOGLE_TRANSLATE
+                                  })}
                                 >
                                   {translateText(
                                     `${format(',')(Math.round(indicator.total))} ${indicator.unit}`
@@ -289,7 +293,9 @@ function Explore(props) {
                                     weight="bold"
                                     transform="uppercase"
                                     lineHeight="md"
-                                    className="quick-facts-label notranslate"
+                                    className={cx('quick-facts-label', {
+                                      notranslate: !ENABLE_GOOGLE_TRANSLATE
+                                    })}
                                     color="blue"
                                   >
                                     {translateText(
@@ -304,7 +310,9 @@ function Explore(props) {
                                     size="md"
                                     weight="bold"
                                     align="center"
-                                    className="quick-facts-value notranslate"
+                                    className={cx('quick-facts-label', {
+                                      notranslate: !ENABLE_GOOGLE_TRANSLATE
+                                    })}
                                   >
                                     {translateText(
                                       highlightedCommodityIds.length ||

@@ -199,7 +199,7 @@ ToolSearch.propTypes = {
   toolLayout: PropTypes.number,
   selectedNodesIds: PropTypes.array,
   setIsSearchOpen: PropTypes.func,
-  labelComponent: PropTypes.node,
+  labelComponent: PropTypes.func,
   onInputValueChange: PropTypes.func,
   portalRef: PropTypes.object
 };

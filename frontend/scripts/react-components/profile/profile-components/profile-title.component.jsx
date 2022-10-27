@@ -52,7 +52,9 @@ function ProfileTitle(props) {
 }
 
 ProfileTitle.propTypes = {
+  commodityName: PropTypes.string,
   template: PropTypes.string,
+  year: PropTypes.number,
   summary: PropTypes.object.isRequired
 };
 

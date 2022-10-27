@@ -68,7 +68,7 @@ export const routes = {
     path: '/explore',
     Component: lazy(() =>
       import(
-        /* webpackChunkName: "explore" */ /* webpackPreload: true */ '../react-components/explore/explore.js'
+        /* webpackChunkName: "explore" */ /* webpackPreload: true */ '../react-components/explore/explore'
       )
     ),
     title: getPageTitle,
@@ -81,7 +81,7 @@ export const routes = {
   tool: {
     path: '/flows/:section?',
     Component: lazy(() =>
-      import(/* webpackChunkName: "tool" */ '../react-components/tool/tool.js')
+      import(/* webpackChunkName: "tool" */ '../react-components/tool/tool')
     ),
     title: getPageTitle,
     thunk: loadPageData(loadToolInitialData, resizeSankeyTool, loadDisclaimerTool, loadUnitLayers),

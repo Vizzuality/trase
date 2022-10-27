@@ -119,7 +119,9 @@ MapFlowsWidget.propTypes = {
   profileType: PropTypes.string,
   title: PropTypes.string,
   year: PropTypes.number,
-  commodityName: PropTypes.string
+  commodityName: PropTypes.string,
+  commodityId: PropTypes.string,
+  contextId: PropTypes.string
 };
 
 export default MapFlowsWidget;

@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import pickBy from 'lodash/pickBy';
 import mapValues from 'lodash/mapValues';
 import isEmpty from 'lodash/isEmpty';
+import { PropTypes } from 'prop-types';
 
 export const DONT_SERIALIZE = 'NO_CEREAL_RYAN_GOSLING';
 
@@ -43,6 +44,13 @@ function UrlSerializer(props) {
 
   return null;
 }
+
+UrlSerializer.propTypes = {
+  query: PropTypes.shape({}),
+  urlPropHandlers: PropTypes.shape({}),
+  urlProps: PropTypes.shape({}),
+  serializer: PropTypes.func.isRequired
+};
 
 UrlSerializer.defaultProps = {
   query: {},

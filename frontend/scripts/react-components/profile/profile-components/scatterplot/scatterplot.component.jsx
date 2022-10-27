@@ -267,6 +267,7 @@ Scatterplot.propTypes = {
   data: PropTypes.array,
   node: PropTypes.object,
   xDimension: PropTypes.array,
+  yDimension: PropTypes.object,
   xDimensionSelectedIndex: PropTypes.number,
   year: PropTypes.number,
   width: PropTypes.number,

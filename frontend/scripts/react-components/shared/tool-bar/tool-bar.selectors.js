@@ -46,7 +46,7 @@ const getPanelFilter = createSelector(
       label: 'Change context',
       title,
       subtitle: isCustom ? '(Custom)' : null,
-      show: selectedContext,
+      show: !!selectedContext,
       tooltip: immer(dynamicSentence, draft => {
         if (draft[0] && !draft[0].prefix) {
           draft[0].prefix = 'Your supply chain includes ';
@@ -62,7 +62,7 @@ export const getResizeByFilter = createSelector(
     id: 'unit',
     type: 'optionsMenu',
     label: 'Change units',
-    show: selectedResizeBy,
+    show: !!selectedResizeBy,
     value: selectedResizeBy?.label || '',
     suffix: selectedResizeBy?.unit && `(${selectedResizeBy?.unit})`,
     isDisabled: items.length === 1 && selectedResizeBy?.attributeId === items[0].attributeId,

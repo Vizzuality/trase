@@ -16,6 +16,7 @@ const SmartLink = props => {
     return <Link to={href}>{children}</Link>;
   }
   return (
+    // eslint-disable-next-line react/no-unknown-property
     <a href={href} target="_blank" rel="noopener noreferrer" tx-content="translate_urls">
       {children}
     </a>

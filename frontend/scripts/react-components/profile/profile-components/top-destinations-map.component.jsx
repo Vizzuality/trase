@@ -107,7 +107,7 @@ class TopDestinationsMap extends React.PureComponent {
                 <div>
                   <div className="legend-title">
                     <ProfileTitle
-                      template={'{{commodity_name}} imported in {{year}}'}
+                      template="{{commodity_name}} imported in {{year}}"
                       summary={summary}
                       year={year}
                       commodityName={commodityName}

@@ -48,6 +48,7 @@ export const getBounds = createSelector([getSelectedCommodity], commodity => {
 });
 
 export const getBorder = createSelector([getSelectedCommodity], commodity => ({
+  id: 'border',
   provider: 'leaflet',
   layerConfig: {
     type: 'geoJSON',

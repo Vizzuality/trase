@@ -20,7 +20,7 @@ function CookieBanner({ setAccepted, accepted }) {
               title="Privacy policy page"
               // eslint-disable-next-line react/jsx-no-target-blank
               target="_blank"
-              rel="noopener"
+              rel="noopener noreferrer"
             >
               <Text as="span" color="pink" className="cookie-link" variant="sans" weight="bold">
                 privacy policy
