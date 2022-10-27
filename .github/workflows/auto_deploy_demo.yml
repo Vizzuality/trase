@@ -6,7 +6,7 @@ env:
   TRASE_LOCAL_MIRROR_SCHEMA: trase_earth
   TRASE_LOCAL_SCHEMA: public
 
-name: Deploy master
+name: Deploy demo
 
 on:
   push:
