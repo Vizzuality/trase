@@ -133,5 +133,5 @@ end
 
 set :rvm_ruby_version, '2.6.3'
 set :nvm_type, :user
-set :nvm_node, 'v12.13.0'
+set :nvm_node, 'v16.13.2'
 set :nvm_map_bins, %w{node npm yarn}
