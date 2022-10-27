@@ -24,7 +24,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3.1.0
         with:
-          node-version: '16.13.2'
+          node-version: 16
       - name: Install modules
         run: yarn
       - name: Run tests
