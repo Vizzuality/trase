@@ -19,14 +19,12 @@ export const sendSubscriptionEmail = ({ email, firstname, lastname, organisation
       if (data.error) return Promise.reject(new Error(data.error));
       return Promise.resolve('Subscription successful');
     })
-    .then(message =>
-      dispatch({
+    .then(message => dispatch({
         type: NEWSLETTER__SET_SUBSCRIPTION_MESSAGE,
         payload: { message }
       })
     )
-    .catch(error =>
-      dispatch({
+    .catch(error => dispatch({
         type: NEWSLETTER__SET_SUBSCRIPTION_MESSAGE,
         payload: { message: `Error: ${error}` }
       })
