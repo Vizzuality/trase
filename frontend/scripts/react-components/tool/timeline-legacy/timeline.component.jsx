@@ -169,6 +169,7 @@ function Timeline(props) {
                         variant="sans"
                         weight="bold"
                         color={statusClassName ? 'white' : 'grey'}
+                        className="notranslate"
                       >
                         {year}
                       </Text>
@@ -180,6 +181,7 @@ function Timeline(props) {
                       variant="sans"
                       weight="bold"
                       color={statusClassName ? 'white' : 'grey'}
+                      className="notranslate"
                     >
                       {year}
                     </Text>

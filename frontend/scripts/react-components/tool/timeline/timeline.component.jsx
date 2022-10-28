@@ -78,6 +78,7 @@ function Timeline(props) {
                         weight="bold"
                         variant="sans"
                         color={isActive || isHovered ? 'white' : 'grey'}
+                        className="notranslate"
                       >
                         {year}
                       </Text>
