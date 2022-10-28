@@ -15,6 +15,11 @@ $card-min-width: 180px;
   .featured-cards-title {
     display: inline;
     margin-right: 20px;
+
+    // Only for google translate. TODO: Find a better solution
+    font {
+      margin-left: 0.1em;
+    }
   }
 
   .featured-cards-container {
