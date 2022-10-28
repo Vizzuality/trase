@@ -82,4 +82,14 @@ $card-min-height: 200px;
       }
     }
   }
+  .cards-details-text-container {
+    // Only for google translate. TODO: Find a better solution
+    font {
+      margin: 0 0.1em;
+
+      &:first-child {
+        margin-left: 0;
+      }
+    }
+  }
 }
