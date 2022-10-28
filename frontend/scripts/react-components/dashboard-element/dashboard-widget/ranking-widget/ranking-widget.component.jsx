@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 import Link from 'redux-first-router-link';
 import { format } from 'd3-format';
 import capitalize from 'lodash/capitalize';
@@ -28,7 +29,7 @@ function RankingWidget(props) {
     'IMPORTER GROUP',
     'WOOD SUPPLIER'
   ];
-  const titleUpper = companyWidgets.indexOf(nodeType.toUpperCase()) > -1;
+  const isCompanyWidget = companyWidgets.indexOf(nodeType.toUpperCase()) > -1;
 
   useEffect(() => {
     setWidth(ref.current ? ref.current.offsetWidth : 0);
@@ -46,11 +47,12 @@ function RankingWidget(props) {
     const WIDTH_LIMIT = 498;
     const name = (
       <Heading
-        transform={titleUpper ? 'uppercase' : null}
+        transform={isCompanyWidget ? 'uppercase' : null}
         as="span"
         size={width > WIDTH_LIMIT ? 'md' : 'rg'}
         weight="bold"
         color={color}
+        className={cx({ notranslate: isCompanyWidget })}
       >
         <Ellipsis fontSize={width > WIDTH_LIMIT ? 'medium' : 'xxx-regular'} lineLimit={2}>
           {capitalize(item.y)}

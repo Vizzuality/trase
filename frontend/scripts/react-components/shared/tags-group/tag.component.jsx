@@ -65,7 +65,7 @@ function Tag(props) {
       color={color}
       transform={part.transform}
       className={cx('tags-group-item', {
-        notranslate: part.id === 'indicator-value' && valueHasNumber(),
+        notranslate: part.notranslate || (part.id === 'indicator-value' && valueHasNumber()),
         '-with-cross': !isPartReadOnly && clearPanel,
         '-spaced': spaced
       })}
