@@ -247,11 +247,10 @@ export const getSelectedUnitLayers = createSelector(
       if (exceptions.includes(exceptionId)) {
         layerId = exceptionId;
       }
+
       // columns of production are the same than their respective without the of_production part
-      if (layerId.endsWith('_of_production')) {
-        layerId = layerId.replace('_of_production', '');
-      }
-      const unitLayer = unitLayers.find(l => l.id === layerId);
+      const unitLayer = unitLayers.find(l => l.id === layerId || l.id === layerId.replace('_of_production', ''));
+
       if (unitLayer) {
         selectedUnitLayers.push({ ...unitLayer, hasChoropleth: !geoColumn.isChoroplethDisabled });
       }
