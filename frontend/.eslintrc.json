@@ -64,6 +64,7 @@
     "NODE_ENV_DEV": true,
     "ENABLE_INTERSECTION_OBSERVER": true,
     "ENABLE_VERSIONING": true,
+    "ENABLE_POPUP": true,
     "ENABLE_TOOL_PANEL": true,
     "ENABLE_COUNTRY_PROFILES": true,
     "ENABLE_LOGISTIC_LAYERS_TAB": true,

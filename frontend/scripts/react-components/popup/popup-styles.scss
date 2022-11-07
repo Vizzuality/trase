@@ -1,0 +1,28 @@
+@import 'styles/settings';
+
+.c-popup {
+  .popup-content {
+    padding: 40px;
+    z-index: $z-above-hero;
+    background-color: white;
+    width: 100%;
+    text-align: center;
+  }
+
+  .divider {
+    width: 100%;
+    display: block;
+    height: 8px;
+    border-bottom: 1px solid $gray-300;
+    margin-bottom: 20px;
+  }
+
+  .description {
+    margin-bottom: 40px;
+  }
+
+  .link {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}

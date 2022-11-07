@@ -5,6 +5,7 @@ import CookieBanner from 'react-components/shared/cookie-banner';
 import FullScreenButton from 'react-components/shared/full-screen-button';
 import Feedback from 'react-components/shared/feedback';
 import Footer from 'react-components/shared/footer/footer.component';
+import PopUp from 'react-components/popup';
 
 import isIe from 'utils/isIe';
 import isIframe from 'utils/isIframe';
@@ -83,6 +84,7 @@ function App() {
           {!isInIframe && <CookieBanner />}
           {isInIframe && <FullScreenButton />}
           {feedback && <Feedback />}
+          <PopUp />
         </main>
 
         {footer && (

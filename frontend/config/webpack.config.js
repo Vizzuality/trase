@@ -58,6 +58,7 @@ module.exports = {
       CURRENT_CTA_VERSION: JSON.stringify(process.env.CURRENT_CTA_VERSION),
       ENABLE_INTERSECTION_OBSERVER: process.env.ENABLE_INTERSECTION_OBSERVER === 'true',
       ENABLE_VERSIONING: process.env.ENABLE_VERSIONING === 'true',
+      ENABLE_POPUP: process.env.ENABLE_POPUP === 'true',
       ENABLE_TOOL_PANEL: process.env.ENABLE_TOOL_PANEL === 'true',
       DATA_DOWNLOAD_ENABLED: process.env.DATA_DOWNLOAD_ENABLED === 'true',
       SHOW_WORLD_MAP_IN_EXPLORE: process.env.SHOW_WORLD_MAP_IN_EXPLORE === 'true',
