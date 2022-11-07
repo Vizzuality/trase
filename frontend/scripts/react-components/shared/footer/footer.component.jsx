@@ -140,7 +140,7 @@ const Footer = () => {
           },
           {
             title: 'FAQs',
-            href: 'https://trase.finance/faqs'
+            href: 'https://trase.finance/faq'
           }
         ]
       },
