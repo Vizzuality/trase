@@ -44,7 +44,7 @@ Text.defaultProps = {
   size: 'rg',
   color: 'grey',
   weight: 'light',
-  variant: 'serif'
+  variant: 'sans'
 };
 
 Text.propTypes = {

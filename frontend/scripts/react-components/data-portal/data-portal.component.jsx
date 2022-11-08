@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useReducer } from 'react';
 import PropTypes from 'prop-types';
 import DataPortalDisabledMessage from 'react-components/data-portal/data-portal-disabled-message.component';
-import DataPortalForm from 'react-components/data-portal/data-portal-form/data-portal-form.component';
+import DataPortalForm from 'react-components/data-portal/data-portal-form';
 import BulkDownloadsBlock from 'react-components/data-portal/bulk-downloads-block/bulk-downloads-block.component';
 import FormatSidebar from 'react-components/data-portal/format-sidebar.component';
 import CustomDownload from 'react-components/data-portal/custom-download/custom-download.container';
@@ -279,11 +279,14 @@ function DataPortal(props) {
     const file = state.fileExtension;
     const getDownloadURL = () => {
       if (state.downloadType === 'logistics') {
-        return `https://${CARTO_ACCOUNT}.carto.com/api/v2/sql?filename=crushing_facilities&q=SELECT * FROM "${CARTO_ACCOUNT}".${state.bulkContext}&format=${file.replace('.', '')}`;
+        return `https://${CARTO_ACCOUNT}.carto.com/api/v2/sql?filename=crushing_facilities&q=SELECT * FROM "${CARTO_ACCOUNT}".${
+          state.bulkContext
+        }&format=${file.replace('.', '')}`;
       }
-      const fileUrl = file === '.json' ? GET_JSON_DATA_DOWNLOAD_FILE_URL : GET_CSV_DATA_DOWNLOAD_FILE_URL;
+      const fileUrl =
+        file === '.json' ? GET_JSON_DATA_DOWNLOAD_FILE_URL : GET_CSV_DATA_DOWNLOAD_FILE_URL;
       return getURLFromParams(fileUrl, params);
-    }
+    };
 
     onDownloadTriggered(
       Object.assign(
@@ -320,7 +323,7 @@ function DataPortal(props) {
           bulkLogisticsData={bulkLogisticsData}
           enabled={DATA_DOWNLOAD_ENABLED}
           onButtonClicked={(type, id) =>
-            dataPortalDispatch({ type: 'setDownloadType', payload: { type , id } })
+            dataPortalDispatch({ type: 'setDownloadType', payload: { type, id } })
           }
         />
         <div className="c-custom-dataset">

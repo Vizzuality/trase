@@ -79,7 +79,12 @@ function LogisticsMap(props) {
               </MapControls>
               <LayerManager map={map} plugin={PluginLeaflet}>
                 {activeLayers.map(layer => (
-                  <Layer key={layer.id} {...layer} events={buildEvents(layer)} />
+                  <Layer
+                    key={layer.id || layer.value}
+                    id={layer.id || layer.value}
+                    {...layer}
+                    events={buildEvents(layer)}
+                  />
                 ))}
                 <Layer {...border} />
               </LayerManager>

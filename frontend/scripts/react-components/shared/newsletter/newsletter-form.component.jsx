@@ -205,7 +205,7 @@ class NewsletterForm extends React.PureComponent {
                       title="Privacy policy page"
                       // eslint-disable-next-line react/jsx-no-target-blank
                       target="_blank"
-                      rel="noopener"
+                      rel="noopener noreferrer"
                     >
                       <Text as="span" size="xs" color="white" variant="sans" className="link-text">
                         {' '}

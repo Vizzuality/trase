@@ -51,6 +51,10 @@ function Tag(props) {
     }
     return part.value[0].name ? translateText(part.value[0].name) : null;
   };
+  const valueHasNumber = () =>
+    part.name
+      ? !Number.isNaN(parseInt(part.name, 10))
+      : part.value[0].name && !Number.isNaN(parseInt(part.value[0].name, 10));
 
   return (
     <Component
@@ -60,7 +64,8 @@ function Tag(props) {
       align="center"
       color={color}
       transform={part.transform}
-      className={cx('tags-group-item', 'notranslate', {
+      className={cx('tags-group-item', {
+        notranslate: part.notranslate || (part.id === 'indicator-value' && valueHasNumber()),
         '-with-cross': !isPartReadOnly && clearPanel,
         '-spaced': spaced
       })}

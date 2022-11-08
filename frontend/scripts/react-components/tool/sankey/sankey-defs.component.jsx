@@ -79,40 +79,50 @@ GradientAnimation.propTypes = {
   candyMode: PropTypes.bool
 };
 
-export const LinksPlaceHolder = React.memo(
-  ({ gapBetweenColumns, sankeyColumnsWidth, size = MIN_COLUMNS_NUMBER - 1, height = 525 }) =>
-    Array.from({ length: size }).map((_, i) => (
-      <rect
-        key={i}
-        height={height}
-        width={gapBetweenColumns}
-        transform={`translate(${i * gapBetweenColumns +
-          i * sankeyColumnsWidth +
-          sankeyColumnsWidth},0)`}
-        fill="url(#animate-gradient)"
-      />
-    ))
-);
-LinksPlaceHolder.propTypes = {
+// to avoid propTypes error
+const linksPlaceHolderFunction = props => {
+  const {
+    gapBetweenColumns,
+    sankeyColumnsWidth,
+    size = MIN_COLUMNS_NUMBER - 1,
+    height = 525
+  } = props;
+  return Array.from({ length: size }).map((_, i) => (
+    <rect
+      key={i}
+      height={height}
+      width={gapBetweenColumns}
+      transform={`translate(${i * gapBetweenColumns +
+        i * sankeyColumnsWidth +
+        sankeyColumnsWidth},0)`}
+      fill="url(#animate-gradient)"
+    />
+  ));
+};
+export const LinksPlaceHolder = React.memo(linksPlaceHolderFunction);
+
+linksPlaceHolderFunction.propTypes = {
   gapBetweenColumns: PropTypes.number,
   sankeyColumnsWidth: PropTypes.number,
   size: PropTypes.number,
   height: PropTypes.number
 };
 
-export const ColumnsPlaceholder = React.memo(
-  ({ sankeyColumnsWidth, gapBetweenColumns, size = MIN_COLUMNS_NUMBER, height = 525 }) =>
-    Array.from({ length: size }).map((_, i) => (
-      <rect
-        key={i}
-        height={height}
-        width={sankeyColumnsWidth}
-        className="sankey-column-placeholder"
-        transform={`translate(${i * (sankeyColumnsWidth + gapBetweenColumns)},0)`}
-      />
-    ))
-);
-ColumnsPlaceholder.propTypes = {
+const columnsPlaceholderFunction = props => {
+  const { sankeyColumnsWidth, gapBetweenColumns, size = MIN_COLUMNS_NUMBER, height = 525 } = props;
+  return Array.from({ length: size }).map((_, i) => (
+    <rect
+      key={i}
+      height={height}
+      width={sankeyColumnsWidth}
+      className="sankey-column-placeholder"
+      transform={`translate(${i * (sankeyColumnsWidth + gapBetweenColumns)},0)`}
+    />
+  ));
+};
+export const ColumnsPlaceholder = React.memo(columnsPlaceholderFunction);
+
+columnsPlaceholderFunction.propTypes = {
   gapBetweenColumns: PropTypes.number,
   sankeyColumnsWidth: PropTypes.number,
   size: PropTypes.number,

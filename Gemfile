@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.2.6'
+gem 'rails', '~> 5.2.6.3'
  # Use pg as the database for Active Record
 gem 'pg', '~> 0.18'
 # Use Puma as the app server
@@ -55,7 +55,7 @@ gem 'oj'
 gem 'paperclip', '~> 6.1.0'
 gem 'pg_csv'
 gem 'pg_search'
-gem 'rack', '~> 2.2.3' # issue with sidekiq web in version 2.1.1, still doesn't work on sandbox in version 2.1.2
+gem 'rack', '~> 2.2.4' # issue with sidekiq web in version 2.1.1, still doesn't work on sandbox in version 2.1.2
 gem 'rack-cors', '~> 1.1'
 gem 'scenic'
 gem 'sidekiq', '~> 6.2.1'
@@ -95,7 +95,7 @@ group :development do
   gem 'capistrano-rails', '~> 1.6', require: false
   gem 'capistrano-rvm'
   gem 'ed25519', '~> 1.2'
-  gem 'rubocop', '~> 1.15.0', require: false
+  gem 'rubocop', '~> 1.36.0', require: false
   gem 'rubocop-performance', require: false
 end
 

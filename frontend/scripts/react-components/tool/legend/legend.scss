@@ -16,7 +16,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    padding: 0 8px;
+    padding: 0 30px;
     height: 30px;
     width: 100%;
     background-color: $charcoal-grey;
@@ -63,12 +63,12 @@
 
       .bullet {
         display: inline-block;
-        width: 10px;
-        height: 10px;
+        width: 12px;
+        height: 12px;
         position: relative;
         top: 1px;
         margin-right: 2px;
-        border: solid 1px $charcoal-grey;
+        border: solid 1px $gray-500;
         text-align: center;
 
         span {
@@ -84,7 +84,7 @@
         }
 
         &.-highlighted {
-          border: solid 2px $charcoal-grey;
+          border: solid 2px $gray-500;
         }
 
         &.-color-white {

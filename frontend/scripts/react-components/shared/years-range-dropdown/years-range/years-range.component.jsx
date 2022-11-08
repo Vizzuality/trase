@@ -66,7 +66,7 @@ function YearsRange(props) {
               <div className="years-range-fill">
                 <Text
                   as="span"
-                  className="year-label"
+                  className="year-label notranslate"
                   variant="mono"
                   size="sm"
                   color="grey-faded"

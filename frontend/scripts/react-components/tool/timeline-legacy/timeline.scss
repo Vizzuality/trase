@@ -1,0 +1,211 @@
+@import 'styles/settings';
+@import 'styles/mixins';
+
+.c-timeline {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 40px;
+  bottom: -70px;
+
+  @media screen and (min-width: $breakpoint-laptop) {
+    bottom: 0;
+  }
+
+  left: 0;
+  width: 100%;
+  height: $timeline-height;
+  z-index: $z-above;
+
+  &.-show-background {
+    background-color: $background-white;
+    box-shadow: $box-shadow;
+  }
+
+  .timeline-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin: 0 0 0 12px;
+    overflow: hidden;
+    flex: 1;
+    position: relative;
+    border-radius: 4px;
+
+    &::before,
+    &::after {
+      display: block;
+      position: absolute;
+      height: 30px;
+      width: 60px;
+      top: 0;
+      z-index: $z-base;
+      transform: translate(-50%, 0);
+      pointer-events: none;
+    }
+
+    &::before {
+      left: 30px;
+      background-image: linear-gradient(
+        to right,
+        $background-white 70%,
+        rgba($background-white, 0.2) 100%
+      );
+    }
+
+    &::after {
+      left: calc(100% - 30px);
+      background-image: linear-gradient(
+        to left,
+        $background-white 70%,
+        rgba($background-white, 0.2) 100%
+      );
+    }
+
+    &.-button-left::before {
+      content: '';
+    }
+
+    &.-button-right::after {
+      content: '';
+    }
+  }
+
+  .timeline-page-button {
+    position: absolute;
+    height: 30px;
+    width: 30px;
+    z-index: $z-above;
+    background-color: $charcoal-grey;
+    border-radius: 4px;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 350ms $ease-in-out-sine;
+
+    &::after {
+      content: '';
+      display: block;
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      top: 50%;
+      left: 50%;
+      border: 2px solid $white;
+      border-bottom: 0;
+      border-left: 0;
+    }
+
+    &.-prev {
+      top: 0;
+      left: 0;
+      &::after {
+        transform: translate(calc(-50% + 1px), -50%) rotate(225deg);
+      }
+    }
+
+    &.-next {
+      top: 0;
+      right: 0;
+      &::after {
+        transform: translate(calc(-50% - 1px), -50%) rotate(45deg);
+      }
+    }
+
+    &.-visible {
+      opacity: 1;
+      pointer-events: all;
+    }
+  }
+
+  .timeline-years-list {
+    display: flex;
+    transition: transform 350ms $ease-in-out-sine;
+  }
+
+  .timeline-year-item {
+    border: 1px solid $charcoal-grey-faded;
+    margin: 0 6px; // matches MARGIN_BETWEEN_ITEMS inside useSlider
+    height: 30px;
+    width: 75px;
+    border-radius: 4px;
+    background-color: $white;
+
+    &.-sub-national {
+      border: 2px solid $strong-pink;
+      &.-start,
+      &.-end {
+        background-color: $strong-pink;
+      }
+    }
+
+    &.-active {
+      background-color: $charcoal-grey-faded;
+      &.-sub-national {
+        background-color: $strong-pink;
+        color: $white;
+      }
+    }
+
+    &.-start,
+    &.-end {
+      background-color: $charcoal-grey;
+    }
+
+    .timeline-year-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 12px;
+      height: 100%;
+      width: 100%;
+      cursor: pointer;
+
+      &[disabled=''] {
+        cursor: default;
+      }
+    }
+  }
+
+  .timeline-range-placeholder {
+    position: absolute;
+    height: 30px;
+    left: 0;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: $z-above-hero;
+    background-color: darken($background-white, 7%);
+    border-radius: 4px;
+    opacity: 1;
+    transition: opacity 350ms $ease-in-out-sine;
+    margin: 0 6px;
+
+    &.-hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .timeline-placeholder-year-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 30px;
+      width: 58px;
+      border-radius: 4px;
+      background-color: $charcoal-grey;
+      padding: 6px 12px;
+      flex-shrink: 0;
+
+      > span {
+        display: block;
+      }
+    }
+
+    .timeline-placeholder-text {
+      pointer-events: none;
+    }
+  }
+}

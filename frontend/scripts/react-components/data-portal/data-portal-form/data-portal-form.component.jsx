@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import axios from 'axios';
-import { getURLFromParams, POST_SUBSCRIBE_NEWSLETTER_URL } from '../../../utils/getURLFromParams';
 import { COUNTRIES } from '../../../countries';
 
 import './download-form.scss';
@@ -41,6 +40,8 @@ class DataPortalForm extends Component {
   }
 
   handleSubmit(event) {
+    const { sendSubscriptionEmail } = this.props;
+
     event.preventDefault();
     const { downloaded, downloadFile, closeForm } = this.props;
     const data = this.getFormData(event.target);
@@ -72,14 +73,15 @@ class DataPortalForm extends Component {
     Object.keys(payload).forEach(key => {
       dataSubmitBody.append(key, payload[key]);
     });
-
     axios.post(DATA_FORM_ENDPOINT, dataSubmitBody);
 
     if (payload.email) {
-      const newsletterSubscribeBody = new FormData();
-      newsletterSubscribeBody.append('email', payload.email);
-
-      axios.post(getURLFromParams(POST_SUBSCRIBE_NEWSLETTER_URL), newsletterSubscribeBody);
+      sendSubscriptionEmail({
+        email: payload.email,
+        firstname: payload.name,
+        lastname: payload.lastname,
+        organisation: payload.organisation
+      });
     }
 
     closeForm();

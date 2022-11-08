@@ -117,7 +117,7 @@ describe('Profile actor - Full data', () => {
     expect(biomePolygons.length).toBe(5);
   });
 
-  it('Deforestation risk widget loads successfully', async () => {
+  it('Deforestation exposure widget loads successfully', async () => {
     await testProfileMultiTable(page, {
       tabsLength: 2,
       rowsLength: 10,
@@ -127,7 +127,7 @@ describe('Profile actor - Full data', () => {
       firstColumn: 'municipality',
       testId: 'deforestation-risk',
       firstRow: 'CAMPO NOVO DO PARECIS89ha99ha',
-      title: "deforestation risk associated with bunge's top sourcing regions in 2015"
+      title: "deforestation exposure associated with bunge's top sourcing regions in 2015"
     });
   });
 

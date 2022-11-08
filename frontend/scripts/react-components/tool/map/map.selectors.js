@@ -106,7 +106,7 @@ export const getContextualLayers = createSelector(
       const { identifier, cartoLayers } = layerData;
       const cartoData = cartoLayers[0];
 
-      if (cartoData.rasterUrl) {
+      if (cartoData && cartoData.rasterUrl) {
         layers.push(getRasterLayerTemplate(identifier, `${cartoData.rasterUrl}{z}/{x}/{y}.png`));
       } else {
         const layerStyle = cartoLayerTemplates[identifier];

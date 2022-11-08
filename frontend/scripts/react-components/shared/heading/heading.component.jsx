@@ -42,7 +42,7 @@ Heading.defaultProps = {
   size: 'rg',
   color: 'grey',
   weight: 'light',
-  variant: 'serif'
+  variant: 'sans'
 };
 
 Heading.propTypes = {

@@ -340,7 +340,6 @@ Sankey.propTypes = {
   maxHeight: PropTypes.number,
   detailedView: PropTypes.bool,
   flowsLoading: PropTypes.bool,
-  isReExpand: PropTypes.bool, // eslint-disable-line
   hasExpandedNodesIds: PropTypes.bool, // eslint-disable-line
   selectedResizeBy: PropTypes.object,
   selectedRecolorBy: PropTypes.object,

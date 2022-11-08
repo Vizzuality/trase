@@ -20,6 +20,7 @@ function TagsGroup(props) {
         <Component
           as="span"
           size={size}
+          variant="sans"
           align="center"
           key={part.id || part.prefix}
           color={color}

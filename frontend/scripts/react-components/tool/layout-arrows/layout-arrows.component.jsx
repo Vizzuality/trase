@@ -9,20 +9,20 @@ export default function LayoutArrows({ layout, changeLayout }) {
   return (
     <>
       <button
-        className={cx(
-          'layout-arrow-button',
-          { '-centered-arrow': layout !== TOOL_LAYOUT.splitted },
-          { '-disabled': layout === TOOL_LAYOUT.left }
-        )}
+        className={cx('layout-arrow-button', {
+          '-centered-arrow': layout !== TOOL_LAYOUT.splitted,
+          '-right-layout': layout === TOOL_LAYOUT.right,
+          '-disabled': layout === TOOL_LAYOUT.left
+        })}
         disabled={layout === TOOL_LAYOUT.left}
         onClick={() => changeLayout(layout - 1)}
       />
       <button
-        className={cx(
-          'layout-arrow-button -right',
-          { '-centered-arrow': layout !== TOOL_LAYOUT.splitted },
-          { '-disabled': layout === TOOL_LAYOUT.right }
-        )}
+        className={cx('layout-arrow-button -right', {
+          '-centered-arrow': layout !== TOOL_LAYOUT.splitted,
+          '-right-layout': layout === TOOL_LAYOUT.right,
+          '-disabled': layout === TOOL_LAYOUT.right
+        })}
         disabled={layout === TOOL_LAYOUT.right}
         onClick={() => changeLayout(layout + 1)}
       />

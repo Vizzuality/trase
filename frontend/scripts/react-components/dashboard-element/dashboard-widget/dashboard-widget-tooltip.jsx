@@ -39,16 +39,14 @@ const renderTooltipSuffix = (meta, dataKey, payload) => {
   const key = dataKey || Object.keys(keys)[0];
   if (meta && meta[key]) {
     const { tooltip } = meta[key];
-    return <>
-      {' '}
-      <Text
-        variant="mono"
-        as="span"
-        color="grey-faded"
-      >
-        {tooltip.suffix || meta.yAxis.suffix}
-      </Text>
-    </>
+    return (
+      <>
+        {' '}
+        <Text variant="mono" as="span" color="grey-faded">
+          {tooltip.suffix || meta.yAxis.suffix}
+        </Text>
+      </>
+    );
   }
   return null;
 };
@@ -67,16 +65,17 @@ function DashboardWidgetTooltip(props) {
 
   const scrollCorrection = containerRef?.current?.offsetTop - dataView.scrollTop;
   const top = y + height / 2 + scrollCorrection;
-  const left = x + containerRef?.current?.offsetWidth + containerRef?.current?.offsetLeft - width / 2 - (tooltipRef?.current?.offsetWidth || 0);
+  const left =
+    x +
+    containerRef?.current?.offsetWidth +
+    containerRef?.current?.offsetLeft -
+    width / 2 -
+    (tooltipRef?.current?.offsetWidth || 0);
   const isStackedBars = meta.x1 || meta.y1;
   const renderTooltip = () => (
     <div className="c-dashboard-widget-tooltip" ref={tooltipRef} style={{ top, left }}>
       <div className="dashboard-widget-tooltip-header">
-        <Text
-          variant="mono"
-          as="span"
-          transform="uppercase"
-        >
+        <Text variant="mono" as="span" transform="uppercase">
           {payload[0] && (payload[0].unit || payload[0].payload?.y || payload[0].payload?.x)}
         </Text>
       </div>
@@ -93,18 +92,21 @@ function DashboardWidgetTooltip(props) {
         </Text>
       )}
       {[...payload].reverse().map(item => (
-        <div className={cx("dashboard-widget-tooltip-item", { 'stacked-bars': isStackedBars })} key={item.name}>
+        <div
+          className={cx('dashboard-widget-tooltip-item', { 'stacked-bars': isStackedBars })}
+          key={item.name}
+        >
           {!isStackedBars && (
-              <Text
-                variant="mono"
-                as="div"
-                size="xs"
-                transform="uppercase"
-                color="grey-faded"
-                className="dashboard-widget-tooltip-label"
-              >
-                {getTooltipLabel(meta, item.dataKey, item.payload)}
-              </Text>
+            <Text
+              variant="mono"
+              as="div"
+              size="xs"
+              transform="uppercase"
+              color="grey-faded"
+              className="dashboard-widget-tooltip-label"
+            >
+              {getTooltipLabel(meta, item.dataKey, item.payload)}
+            </Text>
           )}
           <div className="dashboard-widget-tooltip-value-container">
             {isStackedBars && (
@@ -125,11 +127,7 @@ function DashboardWidgetTooltip(props) {
                 </Text>
               </div>
             )}
-            <Text
-              variant="mono"
-              as="span"
-              size={isStackedBars ? "rg" : "lg"}
-            >
+            <Text variant="mono" as="span" size={isStackedBars ? 'rg' : 'lg'}>
               {getTooltipValue(meta, item.dataKey, item.payload)}
               {renderTooltipSuffix(meta, item.dataKey, item.payload)}
             </Text>
@@ -148,7 +146,10 @@ DashboardWidgetTooltip.defaultProps = {};
 
 DashboardWidgetTooltip.propTypes = {
   payload: PropTypes.array,
-  meta: PropTypes.object
+  meta: PropTypes.object,
+  viewBox: PropTypes.shape({ height: PropTypes.number, width: PropTypes.number }),
+  coordinate: PropTypes.shape({ x: PropTypes.number, y: PropTypes.number }),
+  containerRef: PropTypes.instanceOf(Element)
 };
 
 export default DashboardWidgetTooltip;

@@ -76,7 +76,7 @@ const sidebarNav = [
     }
   },
   {
-    name: 'What is Trase?',
+    name: 'What is <span class="notranslate">Trase</span>?',
     page: {
       type: 'about',
       payload: {

@@ -24,10 +24,10 @@
     }
 
     .tags-group-item-remove-cross {
-      position: absolute;
-      top: 0;
-      right: 0;
+      position: relative;
+      margin-left: 0 0 3px -3px;
       cursor: pointer;
+
       svg {
         fill: $strong-pink;
       }

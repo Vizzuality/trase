@@ -23,7 +23,14 @@ function isActive(match, location, link) {
 }
 
 const NavLinks = props => {
-  const { links, itemClassName, linkClassName, linkActiveClassName, navLinkProps } = props;
+  const {
+    links,
+    itemClassName,
+    linkClassName,
+    linkActiveClassName,
+    navLinkProps,
+    parseHtml
+  } = props;
   return (
     <React.Fragment>
       {links.map(mapLinksToRouter).map(link => (
@@ -49,7 +56,12 @@ const NavLinks = props => {
               isActive={(...params) => isActive(...params, link)}
               {...navLinkProps}
             >
-              {link.children || link.name}
+              {parseHtml ? (
+                // eslint-disable-next-line react/no-danger
+                <span dangerouslySetInnerHTML={{ __html: link.children || link.name }} />
+              ) : (
+                link.children || link.name
+              )}
             </NavLink>
           )}
         </li>
@@ -63,7 +75,8 @@ NavLinks.propTypes = {
   itemClassName: PropTypes.string,
   linkClassName: PropTypes.string,
   linkActiveClassName: PropTypes.string,
-  navLinkProps: PropTypes.object
+  navLinkProps: PropTypes.object,
+  parseHtml: PropTypes.bool
 };
 
 export default NavLinks;

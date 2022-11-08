@@ -18,8 +18,12 @@
   }
 
   &.-hovered {
+    background-color: $green-200;
+
+    .options-menu-label,
+    .suffix-text,
     .value-text {
-      text-decoration: underline;
+      color: $gray-500;
     }
   }
 

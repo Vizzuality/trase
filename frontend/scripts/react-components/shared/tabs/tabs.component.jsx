@@ -24,8 +24,12 @@ function Tabs(props) {
   const variantText = {
     'plain-text': {
       color: 'blue'
+    },
+    toolbar: {
+      color: 'blue'
     }
   }[variant];
+
   return (
     <div className={cx('c-tabs', { [`margin-${margin}`]: margin, [`v-${variant}`]: variant })}>
       <div className="tabs-container">
@@ -44,7 +48,7 @@ function Tabs(props) {
             >
               <Text
                 as="span"
-                color={isSelected(item) ? variantText?.color || color : 'blue'}
+                color={isSelected(item) ? variantText?.color || color || 'white' : 'blue'}
                 weight="bold"
                 size="rg"
                 variant="sans"
@@ -64,7 +68,6 @@ function Tabs(props) {
 Tabs.defaultProps = {
   testId: 'tab',
   getTabId: x => x,
-  color: 'white',
   margin: 'sm'
 };
 

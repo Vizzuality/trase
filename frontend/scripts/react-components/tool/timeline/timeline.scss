@@ -6,7 +6,7 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  padding: 0 40px;
+  padding: 0 30px;
   bottom: 0;
   left: 0;
   width: 100%;
@@ -22,7 +22,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    margin: 0 0 0 12px;
+    margin: 0 0 0 28px;
     overflow: hidden;
     flex: 1;
     position: relative;
@@ -129,23 +129,22 @@
 
     &.-sub-national {
       border: 2px solid $strong-pink;
-      &.-start,
-      &.-end {
+    }
+
+    &.-hovered {
+      background-color: $charcoal-grey-faded;
+
+      &.-sub-national {
         background-color: $strong-pink;
       }
     }
 
     &.-active {
-      background-color: $charcoal-grey-faded;
+      background-color: $charcoal-grey;
+
       &.-sub-national {
         background-color: $strong-pink;
-        color: $white;
       }
-    }
-
-    &.-start,
-    &.-end {
-      background-color: $charcoal-grey;
     }
 
     .timeline-year-button {
@@ -162,44 +161,7 @@
     }
   }
 
-  .timeline-range-placeholder {
-    position: absolute;
-    height: 30px;
-    left: 0;
-    top: 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    z-index: $z-above-hero;
-    background-color: darken($background-white, 7%);
-    border-radius: 4px;
-    opacity: 1;
-    transition: opacity 350ms $ease-in-out-sine;
-    margin: 0 6px;
-
-    &.-hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .timeline-placeholder-year-item {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 30px;
-      width: 58px;
-      border-radius: 4px;
-      background-color: $charcoal-grey;
-      padding: 6px 12px;
-      flex-shrink: 0;
-
-      > span {
-        display: block;
-      }
-    }
-
-    .timeline-placeholder-text {
-      pointer-events: none;
-    }
+  .year-label {
+    margin-left: 8px;
   }
 }

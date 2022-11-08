@@ -32,11 +32,14 @@ function DashboardModalFooter(props) {
       />
       <div className="dashboard-modal-actions">
         {onBack && (
-          <button type="button" onClick={onBack} className="dashboard-modal-back-button">
-            <Text as="span" size="rg" variant="mono">
-              {backText || 'Back To Options'}
-            </Text>
-          </button>
+          <Button
+            onClick={onBack}
+            className="dashboard-modal-back-button"
+            size="rg"
+            color="transparent"
+          >
+            {backText || 'Back To Options'}
+          </Button>
         )}
         {!isLastStep && (
           <Button

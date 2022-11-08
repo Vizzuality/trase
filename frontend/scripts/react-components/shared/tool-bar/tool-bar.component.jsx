@@ -37,22 +37,30 @@ function ToolBar(props) {
   const [activeId, setId] = useState(null);
 
   function getListItem(item, ref) {
+    const {
+      noHover,
+      noBorder,
+      noPaddingRight,
+      type,
+      className: itemClassName,
+      ...updatedItem
+    } = item;
     return (
       <li
-        key={item.id}
+        key={updatedItem.id}
         ref={ref}
         className={cx('slot-item', {
-          '-no-hover': item.noHover,
-          '-no-border': item.noBorder,
-          '-no-padding-right': item.noPaddingRight
+          '-no-hover': noHover,
+          '-no-border': noBorder,
+          '-no-padding-right': noPaddingRight
         })}
-        onMouseEnter={() => setId(item.id)}
+        onMouseEnter={() => setId(updatedItem.id)}
         onMouseLeave={() => setId(null)}
       >
-        {React.createElement(types[item.type], {
-          ...item,
-          onClick: props[`${item.id}_onClick`],
-          className: cx(item.className, item.id === activeId ? '-hovered' : undefined)
+        {React.createElement(types[type], {
+          ...updatedItem,
+          onClick: props[`${updatedItem.id}_onClick`],
+          className: cx(itemClassName, updatedItem.id === activeId ? '-hovered' : undefined)
         })}
       </li>
     );
@@ -66,7 +74,7 @@ function ToolBar(props) {
         placement="bottom-start"
         arrow={false}
         animation="none"
-        theme="black"
+        theme="green"
         duration={0}
         zIndex={102}
         distance={0}

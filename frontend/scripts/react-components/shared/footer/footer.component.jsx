@@ -40,13 +40,6 @@ const donors = [
     imageClassName: null
   },
   {
-    className: 'ggp-logo',
-    href: 'https://goodgrowthpartnership.com/',
-    image: '/images/footer/donors/ggp.svg',
-    alt: 'Good Growth partnership',
-    imageClassName: null
-  },
-  {
     className: 'quadrature-logo',
     href: 'https://quadrature.ai/foundation/',
     image: '/images/footer/donors/quadrature.png',
@@ -77,7 +70,7 @@ const Footer = () => {
           title="Parners and funders info"
           // eslint-disable-next-line react/jsx-no-target-blank
           target="_blank"
-          rel="noopener"
+          rel="noopener noreferrer"
         >
           Click for more information about our partners and funders.
         </a>
@@ -147,7 +140,7 @@ const Footer = () => {
           },
           {
             title: 'FAQs',
-            href: 'https://trase.finance/faqs'
+            href: 'https://trase.finance/faq'
           }
         ]
       },
@@ -261,7 +254,7 @@ const Footer = () => {
                 title="Terms of use page"
                 // eslint-disable-next-line react/jsx-no-target-blank
                 target="_blank"
-                rel="noopener"
+                rel="noopener noreferrer"
               >
                 Terms of use
               </a>
@@ -275,7 +268,7 @@ const Footer = () => {
                   title="Terms of use page"
                   // eslint-disable-next-line react/jsx-no-target-blank
                   target="_blank"
-                  rel="noopener"
+                  rel="noopener noreferrer"
                 >
                   Privacy policy
                 </a>
@@ -288,7 +281,7 @@ const Footer = () => {
                   title="Terms of use page"
                   // eslint-disable-next-line react/jsx-no-target-blank
                   target="_blank"
-                  rel="noopener"
+                  rel="noopener noreferrer"
                 >
                   Cookie policy
                 </a>

@@ -13,7 +13,8 @@ class ProfileContainer extends React.PureComponent {
     context: PropTypes.object,
     commodityId: PropTypes.number,
     nodeId: PropTypes.number,
-    selectedYear: PropTypes.number
+    selectedYear: PropTypes.number,
+    profileType: PropTypes.string
   };
 
   render() {

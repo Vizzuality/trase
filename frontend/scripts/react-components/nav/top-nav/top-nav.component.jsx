@@ -239,8 +239,7 @@ class TopNav extends React.PureComponent {
           {
             '-has-background': backgroundVisible || menuOpen,
             '-yellow-background': YELLOW_PAGES.includes(page) && !backgroundVisible && !menuOpen,
-            '-no-shadow': className === '-egg-shell',
-            'with-google-translate': ENABLE_GOOGLE_TRANSLATE
+            '-no-shadow': className === '-egg-shell'
           },
           className
         )}

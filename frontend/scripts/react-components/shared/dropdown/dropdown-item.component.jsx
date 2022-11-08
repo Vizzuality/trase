@@ -20,7 +20,7 @@ function DropdownItem(props) {
   const itemCustomClassName = getItemClassName && getItemClassName(item);
   const itemTextProps =
     {
-      column: { variant: 'mono', size: 'rg' }
+      column: { variant: 'sans', size: 'rg' }
     }[variant] || {};
   return (
     <>
@@ -39,14 +39,21 @@ function DropdownItem(props) {
           ref: index === 0 ? listItemRef : undefined
         })}
       >
+        <Text
+          title={item.label}
+          weight="regular"
+          className="item-label"
+          {...itemTextProps}
+          {...(item.style || {})}
+          transform="uppercase"
+        >
+          {item.label}
+        </Text>
         {item.icon && (
           <svg className={cx('dropdown-menu-item-icon', 'icon', `icon-${item.icon}`)}>
             <use xlinkHref={`#icon-${item.icon}`} />
           </svg>
         )}
-        <Text title={item.label} weight="regular" className="item-label" {...itemTextProps}>
-          {item.label}
-        </Text>
         {item.tooltip && (
           <Tooltip className="dropdown-menu-item-tooltip" constraint="window" text={item.tooltip} />
         )}

@@ -5,12 +5,13 @@ $segment-width-tablet: 110px;
 $label-height: 25px;
 $circle-size: 32px;
 $item-height: $label-height + $circle-size;
-$circle-dot-size: $circle-size / 2;
+$circle-dot-size: calc($circle-size / 2);
 
 .c-steps-tracker {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 40px 0 20px;
 
   .steps-tracker-item-wrapper {
     position: relative;
@@ -129,6 +130,12 @@ $circle-dot-size: $circle-size / 2;
       .steps-tracker-item {
         cursor: pointer;
         outline: none;
+
+        .steps-tracker-label:not(.-choose-step){
+          > span {
+            color: $gray-200;
+          }
+        }
 
         &:hover {
           .steps-tracker-circle-dot {

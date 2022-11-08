@@ -79,7 +79,7 @@ function DropdownButton(props) {
 DropdownButton.propTypes = {
   innerRef: PropTypes.any.isRequired,
   arrowType: PropTypes.string,
-  inputValue: PropTypes.any.isRequired,
+  inputValue: PropTypes.any,
   selectedValueOverride: PropTypes.any,
   label: PropTypes.string,
   size: PropTypes.string,

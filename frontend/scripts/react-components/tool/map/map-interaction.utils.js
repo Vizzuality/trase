@@ -14,7 +14,7 @@ export const handleHover = ({
   logisticLayers,
   onPolygonHighlighted
 }) => {
-  const { features, center } = event;
+  const { features, offsetCenter } = event;
   if (!features || !features.length) {
     return undefined;
   }
@@ -51,9 +51,9 @@ export const handleHover = ({
     });
     updateTooltipValues(logisticsTooltipValues);
     setTooltip({
-      x: center.x,
-      y: center.y,
-      name: properties?.subclass || upperCase(logisticsFeature.source)
+      x: offsetCenter.x,
+      y: offsetCenter.y,
+      text: properties?.subclass || upperCase(logisticsFeature.source)
     });
     return undefined;
   }
@@ -75,8 +75,8 @@ export const handleHover = ({
     }
 
     onPolygonHighlighted(id, {
-      pageX: center.x,
-      pageY: center.y
+      pageX: offsetCenter.x,
+      pageY: offsetCenter.y
     });
 
     if (source === INDONESIA_MILL_LAYER_ID) {
@@ -103,7 +103,7 @@ export const handleHover = ({
       });
 
       updateTooltipValues(logisticsTooltipValues);
-      setTooltip({ x: center.x, y: center.y, name: id, values: properties });
+      setTooltip({ x: offsetCenter.x, y: offsetCenter.y, text: id, values: properties });
 
       return undefined;
     }
@@ -111,7 +111,7 @@ export const handleHover = ({
     const node = highlightedNodesData[0];
 
     if (node?.name) {
-      setTooltip({ x: center.x, y: center.y, name: node?.name, values: properties });
+      setTooltip({ x: offsetCenter.x, y: offsetCenter.y, text: node?.name, values: properties });
     } else {
       // Reset last and current tooltip
       hoveredGeo.set({});

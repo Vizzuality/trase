@@ -11,10 +11,10 @@ function OptionsMenuFilter(props) {
 
   return (
     <button className={cx('c-options-menu-filter', className)} onClick={() => onClick(id)}>
-      <Text as="span" size="sm" variant="mono" transform="uppercase" className="options-menu-label">
+      <Text as="span" size="rg" variant="sans" transform="uppercase" className="options-menu-label">
         {label}
       </Text>
-      <Heading as="p" size="rg" color="white" weight="bold" title={value}>
+      <Heading as="p" size="rg" color="white" variant="sans" weight="bold" title={value}>
         <span className="value-text">{value}</span>
         {suffix && (
           <>

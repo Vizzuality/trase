@@ -50,7 +50,8 @@ function Button(props) {
 
 Button.defaultProps = {
   as: 'button',
-  iconPosition: 'right'
+  iconPosition: 'right',
+  weight: 'bold'
 };
 
 Button.propTypes = {

@@ -104,11 +104,11 @@ export default function(
         if (!nodeMeta) {
           color = CHOROPLETH_COLORS.error_no_metadata_for_layer; // no metadata on this node has been found for this layer
         } else {
-          const value = nodeMeta.single_layer_bucket;
+          const { single_layer_bucket: bucketValue, value } = nodeMeta;
           if (value === 0) {
             color = CHOROPLETH_CLASS_ZERO;
           } else {
-            colorIndex = Math.max(0, value - 1);
+            colorIndex = Math.max(0, bucketValue - 1);
             color = colors[colorIndex];
           }
         }

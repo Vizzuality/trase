@@ -93,6 +93,7 @@ function SourcesPanel(props) {
                 isActive={selectedNodesIds.includes(itemProps.item?.id)}
                 enableItem={setSelectedItems}
                 disableItem={setSelectedItems}
+                color="transparent"
               />
             )}
           </GridList>

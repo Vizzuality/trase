@@ -41,10 +41,11 @@ const sagaMiddleware = createSagaMiddleware();
 // analytics middleware has to be after router.middleware
 const middlewares = [thunk, sagaMiddleware, router.middleware, analyticsMiddleware];
 
-window.liveSettings = TRANSIFEX_API_KEY && {
-  api_key: TRANSIFEX_API_KEY,
-  autocollect: true
-};
+window.liveSettings = !ENABLE_GOOGLE_TRANSLATE &&
+  TRANSIFEX_API_KEY && {
+    api_key: TRANSIFEX_API_KEY,
+    autocollect: true
+  };
 
 // test for ie11 and googlebot
 if (

@@ -16,7 +16,7 @@ on:
 jobs:
   rspec:
     name: RSpec
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     services:
       postgres:
         image: postgres:11
@@ -29,7 +29,12 @@ jobs:
 
     steps:
       - name: Checkout 🛎️
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
 
       - name: Install PostgreSQL client 🐘
         run: |
@@ -50,6 +55,7 @@ jobs:
 
       - name: Install gems 💎
         run: |
+          sudo apt-get install libffi-dev
           bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
 
@@ -69,6 +75,8 @@ jobs:
           bundle exec rails db:migrate RAILS_ENV=test
 
       - name: Setup code coverage
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         run: cc-test-reporter before-build
 
       - name: Run tests 🔧
@@ -80,4 +88,6 @@ jobs:
         run: bundle exec rspec spec --fail-fast
 
       - name: Publish code coverage 🚀
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         run: cc-test-reporter after-build

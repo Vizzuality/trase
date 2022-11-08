@@ -7,7 +7,7 @@
   height: 36px;
   transition: top 450ms $ease-in-out-sine, left 450ms $ease-in-out-sine;
   border-radius: 50%;
-  background-color: $charcoal-grey;
+  background-color: $gray-500;
   color: $white;
   box-shadow: $box-shadow-big;
   cursor: pointer;
@@ -19,7 +19,7 @@
     display: block;
   }
 
-  &:hover {
+  &.-open {
     background-color: transparent;
     box-shadow: unset;
 
@@ -42,6 +42,8 @@
     display: none;
     position: absolute;
     min-width: 230px;
+    padding: 12px;
+    background-color: $white;
     box-shadow: $box-shadow-big;
     font-family: $font-family-1;
     top: 2px;
@@ -49,7 +51,7 @@
 
     .title {
       padding: 10px;
-      background-color: $manilla;
+      background-color: $green-200;
       letter-spacing: -1px;
       font-family: $font-family-1;
     }
@@ -63,22 +65,38 @@
       position: relative;
       height: 32px;
       background-color: $white;
+      border-radius: 4px;
+
+      .option-text {
+          text-overflow: ellipsis;
+          overflow: hidden;
+          white-space: nowrap;
+      }
+
+      &:hover {
+        .option-text {
+          color: $white;
+        }
+      }
 
       .menu-item-button {
         width: 100%;
         cursor: pointer;
-        padding: 10px 8px;
+        padding: 8px 16px;
         display: flex;
         flex-direction: row;
-        justify-content: space-between;
         white-space: nowrap;
 
         .option-icon {
-          order: 2;
+          width: 20px;
+          height: 20px;
+          margin-left: 0;
         }
 
-        .option-text {
-          order: 1;
+        &:hover {
+          .option-icon {
+            color: $white;
+          }
         }
       }
 
@@ -91,7 +109,8 @@
       }
 
       &:hover {
-        background-color: $manilla;
+        background-color: $gray-500;
+        color: $white;
       }
     }
 

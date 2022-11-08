@@ -1,9 +1,13 @@
-.google-translate {
-  width: 240px;
-  margin-left: 9px;
+// Remove top google translate navbar
+.goog-te-banner-frame.skiptranslate {
+  display: none !important;
 }
 
+body {
+  top: 0px !important;
+}
 
-// :global .goog-te-combo {
-//   max-width: 50px;
-// }
+.google-translate {
+  max-width: 140px;
+  margin-left: 9px;
+}

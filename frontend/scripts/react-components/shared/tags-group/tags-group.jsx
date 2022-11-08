@@ -23,7 +23,7 @@ class TagsGroupContainer extends React.Component {
     const options = value.map(p => ({ value: p.id, label: p.name, ...iconProp }));
     return readOnly
       ? options
-      : options.concat({ label: 'CLEAR ALL', value: 'clear-all', ...iconProp });
+      : options.concat({ label: 'CLEAR ALL', value: 'clear-all', style: { weight: 'bold' } });
   };
 
   removeOption = (part, optionToClear) => {
@@ -32,7 +32,10 @@ class TagsGroupContainer extends React.Component {
     if (optionToClear.value === 'clear-all') {
       clearPanel(part.panel);
     } else {
-      removeSentenceItem(part.value.find(v => v.id === optionToClear.value), part.panel);
+      removeSentenceItem(
+        part.value.find(v => v.id === optionToClear.value),
+        part.panel
+      );
     }
   };
 

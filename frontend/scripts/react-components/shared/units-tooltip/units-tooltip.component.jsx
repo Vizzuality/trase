@@ -47,27 +47,33 @@ function UnitsTooltip(props) {
       <Text variant="sans" size="sm" weight="bold" className="units-tooltip-text">
         {text}
       </Text>
-      {items.map(item => (
-        <div key={`units-tooltip-${item.title}`} className="units-tooltip-value">
-          <Text
-            as="div"
-            variant="mono"
-            size="sm"
-            color="grey-faded"
-            weight="light"
-            transform="uppercase"
-            className="units-tooltip-unit"
-          >
-            {item.title}
-          </Text>
-          {item.value && (
-            <Text variant="sans" size="sm" weight="bold" className="units-tooltip-data">
-              {item.value} {item.unit}
+      {items &&
+        items.map(item => (
+          <div key={`units-tooltip-${item.title}`} className="units-tooltip-value">
+            <Text
+              as="div"
+              variant="mono"
+              size="sm"
+              color="grey-faded"
+              weight="light"
+              transform="uppercase"
+              className="units-tooltip-unit"
+            >
+              {item.title}
             </Text>
-          )}
-          {!item.value && item.children}
-        </div>
-      ))}
+            {item.value && (
+              <Text
+                variant="sans"
+                size="sm"
+                weight="bold"
+                className="units-tooltip-data notranslate"
+              >
+                {item.value} {item.unit}
+              </Text>
+            )}
+            {!item.value && item.children}
+          </div>
+        ))}
       {disclaimer && (
         <Text variant="sans" size="sm" className="disclaimer-text">
           {disclaimer}

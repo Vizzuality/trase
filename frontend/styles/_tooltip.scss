@@ -58,13 +58,24 @@
   line-height: $line-height-md;
 }
 
+.tippy-tooltip.green-theme .tippy-content{
+  background: $green-light-gray-gradient;
+  color: $gray-300;
+  border-radius: 0;
+  padding: 0;
+  font-family: $font-family-2;
+  font-size: $font-size-regular;
+  font-weight: $font-weight-light;
+  line-height: $line-height-md;
+}
+
 // Gradient Theme with padding
 .tippy-tooltip.gradient-padding-theme .tippy-content {
   background: $green-light-gray-gradient;
   color: $main-dark-blue;
   border-radius: 0;
   padding: 12px;
-  font-family: $font-family-2;
+  font-family: $font-family-1;
   font-size: $font-size-regular;
   font-weight: $font-weight-light;
   line-height: $line-height-md;
@@ -75,7 +86,7 @@
   color: $main-dark-blue;
   border-radius: 0;
   padding: 12px;
-  font-family: $font-family-2;
+  font-family: $font-family-1;
   font-size: $font-size-regular;
   font-weight: $font-weight-light;
   line-height: $line-height-md;

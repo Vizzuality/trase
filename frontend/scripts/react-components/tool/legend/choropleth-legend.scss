@@ -2,6 +2,7 @@
 
 .c-choropleth-legend {
   position: relative;
+  padding: 20px 0;
 
   .bucket {
     position: relative;
@@ -48,10 +49,17 @@
 
   .bucket-container {
     position: relative;
-    border-bottom: 1px solid rgba($charcoal-grey, .2);
 
     .bucket-names {
       display: flex;
+    }
+
+    .bucket-label {
+      max-width: 100px;
+
+      &:only-child {
+        max-width: 150px;
+      }
     }
 
     .bucket-legend {
@@ -63,19 +71,11 @@
       height: 100%;
     }
 
-    .layer-name {
-      font-family: $font-family-1;
-      font-size: 11px;
-      letter-spacing: -1.1px;
-      color: $charcoal-grey;
-      text-transform: uppercase;
-    }
-
     .unidimensional-legend-arrow {
       display: block;
       position: absolute;
-      width: 45%;
-      right: 10px;
+      width: 42%;
+      right: 31px;
       bottom: 15px;
     }
 
@@ -91,12 +91,12 @@
     }
 
     &.-horizontal {
-      padding: 9px 0 24px 0;
+      padding: 0 20px 25px 0;
       text-align: right;
 
       .bucket-names {
         justify-content: flex-end;
-        padding: 0 9px;
+        padding: 0 12px;
       }
 
       .bucket-legend {
@@ -132,7 +132,7 @@
 
       .bucket-names {
         justify-content: space-between;
-        padding: 0 6px;
+        padding: 0 12px;
       }
 
       .bucket-legend {
@@ -173,11 +173,17 @@
 
   .bullets {
     position: absolute;
-    left: 6px;
-    bottom: 6px;
+    left: 30px;
+    bottom: 8px;
 
-    li {
+    .bullet-container {
       line-height: 100%;
+      display: flex;
+      align-items: flex-start;
+    }
+
+    .bullet-text {
+      margin-left: 5px;
     }
   }
 
@@ -187,7 +193,7 @@
     left: 0;
     right: 0;
     margin: auto;
-    width: 127px;
+    width: 144px;
     height: 60px;
 
     li {

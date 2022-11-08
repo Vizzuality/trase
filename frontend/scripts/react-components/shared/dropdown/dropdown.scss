@@ -20,7 +20,7 @@
       }
 
       &.-no-label::after {
-        transform: translateY(calc(-50% - 2px)) rotate(225deg);
+        transform: translateY(calc(-50% + 2px)) rotate(225deg);
       }
 
       &.-caret {
@@ -112,7 +112,7 @@
     padding: 10px;
 
     &.-highlighted {
-      background-color: $manilla;
+      background-color: $green-200;
     }
 
     &.-disabled {

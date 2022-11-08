@@ -7,14 +7,10 @@ import TagsGroup from 'react-components/shared/tags-group/tags-group.component';
 
 function ToolbarTooltip(props) {
   const { style, children } = props;
-
   return (
-    <div
-      className="c-toolbar-tooltip"
-      style={style}
-    >
+    <div className="c-toolbar-tooltip" style={style}>
       {typeof children === 'string' && (
-        <Text lineHeight="md" color="white" size="sm">
+        <Text lineHeight="md" color="gray" size="sm">
           {children}
         </Text>
       )}
@@ -23,7 +19,7 @@ function ToolbarTooltip(props) {
           variant="tooltip"
           readOnly
           tags={children}
-          color="white"
+          color="gray"
           textAs={Text}
           size="sm"
           showDropdown={false}
