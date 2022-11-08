@@ -11,7 +11,7 @@ import 'styles/components/shared/modal.scss';
 
 function PopUp({ handleOnRequestClose }) {
   return (
-    <SimpleModal isOpen onRequestClose={handleOnRequestClose}>
+    <SimpleModal isOpen onRequestClose={handleOnRequestClose} overlayClassName="popup-overlay">
       <div className="c-popup">
         <div className="popup-content">
           <Heading as="h3" weight="bold" size="md">

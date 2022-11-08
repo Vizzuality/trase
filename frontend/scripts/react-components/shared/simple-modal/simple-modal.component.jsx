@@ -10,7 +10,7 @@ function SimpleModal(props) {
     <ReactModal
       {...props}
       className={cx('c-simple-modal', props.className)}
-      overlayClassName="c-simple-modal-overlay"
+      overlayClassName={cx('c-simple-modal-overlay', props.overlayClassName)}
       ariaHideApp={false}
     >
       <div className="simple-modal-content">
@@ -33,6 +33,7 @@ SimpleModal.propTypes = {
   closeLabel: PropTypes.string,
   contentClassName: PropTypes.string,
   className: PropTypes.string,
+  overlayClassName: PropTypes.string,
   onClickClose: PropTypes.func,
   onRequestClose: PropTypes.func
 };
