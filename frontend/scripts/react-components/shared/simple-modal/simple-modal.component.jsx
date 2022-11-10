@@ -6,23 +6,34 @@ import cx from 'classnames';
 import './simple-modal.scss';
 
 function SimpleModal(props) {
+  const {
+    noClose,
+    closeLabel,
+    onRequestClose,
+    onClickClose,
+    overlayClassName,
+    className,
+    children
+  } = props;
   return (
     <ReactModal
       {...props}
-      className={cx('c-simple-modal', props.className)}
-      overlayClassName={cx('c-simple-modal-overlay', props.overlayClassName)}
+      className={cx('c-simple-modal', className)}
+      overlayClassName={cx('c-simple-modal-overlay', overlayClassName)}
       ariaHideApp={false}
     >
       <div className="simple-modal-content">
         <div className="simple-modal-close">
-          <button onClick={props.onRequestClose || props.onClickClose}>
-            <span>{props.closeLabel}</span>
-            <svg className="icon icon-close">
-              <use xlinkHref="#icon-close" />
-            </svg>
-          </button>
+          {!noClose && (
+            <button onClick={onRequestClose || onClickClose}>
+              <span>{closeLabel}</span>
+              <svg className="icon icon-close">
+                <use xlinkHref="#icon-close" />
+              </svg>
+            </button>
+          )}
         </div>
-        {props.children}
+        {children}
       </div>
     </ReactModal>
   );
@@ -35,11 +46,13 @@ SimpleModal.propTypes = {
   className: PropTypes.string,
   overlayClassName: PropTypes.string,
   onClickClose: PropTypes.func,
-  onRequestClose: PropTypes.func
+  onRequestClose: PropTypes.func,
+  noClose: PropTypes.bool
 };
 
 SimpleModal.defaultProps = {
-  closeLabel: 'close'
+  closeLabel: 'close',
+  noClose: false
 };
 
 export default SimpleModal;
