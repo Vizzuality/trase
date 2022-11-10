@@ -11,28 +11,42 @@ import 'styles/components/shared/modal.scss';
 
 function PopUp({ handleOnRequestClose }) {
   return (
-    <SimpleModal isOpen onRequestClose={handleOnRequestClose} overlayClassName="popup-overlay">
+    <SimpleModal
+      isOpen
+      noClose
+      onRequestClose={handleOnRequestClose}
+      overlayClassName="popup-overlay"
+    >
       <div className="c-popup">
         <div className="popup-content">
           <Heading as="h3" weight="bold" size="md">
-            Deforestation Risk is now Deforestation exposure
+            The term Deforestation Risk changes to Deforestation exposure
           </Heading>
-          <span className="divider" />
-          <Text as="p" size="md" lineHeight="lg" className="description">
-            On 10 November 2022, the term ‘deforestation risk’ was replaced with ‘deforestation
-            exposure’ as a measure of the exposure of supply chain actors to deforestation from
-            commodity production based on sourcing patterns. For more information, see{' '}
+          <Text as="p" size="md" lineHeight="md" className="description">
+            On 10 November 2022, the term{' '}
+            <Text as="span" weight="bold" size="md">
+              ‘deforestation risk’
+            </Text>{' '}
+            was replaced with{' '}
+            <Text as="span" weight="bold" size="md">
+              ‘deforestation exposure’
+            </Text>{' '}
+            as a measure of the exposure of supply chain actors to deforestation from commodity
+            production based on sourcing patterns.
+          </Text>
+          <Text as="p" size="md" lineHeight="md">
+            For more information, see{' '}
             <a
               className="link"
               target="_blank"
               rel="noopener noreferrer"
-              href="https://resources.trase.earth/documents/data_methods/Trase-deforestation-exposure"
+              href="https://resources.trase.earth/documents/data_methods/Trase-deforestation-exposure.pdf"
             >
               Commodity deforestation exposure and carbon emissions assessment.
             </a>
           </Text>
-          <Button size="md" color="pink" onClick={handleOnRequestClose}>
-            Accept
+          <Button size="md" color="pink" onClick={handleOnRequestClose} className="button">
+            I understand
           </Button>
         </div>
       </div>

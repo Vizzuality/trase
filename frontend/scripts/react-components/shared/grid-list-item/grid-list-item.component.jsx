@@ -44,7 +44,8 @@ function GridListItem(props) {
     onHover,
     isInfoActive,
     variant,
-    color
+    color,
+    hasDisclaimer
   } = props;
   if (!item) return <b style={style} />;
   const onClick = isActive && disableItem ? disableItem : enableItem;
@@ -93,6 +94,12 @@ function GridListItem(props) {
                 className="grid-list-item-text"
               >
                 {item.name}
+                {hasDisclaimer && (
+                  <Text as="span" color="pink" className="disclaimer-mark">
+                    {' '}
+                    *
+                  </Text>
+                )}
               </Text>
             </button>
           </WrapWithTooltip>
@@ -139,7 +146,12 @@ GridListItem.propTypes = {
   onHover: PropTypes.func,
   isInfoActive: PropTypes.bool,
   style: PropTypes.object,
-  variant: PropTypes.string
+  variant: PropTypes.string,
+  hasDisclaimer: PropTypes.bool
+};
+
+GridListItem.defaultProps = {
+  hasDisclaimer: false
 };
 
 export default GridListItem;

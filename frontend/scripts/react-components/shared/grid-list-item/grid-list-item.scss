@@ -77,10 +77,15 @@
     justify-content: flex-start;
     height: 40px;
     width: 100%;
+
     span {
       display: block;
       width: inherit;
       height: inherit;
+
+      &.disclaimer-mark {
+        display: inline;
+      }
     }
   }
 

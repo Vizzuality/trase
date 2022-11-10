@@ -3,12 +3,43 @@ import PropTypes from 'prop-types';
 import Heading from 'react-components/shared/heading';
 import GridList from 'react-components/shared/grid-list/grid-list.component';
 import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
+import Text from 'react-components/shared/text';
 
 import './list-modal.scss';
 
 export default function ListModal(props) {
   const { items, selectedItem, onChange, heading, itemValueProp } = props;
   const COLUMN_COUNT = 3;
+
+  const renderDisclaimer = () => (
+    <div className="disclaimer">
+      <span className="separator" />
+      <Text as="p" size="sm" color="pink" className="description">
+        * On 10 November 2022, the term{' '}
+        <Text as="span" weight="bold" color="pink" size="sm">
+          ‘deforestation risk’
+        </Text>{' '}
+        was replaced with{' '}
+        <Text as="span" weight="bold" color="pink" size="sm">
+          ‘deforestation exposure’
+        </Text>{' '}
+        as a measure of the exposure of supply chain actors to deforestation from commodity
+        production based on sourcing patterns.
+      </Text>
+      <Text as="p" size="sm" color="pink" className="link-container">
+        For more information, see{' '}
+        <a
+          className="link"
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://resources.trase.earth/documents/data_methods/Trase-deforestation-exposure.pdf"
+        >
+          Commodity deforestation exposure and carbon emissions assessment.
+        </a>
+      </Text>
+    </div>
+  );
+  const hasDisclaimer = items.some(i => i.label.toLowerCase().includes('deforestation exposure'));
   return (
     <div className="c-base-modal">
       <div className="row">
@@ -39,10 +70,14 @@ export default function ListModal(props) {
                 tooltip={itemProps.item.description}
                 isActive={selectedItem[itemValueProp] === itemProps.item[itemValueProp]}
                 enableItem={onChange}
+                hasDisclaimer={itemProps.item.label
+                  .toLowerCase()
+                  .includes('deforestation exposure')}
               />
             )
           }
         </GridList>
+        {hasDisclaimer && renderDisclaimer()}
       </div>
     </div>
   );
