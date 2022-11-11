@@ -32,7 +32,7 @@ export default function ListModal(props) {
           className="link"
           target="_blank"
           rel="noopener noreferrer"
-          href="https://resources.trase.earth/documents/data_methods/Trase-deforestation-exposure.pdf"
+          href="https://schema-cms-api-pages127dfd1a-1100pd61xro1g.s3.amazonaws.com/280/blocks/1043/Trase-deforestation-exposure.pdf"
         >
           Commodity deforestation exposure and carbon emissions assessment.
         </a>
