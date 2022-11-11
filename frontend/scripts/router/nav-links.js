@@ -76,7 +76,7 @@ const sidebarNav = [
     }
   },
   {
-    name: 'What is <span class="notranslate">Trase</span>?',
+    name: ENABLE_GOOGLE_TRANSLATE ? 'What is <span class="notranslate">Trase</span>?' : 'What is Trase',
     page: {
       type: 'about',
       payload: {
