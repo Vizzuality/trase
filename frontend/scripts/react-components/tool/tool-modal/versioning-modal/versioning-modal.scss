@@ -24,4 +24,23 @@
     border-top: 1px solid $medium-gray;
     margin: 30px 0 15px;
   }
+
+  .disclaimer {
+    margin-top: 30px;
+  }
+
+  .disclaimer-icon {
+    margin: 0 5px 0 0;
+  }
+
+  .disclaimer-title {
+    display: flex;
+    margin-bottom: 10px;
+  }
+
+  .pink-link {
+    color: $strong-pink;
+    text-decoration: underline;
+    font-weight: $font-weight-bold;
+  }
 }
