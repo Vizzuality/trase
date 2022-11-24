@@ -1,0 +1,44 @@
+@import 'styles/settings';
+
+.c-methods-disclaimer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transform: translateY(100%);
+  background-color: $green-200;
+
+  padding: 20px;
+
+  z-index: $z-above-veil;
+  box-shadow: $box-shadow;
+  animation: appear 300ms 2s forwards;
+
+  @keyframes appear {
+    0% { transform: translateY(100%) }
+    100% { transform: translateY(0) }
+  }
+
+  .disclaimer-content {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .close-button {
+    position: absolute;
+    right: 30px;
+    top: 40%;
+    border: none;
+  }
+
+  .icon-close {
+    width: 20px;
+    height: 20px;
+  }
+
+  .link {
+    text-decoration: underline;
+    font-weight: $font-weight-bold;
+  }
+}
