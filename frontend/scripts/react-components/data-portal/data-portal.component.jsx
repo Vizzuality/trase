@@ -215,7 +215,6 @@ function DataPortal(props) {
     }
   }
   const [state, dataPortalDispatch] = useReducer(reducer, initialState);
-
   const { width } = useWindowSize();
 
   useEffect(() => {
@@ -306,7 +305,6 @@ function DataPortal(props) {
   if (width <= BREAKPOINTS.small) {
     return <NotSupportedComponent />;
   }
-
   return (
     <div className="l-data">
       {DATA_DOWNLOAD_ENABLED === false && <DataPortalDisabledMessage />}
@@ -316,6 +314,13 @@ function DataPortal(props) {
         closeForm={() => dataPortalDispatch({ type: 'closeForm' })}
         downloadFile={downloadFile}
         downloaded={state.downloaded}
+        isBrazilSoyException={
+          state.bulkContext === 1 ||
+          (!state.bulkContext &&
+            selectedContext &&
+            selectedContext.commodityName === 'SOY' &&
+            selectedContext.countryName === 'BRAZIL')
+        }
       />
       <div className="row column">
         <BulkDownloadsBlock
