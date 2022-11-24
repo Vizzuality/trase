@@ -20,8 +20,7 @@ function PopUp({ handleOnRequestClose }) {
       <div className="c-popup">
         <div className="popup-content">
           <Heading as="h3" weight="bold" size="md">
-            The term {`"`}Deforestation Risk{`"`} has been replaced with {`"`}Deforestation exposure
-            {`"`}
+            Recent updates to {`"`}Deforestation Exposure{`"`}
           </Heading>
           <Text as="p" size="md" lineHeight="md" className="description">
             On 10 November 2022, the term{' '}
