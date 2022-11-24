@@ -13,6 +13,10 @@ import { getNodesPanelUrlProps } from 'react-components/nodes-panel/nodes-panel.
 import toolLayerSerializer from 'react-components/tool-layers/tool-layers.serializers';
 import toolLinksSerializer from 'react-components/tool-links/tool-links.serializers';
 import nodesPanelSerializer from 'react-components/nodes-panel/nodes-panel.serializers';
+import {
+  getCountryName,
+  getCommodityName
+} from 'react-components/tool/map/map.selectors';
 
 const { urlPropHandlers: toolLayersUrlPropHandlers } = toolLayerSerializer;
 const { urlPropHandlers: toolLinksUrlPropHandlers } = toolLinksSerializer;
@@ -36,7 +40,9 @@ const mapStateToProps = state => ({
   section: state.location.payload.section,
   mapSidebarOpen: state.app.isMapLayerVisible,
   noLinksFound: state.toolLinks.noLinksFound,
-  activeModal: state.toolLayers.activeModal
+  activeModal: state.toolLayers.activeModal,
+  countryName: getCountryName(state),
+  commodityName: getCommodityName(state),
 });
 
 const mapDispatchToProps = {
