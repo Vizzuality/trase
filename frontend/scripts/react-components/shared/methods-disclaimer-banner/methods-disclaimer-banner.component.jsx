@@ -25,7 +25,7 @@ function MethodsDisclaimerBanner({ setAccepted, accepted }) {
           >
             Check the method document
           </a>{' '}
-          for more information
+          for more information.
         </Text>
       </div>
       <Button className="close-button" onClick={setAccepted}>

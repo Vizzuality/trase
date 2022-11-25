@@ -26,7 +26,7 @@ function MethodsDisclaimer() {
         >
           Check the method document
         </a>{' '}
-        for more information
+        for more information.
       </Text>
     </div>
   );
