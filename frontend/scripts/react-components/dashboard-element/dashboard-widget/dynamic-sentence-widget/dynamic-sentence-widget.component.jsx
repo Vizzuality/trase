@@ -9,7 +9,11 @@ function DynamicSentenceWidget({ dynamicSentenceParts, variant }) {
     light: 'grey'
   }[variant];
   if (dynamicSentenceParts) {
-    return <TagsGroup readOnly color={color} tags={dynamicSentenceParts} />;
+    return (
+      <>
+        <TagsGroup readOnly color={color} tags={dynamicSentenceParts} />
+      </>
+    );
   }
   return <Text>No data available</Text>;
 }

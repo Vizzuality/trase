@@ -1,6 +1,7 @@
 /* eslint-disable react/no-danger */
 import React from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 import Tippy from '@tippy.js/react';
 
 import 'tippy.js/dist/tippy.css';
@@ -29,12 +30,13 @@ function HelpTooltipComponent(props) {
     referenceComponent: ReferenceComponent,
     position,
     text,
-    interactive
+    interactive,
+    className
   } = props;
   const parsedText = interactive ? <div dangerouslySetInnerHTML={{ __html: text }} /> : text;
 
   return (
-    <span className="c-help-tooltip">
+    <span className={cx('c-help-tooltip', className)}>
       <Tippy
         content={parsedText}
         animation="none"
@@ -61,13 +63,15 @@ HelpTooltipComponent.propTypes = {
   children: PropTypes.any,
   position: PropTypes.string,
   referenceComponent: PropTypes.node,
+  className: PropTypes.string,
   interactive: PropTypes.bool
 };
 
 HelpTooltipComponent.defaultProps = {
   position: 'bottom',
   theme: 'gradient-padding',
-  showInfoIcon: true
+  showInfoIcon: true,
+  className: undefined
 };
 
 export default HelpTooltipComponent;
