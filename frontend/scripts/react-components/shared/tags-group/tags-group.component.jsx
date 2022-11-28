@@ -9,7 +9,7 @@ import './tags-group.scss';
 import './tags-group-tooltip.variant.scss';
 
 function TagsGroup(props) {
-  const { as, variant, tags, color, showDropdown, textAs, size } = props;
+  const { as, variant, tags, color, showDropdown, textAs, size, disclaimer } = props;
 
   const Component = textAs || Heading;
   return React.createElement(
@@ -30,6 +30,7 @@ function TagsGroup(props) {
           {part.value && <Tag {...props} part={part} showDropdown={showDropdown} as={textAs} />}
         </Component>
       ))}
+      {disclaimer}
     </>
   );
 }
@@ -39,6 +40,7 @@ TagsGroup.propTypes = {
   color: PropTypes.string,
   size: PropTypes.string,
   showDropdown: PropTypes.bool,
+  disclaimer: PropTypes.node,
   tags: PropTypes.array.isRequired,
   as: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   textAs: PropTypes.oneOfType([PropTypes.string, PropTypes.element, PropTypes.func])

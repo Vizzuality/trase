@@ -113,16 +113,20 @@ function DashboardWidget(props) {
           chartConfig.dashboardMeta.context.commodityName === 'SOY' &&
           chartConfig.dashboardMeta.context.countryName === 'BRAZIL' &&
           meta.yAxis.label === 'Trade volume';
-
+        const disclaimer = hasDisclaimer && (
+          <HelpTooltip
+            text="For Brazil soy data, Trade volume is the total production exported abroad and consumed domestically."
+            className="info-tooltip"
+          />
+        );
         return (
           <div className="dynamic-sentence-widget" data-test="widget-dynamic-sentence">
-            <DynamicSentenceWidget data={data} config={chartConfig} variant={variant} />
-            {hasDisclaimer && (
-              <HelpTooltip
-                text="For Brazil soy data, Trade volume is the total production exported abroad and consumed domestically."
-                className="info-tooltip"
-              />
-            )}
+            <DynamicSentenceWidget
+              data={data}
+              config={chartConfig}
+              variant={variant}
+              disclaimer={disclaimer}
+            />
           </div>
         );
       }

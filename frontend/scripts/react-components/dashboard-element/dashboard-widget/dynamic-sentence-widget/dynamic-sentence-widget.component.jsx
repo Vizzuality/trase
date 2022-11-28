@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import TagsGroup from 'react-components/shared/tags-group';
 import Text from 'react-components/shared/text';
 
-function DynamicSentenceWidget({ dynamicSentenceParts, variant }) {
+function DynamicSentenceWidget({ dynamicSentenceParts, variant, disclaimer }) {
   const color = {
     dark: 'white',
     light: 'grey'
@@ -11,7 +11,7 @@ function DynamicSentenceWidget({ dynamicSentenceParts, variant }) {
   if (dynamicSentenceParts) {
     return (
       <>
-        <TagsGroup readOnly color={color} tags={dynamicSentenceParts} />
+        <TagsGroup readOnly color={color} tags={dynamicSentenceParts} disclaimer={disclaimer} />
       </>
     );
   }
@@ -20,7 +20,8 @@ function DynamicSentenceWidget({ dynamicSentenceParts, variant }) {
 
 DynamicSentenceWidget.propTypes = {
   variant: PropTypes.string,
-  dynamicSentenceParts: PropTypes.array
+  dynamicSentenceParts: PropTypes.array,
+  disclaimer: PropTypes.node
 };
 
 export default DynamicSentenceWidget;
