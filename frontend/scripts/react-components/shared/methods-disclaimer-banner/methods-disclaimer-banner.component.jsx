@@ -15,8 +15,8 @@ function MethodsDisclaimerBanner({ setAccepted, accepted }) {
         </Text>
         <Text as="p" color="grey" variant="sans" lineHeight="md" align="center">
           <a
-            title="Spatially Explicit Information on Production to Consumption Systems by Godar et al.2015"
-            href="https://www.sciencedirect.com/science/article/abs/pii/S0921800915000427?via%3Dihub"
+            title="Brazil Soy method document"
+            href="https://resources.trase.earth/documents/data_methods/SEI_PCS_Brazil_soy_2.6._EN.pdf"
             target="_blank"
             rel="noopener noreferrer"
             // eslint-disable-next-line react/no-unknown-property
