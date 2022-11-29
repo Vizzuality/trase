@@ -6,8 +6,13 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  padding: 0 30px;
-  bottom: 0;
+  padding: 0 40px;
+  bottom: -70px;
+
+  @media screen and (min-width: $breakpoint-laptop) {
+    bottom: 0;
+  }
+
   left: 0;
   width: 100%;
   height: $timeline-height;
@@ -22,7 +27,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    margin: 0 0 0 28px;
+    margin: 0 0 0 12px;
     overflow: hidden;
     flex: 1;
     position: relative;
@@ -123,33 +128,35 @@
     border: 1px solid $charcoal-grey-faded;
     margin: 0 6px; // matches MARGIN_BETWEEN_ITEMS inside useSlider
     height: 30px;
-    width: 58px;
+    width: 75px;
     border-radius: 4px;
     background-color: $white;
 
     &.-sub-national {
       border: 2px solid $strong-pink;
-    }
-
-    &.-hovered {
-      background-color: $charcoal-grey-faded;
-
-      &.-sub-national {
+      &.-start,
+      &.-end {
         background-color: $strong-pink;
       }
     }
 
     &.-active {
-      background-color: $charcoal-grey;
-
+      background-color: $charcoal-grey-faded;
       &.-sub-national {
         background-color: $strong-pink;
+        color: $white;
       }
+    }
+
+    &.-start,
+    &.-end {
+      background-color: $charcoal-grey;
     }
 
     .timeline-year-button {
       display: flex;
       align-items: center;
+      justify-content: center;
       padding: 6px 12px;
       height: 100%;
       width: 100%;
@@ -161,7 +168,44 @@
     }
   }
 
-  .year-label {
-    margin-left: 8px;
+  .timeline-range-placeholder {
+    position: absolute;
+    height: 30px;
+    left: 0;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: $z-above-hero;
+    background-color: darken($background-white, 7%);
+    border-radius: 4px;
+    opacity: 1;
+    transition: opacity 350ms $ease-in-out-sine;
+    margin: 0 6px;
+
+    &.-hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .timeline-placeholder-year-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 30px;
+      width: 58px;
+      border-radius: 4px;
+      background-color: $charcoal-grey;
+      padding: 6px 12px;
+      flex-shrink: 0;
+
+      > span {
+        display: block;
+      }
+    }
+
+    .timeline-placeholder-text {
+      pointer-events: none;
+    }
   }
 }
