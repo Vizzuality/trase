@@ -18,15 +18,15 @@ const getBlocks = () => {
       whiteImageUrl: '/images/dashboards/icon_companies_white.svg'
     }
   ];
-  if (ENABLE_COUNTRY_PROFILES) {
-    const importingCountries = {
-      id: PROFILE_TYPES.importing,
-      title: 'importer countries',
-      imageUrl: '/images/dashboards/icon_importing.svg',
-      whiteImageUrl: '/images/dashboards/icon_importing_white.svg'
-    };
-    blocks.splice(1, 0, importingCountries);
-  }
+
+  const importingCountries = {
+    id: PROFILE_TYPES.importing,
+    title: 'importer countries',
+    imageUrl: '/images/dashboards/icon_importing.svg',
+    whiteImageUrl: '/images/dashboards/icon_importing_white.svg'
+  };
+  blocks.splice(1, 0, importingCountries);
+
   return blocks;
 }
 

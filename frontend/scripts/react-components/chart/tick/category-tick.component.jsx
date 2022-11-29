@@ -19,12 +19,7 @@ function CategoryTick(props) {
   const node = nodeIds[payload.index];
   let url;
 
-  if (
-    node &&
-    node.profile &&
-    !DISABLE_PROFILES &&
-    !(node.profile === 'country' && !ENABLE_COUNTRY_PROFILES)
-  ) {
+  if (node && node.profile && !DISABLE_PROFILES) {
     url = {
       type: 'profile',
       payload: { profileType: node.profile },

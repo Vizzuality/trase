@@ -7,7 +7,6 @@ import ColumnsSelectorGroupContainer from 'react-components/tool/columns-selecto
 import SplittedView from 'react-components/tool/splitted-view';
 import MapBoxMap from 'react-components/tool/map/map';
 import Timeline from 'react-components/tool/timeline';
-import TimelineLegacy from 'react-components/tool/timeline-legacy';
 import ToolBar from 'react-components/shared/tool-bar';
 import UrlSerializer from 'react-components/shared/url-serializer';
 import useWindowSize from 'utils/hooks/useWindowSize';
@@ -47,7 +46,7 @@ function renderDataView() {
   );
 }
 
-const TimelineComponent = DISABLE_TOOL_RANGE ? Timeline : TimelineLegacy;
+const TimelineComponent = Timeline;
 
 const Tool = props => {
   const {

@@ -210,8 +210,7 @@ function Sankey(props) {
     }
     // Country menu can be enabled if we have country profiles or other node is selected and we can expand
     const enabledCountryMenu =
-      node.type === NODE_TYPES.countryOfProduction &&
-      (selectedNodesIds.length || ENABLE_COUNTRY_PROFILES);
+      node.type === NODE_TYPES.countryOfProduction && selectedNodesIds.length;
 
     if (selectedNodesIds.includes(node.id) || enabledCountryMenu) {
       setHoveredSelectedNode(node);
