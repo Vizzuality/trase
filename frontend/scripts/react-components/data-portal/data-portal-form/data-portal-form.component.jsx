@@ -231,6 +231,7 @@ DataPortalForm.propTypes = {
   isFormVisible: PropTypes.bool,
   closeForm: PropTypes.func,
   downloadFile: PropTypes.func,
+  sendSubscriptionEmail: PropTypes.func,
   downloaded: PropTypes.bool,
   isBrazilSoyException: PropTypes.bool
 };
