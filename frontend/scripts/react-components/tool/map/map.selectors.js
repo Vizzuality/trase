@@ -17,6 +17,10 @@ export const getCountryName = createSelector(
   [getSelectedContext],
   selectedContext => selectedContext?.countryName || null
 );
+export const getCommodityName = createSelector(
+  [getSelectedContext],
+  selectedContext => selectedContext?.commodityName || null
+);
 
 const getNodeAttributes = state => state.toolLinks.data.nodeAttributes || null;
 const getHighlightedNodesCoordinates = state => state.toolLayers.highlightedNodeCoordinates;

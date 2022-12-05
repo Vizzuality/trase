@@ -11,7 +11,7 @@ function EditFilter(props) {
 
   return (
     <button onClick={() => onClick(id)} className={cx('c-edit-filter', className)}>
-      <Text as="span" size="sm" variant="sans" transform="uppercase" className="options-menu-label">
+      <Text as="span" size="rg" variant="sans" transform="uppercase" className="options-menu-label">
         {label}
       </Text>
       <Heading as="h2" color="white" weight="bold" size="rg" className="edit-title">

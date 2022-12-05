@@ -18,7 +18,7 @@ class ProfileContainer extends React.PureComponent {
   };
 
   render() {
-    const { context, nodeId, selectedYear, commodityId, profileType } = this.props;
+    const { context, nodeId, selectedYear, commodityId } = this.props;
     const contextProps = {};
 
     if (context) {
@@ -28,10 +28,6 @@ class ProfileContainer extends React.PureComponent {
     }
 
     const params = { node_id: nodeId, selectedYear, ...contextProps };
-
-    if (profileType === 'country' && !ENABLE_COUNTRY_PROFILES) {
-      return <Profile {...this.props} errorMetadata="Profile not ready" />;
-    }
 
     return (
       <Widget key={nodeId} query={[GET_PROFILE_METADATA]} params={[params]}>

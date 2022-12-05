@@ -6,6 +6,7 @@ import Chart from 'react-components/chart';
 import SimpleModal from 'react-components/shared/simple-modal/simple-modal.component';
 import TableModal from 'react-components/shared/table-modal';
 import Button from 'react-components/shared/button';
+import HelpTooltip from 'react-components/shared/help-tooltip/help-tooltip.component';
 import Spinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
 import DashboardWidgetLabel from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-label.component';
 import DashboardWidgetLegend from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-legend/dashboard-widget-legend.component';
@@ -106,12 +107,29 @@ function DashboardWidget(props) {
             />
           </div>
         );
-      case 'sentence':
+      case 'sentence': {
+        const hasDisclaimer =
+          title === 'Selection overview' &&
+          chartConfig.dashboardMeta.context.commodityName === 'SOY' &&
+          chartConfig.dashboardMeta.context.countryName === 'BRAZIL' &&
+          meta.yAxis.label === 'Trade volume';
+        const disclaimer = hasDisclaimer && (
+          <HelpTooltip
+            text="For Brazil soy data, Trade volume is the total production exported abroad and consumed domestically."
+            className="info-tooltip"
+          />
+        );
         return (
           <div className="dynamic-sentence-widget" data-test="widget-dynamic-sentence">
-            <DynamicSentenceWidget data={data} config={chartConfig} variant={variant} />
+            <DynamicSentenceWidget
+              data={data}
+              config={chartConfig}
+              variant={variant}
+              disclaimer={disclaimer}
+            />
           </div>
         );
+      }
       case 'ranking':
         return (
           <div className="widget-centered" data-test="widget-ranking">
@@ -138,10 +156,7 @@ function DashboardWidget(props) {
               containerRef={widgetBoxRef}
             />
             {chartConfig.xAxisLabel && (
-              <DashboardWidgetLabel
-                axis="x"
-                text={chartConfig.xAxisLabel.suffix}
-              />
+              <DashboardWidgetLabel axis="x" text={chartConfig.xAxisLabel.suffix} />
             )}
           </React.Fragment>
         );

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Heading from 'react-components/shared/heading';
 import Text from 'react-components/shared/text';
+import MethodsDisclaimer from 'react-components/shared/methods-disclaimer';
 import 'react-components/tool/tool-modal/versioning-modal/versioning-modal.scss';
 import capitalize from 'lodash/capitalize';
 
@@ -71,6 +72,7 @@ function VersioningModal({ data, context }) {
               </Text>
             </a>
           </Text>
+          {countryName === 'BRAZIL' && commodityName === 'SOY' && <MethodsDisclaimer />}
         </div>
       </div>
     </div>

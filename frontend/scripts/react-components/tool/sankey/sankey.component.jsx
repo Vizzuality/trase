@@ -165,14 +165,13 @@ function Sankey(props) {
       const associatedLinks = links.filter(l => l.targetNodeId === node.id);
       const value = associatedLinks.reduce((acc, curr) => acc + curr.quant, 0);
       const formattedValue = formatValue(value, selectedResizeBy.label);
-
       tooltip.items = [
         {
-          title: 'Selection volume',
+          title: `Selection ${selectedResizeBy.label}`,
           unit: selectedResizeBy.unit,
           value: formattedValue
         },
-        { ...resizeByItem, title: 'Total volume' }
+        { ...resizeByItem, title: `Total ${selectedResizeBy.label}` }
       ];
     } else if (hasDimensionSelected) {
       const nodeIndicators = selectedMapDimensions
@@ -210,8 +209,7 @@ function Sankey(props) {
     }
     // Country menu can be enabled if we have country profiles or other node is selected and we can expand
     const enabledCountryMenu =
-      node.type === NODE_TYPES.countryOfProduction &&
-      (selectedNodesIds.length || ENABLE_COUNTRY_PROFILES);
+      node.type === NODE_TYPES.countryOfProduction && selectedNodesIds.length;
 
     if (selectedNodesIds.includes(node.id) || enabledCountryMenu) {
       setHoveredSelectedNode(node);

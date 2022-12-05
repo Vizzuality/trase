@@ -1,4 +1,48 @@
-import { useEffect, useRef, useState } from 'react';
+import { useReducer, useEffect, useRef, useState } from 'react';
+import timelineReducer, { initTimelineState } from './timeline.reducer';
+
+export function useTimelineReducer({ selectedYears }) {
+  return useReducer(timelineReducer, initTimelineState(selectedYears), initTimelineState);
+}
+
+export function useSelectedYearsPropsState(props, state, dispatch) {
+  useEffect(() => {
+    if (props.selectedYears.length > 0) {
+      dispatch({ type: 'reset', payload: props.selectedYears });
+    }
+  }, [props.selectedYears, dispatch]);
+}
+
+export function useUpdateSelectedYears(props, state) {
+  const { selectYears, selectedYears } = props;
+  useEffect(() => {
+    if (
+      state.start &&
+      state.end &&
+      (state.start !== selectedYears[0] || state.end !== selectedYears[1])
+    ) {
+      selectYears([state.start, state.end]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.start, state.end]);
+}
+
+export function useEscapeClearEvent(state, dispatch) {
+  useEffect(() => {
+    const onClickEscape = e => {
+      if (e.key === 'Escape') {
+        dispatch({ type: 'clear' });
+      }
+    };
+    if (!state.end && state.range) {
+      window.addEventListener('keydown', onClickEscape);
+    }
+
+    return () => {
+      window.removeEventListener('keydown', onClickEscape);
+    };
+  }, [state.end, dispatch, state.range]);
+}
 
 export function useSlider({ years, selectedYears }) {
   const [page, setPage] = useState(0);
@@ -13,6 +57,7 @@ export function useSlider({ years, selectedYears }) {
   const maxVisibleItems = sizes.container ? Math.floor(sizes.container / sizes.item) : 0;
   const pointer = page > 0 ? page * DEFAULT_PAGE_SIZE + 1 : 0;
   const remainingItems = years.length - pointer;
+  const rangeOutOfBounds = maxVisibleItems < selectedYears[1] - selectedYears[0];
   const jumpToPage = (_page, pageSize = DEFAULT_PAGE_SIZE) =>
     -_page * sizes.item * pageSize - (_page > 0 ? MARGIN_BETWEEN_ITEMS * 2 : 0);
 
@@ -62,6 +107,7 @@ export function useSlider({ years, selectedYears }) {
     hasNextPage,
     hasPrevPage: page > 0,
     onPrevious: () => setPage(p => p - 1),
-    onNext: () => setPage(p => p + 1)
+    onNext: () => setPage(p => p + 1),
+    rangeOutOfBounds
   };
 }

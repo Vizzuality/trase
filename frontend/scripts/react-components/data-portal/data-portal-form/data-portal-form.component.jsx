@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import axios from 'axios';
+import MethodsDisclaimer from 'react-components/shared/methods-disclaimer';
 import { COUNTRIES } from '../../../countries';
 
 import './download-form.scss';
@@ -99,6 +100,7 @@ class DataPortalForm extends Component {
   }
 
   render() {
+    const { isBrazilSoyException } = this.props;
     return (
       <div className={cx({ 'is-hidden': !this.props.isFormVisible })}>
         <div className="veil -below-nav" onClick={this.props.closeForm} />
@@ -114,6 +116,7 @@ class DataPortalForm extends Component {
                 We&apos;d love to hear about how you use the data and how we could improve it.
                 Please fill in details below and click on &apos;submit&apos;:
               </p>
+              {isBrazilSoyException && <MethodsDisclaimer />}
               <label htmlFor="name">
                 Name:
                 <input type="text" placeholder="type name" id="name" />
@@ -228,7 +231,9 @@ DataPortalForm.propTypes = {
   isFormVisible: PropTypes.bool,
   closeForm: PropTypes.func,
   downloadFile: PropTypes.func,
-  downloaded: PropTypes.bool
+  sendSubscriptionEmail: PropTypes.func,
+  downloaded: PropTypes.bool,
+  isBrazilSoyException: PropTypes.bool
 };
 
 export default DataPortalForm;

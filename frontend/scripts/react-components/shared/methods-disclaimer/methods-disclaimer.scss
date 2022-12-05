@@ -1,0 +1,21 @@
+@import 'styles/settings';
+
+.c-disclaimer {
+  margin-top: 30px;
+
+  .disclaimer-icon {
+    margin: 0 5px 0 0;
+  }
+
+  .disclaimer-title {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .pink-link {
+    color: $strong-pink;
+    text-decoration: underline;
+    font-weight: $font-weight-bold;
+  }
+}

@@ -17,6 +17,16 @@ $this: 'c-dashboard-widget';
     justify-content: center;
     height: 100%;
     padding: 0 30px;
+
+    .info-tooltip {
+      margin-bottom: 20px;
+
+      .tooltip-react-icon {
+        opacity: 1;
+        width: 20px;
+        height: 20px;
+      }
+    }
   }
 
   .widget-centered {
@@ -136,5 +146,3 @@ $this: 'c-dashboard-widget';
     }
   }
 }
-
-
