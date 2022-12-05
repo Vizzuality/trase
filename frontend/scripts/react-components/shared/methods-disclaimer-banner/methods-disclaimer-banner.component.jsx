@@ -29,6 +29,7 @@ function MethodsDisclaimerBanner({ setAccepted, accepted }) {
         </Text>
       </div>
       <Button className="close-button" onClick={setAccepted}>
+        CLOSE
         <Icon icon="icon-close" />
       </Button>
     </div>
