@@ -1,6 +1,9 @@
 @import 'styles/settings';
 
 .c-popup {
+  max-height: 90vh;
+  overflow: scroll;
+
   .popup-content {
     padding: 40px;
     z-index: $z-above-hero;
