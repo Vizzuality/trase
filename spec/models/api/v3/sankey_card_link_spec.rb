@@ -34,7 +34,7 @@ RSpec.describe Api::V3::SankeyCardLink, type: :model do
     describe 'before_validation' do
       describe '#extract_link_params' do
         it 'extract parameters from link' do
-          sankey_card_link.update_attributes(
+          sankey_card_link.update(
             link: "#{sankey_card_link.link}&selectedYears%5B%5D=2009"
           )
           expect(sankey_card_link.query_params).to include(
@@ -45,7 +45,7 @@ RSpec.describe Api::V3::SankeyCardLink, type: :model do
 
       describe '#extract_relations' do
         it 'extracts relations from the params' do
-          sankey_card_link.update_attributes(
+          sankey_card_link.update(
             link: "http://test.com?selectedCommodityId=#{api_v3_beef.id}&"\
                   "selectedCountryId=#{api_v3_brazil.id}"
           )

@@ -10,7 +10,7 @@ class MirrorDatabaseUpdateWorker
 
   def perform(database_update_id, s3_filename)
     database_update = Api::V3::DatabaseUpdate.find(database_update_id)
-    database_update.update_attributes(jid: jid) # make sure validations run here
+    database_update.update(jid: jid) # make sure validations run here
     Api::V3::Import::MirrorImport.new.call(database_update, s3_filename)
   end
 end

@@ -12,7 +12,7 @@ Sidekiq.configure_server do |config|
     SidekiqUniqueJobs::Digests.del(digest: job['unique_digest']) if job['unique_digest']
   end
 
-  config.redis = {size: (config.options[:concurrency] + 5)}
+  config.redis = {size: (config[:concurrency] + 5)}
 
   config.client_middleware do |chain|
     chain.add SidekiqUniqueJobs::Middleware::Client
@@ -26,7 +26,7 @@ Sidekiq.configure_server do |config|
 end
 
 Sidekiq.configure_client do |config|
-  config.redis = {size: config.options[:concurrency]}
+  config.redis = {size: config[:concurrency]}
 
   config.client_middleware do |chain|
     chain.add SidekiqUniqueJobs::Middleware::Client
