@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.7.7'
+ruby '3.0.5'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
 gem 'rails', '~> 6.1.0'
@@ -50,7 +50,7 @@ gem 'kaminari'
 gem 'mailchimp-api', require: 'mailchimp'
 # gem 'net-http' # https://github.com/ruby/net-imap/issues/16#issuecomment-803086765
 gem 'oj'
-gem 'paperclip'
+gem 'kt-paperclip', '~> 6.4'
 gem 'pg_csv'
 gem 'pg_search'
 gem 'rack'

@@ -288,6 +288,12 @@ GEM
       activerecord
       kaminari-core (= 1.2.2)
     kaminari-core (1.2.2)
+    kt-paperclip (6.4.2)
+      activemodel (>= 4.2.0)
+      activesupport (>= 4.2.0)
+      mime-types
+      mimemagic (~> 0.3.0)
+      terrapin (~> 0.6.0)
     listen (3.8.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
@@ -336,12 +342,6 @@ GEM
       racc (~> 1.4)
     oj (3.14.2)
     orm_adapter (0.5.0)
-    paperclip (6.1.0)
-      activemodel (>= 4.2.0)
-      activesupport (>= 4.2.0)
-      mime-types
-      mimemagic (~> 0.3.0)
-      terrapin (~> 0.6.0)
     parallel (1.22.1)
     parser (3.2.1.0)
       ast (~> 2.4.1)
@@ -585,10 +585,10 @@ DEPENDENCIES
   i18n_data
   json-schema
   kaminari
+  kt-paperclip (~> 6.4)
   listen (~> 3.3)
   mailchimp-api
   oj
-  paperclip
   pg
   pg_csv
   pg_search
@@ -621,7 +621,7 @@ DEPENDENCIES
   zip_tricks
 
 RUBY VERSION
-   ruby 2.7.7p221
+   ruby 3.0.5p211
 
 BUNDLED WITH
-   1.17.3
+   2.4.7
