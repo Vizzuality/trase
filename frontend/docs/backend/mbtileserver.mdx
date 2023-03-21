@@ -11,7 +11,9 @@ There are two instances:
 * test instance on sandbox-data, accessible at https://sandbox.trase.earth/services
 * production instance on production-data, accessible at https://supplychains.trase.earth/services
 
-On both servers tiles go into /var/www/tilesets, user `ubuntu` must be able to read. After uploading tiles restart the server:
+On both servers tiles go into /var/www/tilesets, user `ubuntu` must be able to read.
+
+After uploading tiles restart the server:
 
 `sudo systemctl restart mbtileserver`
 
@@ -21,17 +23,11 @@ On both servers tiles go into /var/www/tilesets, user `ubuntu` must be able to r
 
 Consult the current [mbtileserver instructions](https://github.com/consbio/mbtileserver) for version number.
 
-    wget https://dl.google.com/go/go1.14.2.linux-amd64.tar.gz
-    sudo tar -C /usr/local -xzf go1.14.2.linux-amd64.tar.gz
-
-## Sort out paths in `~/.profile`
-
-    export PATH=$PATH:/usr/local/go/bin
-    export PATH=$PATH:$HOME/go/bin
+`sudo apt-get install golang-go`
 
 ## Install mbtileserver
 
-`go get github.com/consbio/mbtileserver`
+`go install github.com/consbio/mbtileserver@latest`
 
 # Service configuration
 
@@ -96,13 +92,13 @@ In `/lib/systemd/system/mbtileserver.service`
 
 In `/etc/logrotate.d/mbtileserver`
 
-    /var/log/mbtileserver/mbtileserver*.log {
-            weekly
-            missingok
-            rotate 12
-            compress
-            notifempty
-    }
+/var/log/mbtileserver/mbtileserver*.log {
+        weekly
+        missingok
+        rotate 12
+        compress
+        notifempty
+}
 
 # Configure https via reverse proxy
 
@@ -131,4 +127,4 @@ https://xxx.trase.earth/services
 
 # Load balancer forwarding
 
-First approach is to run on `-data` instances only, so we need a forwardng rule for `/services*` paths to the data target group.
+Current approach is to run on `-data` instances only, so we need a forwarding rule for `/services*` paths to the data target group.

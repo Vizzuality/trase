@@ -23,15 +23,18 @@ https://github.com/mattiasgeniar/varnish-6.0-configuration-templates/blob/master
 
 That template needs to contain purging and banning settings.
 
-Remember about 2 IMPORTANT customisations:
+Remember about a few IMPORTANT customisations:
 
 - ensure the backend port is set to the application server port (8080)
-- ensure /health requests pass
+- increase the default .between_bytes_timeout to 60s, to avoid "guru meditation"
+- ensure /health requests always pass to the backend
   ````
   if (req.url ~ "^/health") {
     return (pass);
   }
   ````
+- ensure BAN requests are handled
+- downloads and webshot are also configured to pass to the backend
 
 ## Purging
 

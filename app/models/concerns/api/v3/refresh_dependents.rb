@@ -12,7 +12,7 @@ module Api
       def refresh_dependents_after_create
         keys = self.class.blue_foreign_keys.map { |bfk| bfk[:name] }
         key_conditions = keys.map do |key|
-          [key, send(key)]
+          [key.to_s, send(key)]
         end
         dependent_classes = self.class.dependent_classes
         dependent_classes.each do |dependent_class|

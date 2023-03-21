@@ -189,7 +189,7 @@ module Api
         def summary_of_total_trade_volume(profile_type)
           if @trade_total_current_year_raw.zero?
             return "<span class=\"notranslate\">#{@node_name}</span> \
-            #{profile_type.first(-1)}d 0 tons of #{@commodity_name} from \
+            #{profile_type.slice(0, profile_type.length-1)}d 0 tons of #{@commodity_name} from \
             #{@context.country.name} in \
 <span class=\"notranslate\">#{@year}</span>."
           end
@@ -237,7 +237,7 @@ of the #{@commodity_name} production #{source_node_name_plural}."
         def summary_of_destinations(profile_type)
           if @perc_exports_formatted
             " The main destination of the #{@commodity_name} \
-#{profile_type.first(-1)}d by \
+#{profile_type.slice(0, profile_type.length-1)}d by \
 <span class=\"notranslate\">#{@node_name}</span> is \
 <span class=\"notranslate\">#{@main_destination_name.upcase}</span>, \
 accounting for \

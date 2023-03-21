@@ -16,7 +16,7 @@
 #  updated_at        :datetime         not null
 #
 module Content
-  module CkEditor
+  module Ckeditor
     class Picture < Ckeditor::Asset
       has_attached_file :data,
                         url: '/ckeditor_assets/pictures/:id/:style_:basename.:extension',
