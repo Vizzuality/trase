@@ -1,4 +1,4 @@
-require "#{Rails.root}/lib/modules/cache/cleaner.rb"
+require "#{Rails.root}/lib/cache/cleaner.rb"
 
 module Api
   module V3

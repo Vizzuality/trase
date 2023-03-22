@@ -1,104 +1,18 @@
-require: rubocop-performance
-
 inherit_from: .rubocop_todo.yml
 
+require: standard
+
+inherit_gem:
+  standard: config/base.yml
+
 AllCops:
-  TargetRubyVersion: 2.6
+  TargetRubyVersion: 3.1
   Exclude:
-    - 'bin/*'
+    - 'bin/**/*'
+    - 'db/schema.rb'
     - 'db/migrate/*'
+    - 'db/scripts/*'
     - 'config/environments/*'
     - 'config/initializers/*'
     - 'config/*'
     - 'frontend/node_modules/**/*'
-  NewCops: enable
-
-Bundler/OrderedGems:
-  Enabled: false
-
-Layout/DotPosition:
-  EnforcedStyle: trailing
-
-Layout/LineLength:
-  Max: 80
-  Include:
-    - 'app/services/api/v3/actors/**/*'
-    - 'app/services/api/v3/places/**/*'
-
-Layout/MultilineMethodCallIndentation:
-  EnforcedStyle: indented
-
-Layout/MultilineOperationIndentation:
-  EnforcedStyle: indented
-
-Layout/SpaceInsideHashLiteralBraces:
-  EnforcedStyle: no_space
-
-Style/RescueStandardError:
-  Enabled: false
-
-Metrics/BlockLength:
-  Exclude:
-    - 'config/routes.rb'
-    - 'spec/**/*'
-    - 'lib/tasks/**/*'
-    - 'app/admin/**/*'
-
-Style/Alias:
-  Enabled: false
-
-Style/AndOr:
-  Enabled: false
-
-Style/BlockComments:
-  Exclude:
-    - 'spec/spec_helper.rb'
-
-Style/BlockDelimiters:
-  Exclude:
-    - 'spec/**/*'
-
-Style/ClassVars:
-  Exclude:
-    - 'app/models/api/v3/base_model.rb'
-
-Style/Documentation:
-  Enabled: false
-
-Style/FormatStringToken:
-  Enabled: false
-
-Style/FrozenStringLiteralComment:
-  Enabled: false
-
-Style/HashEachMethods:
-  Enabled: true
-
-Style/HashTransformKeys:
-  Enabled: true
-
-Style/HashTransformValues:
-  Enabled: true
-
-Style/Lambda:
-  Enabled: false
-
-Style/MixinUsage:
-  Exclude:
-    - 'lib/tasks/db_doc.rake'
-
-Style/PercentLiteralDelimiters:
-  Enabled: false
-
-Style/PerlBackrefs:
-  Enabled: false
-
-Style/RaiseArgs:
-  EnforcedStyle: compact
-
-Style/RegexpLiteral:
-  EnforcedStyle: slashes
-  AllowInnerSlashes: true
-
-Style/SymbolArray:
-  EnforcedStyle: brackets

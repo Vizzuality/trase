@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       postgres:
-        image: postgres:11
+        image: postgres:14
         ports:
           - 5432:5432
         env:
@@ -39,10 +39,7 @@ jobs:
       - name: Install PostgreSQL client 🐘
         run: |
           sudo apt update
-          sudo bash -c "echo deb http://apt.postgresql.org/pub/repos/apt/ bionic-pgdg main >> /etc/apt/sources.list.d/pgdg.list"
-          wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
-          sudo apt-get update
-          sudo apt-get -yqq install libpq-dev postgresql-client-11
+          sudo apt-get -yqq install libpq-dev postgresql-client
 
       - name: Install Ruby 💎
         uses: ruby/setup-ruby@v1
@@ -60,7 +57,7 @@ jobs:
           bundle install --jobs 4 --retry 3
 
       - name: Install CodeClimate reporter
-        uses: amancevice/setup-code-climate@v0
+        uses: amancevice/setup-code-climate@v1
         with:
           cc_test_reporter_id: ${{ secrets.CC_TEST_REPORTER_ID }}
 
@@ -72,7 +69,7 @@ jobs:
           RAILS_ENV: test
         run: |
           bundle exec rails db:create RAILS_ENV=test
-          bundle exec rails db:migrate RAILS_ENV=test
+          bundler exec rails db:structure:load RAILS_ENV=test
 
       - name: Setup code coverage
         env:
@@ -91,3 +88,4 @@ jobs:
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         run: cc-test-reporter after-build
+        if: ${{ github.event_name != 'pull_request' }}

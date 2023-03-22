@@ -57,7 +57,7 @@ RSpec.describe Api::V3::DownloadController, type: :controller do
         expect(response.content_type).to eq('application/zip')
         expect(
           response.headers['Content-Disposition']
-        ).to eq("attachment; filename=\"#{@file_name}\"")
+        ).to eq("attachment; filename=\"#{@file_name}\"; filename*=UTF-8''#{@file_name}")
       end
       it 'returns a zipped json file' do
         @file_name = 'BRAZIL_SOY_v1.0_tc.zip'
@@ -79,7 +79,7 @@ RSpec.describe Api::V3::DownloadController, type: :controller do
         expect(response.content_type).to eq('application/zip')
         expect(
           response.headers['Content-Disposition']
-        ).to eq("attachment; filename=\"#{@file_name}\"")
+        ).to eq("attachment; filename=\"#{@file_name}\"; filename*=UTF-8''#{@file_name}")
       end
       it 'returns no version on file name if none is available' do
         @file_name = 'PARAGUAY_SOY_tc.zip'
@@ -101,7 +101,7 @@ RSpec.describe Api::V3::DownloadController, type: :controller do
         expect(response.content_type).to eq('application/zip')
         expect(
           response.headers['Content-Disposition']
-        ).to eq("attachment; filename=\"#{@file_name}\"")
+        ).to eq("attachment; filename=\"#{@file_name}\"; filename*=UTF-8''#{@file_name}")
       end
     end
 
@@ -116,12 +116,13 @@ RSpec.describe Api::V3::DownloadController, type: :controller do
       end
 
       it 'returns a zipped csv file' do
+        @file_name = 'BRAZIL_SOY_v1.0_tc.zip'
         get :index, params: {context_id: api_v3_brazil_soy_context.id}, format: :csv
         expect(assigns(:context)).to eq(api_v3_brazil_soy_context)
         expect(response.content_type).to eq('application/zip')
         expect(
           response.headers['Content-Disposition']
-        ).to eq('attachment; filename="BRAZIL_SOY_v1.0_tc.zip"')
+        ).to eq("attachment; filename=\"#{@file_name}\"")
       end
     end
 
@@ -136,6 +137,7 @@ RSpec.describe Api::V3::DownloadController, type: :controller do
       end
 
       it 'returns a zipped csv file' do
+        @file_name = 'BRAZIL_SOY_v1.0_tc.zip'
         get :index, params: {
           country_id: api_v3_brazil_soy_context.country_id, commodity_id: api_v3_brazil_soy_context.commodity_id
         }, format: :csv
@@ -143,7 +145,7 @@ RSpec.describe Api::V3::DownloadController, type: :controller do
         expect(response.content_type).to eq('application/zip')
         expect(
           response.headers['Content-Disposition']
-        ).to eq('attachment; filename="BRAZIL_SOY_v1.0_tc.zip"')
+        ).to eq("attachment; filename=\"#{@file_name}\"")
       end
     end
   end

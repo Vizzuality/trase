@@ -168,7 +168,7 @@ RSpec.describe Api::V3::ChartAttribute, type: :model do
 
         context 'when the identifier changes' do
           it 'refresh actor_basic_attributes of the related node_with_flows' do
-            chart_attribute.update_attributes(identifier: 'new identifier')
+            chart_attribute.update(identifier: 'new identifier')
 
             related_node_with_flows.each do |node_with_flows|
               expect(node_with_flows.actor_basic_attributes).to be_nil
@@ -178,7 +178,7 @@ RSpec.describe Api::V3::ChartAttribute, type: :model do
 
         context 'when chart_id changes' do
           it 'refresh actor_basic_attributes of the related node_with_flows' do
-            chart_attribute.update_attributes(chart_id: Api::V3::Chart.last.id)
+            chart_attribute.update(chart_id: Api::V3::Chart.last.id)
 
             related_node_with_flows.each do |node_with_flows|
               expect(node_with_flows.actor_basic_attributes).to be_nil
@@ -202,7 +202,7 @@ RSpec.describe Api::V3::ChartAttribute, type: :model do
 
         context 'when changes any other field' do
           it 'not refresh actor_basic_attributes of the related node_with_flows' do
-            chart_attribute.update_attributes(identifier: 'new identifier')
+            chart_attribute.update(identifier: 'new identifier')
 
             related_node_with_flows.each do |node_with_flows|
               expect(node_with_flows.actor_basic_attributes).to be_nil

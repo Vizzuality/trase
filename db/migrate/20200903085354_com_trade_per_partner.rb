@@ -1,6 +1,6 @@
 class ComTradePerPartner < ActiveRecord::Migration[5.2]
   def change
-    create_table :countries_com_trade_world_indicators, {id: false, force: true} do |t|
+    create_table :countries_com_trade_world_indicators, id: false, force: true do |t|
       t.float :raw_quantity
       t.float :quantity
       t.float :value
@@ -13,7 +13,7 @@ class ComTradePerPartner < ActiveRecord::Migration[5.2]
       t.column :updated_at, 'timestamp with time zone', null: :false
     end
 
-    create_table :countries_com_trade_world_aggregated_indicators, {id: false, force: true} do |t|
+    create_table :countries_com_trade_world_aggregated_indicators, id: false, force: true do |t|
       t.float :quantity
       t.float :value
       t.integer :quantity_rank
@@ -27,7 +27,7 @@ class ComTradePerPartner < ActiveRecord::Migration[5.2]
     create_view :countries_com_trade_world_aggregated_indicators_v,
       materialized: false
 
-    create_table :countries_com_trade_partner_indicators, {id: false, force: true} do |t|
+    create_table :countries_com_trade_partner_indicators, id: false, force: true do |t|
       t.float :raw_quantity
       t.float :quantity
       t.float :value
@@ -42,7 +42,7 @@ class ComTradePerPartner < ActiveRecord::Migration[5.2]
       t.column :updated_at, 'timestamp with time zone', null: :false
     end
 
-    create_table :countries_com_trade_partner_aggregated_indicators, {id: false, force: true} do |t|
+    create_table :countries_com_trade_partner_aggregated_indicators, id: false, force: true do |t|
       t.float :quantity
       t.float :value
       t.integer :commodity_id

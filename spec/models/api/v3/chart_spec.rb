@@ -121,7 +121,7 @@ RSpec.describe Api::V3::Chart, type: :model do
 
         context 'when the identifier changes' do
           it 'refresh actor_basic_attributes of the related node_with_flows' do
-            chart.update_attributes(identifier: 'new name')
+            chart.update(identifier: 'new name')
 
             related_node_with_flows.each do |node_with_flows|
               expect(node_with_flows.actor_basic_attributes).to be_nil
@@ -133,7 +133,7 @@ RSpec.describe Api::V3::Chart, type: :model do
           it 'refresh actor_basic_attributes of the related node_with_flows' do
             new_profile = Api::V3::Profile.where(name: :actor).last
             Api::V3::Chart.where(profile_id: new_profile.id).destroy_all
-            chart.update_attributes(profile_id: new_profile.id)
+            chart.update(profile_id: new_profile.id)
 
             related_node_with_flows.each do |node_with_flows|
               expect(node_with_flows.actor_basic_attributes).to be_nil
@@ -159,7 +159,7 @@ RSpec.describe Api::V3::Chart, type: :model do
 
         context 'when changes any other field' do
           it 'not refresh actor_basic_attributes of the related node_with_flows' do
-            chart.update_attributes(title: 'new title')
+            chart.update(title: 'new title')
 
             related_node_with_flows.each do |node_with_flows|
               expect(node_with_flows.actor_basic_attributes).to be_nil

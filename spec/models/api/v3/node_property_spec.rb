@@ -38,7 +38,7 @@ RSpec.describe Api::V3::NodeProperty, type: :model do
         id: np.node_id, context_id: api_v3_brazil_soy_context.id
       )
 
-      np.update_attributes(is_domestic_consumption: !node.is_domestic_consumption)
+      np.update(is_domestic_consumption: !node.is_domestic_consumption)
 
       node = Api::V3::Readonly::NodeWithFlowsOrGeo.find_by(
         id: np.node_id, context_id: api_v3_brazil_soy_context.id

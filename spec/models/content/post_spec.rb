@@ -18,7 +18,7 @@ RSpec.describe Content::Post, type: :model do
 
     it 'keeps post highlighted when another property updated' do
       highlighted_post = FactoryBot.create(:post, highlighted: true)
-      highlighted_post.update_attributes(title: 'zonk')
+      highlighted_post.update(title: 'zonk')
       expect(highlighted_post.reload).to be_highlighted
     end
   end

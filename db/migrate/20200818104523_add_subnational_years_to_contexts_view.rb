@@ -17,6 +17,6 @@ class AddSubnationalYearsToContextsView < ActiveRecord::Migration[5.2]
     filename = "db/views/#{view_name}_v#{"%02d" % options[:version]}.sql"
     return unless File.exists?(filename)
 
-    update_view view_name, options
+    update_view view_name, **options
   end
 end

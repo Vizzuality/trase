@@ -1,5 +1,5 @@
 # config valid for current version and patch releases of Capistrano
-lock '~> 3.16.0'
+lock '~> 3.17.0'
 
 set :application, 'trase'
 set :repo_url, 'git@github.com:Vizzuality/trase.git'
@@ -37,6 +37,7 @@ set :keep_releases, 3
 
 # Uncomment the following to require manually verifying the host key before first deploy.
 # set :ssh_options, verify_host_key: :secure
+set :ssh_options, forward_agent: true
 
 set :yarn_target_path, -> { release_path.join('frontend') } # default not set
 set :yarn_flags, ''
@@ -131,7 +132,10 @@ namespace :map_attributes do
   end
 end
 
-set :rvm_ruby_version, '2.6.3'
+set :rvm_ruby_version, '3.1.3'
 set :nvm_type, :user
-set :nvm_node, 'v12.13.0'
+set :nvm_node, 'v16.19.1'
 set :nvm_map_bins, %w{node npm yarn}
+set :default_env, {
+  "PATH" => "/home/ubuntu/.nvm/versions/node/v16.19.1/bin:$PATH"
+}

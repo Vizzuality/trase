@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       postgres:
-        image: postgres:11
+        image: postgres:14
         ports:
           - 5432:5432
         env:
@@ -34,10 +34,7 @@ jobs:
       - name: Install PostgreSQL client 🐘
         run: |
           sudo apt update
-          sudo bash -c "echo deb http://apt.postgresql.org/pub/repos/apt/ bionic-pgdg main >> /etc/apt/sources.list.d/pgdg.list"
-          wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
-          sudo apt-get update
-          sudo apt-get -yqq install libpq-dev postgresql-client-11
+          sudo apt-get -yqq install libpq-dev postgresql-client
 
       - name: Install Ruby 💎
         uses: ruby/setup-ruby@v1
@@ -62,7 +59,7 @@ jobs:
           RAILS_ENV: test
         run: |
           bundle exec rails db:create RAILS_ENV=test
-          bundle exec rails db:migrate RAILS_ENV=test
+          bundler exec rails db:structure:load RAILS_ENV=test
 
       - name: Build 🔧
         env:
@@ -73,7 +70,7 @@ jobs:
         run: bundle exec rake db:doc:html
 
       - name: Publish to https://vizzuality.github.io/trase/db/all_tables 🚀
-        uses: JamesIves/github-pages-deploy-action@v4.4.0
+        uses: JamesIves/github-pages-deploy-action@v4.4.1
         with:
           branch: gh-pages # The branch the action should deploy to.
           folder: doc/gh-pages # The folder the action should deploy.

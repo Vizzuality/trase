@@ -65,7 +65,7 @@ RSpec.describe Api::V3::Profile, type: :model do
 
         context 'when the name changes' do
           it 'refresh actor_basic_attributes of the related node_with_flows' do
-            profile.update_attributes(name: 'place')
+            profile.update(name: 'place')
 
             related_node_with_flows.each do |node_with_flows|
               expect(node_with_flows.actor_basic_attributes).to be_nil
@@ -75,7 +75,7 @@ RSpec.describe Api::V3::Profile, type: :model do
 
         context 'when context_node_type_id changes' do
           it 'refresh actor_basic_attributes of the related node_with_flows' do
-            profile.update_attributes(
+            profile.update(
               context_node_type_id: Api::V3::ContextNodeType.last.id
             )
 
@@ -88,7 +88,7 @@ RSpec.describe Api::V3::Profile, type: :model do
 
         context 'when changes any other field' do
           it 'not refresh actor_basic_attributes of the related node_with_flows' do
-            profile.update_attributes(adm_1_name: 'new_name')
+            profile.update(adm_1_name: 'new_name')
 
             related_node_with_flows.each do |node_with_flows|
               expect(node_with_flows.actor_basic_attributes).to be_nil

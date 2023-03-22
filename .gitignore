@@ -63,3 +63,9 @@ frontend/package-lock.json
 
 public/sitemap*
 vendor/
+/public/packs
+/public/packs-test
+/node_modules
+/yarn-error.log
+yarn-debug.log*
+.yarn-integrity

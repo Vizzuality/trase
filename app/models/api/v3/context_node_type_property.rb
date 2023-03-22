@@ -41,11 +41,10 @@ module Api
       # TODO: there should be only one default per group
 
       belongs_to :context_node_type
-      belongs_to :geometry_context_node_type, {
+      belongs_to :geometry_context_node_type,
         class_name: 'ContextNodeType',
         foreign_key: :geometry_context_node_type_id,
         optional: true
-      }
       has_many :sankey_card_link_node_types
 
       validates :context_node_type, presence: true, uniqueness: true

@@ -79,7 +79,7 @@ RSpec.describe Api::V3::IndContextProperty, type: :model do
 
         context 'when the context_id changes' do
           it 'refresh actor_basic_attributes of the related node_with_flows' do
-            ind_context_property.update_attributes(
+            ind_context_property.update(
               context_id: Api::V3::Context.last.id
             )
 
@@ -91,7 +91,7 @@ RSpec.describe Api::V3::IndContextProperty, type: :model do
 
         context 'when ind_id changes' do
           it 'refresh actor_basic_attributes of the related node_with_flows' do
-            ind_context_property.update_attributes(ind_id: nil)
+            ind_context_property.update(ind_id: nil)
 
             related_node_with_flows.each do |node_with_flows|
               expect(node_with_flows.actor_basic_attributes).to be_nil
@@ -101,7 +101,7 @@ RSpec.describe Api::V3::IndContextProperty, type: :model do
 
         context 'when tooltip_text changes' do
           it 'refresh actor_basic_attributes of the related node_with_flows' do
-            ind_context_property.update_attributes(tooltip_text: 'new tooltip')
+            ind_context_property.update(tooltip_text: 'new tooltip')
 
             related_node_with_flows.each do |node_with_flows|
               node_with_flows.reload

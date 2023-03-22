@@ -25,8 +25,7 @@ module Api
     class Chart < YellowTable
       belongs_to :profile, optional: false
       belongs_to :parent, class_name: 'Chart', optional: true
-      has_many :children, -> { order(:position) },
-               {class_name: 'Chart', foreign_key: :parent_id}
+      has_many :children, -> { order(:position) }, class_name: 'Chart', foreign_key: :parent_id
       has_many :chart_attributes, dependent: :delete_all
       has_many :readonly_chart_attributes,
                class_name: 'Readonly::ChartAttribute'

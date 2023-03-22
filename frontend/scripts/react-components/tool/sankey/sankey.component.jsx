@@ -2,12 +2,10 @@ import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import formatValue from 'utils/formatValue';
-import getNodeMeta from 'app/helpers/getNodeMeta';
 import Heading from 'react-components/shared/heading';
 import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.component';
 import { TOOL_LAYOUT, MIN_COLUMNS_NUMBER, NODE_TYPES } from 'constants';
-import pluralize from 'utils/pluralize';
-
+import { handleNodeOver } from './node-interaction-utils';
 import { useNodeRefHeight, useMenuOptions, useMenuPosition } from './sankey-hooks';
 import RecolorByLegend from './recolor-by-legend';
 import SankeyColumn from './sankey-column.component';
@@ -61,7 +59,8 @@ function Sankey(props) {
     selectedNodesIds,
     toolLayout,
     extraColumnId,
-    selectedContext
+    selectedContext,
+    toolColumns
   } = props;
   const [hoveredLink, setHoveredLink] = useState(null);
   const [tooltipContent, setTooltipContent] = useState(null);
@@ -125,99 +124,28 @@ function Sankey(props) {
     setTooltipContent(null);
   };
 
-  const onNodeOver = (e, node) => {
-    const rect = getRect(toolLayout);
-    const nodeHeight = nodeHeights[node.id];
-    const otherNodeCount = otherNodes && otherNodes[node.id] && otherNodes[node.id].count;
-    const scrollY = scrollContainerRef?.current?.scrollTop || 0;
-    const tooltipPadding = 10;
-    const minTooltipWidth = 180;
-
-    const resizeByItem = {
-      title: selectedResizeBy.label,
-      unit: selectedResizeBy.unit,
-      value: `${formatValue(nodeHeight.quant, selectedResizeBy.label)}`
-    };
-
-    const tooltip = {
-      text: node.name,
-      items: [resizeByItem],
-      width: rect.width,
-      height: rect.height,
-      x:
-        // this math is here to prevent overflow from the viewport, or the tooltip appearing on top of the mouse
-        node.x + sankeyColumnsWidth + tooltipPadding > rect.width - minTooltipWidth
-          ? node.x
-          : node.x + sankeyColumnsWidth,
-      y: node.y - tooltipPadding - scrollY
-    };
-
-    const lastColumnNodeTypes = [
-      NODE_TYPES.country,
-      NODE_TYPES.countryOfDestination,
-      NODE_TYPES.economicBloc
-    ];
-    const hasDimensionSelected =
-      nodeAttributes && selectedMapDimensions && selectedMapDimensions.length > 0;
-
-    // Last column nodes should only show the trade volume on the tooltip
-    if (lastColumnNodeTypes.includes(node.type)) {
-      const associatedLinks = links.filter(l => l.targetNodeId === node.id);
-      const value = associatedLinks.reduce((acc, curr) => acc + curr.quant, 0);
-      const formattedValue = formatValue(value, selectedResizeBy.label);
-      tooltip.items = [
-        {
-          title: `Selection ${selectedResizeBy.label}`,
-          unit: selectedResizeBy.unit,
-          value: formattedValue
-        },
-        { ...resizeByItem, title: `Total ${selectedResizeBy.label}` }
-      ];
-    } else if (hasDimensionSelected) {
-      const nodeIndicators = selectedMapDimensions
-        .map(dimension => {
-          const meta = getNodeMeta(dimension, node, nodeAttributes, selectedResizeBy, nodeHeights);
-          if (!meta) {
-            return null;
-          }
-          return {
-            title: dimension.name,
-            unit: dimension.unit,
-            value: formatValue(meta.value, dimension.name)
-          };
-        })
-        .filter(Boolean);
-      tooltip.items.push(...nodeIndicators);
-
-      if (otherNodeCount) {
-        tooltip.items.push({
-          title: pluralize(node.type),
-          unit: null,
-          value: otherNodeCount
-        });
-      }
-    }
-
-    // Tooltip disclaimer only for Argentina Soy Other node
-    const { commodityName, countryName } = selectedContext;
-    if (commodityName === 'SOY' && countryName === 'ARGENTINA' && node.name === 'IMPORTS + STOCK') {
-      setTooltipDisclaimer(
-        'Sources include soybean imports from other countries and Argentina’s production that is part of the soybean stock'
-      );
-    } else {
-      setTooltipDisclaimer(null);
-    }
-    // Country menu can be enabled if we have country profiles or other node is selected and we can expand
-    const enabledCountryMenu =
-      node.type === NODE_TYPES.countryOfProduction && selectedNodesIds.length;
-
-    if (selectedNodesIds.includes(node.id) || enabledCountryMenu) {
-      setHoveredSelectedNode(node);
-    }
-
-    setTooltipContent(tooltip);
-    onNodeHighlighted(node.id);
-  };
+  const onNodeOver = (e, node) =>
+    handleNodeOver({
+      node,
+      setTooltipContent,
+      setHoveredSelectedNode,
+      onNodeHighlighted,
+      setTooltipDisclaimer,
+      getRect,
+      toolLayout,
+      nodeHeights,
+      selectedResizeBy,
+      selectedMapDimensions,
+      selectedContext,
+      selectedNodesIds,
+      otherNodes,
+      nodeAttributes,
+      toolColumns,
+      columns,
+      scrollContainerRef,
+      sankeyColumnsWidth,
+      links
+    });
 
   const onNodeOut = () => {
     setTooltipContent(null);

@@ -1,6 +1,6 @@
 class CreateCountriesComTradeIndicators < ActiveRecord::Migration[5.2]
   def change
-    create_table :countries_com_trade_indicators, {id: false, force: true} do |t|
+    create_table :countries_com_trade_indicators, id: false, force: true do |t|
       t.float :raw_quantity
       t.float :quantity
       t.float :value
@@ -12,7 +12,7 @@ class CreateCountriesComTradeIndicators < ActiveRecord::Migration[5.2]
       t.text :activity, null: false
     end
 
-    create_table :countries_com_trade_aggregated_indicators, {id: false, force: true} do |t|
+    create_table :countries_com_trade_aggregated_indicators, id: false, force: true do |t|
       t.float :quantity
       t.float :value
       t.integer :quantity_rank
