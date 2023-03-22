@@ -30,8 +30,7 @@ module Api
         private
 
         def dump
-          config = Rails.configuration.database_configuration
-          env_config = config[Rails.env]
+          env_config = ActiveRecord::Base.configurations.configs_for(env_name: Rails.env).first
           pg_tasks = ActiveRecord::Tasks::PostgreSQLDatabaseTasks.new(env_config)
           pg_tasks.data_dump(@local_filename)
           Rails.logger.debug 'Database dumped'
