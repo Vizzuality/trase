@@ -1,8 +1,8 @@
-require 'rails_helper'
-require 'services/api/v3/database_validation/checks/shared_check_examples'
+require "rails_helper"
+require "services/api/v3/database_validation/checks/shared_check_examples"
 
 RSpec.describe Api::V3::DatabaseValidation::Checks::DeclaredYearsMatchFlowAttributes do
-  context 'when checking resize_by_attributes' do
+  context "when checking resize_by_attributes" do
     let(:context) { FactoryBot.create(:api_v3_context) }
     let(:quant) { FactoryBot.create(:api_v3_quant) }
     let(:resize_by_attribute) {
@@ -42,11 +42,11 @@ RSpec.describe Api::V3::DatabaseValidation::Checks::DeclaredYearsMatchFlowAttrib
     let(:report_status) {
       Api::V3::DatabaseValidation::ErrorsList.new
     }
-    context 'when years dont match' do
-      include_examples 'failing checks'
+    context "when years dont match" do
+      include_examples "failing checks"
     end
 
-    context 'when years match' do
+    context "when years match" do
       let(:flow_2015) {
         FactoryBot.create(
           :api_v3_flow, context: context, path: flow_path, year: 2015
@@ -56,7 +56,7 @@ RSpec.describe Api::V3::DatabaseValidation::Checks::DeclaredYearsMatchFlowAttrib
         FactoryBot.create(:api_v3_flow_quant, flow: flow_2015, quant: quant)
       }
 
-      include_examples 'passing checks'
+      include_examples "passing checks"
     end
   end
 end

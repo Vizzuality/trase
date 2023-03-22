@@ -16,7 +16,7 @@ module Api
           parametrised_charts.call
 
           render json: parametrised_charts.data,
-                 root: 'data',
+                 root: "data",
                  meta: parametrised_charts.meta,
                  each_serializer: Api::V3::Dashboards::ParametrisedChartSerializer,
                  url: proc { |options|

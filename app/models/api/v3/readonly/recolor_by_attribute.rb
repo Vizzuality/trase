@@ -23,10 +23,10 @@ module Api
   module V3
     module Readonly
       class RecolorByAttribute < Api::Readonly::BaseModel
-        self.table_name = 'recolor_by_attributes_v'
+        self.table_name = "recolor_by_attributes_v"
 
         belongs_to :context
-        belongs_to :readonly_attribute, foreign_key: :attribute_id, class_name: 'Attribute'
+        belongs_to :readonly_attribute, foreign_key: :attribute_id, class_name: "Attribute"
 
         delegate :name, to: :readonly_attribute
         delegate :display_name, to: :readonly_attribute

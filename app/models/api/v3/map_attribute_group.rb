@@ -34,7 +34,7 @@ module Api
               group.context&.country&.name,
               group.context&.commodity&.name,
               group.name
-            ].join(' / '),
+            ].join(" / "),
             group.id
           ]
         end

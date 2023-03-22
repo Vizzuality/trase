@@ -1,5 +1,5 @@
-ActiveAdmin.register_page 'Database Update' do
-  menu parent: 'Database', priority: 3, if: proc { controller.data_update_supported? }
+ActiveAdmin.register_page "Database Update" do
+  menu parent: "Database", priority: 3, if: proc { controller.data_update_supported? }
 
   controller do
     before_action :ensure_data_update_supported
@@ -12,12 +12,12 @@ ActiveAdmin.register_page 'Database Update' do
       include: [Api::V3::DatabaseUpdate::S3_PREFIX]
     )
     unless current_update
-      render partial: 'admin/database_update/mirror_form', locals: {
+      render partial: "admin/database_update/mirror_form", locals: {
         current_update: current_update,
         main_schema_versions: main_schema_versions
       }
     end
-    render partial: 'admin/database_update/list', locals: {
+    render partial: "admin/database_update/list", locals: {
       current_update: current_update,
       database_updates: database_updates
     }
@@ -31,9 +31,9 @@ ActiveAdmin.register_page 'Database Update' do
     )
     if database_update.save
       MirrorDatabaseUpdateWorker.perform_async(database_update.id, main_schema_version)
-      redirect_to admin_database_update_path, notice: 'Database update scheduled. Please refresh for updates.'
+      redirect_to admin_database_update_path, notice: "Database update scheduled. Please refresh for updates."
     else
-      redirect_to admin_database_update_path, notice: 'Database update already in progress.'
+      redirect_to admin_database_update_path, notice: "Database update already in progress."
     end
   end
 end

@@ -29,7 +29,7 @@ module Api
         end
 
         attribute :nodes do
-          next [] unless object.legend_type.eql? 'qual'
+          next [] unless object.legend_type.eql? "qual"
 
           object.legend
         end

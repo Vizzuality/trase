@@ -1,17 +1,17 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Api::V3::Dashboards::Charts::MultiYearNoNcontNodeTypeView do
-  include_context 'api v3 brazil resize by attributes'
-  include_context 'api v3 brazil soy flow quants'
+  include_context "api v3 brazil resize by attributes"
+  include_context "api v3 brazil soy flow quants"
 
   let!(:api_v3_unknown_exporter_node) do
     node = Api::V3::Node.where(
-      name: 'UNKNOWN', node_type_id: api_v3_exporter_node_type.id
+      name: "UNKNOWN", node_type_id: api_v3_exporter_node_type.id
     ).first
     unless node
       node = FactoryBot.create(
         :api_v3_node,
-        name: 'UNKNOWN',
+        name: "UNKNOWN",
         node_type: api_v3_exporter_node_type,
         is_unknown: true
       )
@@ -95,20 +95,20 @@ RSpec.describe Api::V3::Dashboards::Charts::MultiYearNoNcontNodeTypeView do
   }
 
   describe :call do
-    context 'when no flow path filters' do
+    context "when no flow path filters" do
       let(:parameters_hash) { shared_parameters_hash }
-      it 'summarized all flows per year' do
+      it "summarized all flows per year" do
         expect(data.size).to eq(1)
         expect(data[0][:x]).to eq(2015)
         expect(data[0][exporter1_idx]).to eq(75)
       end
     end
 
-    context 'when filtered by 1 exporter' do
+    context "when filtered by 1 exporter" do
       let(:parameters_hash) {
         shared_parameters_hash.merge(companies_ids: [api_v3_exporter1_node.id])
       }
-      it 'summarized flows matching exporter per ncont' do
+      it "summarized flows matching exporter per ncont" do
         expect(data.size).to eq(1)
         expect(data[0][:x]).to eq(2015)
         expect(data[0][exporter1_idx]).to eq(75)
@@ -116,7 +116,7 @@ RSpec.describe Api::V3::Dashboards::Charts::MultiYearNoNcontNodeTypeView do
       end
     end
 
-    context 'when filtered by 1 exporter and 1 destination excluded' do
+    context "when filtered by 1 exporter and 1 destination excluded" do
       let(:parameters_hash) {
         shared_parameters_hash.merge(
           companies_ids: [api_v3_exporter1_node.id],
@@ -125,7 +125,7 @@ RSpec.describe Api::V3::Dashboards::Charts::MultiYearNoNcontNodeTypeView do
           ]
         )
       }
-      it 'summarized flows matching exporter per ncont' do
+      it "summarized flows matching exporter per ncont" do
         expect(data.size).to eq(1)
         expect(data[0][:x]).to eq(2015)
         expect(data[0][exporter1_idx]).to eq(55)
@@ -133,7 +133,7 @@ RSpec.describe Api::V3::Dashboards::Charts::MultiYearNoNcontNodeTypeView do
       end
     end
 
-    context 'when filtered by 2 exporters' do
+    context "when filtered by 2 exporters" do
       let(:parameters_hash) {
         shared_parameters_hash.merge(
           companies_ids: [
@@ -141,7 +141,7 @@ RSpec.describe Api::V3::Dashboards::Charts::MultiYearNoNcontNodeTypeView do
           ]
         )
       }
-      it 'summarized flows matching either exporter per ncont' do
+      it "summarized flows matching either exporter per ncont" do
         expect(data.size).to eq(1)
         expect(data[0][:x]).to eq(2015)
         expect(data[0][exporter1_idx]).to eq(75)
@@ -149,7 +149,7 @@ RSpec.describe Api::V3::Dashboards::Charts::MultiYearNoNcontNodeTypeView do
       end
     end
 
-    context 'when filtered by 1 exporter and 1 importer' do
+    context "when filtered by 1 exporter and 1 importer" do
       let(:parameters_hash) {
         shared_parameters_hash.merge(
           companies_ids: [
@@ -157,7 +157,7 @@ RSpec.describe Api::V3::Dashboards::Charts::MultiYearNoNcontNodeTypeView do
           ]
         )
       }
-      it 'summarized flows matching exporter AND importer per ncont' do
+      it "summarized flows matching exporter AND importer per ncont" do
         expect(data.size).to eq(1)
         expect(data[0][:x]).to eq(2015)
         expect(data[0][exporter1_idx]).to be_nil
@@ -165,7 +165,7 @@ RSpec.describe Api::V3::Dashboards::Charts::MultiYearNoNcontNodeTypeView do
       end
     end
 
-    context 'when filtered by 2 exporters and 2 importers' do
+    context "when filtered by 2 exporters and 2 importers" do
       let(:parameters_hash) {
         shared_parameters_hash.merge(
           companies_ids: [
@@ -176,7 +176,7 @@ RSpec.describe Api::V3::Dashboards::Charts::MultiYearNoNcontNodeTypeView do
           ]
         )
       }
-      it 'summarized flows matching either exporter AND either importer per ncont' do
+      it "summarized flows matching either exporter AND either importer per ncont" do
         expect(data.size).to eq(1)
         expect(data[0][:x]).to eq(2015)
         expect(data[0][exporter1_idx]).to eq(75)

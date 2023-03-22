@@ -14,7 +14,7 @@ module Api
   module V3
     class Quant < BlueTable
       has_one :quant_property
-      has_one :quant_values_meta, class_name: 'Api::V3::Readonly::QuantValuesMeta'
+      has_one :quant_values_meta, class_name: "Api::V3::Readonly::QuantValuesMeta"
       has_many :node_quants
       has_many :flow_quants
       has_many :flows, through: :flow_quants
@@ -29,18 +29,18 @@ module Api
 
       def readonly_attribute
         Api::V3::Readonly::Attribute.
-          where(original_type: 'Quant', original_id: id).
+          where(original_type: "Quant", original_id: id).
           first
       end
 
       def simple_type
-        'quant'
+        "quant"
       end
 
       def download_original_attribute(context)
         Api::V3::DownloadQuant.
           joins(:download_attribute).
-          find_by('download_attributes.context_id' => context.id, quant_id: id)
+          find_by("download_attributes.context_id" => context.id, quant_id: id)
       end
 
       def self.select_options
@@ -49,7 +49,7 @@ module Api
 
       def self.import_key
         [
-          {name: :name, sql_type: 'TEXT'}
+          {name: :name, sql_type: "TEXT"}
         ]
       end
     end

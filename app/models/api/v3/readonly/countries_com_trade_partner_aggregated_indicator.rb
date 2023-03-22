@@ -16,7 +16,7 @@ module Api
       class CountriesComTradePartnerAggregatedIndicator < Api::Readonly::BaseModel
         include Api::V3::Readonly::MaterialisedTable
 
-        self.table_name = 'countries_com_trade_partner_aggregated_indicators'
+        self.table_name = "countries_com_trade_partner_aggregated_indicators"
 
         INDEXES = [].freeze
       end

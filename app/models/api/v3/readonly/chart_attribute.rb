@@ -23,10 +23,10 @@ module Api
   module V3
     module Readonly
       class ChartAttribute < Api::Readonly::BaseModel
-        self.table_name = 'chart_attributes_v'
+        self.table_name = "chart_attributes_v"
 
         belongs_to :chart
-        belongs_to :readonly_attribute, foreign_key: :attribute_id, class_name: 'Attribute'
+        belongs_to :readonly_attribute, foreign_key: :attribute_id, class_name: "Attribute"
 
         def original_attribute
           return nil unless %w(Ind Qual Quant).include? original_type

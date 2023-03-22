@@ -1,21 +1,21 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Api::V3::MapAttributesExport do
-  include_context 'api v3 brazil soy nodes'
-  include_context 'api v3 quants'
+  include_context "api v3 brazil soy nodes"
+  include_context "api v3 quants"
 
   before(:all) {
-    FileUtils.mkdir_p 'spec/support/export'
+    FileUtils.mkdir_p "spec/support/export"
   }
   after(:all) {
-    FileUtils.rm_rf 'spec/support/export'
+    FileUtils.rm_rf "spec/support/export"
   }
 
   describe :call do
     before(:each) do
       stub_const(
-        'Api::V3::MapAttributesExport::EXPORT_DIR',
-        'spec/support/export'
+        "Api::V3::MapAttributesExport::EXPORT_DIR",
+        "spec/support/export"
       )
       FactoryBot.create(
         :api_v3_node_quant,
@@ -33,8 +33,8 @@ RSpec.describe Api::V3::MapAttributesExport do
       )
     end
     let(:subject) { Api::V3::MapAttributesExport.new }
-    it 'should generate file' do
-      filepath = 'spec/support/export/map_attributes_values_test.csv.gz'
+    it "should generate file" do
+      filepath = "spec/support/export/map_attributes_values_test.csv.gz"
       subject.call
       expect(File).to exist(filepath)
     end

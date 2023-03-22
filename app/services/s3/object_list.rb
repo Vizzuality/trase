@@ -9,12 +9,12 @@ module S3
       objects = @s3.bucket(@bucket_name).objects
       if include_prefixes.any?
         objects = objects.select do |o|
-          include_prefixes.include?(o.key.split('/').first)
+          include_prefixes.include?(o.key.split("/").first)
         end
       end
       if exclude_prefixes.any?
         objects = objects.reject do |o|
-          exclude_prefixes.include?(o.key.split('/').first)
+          exclude_prefixes.include?(o.key.split("/").first)
         end
       end
       objects.map do |obj|
@@ -22,7 +22,7 @@ module S3
           name: obj.key,
           key: obj.key.match(/^(\w| )*/).to_s,
           url: obj.presigned_url(:get),
-          time: obj.last_modified.strftime('%d-%m-%Y %H:%M:%S')
+          time: obj.last_modified.strftime("%d-%m-%Y %H:%M:%S")
         }
       end
     end

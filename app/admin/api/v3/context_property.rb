@@ -1,5 +1,5 @@
-ActiveAdmin.register Api::V3::ContextProperty, as: 'ContextProperty' do
-  menu parent: 'General', priority: 2
+ActiveAdmin.register Api::V3::ContextProperty, as: "ContextProperty" do
+  menu parent: "General", priority: 2
 
   permit_params :context_id, :default_basemap, :is_disabled, :is_default,
                 :is_highlighted, :subnational_years_str
@@ -8,7 +8,7 @@ ActiveAdmin.register Api::V3::ContextProperty, as: 'ContextProperty' do
 
   controller do
     def clear_cache
-      clear_cache_for_regexp('/api/v3/contexts')
+      clear_cache_for_regexp("/api/v3/contexts")
     end
   end
 
@@ -19,22 +19,22 @@ ActiveAdmin.register Api::V3::ContextProperty, as: 'ContextProperty' do
                       collection: Api::V3::Context.select_options
       input :default_basemap, as: :select,
                               collection: Api::V3::ContextProperty::DEFAULT_BASEMAP,
-                              hint: object.class.column_comment('default_basemap')
+                              hint: object.class.column_comment("default_basemap")
       input :is_disabled, as: :boolean, required: true,
-                          hint: object.class.column_comment('is_disabled')
+                          hint: object.class.column_comment("is_disabled")
       input :is_default, as: :boolean, required: true,
-                         hint: object.class.column_comment('is_default')
+                         hint: object.class.column_comment("is_default")
       input :is_highlighted, as: :boolean, required: true,
-                             hint: object.class.column_comment('is_highlighted')
-      input :subnational_years_str, label: 'Subnational years',
-                        hint: (object.class.column_comment('subnational_years') || '') + ' (comma-separated list)'
+                             hint: object.class.column_comment("is_highlighted")
+      input :subnational_years_str, label: "Subnational years",
+                                    hint: (object.class.column_comment("subnational_years") || "") + " (comma-separated list)"
     end
     f.actions
   end
 
   index do
-    column('Country') { |property| property.context&.country&.name }
-    column('Commodity') { |property| property.context&.commodity&.name }
+    column("Country") { |property| property.context&.country&.name }
+    column("Commodity") { |property| property.context&.commodity&.name }
     column :is_disabled
     column :is_default
     column :is_highlighted

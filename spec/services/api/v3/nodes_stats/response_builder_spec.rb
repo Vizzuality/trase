@@ -1,8 +1,8 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Api::V3::NodesStats::ResponseBuilder do
-  include_context 'api v3 brazil soy flow quals'
-  include_context 'api v3 brazil soy flow quants'
+  include_context "api v3 brazil soy flow quals"
+  include_context "api v3 brazil soy flow quants"
 
   before(:each) do
     Api::V3::Readonly::Attribute.refresh
@@ -10,8 +10,8 @@ RSpec.describe Api::V3::NodesStats::ResponseBuilder do
   end
 
   describe :nodes_stats do
-    context 'when all options are correct' do
-      it 'should return top countries' do
+    context "when all options are correct" do
+      it "should return top countries" do
         builder = Api::V3::NodesStats::ResponseBuilder.new(
           nil,
           [api_v3_brazil_soy_context.id],
@@ -24,14 +24,14 @@ RSpec.describe Api::V3::NodesStats::ResponseBuilder do
 
         builder.call
 
-        expect(builder.nodes_stats.first['node_id']).to eq(
+        expect(builder.nodes_stats.first["node_id"]).to eq(
           api_v3_country_of_destination1_node.id
         )
       end
     end
 
-    context 'when start_year is greather than end_year' do
-      it 'raise an error' do
+    context "when start_year is greather than end_year" do
+      it "raise an error" do
         expect {
           Api::V3::NodesStats::ResponseBuilder.new(
             nil,
@@ -43,13 +43,13 @@ RSpec.describe Api::V3::NodesStats::ResponseBuilder do
             year_end: 2015
           )
         }.to raise_error(
-          'Year start can not be higher than year end'
+          "Year start can not be higher than year end"
         )
       end
     end
 
-    context 'when commodity and contexts are specified' do
-      it 'raise an error' do
+    context "when commodity and contexts are specified" do
+      it "raise an error" do
         expect {
           Api::V3::NodesStats::ResponseBuilder.new(
             api_v3_soy.id,
@@ -61,13 +61,13 @@ RSpec.describe Api::V3::NodesStats::ResponseBuilder do
             year_end: 2015
           )
         }.to raise_error(
-          'Either commodity or contexts but not both'
+          "Either commodity or contexts but not both"
         )
       end
     end
 
-    context 'when a qual or ind is used as attribute_id' do
-      it 'raise an error' do
+    context "when a qual or ind is used as attribute_id" do
+      it "raise an error" do
         expect {
           Api::V3::NodesStats::ResponseBuilder.new(
             nil,
@@ -83,8 +83,8 @@ RSpec.describe Api::V3::NodesStats::ResponseBuilder do
       end
     end
 
-    context 'when a qual or ind is used as other_attributes_ids' do
-      it 'raise an error' do
+    context "when a qual or ind is used as other_attributes_ids" do
+      it "raise an error" do
         expect {
           Api::V3::NodesStats::ResponseBuilder.new(
             nil,

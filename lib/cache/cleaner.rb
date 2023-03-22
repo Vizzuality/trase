@@ -1,6 +1,6 @@
 module Cache
   module Cleaner
-    API_HOST = ENV['API_HOST']
+    API_HOST = ENV["API_HOST"]
 
     class << self
       # Uses PURGE to remove objects from cache by url
@@ -18,14 +18,14 @@ module Cache
         with_uri(API_HOST) do |uri|
           Rails.logger.debug "Banning: #{regexp}"
           request = Net::HTTP::Ban.new uri.request_uri
-          request['X-Ban-Url'] = regexp
+          request["X-Ban-Url"] = regexp
           request
         end
       end
 
       def clear_all
-        clear_cache_for_regexp('/api/v3/')
-        clear_cache_for_regexp('/content/')
+        clear_cache_for_regexp("/api/v3/")
+        clear_cache_for_regexp("/content/")
         Dictionary::Ind.instance.reset
         Dictionary::Qual.instance.reset
         Dictionary::Quant.instance.reset
@@ -41,7 +41,7 @@ module Cache
           response = http.request request
           Rails.logger.debug "#{response.code}: #{response.message}"
           unless (200...400).cover?(response.code.to_i)
-            Rails.logger.error 'A problem occurred. Operation was not performed.'
+            Rails.logger.error "A problem occurred. Operation was not performed."
           end
         end
       rescue => e

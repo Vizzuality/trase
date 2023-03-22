@@ -32,12 +32,12 @@ module Api
           # rubocop:enable Layout/LineLength
           nodes_join_clause = ActiveRecord::Base.send(
             :sanitize_sql_array,
-            ['JOIN nodes ON nodes.id = flows.path[?]', @node_index]
+            ["JOIN nodes ON nodes.id = flows.path[?]", @node_index]
           )
           group_clause = ActiveRecord::Base.send(
             :sanitize_sql_array,
             [
-              'flows.context_id, flows.year, path[?]',
+              "flows.context_id, flows.year, path[?]",
               @node_index
             ]
           )
@@ -45,20 +45,20 @@ module Api
             select(select_clause).
             joins("JOIN #{value_table} ON flows.id = #{value_table}.flow_id").
             joins(nodes_join_clause).
-            joins('JOIN node_properties ON node_properties.node_id = nodes.id').
+            joins("JOIN node_properties ON node_properties.node_id = nodes.id").
             where("#{value_table}.#{attribute_type}_id" => attribute.id).
-            where('flows.year' => @year, 'context_id' => @context.id).
-            where('NOT node_properties.is_domestic_consumption').
-            where('NOT is_unknown').
+            where("flows.year" => @year, "context_id" => @context.id).
+            where("NOT node_properties.is_domestic_consumption").
+            where("NOT is_unknown").
             group(group_clause)
 
-          result = Node.from('(' + query.to_sql + ') s').
-            select('s.*').
-            where('s.node_id' => @node.id).
-            order('rank ASC').
+          result = Node.from("(" + query.to_sql + ") s").
+            select("s.*").
+            where("s.node_id" => @node.id).
+            order("rank ASC").
             first
 
-          result && result['rank'] || nil
+          result && result["rank"] || nil
         end
       end
     end

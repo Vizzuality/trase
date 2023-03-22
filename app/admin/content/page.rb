@@ -1,5 +1,5 @@
-ActiveAdmin.register Content::Page, as: 'Page' do
-  menu parent: 'Content'
+ActiveAdmin.register Content::Page, as: "Page" do
+  menu parent: "Content"
 
   permit_params :name, :content
   config.sort_order = :name
@@ -16,11 +16,11 @@ ActiveAdmin.register Content::Page, as: 'Page' do
   form do |f|
     f.semantic_errors
     inputs do
-      input :name, required: true, as: :string, hint: 'Page name used in URL'
+      input :name, required: true, as: :string, hint: "Page name used in URL"
       input :content,
             required: true,
             as: :simplemde_editor,
-            hint: 'Page content formatted in markdown'
+            hint: "Page content formatted in markdown"
     end
     f.actions
   end

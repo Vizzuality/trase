@@ -1,5 +1,5 @@
-shared_context 'api v3 brazil palm oil profiles' do
-  include_context 'api v3 brazil context node types'
+shared_context "api v3 brazil palm oil profiles" do
+  include_context "api v3 brazil context node types"
 
   let!(:api_v3_brazil_palm_oil_exporter_actor_profile) do
     profile = Api::V3::Profile.where(

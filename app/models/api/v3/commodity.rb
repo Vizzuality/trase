@@ -28,7 +28,7 @@ module Api
 
       def self.import_key
         [
-          {name: :name, sql_type: 'TEXT'}
+          {name: :name, sql_type: "TEXT"}
         ]
       end
 

@@ -32,11 +32,11 @@ module Api
 
           def error
             message = [
-              'Exactly one of',
-              @associations.join(' or '),
-              'should be present',
+              "Exactly one of",
+              @associations.join(" or "),
+              "should be present",
               "(#{@count} found)"
-            ].join(' ')
+            ].join(" ")
             super.merge(
               message: message
             )

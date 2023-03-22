@@ -5,7 +5,7 @@ module Api
         @node_types = Api::V3::NodeTypes::Filter.new(@context).call
 
         render json: @node_types,
-               root: 'data',
+               root: "data",
                each_serializer: Api::V3::NodeTypes::NodeTypeSerializer
       end
     end

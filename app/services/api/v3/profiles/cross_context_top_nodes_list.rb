@@ -42,11 +42,11 @@ module Api
           where_conds = []
           where_vars = []
           @node_indices_by_context.each do |context_id, node_idx|
-            where_conds << 'flows.context_id = ? AND ? = path[?]'
+            where_conds << "flows.context_id = ? AND ? = path[?]"
             where_vars += [context_id, @node.id, node_idx]
           end
           query.where(
-            where_conds.join(' OR '), *where_vars
+            where_conds.join(" OR "), *where_vars
           )
         end
       end

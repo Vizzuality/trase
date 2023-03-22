@@ -5,7 +5,7 @@ module Api
         class NoNcontNodeType
           attr_reader :context, :top_n, :cont_attribute, :year, :node_type_idx
 
-          OTHER = 'OTHER'.freeze
+          OTHER = "OTHER".freeze
 
           class << self
             def call(chart_params:, node_type_idx:, top_n:)
@@ -34,7 +34,7 @@ module Api
 
           def data_no_ncont
             data = top_n_and_others_query.map do |r|
-              r.attributes.slice('x', 'y0').symbolize_keys
+              r.attributes.slice("x", "y0").symbolize_keys
             end
             if (last = data.last) && last[:x] == OTHER && last[:y0].blank?
               data.pop
@@ -61,7 +61,7 @@ module Api
 
           def flow_query
             Api::V3::Flow.
-              from('partitioned_flows flows').
+              from("partitioned_flows flows").
               where(context_id: context.id).order(false).
               select("flows.names[#{@node_type_idx}] AS x").
               group("flows.names[#{@node_type_idx}]").

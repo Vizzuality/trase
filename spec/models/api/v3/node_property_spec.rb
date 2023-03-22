@@ -1,7 +1,7 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Api::V3::NodeProperty, type: :model do
-  include_context 'api v3 brazil soy nodes'
+  include_context "api v3 brazil soy nodes"
 
   describe :validate do
     let(:property_without_node) {
@@ -10,10 +10,10 @@ RSpec.describe Api::V3::NodeProperty, type: :model do
     let(:duplicate) {
       FactoryBot.build(:api_v3_node_property, node: api_v3_state_node)
     }
-    it 'fails when node missing' do
+    it "fails when node missing" do
       expect(property_without_node).to have(2).errors_on(:node)
     end
-    it 'fails when node taken' do
+    it "fails when node taken" do
       expect(duplicate).to have(1).errors_on(:node)
     end
   end
@@ -25,7 +25,7 @@ RSpec.describe Api::V3::NodeProperty, type: :model do
     after(:each) do
       Api::V3::NodeProperty.skip_callback(:update, :after, :refresh_dependents_after_update)
     end
-    it 'refreshes nodes_with_flows_or_geo' do
+    it "refreshes nodes_with_flows_or_geo" do
       Api::V3::Readonly::FlowNode.refresh(
         sync: true, skip_dependents: true
       )

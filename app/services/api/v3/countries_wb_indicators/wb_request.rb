@@ -26,13 +26,13 @@ module Api
 
         def api_indicators(indicator_name, start_year, end_year)
           Api::V3::CountriesWbIndicators::ApiService.indicator_request(
-            indicator_name, 'ALL', start_year, end_year
+            indicator_name, "ALL", start_year, end_year
           )
         end
 
         def need_refreshing?(indicator_name, timestamp)
           api_update = Api::V3::ExternalApiUpdate.find_or_initialize_by(
-            name: 'WB', resource_name: indicator_name
+            name: "WB", resource_name: indicator_name
           )
           if !api_update.persisted? ||
               api_update.last_update < timestamp.to_datetime

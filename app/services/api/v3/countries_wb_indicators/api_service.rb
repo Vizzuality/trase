@@ -1,14 +1,14 @@
-require 'net/http'
+require "net/http"
 
 module Api
   module V3
     module CountriesWbIndicators
       class ApiService
-        WORLD_BANK_API_URL = 'https://api.worldbank.org'.freeze
+        WORLD_BANK_API_URL = "https://api.worldbank.org".freeze
 
         def self.indicator_request(wb_name, iso3, start_year = nil, end_year = nil)
           @connection = Api::V3::CountriesWbIndicators::ApiConnection.instance
-          response = @connection.get(request_uri(wb_name, iso3, [start_year,end_year].compact.join(':').presence))
+          response = @connection.get(request_uri(wb_name, iso3, [start_year,end_year].compact.join(":").presence))
           formatted_indicators(wb_name, JSON.parse(response.body))
         end
 
@@ -19,7 +19,7 @@ module Api
         def self.request_uri(wb_name, iso3, start_year = nil, end_year = nil)
           query_params = {format: :json, per_page: 10000}
           if start_year
-            query_params[:date] = [start_year, end_year].compact.join(':')
+            query_params[:date] = [start_year, end_year].compact.join(":")
           end
           uri = URI(
             "#{WORLD_BANK_API_URL}/v2/country/#{iso3}/indicator/" \
@@ -29,18 +29,18 @@ module Api
 
         private_class_method def self.formatted_indicators(wb_name, indicators_response)
           indicators = indicators_response.last.map do |indicator|
-            next if indicator['value'].blank?
+            next if indicator["value"].blank?
 
             {
-              iso_code: indicator['countryiso3code'],
+              iso_code: indicator["countryiso3code"],
               name: wb_name,
-              year: indicator['date'].to_i,
-              value: indicator['value']
+              year: indicator["date"].to_i,
+              value: indicator["value"]
             }
           end
 
           {
-            last_updated: indicators_response.first['lastupdated'].to_date,
+            last_updated: indicators_response.first["lastupdated"].to_date,
             indicators: indicators.compact
           }
         end

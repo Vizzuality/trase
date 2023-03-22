@@ -22,7 +22,7 @@ module Api
     class TopProfileImage < YellowTable
       belongs_to :commodity
       has_many :top_profiles, dependent: :nullify
-      has_attached_file :image, styles: {small: '320x320>', large: '640x640>'}
+      has_attached_file :image, styles: {small: "320x320>", large: "640x640>"}
       validates_attachment_content_type :image, content_type: /\Aimage\/.*\z/
       validates :profile_type, inclusion: Api::V3::Profile::NAMES
 
@@ -36,7 +36,7 @@ module Api
         url = image.url(size)
         return url if Rails.env.development? || Rails.env.test?
 
-        '/content' + url
+        "/content" + url
       end
     end
   end

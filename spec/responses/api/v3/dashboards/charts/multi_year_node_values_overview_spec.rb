@@ -1,10 +1,10 @@
-require 'rails_helper'
-require 'responses/api/v3/dashboards/charts/required_chart_parameters_examples.rb'
+require "rails_helper"
+require "responses/api/v3/dashboards/charts/required_chart_parameters_examples.rb"
 
-RSpec.describe 'Charts::MultiYearNodeValuesOverview', type: :request do
-  include_context 'api v3 brazil municipality quant values'
-  include_context 'api v3 brazil soy flows'
-  include_context 'api v3 brazil soy profiles'
+RSpec.describe "Charts::MultiYearNodeValuesOverview", type: :request do
+  include_context "api v3 brazil municipality quant values"
+  include_context "api v3 brazil soy flows"
+  include_context "api v3 brazil soy profiles"
 
   before(:each) do
     Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
@@ -13,8 +13,8 @@ RSpec.describe 'Charts::MultiYearNodeValuesOverview', type: :request do
 
   let(:cont_attribute) { api_v3_force_labour.readonly_attribute }
 
-  describe 'GET /api/v3/dashboards/charts/multi_year_node_values_overview' do
-    let(:url) { '/api/v3/dashboards/charts/multi_year_node_values_overview' }
+  describe "GET /api/v3/dashboards/charts/multi_year_node_values_overview" do
+    let(:url) { "/api/v3/dashboards/charts/multi_year_node_values_overview" }
     let(:filter_params) {
       {
         country_id: api_v3_brazil.id,
@@ -25,13 +25,13 @@ RSpec.describe 'Charts::MultiYearNodeValuesOverview', type: :request do
         end_year: 2016
       }
     }
-    include_examples 'required node values chart parameters'
+    include_examples "required node values chart parameters"
 
-    it 'has the correct response structure' do
+    it "has the correct response structure" do
       get url, params: filter_params
 
       expect(@response).to have_http_status(:ok)
-      expect(@response).to match_response_schema('dashboards_charts_multi_year_node_values_overview')
+      expect(@response).to match_response_schema("dashboards_charts_multi_year_node_values_overview")
     end
   end
 end

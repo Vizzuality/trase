@@ -1,5 +1,5 @@
-require 'rails_helper'
-require 'services/api/v3/database_validation/checks/shared_check_examples'
+require "rails_helper"
+require "services/api/v3/database_validation/checks/shared_check_examples"
 
 RSpec.describe Api::V3::DatabaseValidation::Checks::HasAtLeastOneProfile do
   let(:context) {
@@ -9,7 +9,7 @@ RSpec.describe Api::V3::DatabaseValidation::Checks::HasAtLeastOneProfile do
     Api::V3::DatabaseValidation::ErrorsList.new
   }
 
-  context 'when checking context actor profiles' do
+  context "when checking context actor profiles" do
     let!(:context_node_type) {
       FactoryBot.create(:api_v3_context_node_type, context: context)
     }
@@ -21,11 +21,11 @@ RSpec.describe Api::V3::DatabaseValidation::Checks::HasAtLeastOneProfile do
       )
     }
 
-    context 'when actor profile missing' do
-      include_examples 'failing checks (warnings)'
+    context "when actor profile missing" do
+      include_examples "failing checks (warnings)"
     end
 
-    context 'when actor profile present' do
+    context "when actor profile present" do
       let!(:actor_profile) {
         FactoryBot.create(
           :api_v3_profile,
@@ -33,7 +33,7 @@ RSpec.describe Api::V3::DatabaseValidation::Checks::HasAtLeastOneProfile do
           name: Api::V3::Profile::ACTOR
         )
       }
-      include_examples 'passing checks (warnings)'
+      include_examples "passing checks (warnings)"
     end
   end
 end

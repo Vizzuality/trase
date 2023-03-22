@@ -9,18 +9,18 @@ module Api
         end
 
         def update_blue_table_before(blue_table_class, cnt_before)
-          update_blue_table_key(blue_table_class, 'before', cnt_before)
+          update_blue_table_key(blue_table_class, "before", cnt_before)
         end
 
         def update_blue_table_after(blue_table_class, cnt_after)
-          update_blue_table_key(blue_table_class, 'after', cnt_after)
+          update_blue_table_key(blue_table_class, "after", cnt_after)
         end
 
         def update_yellow_table_before(
             yellow_table_class, cnt_before, blue_table_name = nil
         )
           update_yellow_table_key(
-            yellow_table_class, 'before', cnt_before, blue_table_name
+            yellow_table_class, "before", cnt_before, blue_table_name
           )
         end
 
@@ -28,7 +28,7 @@ module Api
             yellow_table_class, cnt_after, blue_table_name = nil
         )
           update_yellow_table_key(
-            yellow_table_class, 'after', cnt_after, blue_table_name
+            yellow_table_class, "after", cnt_after, blue_table_name
           )
         end
 
@@ -50,9 +50,9 @@ module Api
           return unless blue_table_name
 
           ensure_nested_hash_exists(
-            blue_table_name, 'yellow_tables', yellow_table_name
+            blue_table_name, "yellow_tables", yellow_table_name
           )
-          @stats[blue_table_name]['yellow_tables'][yellow_table_name][key.to_s] =
+          @stats[blue_table_name]["yellow_tables"][yellow_table_name][key.to_s] =
             value
         end
 

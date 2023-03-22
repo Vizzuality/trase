@@ -1,5 +1,5 @@
-require 'rails_helper'
-require 'models/api/v3/shared_attributes_examples'
+require "rails_helper"
+require "models/api/v3/shared_attributes_examples"
 
 RSpec.describe Api::V3::DashboardsAttribute, type: :model do
   describe :destroy_zombies do
@@ -13,6 +13,6 @@ RSpec.describe Api::V3::DashboardsAttribute, type: :model do
     }
     let!(:zombie) { FactoryBot.create(:api_v3_dashboards_attribute) }
     let(:subject) { Api::V3::DashboardsAttribute }
-    include_examples 'destroys zombies'
+    include_examples "destroys zombies"
   end
 end

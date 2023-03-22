@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :api_v3_context_node_type_property, class: 'Api::V3::ContextNodeTypeProperty' do
+  factory :api_v3_context_node_type_property, class: "Api::V3::ContextNodeTypeProperty" do
     association :context_node_type, factory: :api_v3_context_node_type
     column_group { Api::V3::ContextNodeTypeProperty::COLUMN_GROUP.sample }
     role do |cnt_prop|

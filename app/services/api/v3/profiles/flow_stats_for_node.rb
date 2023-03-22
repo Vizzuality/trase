@@ -22,7 +22,7 @@ module Api
           years = Api::V3::Flow.
             joins("JOIN partitioned_#{flow_values} #{flow_values} ON #{flow_values}.flow_id = flows.id").
             where("#{flow_values}.#{attribute_type}_id" => attribute.id).
-            where('path[?] = ?', @node_index, @node.id).
+            where("path[?] = ?", @node_index, @node.id).
             where(context_id: @context.id).
             select(:year).
             distinct.
@@ -37,7 +37,7 @@ module Api
           attributes_table = :"#{attribute_type}s"
           nodes_join_clause = ActiveRecord::Base.send(
             :sanitize_sql_array,
-            ['JOIN nodes ON nodes.id = flows.path[?]',
+            ["JOIN nodes ON nodes.id = flows.path[?]",
              other_node_index]
           )
           group_clause = ActiveRecord::Base.send(
@@ -50,8 +50,8 @@ module Api
             select("SUM(CAST(#{flow_values_table}.value AS DOUBLE PRECISION)) AS value, #{attributes_table}.name").
             joins(flow_values_table => attribute_type).
             joins(nodes_join_clause).
-            where('? = path[?]', other_node_id, other_node_index).
-            where('NOT is_unknown').
+            where("? = path[?]", other_node_id, other_node_index).
+            where("NOT is_unknown").
             group(group_clause)
         end
 
@@ -65,7 +65,7 @@ module Api
           Api::V3::Flow.
             joins(flow_values_table).
             where("#{flow_values_table}.#{attribute_type}_id" => attributes_ids).
-            where('path[?] = ?', node_index, @node.id).
+            where("path[?] = ?", node_index, @node.id).
             where(context_id: @context.id, year: year)
         end
       end

@@ -1,6 +1,6 @@
-shared_context 'api v3 brazil exporter qual values' do
-  include_context 'api v3 quals'
-  include_context 'api v3 brazil soy nodes'
+shared_context "api v3 brazil exporter qual values" do
+  include_context "api v3 quals"
+  include_context "api v3 brazil soy nodes"
 
   let!(:api_v3_exporter_zero_deforestation_value) do
     Api::V3::NodeQual.where(
@@ -10,7 +10,7 @@ shared_context 'api v3 brazil exporter qual values' do
         :api_v3_node_qual,
         node: api_v3_exporter1_node,
         qual: api_v3_zero_deforestation,
-        value: 'NO'
+        value: "NO"
       )
   end
 
@@ -22,7 +22,7 @@ shared_context 'api v3 brazil exporter qual values' do
         :api_v3_node_qual,
         node: api_v3_exporter1_node,
         qual: api_v3_zero_deforestation_link,
-        value: 'HTTP://WWW.BUNGE.COM/CITIZENSHIP/SUSTAINABLE.HTML'
+        value: "HTTP://WWW.BUNGE.COM/CITIZENSHIP/SUSTAINABLE.HTML"
       )
   end
 
@@ -34,7 +34,7 @@ shared_context 'api v3 brazil exporter qual values' do
         :api_v3_node_qual,
         node: api_v3_exporter1_node,
         qual: api_v3_supply_change,
-        value: 'NO'
+        value: "NO"
       )
   end
 
@@ -46,7 +46,7 @@ shared_context 'api v3 brazil exporter qual values' do
         :api_v3_node_qual,
         node: api_v3_exporter1_node,
         qual: api_v3_supply_change_link,
-        value: 'HTTP://SUPPLY-CHANGE.ORG/COMPANY/BUNGE'
+        value: "HTTP://SUPPLY-CHANGE.ORG/COMPANY/BUNGE"
       )
   end
 
@@ -58,7 +58,7 @@ shared_context 'api v3 brazil exporter qual values' do
         :api_v3_node_qual,
         node: api_v3_exporter1_node,
         qual: api_v3_rtrs_member,
-        value: 'NO'
+        value: "NO"
       )
   end
 end

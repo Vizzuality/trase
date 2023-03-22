@@ -6,7 +6,7 @@ module Api
         class NcontNodeType
           attr_reader :context, :top_n, :ncont_attribute, :cont_attribute, :year, :node_type_idx
 
-          OTHER = 'OTHER'.freeze
+          OTHER = "OTHER".freeze
 
           class << self
             def call(chart_params:, node_type_idx:, top_n:)
@@ -38,8 +38,8 @@ module Api
             data_by_x = {}
             top_n_and_others_query.each do |record|
               ncont_break_by_values_map.each do |break_by, idx|
-                data_by_x[record['x']] ||= {}
-                data_by_x[record['x']]["y#{idx}"] = record['per_break_by'][break_by]
+                data_by_x[record["x"]] ||= {}
+                data_by_x[record["x"]]["y#{idx}"] = record["per_break_by"][break_by]
               end
             end
 
@@ -58,12 +58,12 @@ module Api
               flow_values_class.
               joins(:flow).
               where(
-                'flows.context_id' => context.id,
+                "flows.context_id" => context.id,
                 ncont_attribute.attribute_id_name => ncont_attribute.original_id
               ).
-              select(Arel.sql('value::TEXT AS text_value')).
-              order(Arel.sql('value::TEXT')).
-              distinct.map { |r| r['text_value'] }
+              select(Arel.sql("value::TEXT AS text_value")).
+              order(Arel.sql("value::TEXT")).
+              distinct.map { |r| r["text_value"] }
           end
 
           def top_n_and_others_query
@@ -112,7 +112,7 @@ module Api
 
           def grouped_query
             Api::V3::Flow.
-              from('partitioned_flows flows').
+              from("partitioned_flows flows").
               where(context_id: context.id).
               order(false).
               select("flows.names[#{@node_type_idx}] AS x").

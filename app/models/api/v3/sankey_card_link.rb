@@ -116,25 +116,25 @@ module Api
       end
 
       def extract_selected_country_id
-        cs_countries_ids = query_params['countries']
+        cs_countries_ids = query_params["countries"]
         self.country_id =
-          cs_countries_ids&.split(',')&.first ||
-          query_params['selectedCountryId'] ||
-          Api::V3::Country.find_by(name: 'BRAZIL')&.id
+          cs_countries_ids&.split(",")&.first ||
+          query_params["selectedCountryId"] ||
+          Api::V3::Country.find_by(name: "BRAZIL")&.id
       end
 
       def extract_selected_commodity_id
-        cs_commodities_ids = query_params['commodities']
+        cs_commodities_ids = query_params["commodities"]
         self.commodity_id =
-          cs_commodities_ids&.split(',')&.first ||
-          query_params['selectedCommodityId'] ||
-          Api::V3::Commodity.find_by(name: 'SOY')&.id
+          cs_commodities_ids&.split(",")&.first ||
+          query_params["selectedCommodityId"] ||
+          Api::V3::Commodity.find_by(name: "SOY")&.id
       end
 
       def link_from_query_params
         return nil unless link.present?
 
-        link_without_query_params = link.split('?').first
+        link_without_query_params = link.split("?").first
         "#{link_without_query_params}?#{query_params.to_query}"
       end
     end

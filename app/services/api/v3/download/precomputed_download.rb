@@ -2,7 +2,7 @@ module Api
   module V3
     module Download
       class PrecomputedDownload
-        ROOT_DIRNAME = 'public/downloads'.freeze
+        ROOT_DIRNAME = "public/downloads".freeze
 
         # @param parameters [Api::V3::Context]
         def initialize(context)
@@ -16,7 +16,7 @@ module Api
         def call
           ensure_directory_exists
 
-          out = File.new(@file_path, 'wb')
+          out = File.new(@file_path, "wb")
           ZipTricks::Streamer.open(out) do |stream|
             Api::V3::Download::StreamContentForCsv.new(@download).call(stream)
           end
@@ -29,8 +29,8 @@ module Api
               Dir.glob("#{Api::V3::Download::PrecomputedDownload::ROOT_DIRNAME}/*"),
               secure: true
             )
-            Cache::Cleaner.clear_cache_for_regexp('/api/v3/contexts/.+.csv$')
-            Cache::Cleaner.clear_cache_for_regexp('/api/v3/contexts/.+.json$')
+            Cache::Cleaner.clear_cache_for_regexp("/api/v3/contexts/.+.csv$")
+            Cache::Cleaner.clear_cache_for_regexp("/api/v3/contexts/.+.json$")
           end
 
           def refresh

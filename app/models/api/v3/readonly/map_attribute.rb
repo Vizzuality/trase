@@ -24,10 +24,10 @@ module Api
   module V3
     module Readonly
       class MapAttribute < Api::Readonly::BaseModel
-        self.table_name = 'map_attributes_v'
+        self.table_name = "map_attributes_v"
 
         belongs_to :map_attribute_group
-        belongs_to :readonly_attribute, foreign_key: :attribute_id, class_name: 'Attribute'
+        belongs_to :readonly_attribute, foreign_key: :attribute_id, class_name: "Attribute"
       end
     end
   end

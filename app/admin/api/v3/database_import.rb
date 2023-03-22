@@ -1,5 +1,5 @@
-ActiveAdmin.register_page 'Database Import' do
-  menu parent: 'Database', priority: 2
+ActiveAdmin.register_page "Database Import" do
+  menu parent: "Database", priority: 2
 
   content do
     database_versions = S3::ObjectList.instance.call(
@@ -8,7 +8,7 @@ ActiveAdmin.register_page 'Database Import' do
         Api::V3::MapAttributesExport::S3_PREFIX
       ]
     )
-    render partial: 'admin/database_import/form', locals: {
+    render partial: "admin/database_import/form", locals: {
       database_versions: database_versions, jid: params[:jid]
     }
   end

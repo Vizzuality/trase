@@ -10,7 +10,7 @@ module Api
         # @param substitutions [String] :from
         # @param substitutions [String] :to
         def call(attribute_ref, substitutions = {})
-          attribute_ref_parts = attribute_ref.split('.').map(&:to_sym)
+          attribute_ref_parts = attribute_ref.split(".").map(&:to_sym)
           source = attribute_ref_parts.shift
           list =
             if source == :wb

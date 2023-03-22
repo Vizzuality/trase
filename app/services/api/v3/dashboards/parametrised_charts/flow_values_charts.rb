@@ -226,11 +226,11 @@ module Api
 
               all_params.
                 except(nodes_ids_param_name).
-                merge(nodes_ids_param_name => [node.id].join(',')).
+                merge(nodes_ids_param_name => [node.id].join(",")).
                 merge(
                   multi_year_ncont_node_type_view(node_type)
                 ).merge(
-                  single_filter_key: nodes_ids_param_name.to_s.sub(/_ids$/, '').to_sym,
+                  single_filter_key: nodes_ids_param_name.to_s.sub(/_ids$/, "").to_sym,
                   grouping_key: :cont_attribute_id,
                   grouping_label: node.name
                 )
@@ -262,18 +262,18 @@ module Api
               ncont_attribute_id: @ncont_attribute&.id,
               country_id: @chart_params.country_id,
               commodity_id: @chart_params.commodity_id,
-              sources_ids: @sources_ids.join(','),
+              sources_ids: @sources_ids.join(","),
               # TODO: remove once dashboards_companies_mv retired
-              companies_ids: @companies_ids.join(','),
-              exporters_ids: @exporters_ids.join(','),
-              importers_ids: @importers_ids.join(','),
-              destinations_ids: @destinations_ids.join(','),
-              excluded_sources_ids: @chart_params.excluded_sources_ids.join(','),
+              companies_ids: @companies_ids.join(","),
+              exporters_ids: @exporters_ids.join(","),
+              importers_ids: @importers_ids.join(","),
+              destinations_ids: @destinations_ids.join(","),
+              excluded_sources_ids: @chart_params.excluded_sources_ids.join(","),
               # TODO: remove once dashboards_companies_mv retired
-              excluded_companies_ids: @chart_params.excluded_companies_ids.join(','),
-              excluded_exporters_ids: @chart_params.excluded_exporters_ids.join(','),
-              excluded_importers_ids: @chart_params.excluded_importers_ids.join(','),
-              excluded_destinations_ids: @chart_params.excluded_destinations_ids.join(','),
+              excluded_companies_ids: @chart_params.excluded_companies_ids.join(","),
+              excluded_exporters_ids: @chart_params.excluded_exporters_ids.join(","),
+              excluded_importers_ids: @chart_params.excluded_importers_ids.join(","),
+              excluded_destinations_ids: @chart_params.excluded_destinations_ids.join(","),
               start_year: @start_year,
               end_year: @end_year
             }

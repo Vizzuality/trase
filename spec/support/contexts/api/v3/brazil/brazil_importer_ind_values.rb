@@ -1,6 +1,6 @@
-shared_context 'api v3 brazil importer ind values' do
-  include_context 'api v3 inds'
-  include_context 'api v3 brazil soy nodes'
+shared_context "api v3 brazil importer ind values" do
+  include_context "api v3 inds"
+  include_context "api v3 brazil soy nodes"
 
   let!(:api_v3_importer_forest_500_value) do
     Api::V3::NodeInd.where(

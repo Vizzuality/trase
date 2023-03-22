@@ -1,5 +1,5 @@
-ActiveAdmin.register Content::StaffGroup, as: 'Staff Group' do
-  menu parent: 'Content'
+ActiveAdmin.register Content::StaffGroup, as: "Staff Group" do
+  menu parent: "Content"
 
   permit_params :name, :position
 
@@ -15,7 +15,7 @@ ActiveAdmin.register Content::StaffGroup, as: 'Staff Group' do
     f.semantic_errors
     inputs do
       input :name, required: true, as: :string
-      input :position, required: true, hint: 'Display order'
+      input :position, required: true, hint: "Display order"
     end
     f.actions
   end

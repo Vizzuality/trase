@@ -22,7 +22,7 @@ module Api
       class NodeStats < Api::Readonly::BaseModel
         include Api::V3::Readonly::MaterialisedView
 
-        self.table_name = 'node_stats_mv'
+        self.table_name = "node_stats_mv"
 
         belongs_to :context
         belongs_to :quant

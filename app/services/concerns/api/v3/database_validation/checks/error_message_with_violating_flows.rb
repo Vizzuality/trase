@@ -1,4 +1,4 @@
-require 'active_support/concern'
+require "active_support/concern"
 
 module Api
   module V3
@@ -20,15 +20,15 @@ module Api
               else
                 [@violating_flows, nil]
               end
-            violating_ids_message = violating_ids.join(', ')
+            violating_ids_message = violating_ids.join(", ")
             violating_ids_message += " and #{n_more} more" if n_more
 
             [
               prefix,
-              ' (violating flows ids: ',
+              " (violating flows ids: ",
               violating_ids_message,
-              ')'
-            ].join('')
+              ")"
+            ].join("")
           end
         end
       end

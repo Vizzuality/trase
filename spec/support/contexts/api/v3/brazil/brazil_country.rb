@@ -1,8 +1,8 @@
-shared_context 'api v3 brazil country' do
+shared_context "api v3 brazil country" do
   let!(:api_v3_brazil) do
-    Api::V3::Country.find_by_iso2('BR') || FactoryBot.create(
+    Api::V3::Country.find_by_iso2("BR") || FactoryBot.create(
       :api_v3_country,
-      name: 'BRAZIL', iso2: 'BR'
+      name: "BRAZIL", iso2: "BR"
     )
   end
   let!(:api_v3_brazil_properties) do

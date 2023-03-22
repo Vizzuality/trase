@@ -1,17 +1,17 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Api::V3::Actors::BasicAttributes do
-  include_context 'api v3 brazil exporter actor profile'
-  include_context 'api v3 brazil importer actor profile'
-  include_context 'api v3 brazil exporter quant values'
-  include_context 'api v3 brazil exporter qual values'
-  include_context 'api v3 brazil exporter ind values'
-  include_context 'api v3 brazil importer quant values'
-  include_context 'api v3 brazil soy flow quants'
-  include_context 'api v3 paraguay exporter actor charts'
-  include_context 'api v3 paraguay exporter quant values'
-  include_context 'api v3 paraguay profiles'
-  include_context 'api v3 paraguay flows quants'
+  include_context "api v3 brazil exporter actor profile"
+  include_context "api v3 brazil importer actor profile"
+  include_context "api v3 brazil exporter quant values"
+  include_context "api v3 brazil exporter qual values"
+  include_context "api v3 brazil exporter ind values"
+  include_context "api v3 brazil importer quant values"
+  include_context "api v3 brazil soy flow quants"
+  include_context "api v3 paraguay exporter actor charts"
+  include_context "api v3 paraguay exporter quant values"
+  include_context "api v3 paraguay profiles"
+  include_context "api v3 paraguay flows quants"
 
   describe :call do
     before(:each) {
@@ -25,14 +25,14 @@ RSpec.describe Api::V3::Actors::BasicAttributes do
     let(:brazil_importer_attributes) { Api::V3::Actors::BasicAttributes.new(api_v3_brazil_soy_context, api_v3_importer1_node, 2015) }
     let(:paraguay_exporter_attributes) { Api::V3::Actors::BasicAttributes.new(api_v3_paraguay_context, api_v3_paraguay_exporter_node, 2015) }
 
-    it 'uses context specific quant values for production percentage calculation' do
+    it "uses context specific quant values for production percentage calculation" do
       brazil_exporter_values = brazil_exporter_attributes.call
       brazil_importer_values = brazil_exporter_attributes.call
       paraguay_exporter_values = paraguay_exporter_attributes.call
 
       expect(
         brazil_exporter_values[:summary]
-      ).to_not include('or of the soy production')
+      ).to_not include("or of the soy production")
 
       expect(
         brazil_exporter_values[:summary]
@@ -40,7 +40,7 @@ RSpec.describe Api::V3::Actors::BasicAttributes do
 
       expect(
         brazil_importer_values[:summary]
-      ).to_not include('or of the soy production')
+      ).to_not include("or of the soy production")
 
       expect(
         brazil_importer_values[:summary]
@@ -48,14 +48,14 @@ RSpec.describe Api::V3::Actors::BasicAttributes do
 
       expect(
         paraguay_exporter_values[:summary]
-      ).to_not include('or of the soy production')
+      ).to_not include("or of the soy production")
 
       expect(
         paraguay_exporter_values[:summary]
       ).to include('or <span class="notranslate">100%</span> of the soy production departments')
     end
 
-    context 'when difference in production from last year' do
+    context "when difference in production from last year" do
       let(:flow) {
         FactoryBot.create(
           :api_v3_flow,
@@ -73,7 +73,7 @@ RSpec.describe Api::V3::Actors::BasicAttributes do
           year: 2014
         )
       }
-      it 'calculates increase from last year' do
+      it "calculates increase from last year" do
         FactoryBot.create(
           :api_v3_flow_quant,
           flow: flow,
@@ -85,7 +85,7 @@ RSpec.describe Api::V3::Actors::BasicAttributes do
           brazil_exporter_values[:summary]
         ).to include('<span class="notranslate">200%</span> increase')
       end
-      it 'calculates decrease from last year' do
+      it "calculates decrease from last year" do
         FactoryBot.create(
           :api_v3_flow_quant,
           flow: flow,
@@ -97,7 +97,7 @@ RSpec.describe Api::V3::Actors::BasicAttributes do
           brazil_exporter_values[:summary]
         ).to include('<span class="notranslate">50%</span> decrease')
       end
-      it 'calculates no change' do
+      it "calculates no change" do
         FactoryBot.create(
           :api_v3_flow_quant,
           flow: flow,
@@ -107,20 +107,20 @@ RSpec.describe Api::V3::Actors::BasicAttributes do
         brazil_exporter_values = brazil_exporter_attributes.call
         expect(
           brazil_exporter_values[:summary]
-        ).to include('no change from')
+        ).to include("no change from")
       end
     end
 
-    describe 'header parameters' do
+    describe "header parameters" do
       let!(:attrs) { brazil_exporter_attributes.call }
       let!(:header_attributes) { attrs[:header_attributes] }
       let!(:chart_attributes) {
         api_v3_exporter_basic_attributes.readonly_chart_attributes
       }
 
-      it 'check header zero deforestation parameters' do
+      it "check header zero deforestation parameters" do
         zero_deforestation =
-          chart_attributes.find_by(identifier: 'zero_deforestation')
+          chart_attributes.find_by(identifier: "zero_deforestation")
         expect(attrs[:zero_deforestation]).not_to eql nil
 
         expect(header_attributes[:zero_deforestation][:value]).to eql(
@@ -135,8 +135,8 @@ RSpec.describe Api::V3::Actors::BasicAttributes do
         )
       end
 
-      it 'check header forest 500 parameters' do
-        forest_500 = chart_attributes.find_by(identifier: 'forest_500')
+      it "check header forest 500 parameters" do
+        forest_500 = chart_attributes.find_by(identifier: "forest_500")
         expect(attrs[:forest_500]).not_to eql nil
         expect(header_attributes[:forest_500][:name]).to eql(
           api_v3_exporter_basic_attributes_forest_500_property.display_name

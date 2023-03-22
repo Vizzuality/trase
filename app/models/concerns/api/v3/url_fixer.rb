@@ -1,4 +1,4 @@
-require 'active_support/concern'
+require "active_support/concern"
 
 module Api
   module V3
@@ -12,7 +12,7 @@ module Api
           return
         end
 
-        attr_after = attr_before.gsub(/<[^>]*>/, '').sub(/^(https?:\/\/)+/, '\\1')
+        attr_after = attr_before.gsub(/<[^>]*>/, "").sub(/^(https?:\/\/)+/, '\\1')
         attr_after = "https://#{attr_after}" if attr_after !~ /^http/
 
         send(:"#{attr_sym}=", attr_after) if attr_after != attr_before

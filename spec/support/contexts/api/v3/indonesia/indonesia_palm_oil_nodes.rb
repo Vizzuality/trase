@@ -1,17 +1,17 @@
-shared_context 'api v3 indonesia palm oil nodes' do
-  include_context 'api v3 node types'
-  include_context 'api v3 quals'
+shared_context "api v3 indonesia palm oil nodes" do
+  include_context "api v3 node types"
+  include_context "api v3 quals"
 
   let(:api_v3_indonesia_country_of_production_node) do
     node = Api::V3::Node.where(
-      name: 'INDONESIA', node_type_id: api_v3_country_of_production_node_type.id
+      name: "INDONESIA", node_type_id: api_v3_country_of_production_node_type.id
     ).first
     unless node
       node = FactoryBot.create(
         :api_v3_node,
-        name: 'INDONESIA',
+        name: "INDONESIA",
         node_type: api_v3_country_of_production_node_type,
-        geo_id: 'ID'
+        geo_id: "ID"
       )
       FactoryBot.create(
         :api_v3_node_property,
@@ -23,14 +23,14 @@ shared_context 'api v3 indonesia palm oil nodes' do
 
   let(:api_v3_indonesia_kabupaten_node) do
     node = Api::V3::Node.where(
-      name: 'ROKAN HILIR', node_type_id: api_v3_kabupaten_node_type.id
+      name: "ROKAN HILIR", node_type_id: api_v3_kabupaten_node_type.id
     ).first
     unless node
       node = FactoryBot.create(
         :api_v3_node,
-        name: 'ROKAN HILIR',
+        name: "ROKAN HILIR",
         node_type: api_v3_kabupaten_node_type,
-        geo_id: 'ID-1409'
+        geo_id: "ID-1409"
       )
       FactoryBot.create(
         :api_v3_node_property,
@@ -42,12 +42,12 @@ shared_context 'api v3 indonesia palm oil nodes' do
 
   let(:api_v3_indonesia_mill_node) do
     node = Api::V3::Node.where(
-      name: 'PT. SUMATERAMAKMUR LESTARI', node_type_id: api_v3_mill_node_type.id
+      name: "PT. SUMATERAMAKMUR LESTARI", node_type_id: api_v3_mill_node_type.id
     ).first
     unless node
       node = FactoryBot.create(
         :api_v3_node,
-        name: 'PT. SUMATERAMAKMUR LESTARI',
+        name: "PT. SUMATERAMAKMUR LESTARI",
         node_type: api_v3_mill_node_type
       )
       FactoryBot.create(
@@ -60,12 +60,12 @@ shared_context 'api v3 indonesia palm oil nodes' do
 
   let(:api_v3_indonesia_port_of_export_node) do
     node = Api::V3::Node.where(
-      name: 'DUMAI', node_type_id: api_v3_port_of_export_node_type.id
+      name: "DUMAI", node_type_id: api_v3_port_of_export_node_type.id
     ).first
     unless node
       node = FactoryBot.create(
         :api_v3_node,
-        name: 'DUMAI',
+        name: "DUMAI",
         node_type: api_v3_port_of_export_node_type
       )
       FactoryBot.create(
@@ -78,12 +78,12 @@ shared_context 'api v3 indonesia palm oil nodes' do
 
   let(:api_v3_indonesia_exporter_node) do
     node = Api::V3::Node.where(
-      name: 'INTIBENUA PERKASATAMA', node_type_id: api_v3_exporter_node_type.id
+      name: "INTIBENUA PERKASATAMA", node_type_id: api_v3_exporter_node_type.id
     ).first
     unless node
       node = FactoryBot.create(
         :api_v3_node,
-        name: 'INTIBENUA PERKASATAMA',
+        name: "INTIBENUA PERKASATAMA",
         node_type: api_v3_exporter_node_type
       )
       FactoryBot.create(
@@ -96,12 +96,12 @@ shared_context 'api v3 indonesia palm oil nodes' do
 
   let(:api_v3_indonesia_importer_node) do
     node = Api::V3::Node.where(
-      name: 'INTER-CONTINENTAL OILS & FATS', node_type_id: api_v3_importer_node_type.id
+      name: "INTER-CONTINENTAL OILS & FATS", node_type_id: api_v3_importer_node_type.id
     ).first
     unless node
       node = FactoryBot.create(
         :api_v3_node,
-        name: 'INTER-CONTINENTAL OILS & FATS',
+        name: "INTER-CONTINENTAL OILS & FATS",
         node_type: api_v3_importer_node_type
       )
       FactoryBot.create(
@@ -114,14 +114,14 @@ shared_context 'api v3 indonesia palm oil nodes' do
 
   let(:api_v3_indonesia_economic_bloc_node) do
     node = Api::V3::Node.where(
-      name: 'BRAZIL', node_type_id: api_v3_economic_bloc_node_type.id
+      name: "BRAZIL", node_type_id: api_v3_economic_bloc_node_type.id
     ).first
     unless node
       node = FactoryBot.create(
         :api_v3_node,
-        name: 'BRAZIL',
+        name: "BRAZIL",
         node_type: api_v3_economic_bloc_node_type,
-        geo_id: 'BR'
+        geo_id: "BR"
       )
       FactoryBot.create(
         :api_v3_node_property,
@@ -133,14 +133,14 @@ shared_context 'api v3 indonesia palm oil nodes' do
 
   let(:api_v3_indonesia_country_node) do
     node = Api::V3::Node.where(
-      name: 'BRAZIL', node_type_id: api_v3_country_node_type.id
+      name: "BRAZIL", node_type_id: api_v3_country_node_type.id
     ).first
     unless node
       node = FactoryBot.create(
         :api_v3_node,
-        name: 'BRAZIL',
+        name: "BRAZIL",
         node_type: api_v3_country_node_type,
-        geo_id: 'BR'
+        geo_id: "BR"
       )
       FactoryBot.create(
         :api_v3_node_property,

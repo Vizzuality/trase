@@ -16,7 +16,7 @@ module Api
       class QualValuesMeta < Api::Readonly::BaseModel
         include Api::V3::Readonly::MaterialisedView
 
-        self.table_name = 'qual_values_meta_mv'
+        self.table_name = "qual_values_meta_mv"
 
         belongs_to :qual
       end

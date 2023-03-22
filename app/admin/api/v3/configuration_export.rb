@@ -1,15 +1,15 @@
-ActiveAdmin.register_page 'Configuration Export' do
-  menu parent: 'Database', priority: 3
+ActiveAdmin.register_page "Configuration Export" do
+  menu parent: "Database", priority: 3
 
   content do
     events = Api::Private::ConfigurationExportEvent.order(created_at: :desc).limit(20)
     started_or_queued_event = Api::Private::ConfigurationExportEvent.started_or_queued.order(created_at: :desc).first
 
-    render partial: 'admin/configuration_export/form', locals: {
+    render partial: "admin/configuration_export/form", locals: {
       started_or_queued_event: started_or_queued_event
     }
 
-    render partial: 'admin/configuration_export/list', locals: {
+    render partial: "admin/configuration_export/list", locals: {
       events: events
     }
   end
@@ -17,7 +17,7 @@ ActiveAdmin.register_page 'Configuration Export' do
   page_action :start, method: :post do
     started_or_queued_event = Api::Private::ConfigurationExportEvent.started_or_queued.order(created_at: :desc).first
     if started_or_queued_event
-      notice = 'Export already started or queued'
+      notice = "Export already started or queued"
     else
       event = Api::Private::ConfigurationExportEvent.create(started_by: current_user.email)
       jid = ConfigurationExportWorker.perform_async(event.id)

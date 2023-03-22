@@ -1,12 +1,12 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Api::V3::CountriesComTradeIndicators::CommodityCodes do
-  include_context 'api v3 commodities'
+  include_context "api v3 commodities"
 
   let(:commodity_codes) {
     stub_const(
-      'Api::V3::CountriesComTradeIndicators::CommodityCodes::DATA_FILE_PATH',
-      'spec/support/fixtures/commodity_codes.csv'
+      "Api::V3::CountriesComTradeIndicators::CommodityCodes::DATA_FILE_PATH",
+      "spec/support/fixtures/commodity_codes.csv"
     )
     Api::V3::CountriesComTradeIndicators::CommodityCodes.new
   }
@@ -29,7 +29,7 @@ RSpec.describe Api::V3::CountriesComTradeIndicators::CommodityCodes do
   }
 
   describe :lookup_by_trase_id do
-    it 'returns correct commodities for trase id' do
+    it "returns correct commodities for trase id" do
       expect(
         commodity_codes.lookup_by_trase_id(api_v3_beef.id)
       ).to match_array([beef1, beef2])
@@ -37,7 +37,7 @@ RSpec.describe Api::V3::CountriesComTradeIndicators::CommodityCodes do
   end
 
   describe :lookup_by_com_trade_code do
-    it 'returns correct commodity for com trade code' do
+    it "returns correct commodity for com trade code" do
       expect(
         commodity_codes.lookup_by_com_trade_code("020110")
       ).to eq(beef1)

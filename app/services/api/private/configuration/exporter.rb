@@ -28,8 +28,8 @@ module Api
           ActiveModelSerializers::SerializableResource.new(
             contexts,
             each_serializer: Api::Private::ContextSerializer,
-            include: '**',
-            root: 'contexts'
+            include: "**",
+            root: "contexts"
           ).serializable_hash
         end
 
@@ -63,8 +63,8 @@ module Api
           ActiveModelSerializers::SerializableResource.new(
             commodities,
             each_serializer: Api::Private::CommoditySerializer,
-            include: '**',
-            root: 'commodities'
+            include: "**",
+            root: "commodities"
           ).serializable_hash
         end
 
@@ -78,8 +78,8 @@ module Api
           ActiveModelSerializers::SerializableResource.new(
             inds,
             each_serializer: Api::Private::IndSerializer,
-            include: '**',
-            root: 'inds'
+            include: "**",
+            root: "inds"
           ).serializable_hash
         end
 
@@ -96,8 +96,8 @@ module Api
           ActiveModelSerializers::SerializableResource.new(
             quals,
             each_serializer: Api::Private::QualSerializer,
-            include: '**',
-            root: 'quals'
+            include: "**",
+            root: "quals"
           ).serializable_hash
         end
 
@@ -114,8 +114,8 @@ module Api
           ActiveModelSerializers::SerializableResource.new(
             quants,
             each_serializer: Api::Private::QuantSerializer,
-            include: '**',
-            root: 'quants'
+            include: "**",
+            root: "quants"
           ).serializable_hash
         end
 
@@ -132,7 +132,7 @@ module Api
           ActiveModelSerializers::SerializableResource.new(
             nodes,
             each_serializer: Api::Private::NodeSerializer,
-            root: 'nodes'
+            root: "nodes"
           ).serializable_hash
         end
 

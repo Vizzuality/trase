@@ -1,5 +1,5 @@
-ActiveAdmin.register Api::V3::MapAttributeGroup, as: 'MapAttributeGroup' do
-  menu parent: 'Sankey & Map', priority: 2
+ActiveAdmin.register Api::V3::MapAttributeGroup, as: "MapAttributeGroup" do
+  menu parent: "Sankey & Map", priority: 2
 
   permit_params :context_id, :name, :position
 
@@ -7,7 +7,7 @@ ActiveAdmin.register Api::V3::MapAttributeGroup, as: 'MapAttributeGroup' do
 
   controller do
     def clear_cache
-      clear_cache_for_regexp('/api/v3/contexts/.+/map_layers')
+      clear_cache_for_regexp("/api/v3/contexts/.+/map_layers")
     end
   end
 
@@ -17,16 +17,16 @@ ActiveAdmin.register Api::V3::MapAttributeGroup, as: 'MapAttributeGroup' do
       input :context, as: :select, required: true,
                       collection: Api::V3::Context.select_options
       input :name, required: true, as: :string,
-                   hint: object.class.column_comment('name')
+                   hint: object.class.column_comment("name")
       input :position, required: true,
-                       hint: object.class.column_comment('position')
+                       hint: object.class.column_comment("position")
     end
     f.actions
   end
 
   index do
-    column('Country') { |group| group.context&.country&.name }
-    column('Commodity') { |group| group.context&.commodity&.name }
+    column("Country") { |group| group.context&.country&.name }
+    column("Commodity") { |group| group.context&.commodity&.name }
     column :name
     column :position
     actions
@@ -34,8 +34,8 @@ ActiveAdmin.register Api::V3::MapAttributeGroup, as: 'MapAttributeGroup' do
 
   show do
     attributes_table do
-      row('Country') { |group| group.context&.country&.name }
-      row('Commodity') { |group| group.context&.commodity&.name }
+      row("Country") { |group| group.context&.country&.name }
+      row("Commodity") { |group| group.context&.commodity&.name }
       row :name
       row :position
       row :created_at

@@ -4,7 +4,7 @@ module Api
       def initialize(params)
         @meta = {}
         @self_ids = params.delete(:countries_ids)
-        @include_commodities = params[:include] == 'commodities'
+        @include_commodities = params[:include] == "commodities"
         @commodities_ids = params[:commodities_ids] || []
 
         initialize_query
@@ -19,13 +19,13 @@ module Api
       def initialize_query
         @query = Api::V3::Context.
           select(
-            'contexts.country_id AS id',
-            'countries.name',
-            'countries.iso2'
+            "contexts.country_id AS id",
+            "countries.name",
+            "countries.iso2"
           ).
-          joins('INNER JOIN countries ON countries.id = contexts.country_id').
-          group('contexts.country_id', 'countries.name', 'countries.iso2').
-          order('countries.name')
+          joins("INNER JOIN countries ON countries.id = contexts.country_id").
+          group("contexts.country_id", "countries.name", "countries.iso2").
+          order("countries.name")
 
         if @commodities_ids.any?
           @query = @query.where(commodity_id: @commodities_ids)
@@ -36,7 +36,7 @@ module Api
 
       def include_commodities
         @query = @query.select(
-          'ARRAY_AGG(commodity_id) AS commodity_ids'
+          "ARRAY_AGG(commodity_id) AS commodity_ids"
         )
 
         commodity_ids = @query.map(&:commodity_ids).flatten.uniq

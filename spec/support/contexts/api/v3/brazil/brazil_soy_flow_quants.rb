@@ -1,6 +1,6 @@
-shared_context 'api v3 brazil soy flow quants' do
-  include_context 'api v3 brazil soy flows'
-  include_context 'api v3 quants'
+shared_context "api v3 brazil soy flow quants" do
+  include_context "api v3 brazil soy flows"
+  include_context "api v3 quants"
 
   let!(:api_v3_brazil_soy_flow1_volume) do
     FactoryBot.create(

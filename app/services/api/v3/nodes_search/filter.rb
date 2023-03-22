@@ -21,7 +21,7 @@ module Api
             :years,
             :rank
           ]
-          @rel = @rel.where('context_id' => context_id) if context_id
+          @rel = @rel.where("context_id" => context_id) if context_id
           if profile_only
             @rel = @rel.where.not(profile: nil)
           end

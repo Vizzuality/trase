@@ -9,7 +9,7 @@ module Api
         end
 
         def cleanup
-          mirror_schema = ENV['TRASE_LOCAL_MIRROR_SCHEMA']
+          mirror_schema = ENV["TRASE_LOCAL_MIRROR_SCHEMA"]
           ActiveRecord::Base.connection.execute(
             "DROP SCHEMA IF EXISTS #{mirror_schema} CASCADE;"
           )
@@ -19,12 +19,12 @@ module Api
 
         def download_from_s3(_options = {})
           S3::Downloader.instance.call(@s3_filename, @local_filename)
-          Rails.logger.debug 'Schema downloaded'
+          Rails.logger.debug "Schema downloaded"
         end
 
         def prepare_schema
           cleanup
-          mirror_schema = ENV['TRASE_LOCAL_MIRROR_SCHEMA']
+          mirror_schema = ENV["TRASE_LOCAL_MIRROR_SCHEMA"]
           ActiveRecord::Base.connection.execute(
             "CREATE SCHEMA #{mirror_schema};"
           )

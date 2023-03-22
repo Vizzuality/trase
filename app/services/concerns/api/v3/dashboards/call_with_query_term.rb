@@ -6,7 +6,7 @@ module Api
           # AR sanitisation replaces ' with '' rather than \', which breaks to_tsquery
           # But actually even when quoted correctly, the apostrophe would be treated as whitespace,
           # so better just get rid of it
-          query_term = query_term.gsub("'", ' ')
+          query_term = query_term.gsub("'", " ")
           tsquery = ActiveRecord::Base.sanitize_sql_array(
             ["to_tsquery('simple', ? || ? || ? || ':*')", "' ", query_term, " '"]
           )

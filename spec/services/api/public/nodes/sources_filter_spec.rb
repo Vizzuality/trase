@@ -1,8 +1,8 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Api::Public::Nodes::Sources::Filter do
-  include_context 'api v3 brazil soy flows'
-  include_context 'api v3 brazil beef flows'
+  include_context "api v3 brazil soy flows"
+  include_context "api v3 brazil beef flows"
 
   before(:each) do
     Api::V3::Readonly::FlowNode.refresh(sync: true)
@@ -11,26 +11,26 @@ RSpec.describe Api::Public::Nodes::Sources::Filter do
   end
 
   describe :call do
-    context 'when filtering by country' do
+    context "when filtering by country" do
       let(:filter) {
         Api::Public::Nodes::Sources::Filter.new(
           commodity_id: api_v3_soy.id
         )
       }
-      it 'returns nodes with availability by commodity' do
+      it "returns nodes with availability by commodity" do
         nodes = filter.call
         amazonia = nodes.find { |n| n[:id] == api_v3_biome_node.id }
         expect(amazonia[:availability]).not_to be_empty
       end
     end
-    context 'when filtering by name' do
+    context "when filtering by name" do
       let(:filter) {
         Api::Public::Nodes::Sources::Filter.new(
-          name: 'GRO'
+          name: "GRO"
         )
       }
 
-      it 'matches on any word' do
+      it "matches on any word" do
         nodes = filter.call
 
         mato_idx = nodes.index { |n| n[:id] == api_v3_state_node.id }

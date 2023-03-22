@@ -22,7 +22,7 @@ module Api
             end
           end
           if (year = params[:year]&.to_i)
-            nodes = nodes.where('years && ARRAY[?]::INT[]', year)
+            nodes = nodes.where("years && ARRAY[?]::INT[]", year)
           end
 
           @contexts = Api::V3::Context.where(id: nodes.select(:context_id))
@@ -30,7 +30,7 @@ module Api
 
           unless @node.present?
             raise ActiveRecord::RecordNotFound.new(
-              'Node not found for given parameters'
+              "Node not found for given parameters"
             )
           end
         end

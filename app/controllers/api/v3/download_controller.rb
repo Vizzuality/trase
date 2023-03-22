@@ -22,9 +22,9 @@ module Api
 
       def serve_precomputed_download(precomputed_download)
         send_file precomputed_download.call,
-                  type: 'application/zip',
+                  type: "application/zip",
                   filename: precomputed_download.filename,
-                  disposition: 'attachment'
+                  disposition: "attachment"
       end
 
       def stream_generated_download
@@ -42,17 +42,17 @@ module Api
       end
 
       def set_no_cache_headers
-        response.headers['Cache-Control'] = 'no-cache'
-        response.headers['Last-Modified'] = Time.now.httpdate.to_s
+        response.headers["Cache-Control"] = "no-cache"
+        response.headers["Last-Modified"] = Time.now.httpdate.to_s
       end
 
       # rubocop:disable Naming/AccessorMethodName
       def set_streamed_zip_file_headers(filename)
-        response.headers['Content-Disposition'] =
+        response.headers["Content-Disposition"] =
           "attachment; filename=\"#{filename}\""
-        response.headers['Content-Type'] = 'application/zip'
-        response.delete_header('Content-Length')
-        response.headers['X-Accel-Buffering'] = 'no'
+        response.headers["Content-Type"] = "application/zip"
+        response.delete_header("Content-Length")
+        response.headers["X-Accel-Buffering"] = "no"
       end
       # rubocop:enable Naming/AccessorMethodName
 

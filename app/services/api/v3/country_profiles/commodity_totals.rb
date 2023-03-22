@@ -19,13 +19,13 @@ module Api
               :importer
             end
           @nodes_with_flows = Api::V3::Readonly::NodeWithFlows.
-            select('nodes_with_flows.*, commodities.name AS commodity').
+            select("nodes_with_flows.*, commodities.name AS commodity").
             joins(:commodity).
             where(id: node.id)
           # Assumption: Volume is a special quant which always exists
-          @volume_attribute = quant_dictionary.get('Volume')
+          @volume_attribute = quant_dictionary.get("Volume")
           unless @volume_attribute.present?
-            raise ActiveRecord::RecordNotFound.new 'Quant Volume not found'
+            raise ActiveRecord::RecordNotFound.new "Quant Volume not found"
           end
           @context = node.context
           @profile_type = profile_options[:profile_type]
@@ -48,31 +48,31 @@ module Api
         end
 
         def included_columns
-          trade_volume_ranking = Api::V3::CountryProfiles::ExternalAttributesList.instance.call('com_trade.quantity.rank', substitutions).
+          trade_volume_ranking = Api::V3::CountryProfiles::ExternalAttributesList.instance.call("com_trade.quantity.rank", substitutions).
             except(:short_name).
             merge(
               name: "World #{trade_flow} ranking",
               unit: nil,
               tooltip: "World #{trade_flow} ranking by netweight"
             )
-          trade_volume_value = Api::V3::CountryProfiles::ExternalAttributesList.instance.call('com_trade.quantity.value', substitutions).
+          trade_volume_value = Api::V3::CountryProfiles::ExternalAttributesList.instance.call("com_trade.quantity.value", substitutions).
             except(:short_name).
             merge(
               name: "#{trade_flow}s".capitalize,
-              unit: 't', # needs conversion as it comes in kg from the ComTrade API
-              tooltip: 'Netweight (tonnes)'
+              unit: "t", # needs conversion as it comes in kg from the ComTrade API
+              tooltip: "Netweight (tonnes)"
             )
-          trade_value = Api::V3::CountryProfiles::ExternalAttributesList.instance.call('com_trade.value.value', substitutions).
+          trade_value = Api::V3::CountryProfiles::ExternalAttributesList.instance.call("com_trade.value.value", substitutions).
             except(:short_name).
-            merge(name: 'Value')
+            merge(name: "Value")
 
           [
             trade_volume_ranking,
             {
-              name: 'Production',
-              unit: @volume_attribute.unit || 't',
-              unit_position: 'suffix',
-              tooltip: @volume_attribute.tooltip_text || 'Production (tonnes)'
+              name: "Production",
+              unit: @volume_attribute.unit || "t",
+              unit_position: "suffix",
+              tooltip: @volume_attribute.tooltip_text || "Production (tonnes)"
             },
             trade_volume_value,
             trade_value
@@ -87,15 +87,15 @@ module Api
               @activity,
               node_with_flows.commodity_id
             )
-            quantity = @external_attribute_value.call('com_trade.quantity.value')&.value
+            quantity = @external_attribute_value.call("com_trade.quantity.value")&.value
             quantity = quantity.to_f / 1000 if quantity.present?
             {
-              name: node_with_flows['commodity'],
+              name: node_with_flows["commodity"],
               values: [
-                @external_attribute_value.call('com_trade.quantity.rank')&.value,
-                production_values[node_with_flows['commodity']],
+                @external_attribute_value.call("com_trade.quantity.rank")&.value,
+                production_values[node_with_flows["commodity"]],
                 quantity,
-                @external_attribute_value.call('com_trade.value.value')&.value
+                @external_attribute_value.call("com_trade.value.value")&.value
               ]
             }
           end.sort { |a, b| b[:values][2].to_f <=> a[:values][2].to_f }.reject { |r| r[:values].compact.empty? }
@@ -107,7 +107,7 @@ module Api
           @production_values = {}
           preloaded_values = Api::V3::NodeAttributeValuesPreloader.new(@node, @year)
           @nodes_with_flows.each do |node_with_flows|
-            commodity_name = node_with_flows['commodity']
+            commodity_name = node_with_flows["commodity"]
 
             # find quant based on commodity name
             production_quant = production_quants[commodity_name]
@@ -122,7 +122,7 @@ module Api
         def production_quants
           return @production_quants if defined? @production_quants
 
-          commodity_names = @nodes_with_flows.map { |node| node['commodity'] }
+          commodity_names = @nodes_with_flows.map { |node| node["commodity"] }
           quant_names = commodity_names.map do |commodity_name|
             "#{commodity_name.upcase}_TN"
           end
@@ -141,7 +141,7 @@ module Api
         end
 
         def trade_flow
-          @activity.to_s.sub(/er$/, '')
+          @activity.to_s.sub(/er$/, "")
         end
       end
     end

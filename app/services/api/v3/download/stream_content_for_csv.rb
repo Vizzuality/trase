@@ -10,14 +10,14 @@ module Api
             sql: query.to_sql,
             header: true,
             delimiter: @download.separator,
-            encoding: 'UTF8',
+            encoding: "UTF8",
             logger: Rails.logger
           )
           csv.export(stream_writer)
         end
 
         def format
-          'csv'
+          "csv"
         end
       end
     end

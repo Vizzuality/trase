@@ -1,6 +1,6 @@
-shared_context 'api v3 brazil beef context node types' do
-  include_context 'api v3 brazil beef context'
-  include_context 'api v3 node types'
+shared_context "api v3 brazil beef context node types" do
+  include_context "api v3 brazil beef context"
+  include_context "api v3 node types"
 
   let!(:api_v3_brazil_beef_country_of_production_context_node_type) do
     cnt = Api::V3::ContextNodeType.where(
@@ -18,7 +18,7 @@ shared_context 'api v3 brazil beef context node types' do
         :api_v3_context_node_type_property,
         context_node_type: cnt,
         column_group: 0,
-        role: 'source',
+        role: "source",
         is_default: true
       )
     end
@@ -40,7 +40,7 @@ shared_context 'api v3 brazil beef context node types' do
         :api_v3_context_node_type_property,
         context_node_type: cnt,
         column_group: 1,
-        role: 'exporter',
+        role: "exporter",
         is_default: true
       )
     end
@@ -62,7 +62,7 @@ shared_context 'api v3 brazil beef context node types' do
         :api_v3_context_node_type_property,
         context_node_type: cnt,
         column_group: 1,
-        role: 'exporter'
+        role: "exporter"
       )
     end
     cnt
@@ -83,7 +83,7 @@ shared_context 'api v3 brazil beef context node types' do
         :api_v3_context_node_type_property,
         context_node_type: cnt,
         column_group: 2,
-        role: 'importer',
+        role: "importer",
         is_default: true
       )
     end
@@ -105,7 +105,7 @@ shared_context 'api v3 brazil beef context node types' do
         :api_v3_context_node_type_property,
         context_node_type: cnt,
         column_group: 3,
-        role: 'destination',
+        role: "destination",
         is_default: true
       )
     end

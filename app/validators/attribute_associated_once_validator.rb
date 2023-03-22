@@ -10,7 +10,7 @@ class AttributeAssociatedOnceValidator < ActiveModel::Validator
     # e.g. map_ind
     attribute_association_name = attribute
     # e.g. ind
-    attribute_name = attribute.to_s.split('_').last
+    attribute_name = attribute.to_s.split("_").last
     # e.g. ind_id
     attribute_id_name = "#{attribute_name}_id"
     attribute_id = record.send(attribute_association_name)&.send(attribute_id_name)

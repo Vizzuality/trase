@@ -1,8 +1,8 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Api::V3::TopProfiles::DeriveTopProfileDetails do
-  include_context 'api v3 brazil soy flows'
-  include_context 'api v3 brazil exporter actor profile'
+  include_context "api v3 brazil soy flows"
+  include_context "api v3 brazil exporter actor profile"
 
   describe :call do
     before(:each) do
@@ -15,19 +15,19 @@ RSpec.describe Api::V3::TopProfiles::DeriveTopProfileDetails do
     let!(:top_profile) { FactoryBot.create(:api_v3_top_profile, context: api_v3_brazil_soy_context, node: api_v3_exporter1_node) }
     let!(:subject) { Api::V3::TopProfiles::DeriveTopProfileDetails.call(top_profile) }
 
-    it 'assigns profile type to top profile record' do
+    it "assigns profile type to top profile record" do
       expect(
         top_profile.profile_type
       ).to eq(Api::V3::Readonly::NodeWithFlows.find(api_v3_exporter1_node.id).profile)
     end
 
-    it 'assigns year to top profile record' do
+    it "assigns year to top profile record" do
       expect(
         top_profile.year
       ).to eq(Api::V3::Readonly::NodeWithFlows.find(api_v3_exporter1_node.id).years.max)
     end
 
-    it 'assigns summary to top profile record' do
+    it "assigns summary to top profile record" do
       expect(
         top_profile.summary
       ).not_to be_nil

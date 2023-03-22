@@ -3,11 +3,11 @@ module Api
     module Download
       class FlowDownloadQueryBuilder
         QUAL_OPS = {
-          'eq' => '='
+          "eq" => "="
         }.freeze
         QUANT_OPS = QUAL_OPS.merge(
-          'lt' => '<',
-          'gt' => '>'
+          "lt" => "<",
+          "gt" => ">"
         ).freeze
 
         # @param context [Api::V3::Context]
@@ -42,7 +42,7 @@ module Api
 
         def initialize_query
           @query = Api::V3::Flow.
-            from('download_flows_v flows').
+            from("download_flows_v flows").
             joins(
               'JOIN download_attributes_v ON
               download_attributes_v.context_id = flows.context_id
@@ -88,7 +88,7 @@ module Api
           return unless defined? @attributes
 
           @download_attributes = @download_attributes.where(
-            'attribute_id' => @attributes.map(&:id)
+            "attribute_id" => @attributes.map(&:id)
           )
         end
 
@@ -100,7 +100,7 @@ module Api
           context_node_types_with_roles = @context.context_node_types.
             includes(:context_node_type_property).
             references(:context_node_type_property).
-            where('context_node_type_properties.is_visible')
+            where("context_node_type_properties.is_visible")
           roles = context_node_types_with_roles.map do |cnt|
             cnt.context_node_type_property&.role
           end.compact.uniq
@@ -127,7 +127,7 @@ module Api
             conds << "path[#{idx + 1}] IN (:node_ids)"
           end
           @query = @query.where(
-            conds.join(' OR '), node_ids: node_ids.map(&:to_i)
+            conds.join(" OR "), node_ids: node_ids.map(&:to_i)
           )
         end
 
@@ -145,22 +145,22 @@ module Api
             attr_query_parts, attr_parameters = attribute_filter(
               attribute, *attr_hash.values_at(:op, :val)
             )
-            query_parts << attr_query_parts.join(' AND ')
+            query_parts << attr_query_parts.join(" AND ")
             parameters += attr_parameters
           end
 
           @query = @query.where(
-            query_parts.join(' OR '), *parameters
+            query_parts.join(" OR "), *parameters
           )
           if @attributes.any?
             query_parts = []
             parameters = []
             @attributes.each do |attribute|
-              query_parts << 'attribute_type = ? AND attribute_id = ?'
+              query_parts << "attribute_type = ? AND attribute_id = ?"
               parameters += [attribute.original_type, attribute.original_id]
             end
             @size_query = @size_query.where(
-              [query_parts.join(' OR '), *parameters]
+              [query_parts.join(" OR "), *parameters]
             )
           end
         end
@@ -174,10 +174,10 @@ module Api
 
         # rubocop:disable Metrics/MethodLength
         def attribute_filter(attribute, op_symbol, val)
-          query_parts = ['download_attributes_v.attribute_id = ?']
+          query_parts = ["download_attributes_v.attribute_id = ?"]
           parameters = [attribute.id]
           op_part, val =
-            if attribute.original_type == 'Qual'
+            if attribute.original_type == "Qual"
               [qual_op_part(op_symbol), val]
             else
               [quant_op_part(op_symbol), val&.to_f]

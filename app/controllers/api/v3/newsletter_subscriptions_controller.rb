@@ -4,16 +4,16 @@ module Api
       skip_before_action :load_context
 
       def create
-        mailchimp = Mailchimp::API.new(ENV['MAILCHIMP_API_KEY'])
+        mailchimp = Mailchimp::API.new(ENV["MAILCHIMP_API_KEY"])
         response = mailchimp.lists.subscribe(
-          ENV['MAILCHIMP_LIST_ID'],
+          ENV["MAILCHIMP_LIST_ID"],
           { email: params[:email] },
           {
-            'FNAME' => params[:firstname],
-            'LNAME' => (params[:lastname] && params[:lastname] != "") ? params[:lastname] : "-",
-            'MMERGE3' => params[:organisation],
-            'MMERGE4' => params[:country] || "-",
-            'MMERGE5' => "-"
+            "FNAME" => params[:firstname],
+            "LNAME" => (params[:lastname] && params[:lastname] != "") ? params[:lastname] : "-",
+            "MMERGE3" => params[:organisation],
+            "MMERGE4" => params[:country] || "-",
+            "MMERGE5" => "-"
           }
         )
         p response

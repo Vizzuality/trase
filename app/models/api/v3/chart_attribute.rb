@@ -31,12 +31,12 @@ module Api
 
       NORMALIZABLE_ATTRIBUTES = [:identifier].freeze
 
-      AREA = 'area'.freeze
-      LINE = 'line'.freeze
+      AREA = "area".freeze
+      LINE = "line".freeze
       DISPLAY_TYPES = [LINE, AREA].freeze
-      LINE_DASHED_BLACK = 'line-dashed-black'.freeze
-      LINE_SOLID_RED = 'line-solid-red'.freeze
-      AREA_DISPLAY_STYLES = ['area-pink', 'area-black'].freeze
+      LINE_DASHED_BLACK = "line-dashed-black".freeze
+      LINE_SOLID_RED = "line-solid-red".freeze
+      AREA_DISPLAY_STYLES = ["area-pink", "area-black"].freeze
       LINE_DISPLAY_STYLES = [LINE_DASHED_BLACK].freeze
 
       belongs_to :chart, optional: false

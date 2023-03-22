@@ -17,7 +17,7 @@ module Api
       class FlowAttribute < Api::Readonly::BaseModel
         include Api::V3::Readonly::MaterialisedTable
 
-        self.table_name = 'flow_attributes'
+        self.table_name = "flow_attributes"
 
         INDEXES = [].freeze
 

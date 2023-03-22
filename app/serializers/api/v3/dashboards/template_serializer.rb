@@ -26,7 +26,7 @@ module Api
 
         attribute :image_url do
           url = object.image.url(:small)
-          url = '/content' + url unless Rails.env.development? || Rails.env.test?
+          url = "/content" + url unless Rails.env.development? || Rails.env.test?
           url
         end
       end

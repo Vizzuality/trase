@@ -28,12 +28,12 @@ module Api
             associated_object = @object.send(@association)
             return true unless associated_object.present?
             # e.g. quant
-            attribute_name = @association.to_s.split('_').last
+            attribute_name = @association.to_s.split("_").last
             # e.g. ind_id
             attribute_id_name = "#{attribute_name}_id"
 
             # flow attributes table
-            values_class = ('Api::V3::' + "node_#{attribute_name}".camelize).
+            values_class = ("Api::V3::" + "node_#{attribute_name}".camelize).
               constantize
 
             actual_years = values_class.

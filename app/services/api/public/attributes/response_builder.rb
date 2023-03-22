@@ -19,21 +19,21 @@ module Api
         def initialize_params(params)
           if params[:country]
             @country = Api::V3::Country.find_by(iso2: params[:country])
-            raise 'Country not found' unless @country
+            raise "Country not found" unless @country
           end
 
           return unless params[:commodity]
           @commodity = Api::V3::Commodity.find_by(name: params[:commodity])
-          raise 'Commodity not found' unless @commodity
+          raise "Commodity not found" unless @commodity
         end
 
         def initialize_flow_attributes
           @query = flow_attributes_query
 
-          @query = @query.where('contexts.country_id = ?', @country.id) if @country
+          @query = @query.where("contexts.country_id = ?", @country.id) if @country
 
           if @commodity
-            @query = @query.where('contexts.commodity_id = ?', @commodity.id)
+            @query = @query.where("contexts.commodity_id = ?", @commodity.id)
           end
 
           @query
@@ -42,29 +42,29 @@ module Api
         def flow_attributes_query
           Api::Public::Readonly::FlowAttribute.
             select(*flow_attributes_select_clause).
-            joins('INNER JOIN contexts ON ' \
-                  'contexts.id = flow_attributes.context_id').
-            joins('INNER JOIN countries ON ' \
-                  'countries.id = contexts.country_id').
-            joins('INNER JOIN commodities ON ' \
-                  'commodities.id = contexts.commodity_id').
+            joins("INNER JOIN contexts ON " \
+                  "contexts.id = flow_attributes.context_id").
+            joins("INNER JOIN countries ON " \
+                  "countries.id = contexts.country_id").
+            joins("INNER JOIN commodities ON " \
+                  "commodities.id = contexts.commodity_id").
             group(*flow_attributes_group_clause)
         end
 
         def flow_attributes_select_clause
           [
-            'attribute_id AS id',
-            'name',
-            'display_name',
-            'unit',
-            'unit_type',
-            'json_agg(' \
-              'json_build_object(' \
-                '\'country\', countries.iso2, ' \
-                '\'commodity\', commodities.name, ' \
-                '\'years\', flow_attributes.years' \
-              ')' \
-            ') AS availability'
+            "attribute_id AS id",
+            "name",
+            "display_name",
+            "unit",
+            "unit_type",
+            "json_agg(" \
+              "json_build_object(" \
+                "'country', countries.iso2, " \
+                "'commodity', commodities.name, " \
+                "'years', flow_attributes.years" \
+              ")" \
+            ") AS availability"
           ]
         end
 
@@ -76,7 +76,7 @@ module Api
           @data = ActiveModelSerializers::SerializableResource.new(
             @query,
             each_serializer: Api::Public::Attributes::FlowAttributeSerializer,
-            root: 'data'
+            root: "data"
           ).serializable_hash[:data]
         end
       end

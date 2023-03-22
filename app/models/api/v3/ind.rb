@@ -14,7 +14,7 @@ module Api
   module V3
     class Ind < BlueTable
       has_one :ind_property
-      has_one :ind_values_meta, class_name: 'Api::V3::Readonly::IndValuesMeta'
+      has_one :ind_values_meta, class_name: "Api::V3::Readonly::IndValuesMeta"
       has_many :node_inds
       has_many :flow_inds
       has_many :flows, through: :flow_inds
@@ -28,12 +28,12 @@ module Api
 
       def readonly_attribute
         Api::V3::Readonly::Attribute.
-          where(original_type: 'Ind', original_id: id).
+          where(original_type: "Ind", original_id: id).
           first
       end
 
       def simple_type
-        'ind'
+        "ind"
       end
 
       def self.select_options
@@ -42,7 +42,7 @@ module Api
 
       def self.import_key
         [
-          {name: :name, sql_type: 'TEXT'}
+          {name: :name, sql_type: "TEXT"}
         ]
       end
     end

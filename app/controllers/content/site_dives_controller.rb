@@ -5,7 +5,7 @@ module Content
     def show
       @site_dive = Content::SiteDive.find(params[:id])
       render json: @site_dive,
-             root: 'data',
+             root: "data",
              serializer: Content::SiteDiveSerializer
     end
   end

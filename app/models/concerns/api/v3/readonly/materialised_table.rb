@@ -1,4 +1,4 @@
-require 'active_support/concern'
+require "active_support/concern"
 
 module Api
   module V3
@@ -15,14 +15,14 @@ module Api
             self::INDEXES.each do |index_properties|
               columns = index_properties[:columns]
               execute "CREATE INDEX IF NOT EXISTS #{index_name(columns)} \
-                ON #{table_name} (#{columns_to_string(columns, ',')})"
+                ON #{table_name} (#{columns_to_string(columns, ",")})"
             end
           end
 
           def drop_indexes
             self::INDEXES.each do |index_properties|
               columns = index_properties[:columns]
-              execute 'DROP INDEX IF EXISTS ' + index_name(columns)
+              execute "DROP INDEX IF EXISTS " + index_name(columns)
             end
           end
 
@@ -92,15 +92,15 @@ module Api
           end
 
           def index_name(columns)
-            index_name = self.table_name + '_'
-            index_name << columns_to_string(columns, '_')
-            index_name << '_idx'
+            index_name = self.table_name + "_"
+            index_name << columns_to_string(columns, "_")
+            index_name << "_idx"
             index_name
           end
 
           def key_conditions_str(key_conditions)
             sanitize_sql_for_conditions([
-              key_conditions.map { |k, v| "#{k} = :#{k}" }.join(' AND '),
+              key_conditions.map { |k, v| "#{k} = :#{k}" }.join(" AND "),
               key_conditions
             ])
           end

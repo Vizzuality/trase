@@ -11,13 +11,13 @@ module Api
           def passing?
             expected_length = @object.context_node_types.count
             @violating_flows = @object.flows.
-              where('ICOUNT(path) <> ?', expected_length).
+              where("ICOUNT(path) <> ?", expected_length).
               pluck(:id)
             @violating_flows.none?
           end
 
           def self.human_readable(_options)
-            'path length matches context node types'
+            "path length matches context node types"
           end
 
           private
@@ -25,7 +25,7 @@ module Api
           def error
             super.merge(
               message: error_message(
-                'Path length should match context node types'
+                "Path length should match context node types"
               )
             )
           end

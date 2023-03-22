@@ -18,17 +18,17 @@ module Api
           @year = year
 
           # Assumption: Volume is a special quant which always exists
-          @volume_attribute = Dictionary::Quant.instance.get('Volume')
+          @volume_attribute = Dictionary::Quant.instance.get("Volume")
           unless @volume_attribute.present?
-            raise ActiveRecord::RecordNotFound.new 'Quant Volume not found'
+            raise ActiveRecord::RecordNotFound.new "Quant Volume not found"
           end
 
           initialize_chart_config(:actor, nil, :actor_sustainability)
           unless @chart_config.attributes.any?
-            raise ActiveRecord::RecordNotFound.new 'No attributes found'
+            raise ActiveRecord::RecordNotFound.new "No attributes found"
           end
 
-          @source_node_types = @chart_config.named_node_types('source')
+          @source_node_types = @chart_config.named_node_types("source")
           unless @source_node_types.any?
             raise ActiveRecord::RecordNotFound.new(
               'Chart node type "source" not found'
@@ -90,7 +90,7 @@ module Api
         end
 
         def data_row(group_totals_hash, node_type, node)
-          node_id = node['node_id']
+          node_id = node["node_id"]
           attributes = @chart_config.attributes
           totals_per_attribute = @flow_stats.
             flow_values_totals_for_attributes_into(
@@ -100,7 +100,7 @@ module Api
             )
           totals_hash = Hash[
             totals_per_attribute.map do |total|
-              [total['name'], total['value']]
+              [total["name"], total["value"]]
             end
           ]
           totals_hash.each do |key, value|
@@ -115,7 +115,7 @@ module Api
               [
                 {
                   id: node_id,
-                  value: node['name']
+                  value: node["name"]
                 }
               ] +
                 attributes.map do |attribute|

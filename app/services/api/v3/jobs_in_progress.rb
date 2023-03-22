@@ -7,7 +7,7 @@ module Api
       def call(worker_class_name)
         ss = Sidekiq::ScheduledSet.new
         rs = Sidekiq::RetrySet.new
-        qs = Sidekiq::Queue.new('default')
+        qs = Sidekiq::Queue.new("default")
 
         [ss, rs, qs].any? { |s| s.any? { |j| (j.klass == worker_class_name) } }
       end

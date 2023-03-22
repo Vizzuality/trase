@@ -1,5 +1,5 @@
-ActiveAdmin.register_page 'Data Validation' do
-  menu parent: 'Database', if: proc { controller.data_update_supported? }
+ActiveAdmin.register_page "Data Validation" do
+  menu parent: "Database", if: proc { controller.data_update_supported? }
 
   controller do
     before_action :ensure_data_update_supported
@@ -11,14 +11,14 @@ ActiveAdmin.register_page 'Data Validation' do
       limit(25)
     tabs do
       tab :reports do
-        render partial: 'admin/database_validation/form', locals: {
+        render partial: "admin/database_validation/form", locals: {
           database_validations: database_validations
         }
       end
       tab :rules do
-        table_for Api::V3::DatabaseValidation::Report.human_readable_rules, class: 'index_table' do
-          column('Validated object') { |rule| rule[:validated_object] }
-          column('Rule') { |rule| rule[:rule] }
+        table_for Api::V3::DatabaseValidation::Report.human_readable_rules, class: "index_table" do
+          column("Validated object") { |rule| rule[:validated_object] }
+          column("Rule") { |rule| rule[:rule] }
         end
       end
     end
@@ -28,7 +28,7 @@ ActiveAdmin.register_page 'Data Validation' do
     @report = Api::V3::DatabaseValidation::Report.new
     @report.call
     redirect_to admin_data_validation_url,
-                notice: 'Database validation completed.'
+                notice: "Database validation completed."
   end
 
   page_action :report, method: :get do

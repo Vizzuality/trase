@@ -1,14 +1,14 @@
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe 'Exporter profile', type: :request do
-  include_context 'api v3 brazil exporter quant values'
-  include_context 'api v3 brazil exporter qual values'
-  include_context 'api v3 brazil exporter ind values'
-  include_context 'api v3 brazil municipality quant values'
-  include_context 'api v3 brazil municipality qual values'
-  include_context 'api v3 brazil municipality ind values'
-  include_context 'api v3 brazil soy flow quants'
-  include_context 'api v3 brazil exporter actor profile'
+RSpec.describe "Exporter profile", type: :request do
+  include_context "api v3 brazil exporter quant values"
+  include_context "api v3 brazil exporter qual values"
+  include_context "api v3 brazil exporter ind values"
+  include_context "api v3 brazil municipality quant values"
+  include_context "api v3 brazil municipality qual values"
+  include_context "api v3 brazil municipality ind values"
+  include_context "api v3 brazil soy flow quants"
+  include_context "api v3 brazil exporter actor profile"
 
   before(:each) do
     Api::V3::Readonly::FlowNode.refresh(sync: true)
@@ -20,26 +20,26 @@ RSpec.describe 'Exporter profile', type: :request do
 
   let(:summary_params) { {year: 2015} }
 
-  describe 'GET /api/v3/contexts/:context_id/actors/:id/basic_attributes' do
-    it 'has the correct response structure' do
+  describe "GET /api/v3/contexts/:context_id/actors/:id/basic_attributes" do
+    it "has the correct response structure" do
       get "/api/v3/contexts/#{api_v3_brazil_soy_context.id}/actors/#{api_v3_exporter1_node.id}/basic_attributes",
         params: summary_params
 
       expect(@response.status).to eq 200
-      expect(@response).to match_response_schema('v3_actor_basic_attributes')
+      expect(@response).to match_response_schema("v3_actor_basic_attributes")
     end
   end
 
-  describe 'GET /api/v3/contexts/:context_id/actors/:id/top_countries' do
-    it 'has the correct response structure' do
+  describe "GET /api/v3/contexts/:context_id/actors/:id/top_countries" do
+    it "has the correct response structure" do
       get "/api/v3/contexts/#{api_v3_brazil_soy_context.id}/actors/#{api_v3_exporter1_node.id}/top_countries", params: summary_params
 
       expect(@response.status).to eq 200
-      expect(@response).to match_response_schema('v3_actor_top_countries')
+      expect(@response).to match_response_schema("v3_actor_top_countries")
     end
   end
 
-  describe 'GET /api/v3/contexts/:context_id/actors/:id/top_sources' do
+  describe "GET /api/v3/contexts/:context_id/actors/:id/top_sources" do
     let(:unknown_municipality) {
       FactoryBot.create(
         :api_v3_node,
@@ -72,35 +72,35 @@ RSpec.describe 'Exporter profile', type: :request do
         value: 10
       )
     }
-    it 'has the correct response structure' do
+    it "has the correct response structure" do
       get "/api/v3/contexts/#{api_v3_brazil_soy_context.id}/actors/#{api_v3_exporter1_node.id}/top_sources", params: summary_params
 
       expect(@response.status).to eq 200
-      expect(@response).to match_response_schema('v3_actor_top_sources')
+      expect(@response).to match_response_schema("v3_actor_top_sources")
     end
   end
 
-  describe 'GET /api/v3/contexts/:context_id/actors/:id/sustainability' do
+  describe "GET /api/v3/contexts/:context_id/actors/:id/sustainability" do
     before(:each) do
       Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
     end
-    it 'has the correct response structure' do
+    it "has the correct response structure" do
       get "/api/v3/contexts/#{api_v3_brazil_soy_context.id}/actors/#{api_v3_exporter1_node.id}/sustainability", params: summary_params
 
       expect(@response.status).to eq 200
-      expect(@response).to match_response_schema('v3_actor_sustainability')
+      expect(@response).to match_response_schema("v3_actor_sustainability")
     end
   end
 
-  describe 'GET /api/v3/contexts/:context_id/actors/:id/exporting_companies' do
+  describe "GET /api/v3/contexts/:context_id/actors/:id/exporting_companies" do
     before(:each) do
       Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
     end
-    it 'has the correct response structure' do
+    it "has the correct response structure" do
       get "/api/v3/contexts/#{api_v3_brazil_soy_context.id}/actors/#{api_v3_exporter1_node.id}/exporting_companies", params: summary_params
 
       expect(@response.status).to eq 200
-      expect(@response).to match_response_schema('v3_actor_exporting_companies')
+      expect(@response).to match_response_schema("v3_actor_exporting_companies")
     end
   end
 end

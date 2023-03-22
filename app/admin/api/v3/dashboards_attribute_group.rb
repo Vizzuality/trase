@@ -1,5 +1,5 @@
-ActiveAdmin.register Api::V3::DashboardsAttributeGroup, as: 'DashboardsAttributeGroup' do
-  menu parent: 'Dashboards'
+ActiveAdmin.register Api::V3::DashboardsAttributeGroup, as: "DashboardsAttributeGroup" do
+  menu parent: "Dashboards"
 
   after_action :clear_cache, only: [:create, :update, :destroy]
 
@@ -8,7 +8,7 @@ ActiveAdmin.register Api::V3::DashboardsAttributeGroup, as: 'DashboardsAttribute
 
   controller do
     def clear_cache
-      clear_cache_for_regexp('/api/v3/dashboards/indicators')
+      clear_cache_for_regexp("/api/v3/dashboards/indicators")
     end
   end
 
@@ -16,9 +16,9 @@ ActiveAdmin.register Api::V3::DashboardsAttributeGroup, as: 'DashboardsAttribute
     f.semantic_errors
     inputs do
       input :name, required: true, as: :string,
-                   hint: object.class.column_comment('name')
+                   hint: object.class.column_comment("name")
       input :position, required: true,
-                       hint: object.class.column_comment('position')
+                       hint: object.class.column_comment("position")
     end
     f.actions
   end

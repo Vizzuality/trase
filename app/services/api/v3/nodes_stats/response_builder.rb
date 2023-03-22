@@ -32,18 +32,18 @@ module Api
 
         def initialize_errors
           if @year_start && @year_end && @year_start > @year_end
-            raise 'Year start can not be higher than year end'
+            raise "Year start can not be higher than year end"
           end
 
           if @commodity_id && (@contexts_ids || []).any?
-            raise 'Either commodity or contexts but not both'
+            raise "Either commodity or contexts but not both"
           end
 
           @attribute = initialize_attribute
 
           @other_attributes = @other_attributes_ids.map do |attribute_id|
             attribute = Api::V3::Readonly::Attribute.find_by(
-              id: attribute_id, original_type: 'Quant'
+              id: attribute_id, original_type: "Quant"
             )
 
             raise "Attribute #{attribute_id} not found" unless attribute
@@ -55,22 +55,22 @@ module Api
         def initialize_attribute
           if @attribute_id
             attribute = Api::V3::Readonly::Attribute.find_by(
-              id: @attribute_id, original_type: 'Quant'
+              id: @attribute_id, original_type: "Quant"
             )
             raise "Attribute #{@attribute_id} not found" unless attribute
           else
-            volume_quant = Dictionary::Quant.instance.get('Volume')
+            volume_quant = Dictionary::Quant.instance.get("Volume")
             attribute = Api::V3::Readonly::Attribute.find_by(
-              original_id: volume_quant.id, original_type: 'Quant'
+              original_id: volume_quant.id, original_type: "Quant"
             )
-            raise 'Quant Volume not found' unless attribute
+            raise "Quant Volume not found" unless attribute
           end
           attribute
         end
 
         def formatted_nodes_stats
-          query_filter_name = @commodity_id ? 'commodities.id' : 'context_id'
-          filter_name = @commodity_id ? 'commodity_id' : 'context_id'
+          query_filter_name = @commodity_id ? "commodities.id" : "context_id"
+          filter_name = @commodity_id ? "commodity_id" : "context_id"
           filter_values =
             @commodity_id.present? ? [@commodity_id] : @contexts_ids
           filter_values.map do |filter|

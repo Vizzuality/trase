@@ -34,13 +34,13 @@ module Api
 
         def assign_summary
           service = [
-            'Api', 'V3', profile_type.pluralize.capitalize, 'BasicAttributes'
-          ].join('::').constantize
+            "Api", "V3", profile_type.pluralize.capitalize, "BasicAttributes"
+          ].join("::").constantize
           top_profile.summary = service.new(
             top_profile.context, readonly_node, year
           ).call[:summary]
         rescue NameError
-          top_profile.summary = ''
+          top_profile.summary = ""
         rescue
           raise
         end

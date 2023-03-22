@@ -1,10 +1,10 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Admin::TopProfilesController, type: :controller do
   render_views
 
-  include_context 'api v3 brazil soy flows'
-  include_context 'api v3 brazil exporter actor profile'
+  include_context "api v3 brazil soy flows"
+  include_context "api v3 brazil exporter actor profile"
 
   let(:user) { FactoryBot.create(:user) }
   before { sign_in user }
@@ -12,7 +12,7 @@ RSpec.describe Admin::TopProfilesController, type: :controller do
   let(:context) { api_v3_brazil_soy_context }
   let(:node) { api_v3_exporter1_node }
 
-  describe 'POST create' do
+  describe "POST create" do
     before(:each) do
       Api::V3::Readonly::FlowNode.refresh(sync: true)
       Api::V3::Readonly::NodeWithFlowsPerYear.refresh(sync: true)
@@ -28,7 +28,7 @@ RSpec.describe Admin::TopProfilesController, type: :controller do
     let(:valid_attributes) {
       {context_id: context.id, node_id: node.id}
     }
-    it 'redirects to index' do
+    it "redirects to index" do
       post :create, params: {
         context_id: context.id, api_v3_top_profile: valid_attributes
       }
@@ -39,23 +39,23 @@ RSpec.describe Admin::TopProfilesController, type: :controller do
       )
     end
 
-    it 'renders index' do
+    it "renders index" do
       get :index, params: {context_id: context.id, id: top_profile.id}
       expect(response).to render_template(:index)
     end
 
-    it 'renders show' do
+    it "renders show" do
       get :show, params: {context_id: context.id, id: top_profile.id}
       expect(response).to render_template(:show)
     end
 
-    it 'renders index' do
+    it "renders index" do
       get :new, params: {context_id: context.id}
       expect(response).to render_template(:new)
     end
   end
 
-  describe 'PUT update' do
+  describe "PUT update" do
     before(:each) do
       Api::V3::Readonly::FlowNode.refresh(sync: true)
       Api::V3::Readonly::NodeWithFlowsPerYear.refresh(sync: true)
@@ -77,7 +77,7 @@ RSpec.describe Admin::TopProfilesController, type: :controller do
     let(:valid_attributes) {
       {context_id: context.id, node_id: node.id}
     }
-    it 'redirects to index' do
+    it "redirects to index" do
       put :update, params: {
         context_id: context.id, id: top_profile.id, api_v3_top_profile: valid_attributes, resource: {top_profile_image_id: top_profile_image.id}
       }

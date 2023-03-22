@@ -53,7 +53,7 @@ module Api
       has_one :recolor_by_ind, autosave: true
       has_one :recolor_by_qual, autosave: true
       has_one :readonly_recolor_by_attribute,
-              class_name: 'Api::V3::Readonly::RecolorByAttribute',
+              class_name: "Api::V3::Readonly::RecolorByAttribute",
               foreign_key: :id
 
       validates :context, presence: true
@@ -75,7 +75,7 @@ module Api
                 unless: proc { |a| a.interval_count.blank? }
       validates :divisor,
                 presence: true,
-                unless: proc { |a| a.legend_type != 'percentual' }
+                unless: proc { |a| a.legend_type != "percentual" }
       validates_with OneAssociatedAttributeValidator,
                      attributes: [:recolor_by_ind, :recolor_by_qual]
       validates_with AttributeAssociatedOnceValidator,

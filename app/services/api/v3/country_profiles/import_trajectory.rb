@@ -44,9 +44,9 @@ module Api
         def fetch_lines
           lines = []
           lines << {
-            name: 'Production',
-            legend_name: 'Production',
-            legend_tooltip: 'Production',
+            name: "Production",
+            legend_name: "Production",
+            legend_tooltip: "Production",
             type: Api::V3::ChartAttribute::LINE,
             style: Api::V3::ChartAttribute::LINE_SOLID_RED,
             values: import_values
@@ -61,7 +61,7 @@ module Api
               year,
               @activity
             )
-            val_with_year = external_attribute_value.call 'com_trade.value.value'
+            val_with_year = external_attribute_value.call "com_trade.value.value"
             val_with_year&.dig(:value)
           end
         end

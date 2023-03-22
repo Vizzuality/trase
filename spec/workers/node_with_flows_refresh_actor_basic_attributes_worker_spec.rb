@@ -1,10 +1,10 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe NodeWithFlowsRefreshActorBasicAttributesWorker, type: :worker do
   Sidekiq::Testing.inline!
 
-  include_context 'api v3 brazil soy flows'
-  include_context 'api v3 brazil exporter actor profile'
+  include_context "api v3 brazil soy flows"
+  include_context "api v3 brazil exporter actor profile"
 
   before(:each) do
     Api::V3::Readonly::FlowNode.refresh(sync: true)
@@ -13,9 +13,9 @@ RSpec.describe NodeWithFlowsRefreshActorBasicAttributesWorker, type: :worker do
     Api::V3::Readonly::NodeWithFlows.refresh(sync: true)
   end
 
-  it 'update actor basic attributes column' do
+  it "update actor basic attributes column" do
     actor_with_flows = Api::V3::Readonly::NodeWithFlows.
-      where(context_id: api_v3_brazil_soy_context.id, profile: 'actor').
+      where(context_id: api_v3_brazil_soy_context.id, profile: "actor").
       find(api_v3_exporter1_node.id)
     expect(actor_with_flows.actor_basic_attributes).to be_nil
 
