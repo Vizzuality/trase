@@ -75,6 +75,7 @@ jobs:
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         run: cc-test-reporter before-build
+        if: ${{ github.event_name != 'pull_request' }}
 
       - name: Run tests 🔧
         env:
