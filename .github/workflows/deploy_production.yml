@@ -103,6 +103,7 @@ jobs:
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         run: cc-test-reporter after-build
+        if: ${{ github.event_name != 'pull_request' }}
 
   production:
     needs: [rspec, front_end]
