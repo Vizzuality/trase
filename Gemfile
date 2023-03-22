@@ -5,7 +5,7 @@ ruby '3.1.3'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
 gem 'rails', '~> 6.1.0'
- # Use pg as the database for Active Record
+# Use pg as the database for Active Record
 gem 'pg'
 # Use Puma as the app server
 gem 'puma', '~> 6.1'
@@ -73,7 +73,7 @@ group :development, :test do
   gem 'rails-controller-testing'
   gem 'rspec-collection_matchers'
   gem 'rspec-rails'
-  gem 'rubocop-rspec'
+  gem 'standard'
 end
 
 group :development do
@@ -97,7 +97,7 @@ group :development do
   gem 'capistrano-rvm'
   # a note about ed25519 support
   # from net-ssh readme https://github.com/net-ssh/net-ssh:
-  #{ }"For ed25519 public key auth support your bundle file should contain ed25519, bcrypt_pbkdf dependencies."
+  # { }"For ed25519 public key auth support your bundle file should contain ed25519, bcrypt_pbkdf dependencies."
   # those are development dependencies of net-ssh
   # versions required by net-ssh can be looked up here: https://github.com/net-ssh/net-ssh/blob/master/net-ssh.gemspec
   gem 'ed25519'
