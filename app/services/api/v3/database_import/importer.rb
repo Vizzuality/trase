@@ -49,9 +49,9 @@ cannot restore"
             keep_local_copy: true
           )
           backup_local_filename = exporter.local_filename
-          config = Rails.configuration.database_configuration
-          env_config = config[Rails.env]
-          active_db_name = env_config['database']
+
+          env_config = ActiveRecord::Base.configurations.configs_for(env_name: Rails.env).first
+          active_db_name = env_config.database
           pg_tasks = ActiveRecord::Tasks::PostgreSQLDatabaseTasks.new(env_config)
           begin
             pg_tasks.purge if options[:force]
