@@ -138,5 +138,5 @@ jobs:
         uses: miloserdow/capistrano-deploy@master
         with:
           target: production
-          deploy_key: ${{ secrets.PRODUCTION_DEPLOY_ENC_KEY }}
-          enc_rsa_key_pth: ./config/deploy/encrypted_keys/production_gh_deploy_enc
+          deploy_key: ${{ secrets.DEPLOY_KEY_PASSWORD }}
+          enc_rsa_key_val: ${{ secrets.PRODUCTION_DEPLOY_ENC_KEY }}

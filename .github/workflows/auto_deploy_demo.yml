@@ -141,8 +141,8 @@ jobs:
         uses: miloserdow/capistrano-deploy@master
         with:
           target: demo
-          deploy_key: ${{ secrets.DEMO_DEPLOY_ENC_KEY }}
-          enc_rsa_key_pth: ./config/deploy/encrypted_keys/demo_gh_deploy_enc
+          deploy_key: ${{ secrets.DEPLOY_KEY_PASSWORD }}
+          enc_rsa_key_val: ${{ secrets.DEMO_DEPLOY_ENC_KEY }}
 
   indonesiademo:
     needs: [rspec, front_end]
@@ -172,5 +172,5 @@ jobs:
         uses: miloserdow/capistrano-deploy@master
         with:
           target: indonesiademo
-          deploy_key: ${{ secrets.INDONESIADEMO_DEPLOY_ENC_KEY }}
-          enc_rsa_key_pth: ./config/deploy/encrypted_keys/indonesiademo_gh_deploy_enc
+          deploy_key: ${{ secrets.DEPLOY_KEY_PASSWORD }}
+          enc_rsa_key_val: ${{ secrets.INDONESIADEMO_DEPLOY_ENC_KEY }}

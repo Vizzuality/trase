@@ -134,8 +134,8 @@ jobs:
         uses: miloserdow/capistrano-deploy@master
         with:
           target: staging
-          deploy_key: ${{ secrets.STAGING_DEPLOY_ENC_KEY }}
-          enc_rsa_key_pth: ./config/deploy/encrypted_keys/staging_gh_deploy_enc
+          deploy_key: ${{ secrets.DEPLOY_KEY_PASSWORD }}
+          enc_rsa_key_val: ${{ secrets.STAGING_DEPLOY_ENC_KEY }}
 
   sandbox:
     needs: [rspec, front_end]
@@ -170,5 +170,5 @@ jobs:
         uses: miloserdow/capistrano-deploy@master
         with:
           target: sandbox
-          deploy_key: ${{ secrets.SANDBOX_DEPLOY_ENC_KEY }}
-          enc_rsa_key_pth: ./config/deploy/encrypted_keys/sandbox_gh_deploy_enc
+          deploy_key: ${{ secrets.DEPLOY_KEY_PASSWORD }}
+          enc_rsa_key_val: ${{ secrets.SANDBOX_DEPLOY_ENC_KEY }}
