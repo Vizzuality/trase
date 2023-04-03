@@ -9,6 +9,9 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
+    MailchimpMarketing (3.0.80)
+      excon (>= 0.76.0, < 1)
+      json (~> 2.1, >= 2.1.0)
     actioncable (6.1.7.3)
       actionpack (= 6.1.7.3)
       activesupport (= 6.1.7.3)
@@ -307,9 +310,6 @@ GEM
       net-imap
       net-pop
       net-smtp
-    mailchimp-api (2.0.7)
-      excon (>= 0.16.0)
-      json (>= 1.7.7)
     marcel (1.0.2)
     memoizable (0.4.2)
       thread_safe (~> 0.3, >= 0.3.1)
@@ -554,6 +554,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  MailchimpMarketing
   active_model_serializers
   activeadmin
   activeadmin_addons
@@ -589,7 +590,6 @@ DEPENDENCIES
   kaminari
   kt-paperclip (~> 6.4)
   listen (~> 3.3)
-  mailchimp-api
   oj
   pg
   pg_csv

@@ -13,15 +13,19 @@ module Api
       # Use of Trase data - *|TRASEUSE|*
       # About your work - *|TRASEWORK|*
       def create
-        mailchimp = Mailchimp::API.new(ENV['MAILCHIMP_API_KEY'])
-        response = mailchimp.lists.subscribe(
-          ENV['MAILCHIMP_LIST_ID'],
-          { email: params[:email] },
-          {
+        ensure_required_param_present(:email)
+        client = MailchimpMarketing::Client.new()
+        client.set_config({
+          :api_key => ENV['MAILCHIMP_API_KEY'],
+          :server => ENV['MAILCHIMP_SERVER_PREFIX']
+        })
+        body = {
+          email_address: params[:email],
+          status: 'subscribed',
+          merge_fields: {
             'FNAME' => params[:firstname],
             # TODO: this comes undefined
             'LNAME' => (params[:lastname] && params[:lastname] != "") ? params[:lastname] : "-",
-            'EMAIL' => params[:email],
             'COUNTRY' => params[:country] || "-",
             'MMERGE3' => params[:organisation],
             'TRASETYPE' => params[:trase_type],
@@ -29,17 +33,14 @@ module Api
             'TRASEWORK' => params[:trase_work],
             'REFERRER' => request.referer
           }
-        )
-        p response
-        render json: response and return
-      rescue Mailchimp::ListAlreadySubscribedError
-        # noop
-        render json: {email: params[:email]}
+        }
+        client.lists.add_list_member(ENV['MAILCHIMP_LIST_ID'], body)
+      rescue MailchimpMarketing::ApiError => e
+        Appsignal.send_error(e)
+        render json: {error: 'MailChimp API error'}
       rescue => e
         render json: {error: e.message}
         Appsignal.send_error(e)
-        Rails.logger.error e.message
-        e.backtrace.each { |l| Rails.logger.error l }
       end
     end
   end
