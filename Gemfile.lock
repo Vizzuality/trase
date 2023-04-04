@@ -481,10 +481,10 @@ GEM
     simplecov_json_formatter (0.1.4)
     sitemap_generator (6.3.0)
       builder (~> 3.0)
-    spring (2.1.1)
-    spring-watcher-listen (2.0.1)
+    spring (4.1.1)
+    spring-watcher-listen (2.1.0)
       listen (>= 2.7, < 4.0)
-      spring (>= 1.2, < 3.0)
+      spring (>= 4)
     sprockets (4.2.0)
       concurrent-ruby (~> 1.0)
       rack (>= 2.2.4, < 4)
@@ -610,7 +610,7 @@ DEPENDENCIES
   simplecov
   sitemap_generator
   spring
-  spring-watcher-listen (~> 2.0.0)
+  spring-watcher-listen (~> 2.1.0)
   staccato
   standard
   turbolinks (~> 5)
