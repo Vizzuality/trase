@@ -59,20 +59,10 @@ jobs:
           sudo apt update
           sudo apt-get -yqq install libpq-dev postgresql-client
 
-      - name: Install Ruby 💎
+      - name: Install ruby + gems 💎
         uses: ruby/setup-ruby@v1
-
-      - name: Setup gems cache
-        uses: actions/cache@v2
         with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-
-      - name: Install gems 💎
-        run: |
-          sudo apt-get install libffi-dev
-          bundle config path vendor/bundle
-          bundle install --jobs 4 --retry 3
+          bundler-cache: true
 
       - name: Install CodeClimate reporter
         uses: amancevice/setup-code-climate@v1
@@ -122,20 +112,10 @@ jobs:
         with:
           node-version: 16
 
-      - name: Install Ruby 💎
+      - name: Install ruby + gems 💎
         uses: ruby/setup-ruby@v1
-
-      - name: Setup gems cache
-        uses: actions/cache@v2
         with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-
-      - name: Install gems 💎
-        run: |
-          sudo apt-get install libffi-dev
-          bundle config path vendor/bundle
-          bundle install --jobs 4 --retry 3
+          bundler-cache: true
 
       - name: Deploy 🚀
         uses: miloserdow/capistrano-deploy@master
@@ -153,20 +133,10 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v3
 
-      - name: Install Ruby 💎
+      - name: Install ruby + gems 💎
         uses: ruby/setup-ruby@v1
-
-      - name: Setup gems cache
-        uses: actions/cache@v2
         with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-
-      - name: Install gems 💎
-        run: |
-          sudo apt-get install libffi-dev
-          bundle config path vendor/bundle
-          bundle install --jobs 4 --retry 3
+          bundler-cache: true
 
       - name: Deploy 🚀
         uses: miloserdow/capistrano-deploy@master
