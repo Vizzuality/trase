@@ -11,3 +11,4 @@ ignore:
   - 'db/migrate/*'
   - 'db/scripts/*'
   - 'frontend/node_modules/**/*'
+  - 'app/services/api/v3/places/basic_attributes.rb'
