@@ -77,11 +77,15 @@ jobs:
   rubo_cop:
     name: RuboCop
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout 🛎️
+      - name: Checkout️ 🛎️
         uses: actions/checkout@v3
 
+      - name: Install ruby + gems
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
       - name: Run RuboCop
-        uses: andrewmcodes/rubocop-linter-action@v3.3.0
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        run: bin/rails standard

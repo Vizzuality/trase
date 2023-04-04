@@ -1,0 +1,13 @@
+fix: false
+parallel: true
+format: progress
+ruby_version: 3.1.0
+default_ignores: false
+
+ignore:
+  - 'bin/**/*'
+  - 'vendor/**/*'
+  - 'db/schema.rb'
+  - 'db/migrate/*'
+  - 'db/scripts/*'
+  - 'frontend/node_modules/**/*'
