@@ -80,8 +80,11 @@ class DataPortalForm extends Component {
       sendSubscriptionEmail({
         email: payload.email,
         firstname: payload.name,
-        lastname: payload.lastname,
-        organisation: payload.organisation
+        organisation: payload.organisation,
+        country: payload.country,
+        traseType: payload.organisationType,
+        traseUse: payload.dataUse,
+        traseWork: payload.comments
       });
     }
 

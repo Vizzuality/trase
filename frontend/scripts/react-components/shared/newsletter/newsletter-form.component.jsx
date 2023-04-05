@@ -17,7 +17,6 @@ class NewsletterForm extends React.PureComponent {
       form: {
         email: '',
         firstname: '',
-        lastname: '',
         organisation: '',
         country: ''
       },
@@ -184,12 +183,7 @@ class NewsletterForm extends React.PureComponent {
               <div className={cx('form-hidden-fields', { '-open': dropdownOpen })}>
                 {renderFormInput({
                   field: 'firstname',
-                  placeholder: 'Enter your first name...',
-                  formName: 'footer'
-                })}
-                {renderFormInput({
-                  field: 'lastname',
-                  placeholder: 'Enter your last name...',
+                  placeholder: 'Enter your name...',
                   formName: 'footer'
                 })}
                 {renderFormInput({
