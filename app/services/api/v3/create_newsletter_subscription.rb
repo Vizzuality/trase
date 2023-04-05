@@ -30,8 +30,7 @@ module Api
           status: "subscribed",
           merge_fields: {
             "FNAME" => params[:firstname].presence || "-", # mandatory
-            # TODO: this comes undefined, but is mandatory
-            "LNAME" => params[:lastname] != "undefined" && params[:lastname].presence || "-", # mandatory
+            "LNAME" => params[:lastname].presence || "-", # mandatory
             "COUNTRY" => params[:country].presence || "-", # mandatory
             "MMERGE3" => params[:organisation].presence || "-", # mandatory
             "TRASETYPE" => params[:trase_type].presence || "-", # mandatory
