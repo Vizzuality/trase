@@ -3,7 +3,7 @@ module ActiveRecord
     class PostgreSQLDatabaseTasks # :nodoc:
       def data_dump(filename)
         set_psql_env
-        db_name = configuration['database']
+        db_name = db_config.database
         cmd = "pg_dump --no-owner -c #{db_name} | gzip > #{filename}"
         run_cmd(cmd, [], 'dumping')
       end

@@ -860,5 +860,121 @@ export const getContextualLayersTemplates = () => ({
         ]
       })
     })
-  ]
+  ],
+  bo_protected_areas_2018: [
+    layer({
+      name: 'bo_protected_areas_2018',
+      type: 'vector',
+      provider: 'carto',
+      sql: 'SELECT * FROM bo_protected_areas_2018',
+      renderLayers: [
+        {
+          type: 'fill',
+          paint: {
+            'fill-color': '#B4D84F',
+            'fill-opacity': 0.5
+          },
+          metadata: {
+            position: 'top'
+          }
+        },
+        {
+          type: 'line',
+          paint: {
+            'line-color': '#B4D84F',
+            'line-width': 1,
+            'line-opacity': 1
+          },
+          metadata: {
+            position: 'top'
+          }
+        }
+      ]
+    })
+  ],
+  bo_territorios_indigenas_2012: [
+    layer({
+      name: 'bo_territorios_indigenas_2012',
+      type: 'vector',
+      provider: 'carto',
+      sql: 'SELECT * FROM bo_territorios_indigenas_2012',
+      renderLayers: [
+        {
+          type: 'fill',
+          paint: {
+            'fill-color': '#ECC35F',
+            'fill-opacity': 0.5
+          },
+          metadata: {
+            position: 'top'
+          }
+        },
+        {
+          type: 'line',
+          paint: {
+            'line-color': '#ECC35F',
+            'line-width': 1,
+            'line-opacity': 1
+          },
+          metadata: {
+            position: 'top'
+          }
+        }
+      ]
+    })
+  ],
+  bo_ecoregions_resolve_2017: [
+    layer({
+      name: 'bo_ecoregions_resolve_2017',
+      type: 'vector',
+      provider: 'carto',
+      sql: 'SELECT * FROM bo_ecoregions_resolve_2017',
+      renderLayers: [
+        {
+          type: 'line',
+          paint: {
+            'line-color': '#000000',
+            'line-width': 0.5,
+            'line-opacity': 1
+          }
+        }
+      ]
+    }),
+    layer({
+      name: 'bo_ecoregions_resolve_2017-labels',
+      id: 'bo_ecoregions_resolve_2017',
+      type: 'geojson',
+      variables: ['biome_name'],
+      renderLayers: conditionalRenderLayers({
+        type: 'symbol',
+        // symbol layers need metadata position top
+        metadata: {
+          position: 'top'
+        },
+        name: 'biome_name',
+        baseLayout: {
+          'text-letter-spacing': 0.3,
+          'text-size': 10
+        },
+        zooms: [
+          {
+            minzoom: 3,
+            maxzoom: 5,
+            layout: {
+              'text-size': 8,
+              'text-field': '{biome_name}'
+            }
+          },
+          {
+            minzoom: 5,
+            layout: {
+              'text-size': 10,
+              'text-field': '{biome_name}'
+            }
+          }
+        ]
+      })
+    })
+  ],
+
 });
