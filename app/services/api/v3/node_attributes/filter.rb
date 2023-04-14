@@ -12,7 +12,7 @@ module Api
           @map_attributes = Api::V3::Readonly::MapAttribute.
             includes(:readonly_attribute).
             where(id: layer_ids, context_id: @context.id, is_disabled: false).
-            where('years IS NULL OR array_length(years, 1) IS NULL OR years && ARRAY[?]', @years)
+            where("years IS NULL OR array_length(years, 1) IS NULL OR years && ARRAY[?]", @years)
         end
 
         def result
@@ -24,7 +24,7 @@ module Api
 
           result.map do |node_attr|
             h = node_attr.attributes
-            h.delete('id')
+            h.delete("id")
             h
           end
         end
@@ -40,7 +40,7 @@ module Api
             context_node_types.
             select(:id).
             joins(:context_node_type_property).
-            where('context_node_type_properties.is_geo_column' => true).
+            where("context_node_type_properties.is_geo_column" => true).
             pluck(:id)
           node_values = node_values_class.table_name
           node_values_class.
@@ -48,12 +48,12 @@ module Api
             joins("JOIN nodes ON nodes.id = #{node_values}.node_id").
             joins("JOIN context_node_types cnt ON cnt.node_type_id = nodes.node_type_id").
             joins("JOIN map_#{attribute_type}s maa ON maa.#{attribute_type}_id = #{node_values}.#{attribute_type}_id").
-            where('cnt.id' => cnt_ids).
+            where("cnt.id" => cnt_ids).
             where(
               "#{node_values}.year IN (?) OR #{node_values}.year IS NULL",
               @years
             ).
-            where('maa.map_attribute_id' => map_attribute.id).
+            where("maa.map_attribute_id" => map_attribute.id).
             group(
               "#{node_values}.node_id",
               "#{node_values}.#{attribute_type}_id"
@@ -64,10 +64,10 @@ module Api
         def select_list(map_attribute)
           attribute = map_attribute.readonly_attribute
           agg_value =
-            if ['SUM', 'AVG', 'MAX', 'MIN'].include?(attribute.aggregation_method.upcase)
+            if ["SUM", "AVG", "MAX", "MIN"].include?(attribute.aggregation_method.upcase)
               "#{attribute.aggregation_method}(value)"
             else
-              'SUM(value)'
+              "SUM(value)"
             end
           agg_dual_layer_buckets = <<-SQL
             aggregated_buckets(

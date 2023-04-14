@@ -1,5 +1,5 @@
-shared_context 'api v3 paraguay profiles' do
-  include_context 'api v3 paraguay context node types'
+shared_context "api v3 paraguay profiles" do
+  include_context "api v3 paraguay context node types"
 
   let!(:api_v3_paraguay_department_place_profile) do
     profile = Api::V3::Profile.where(

@@ -36,7 +36,7 @@ module Api
 
       def self.import_key
         [
-          {name: :iso2, sql_type: 'TEXT'}
+          {name: :iso2, sql_type: "TEXT"}
         ]
       end
 

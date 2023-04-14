@@ -19,13 +19,13 @@ module Api
           end
 
           def call
-            break_by_values = @query.map { |e| e['break_by'] }.uniq.sort
+            break_by_values = @query.map { |e| e["break_by"] }.uniq.sort
 
             data_by_x = {}
             @query.each do |record|
-              idx = break_by_values.index(record['break_by'])
-              data_by_x[record['x']] ||= {}
-              data_by_x[record['x']]["y#{idx}"] = record['y0']
+              idx = break_by_values.index(record["break_by"])
+              data_by_x[record["x"]] ||= {}
+              data_by_x[record["x"]]["y#{idx}"] = record["y0"]
             end
 
             @data = data_by_x.map do |key, value|
@@ -34,7 +34,7 @@ module Api
 
             @meta = {
               xAxis: year_axis_meta,
-              yAxis: axis_meta(@cont_attribute, 'number'),
+              yAxis: axis_meta(@cont_attribute, "number"),
               x: year_legend_meta,
               info: info
             }

@@ -14,7 +14,7 @@ module Api
           # @return (see AbstractCheck#passing?)
           def passing?
             @violating_flows = Api::V3::Flow.
-              select('a.id').
+              select("a.id").
               from(
                 <<~SQL
                   (
@@ -25,27 +25,27 @@ module Api
                   ) e ON a.position = (e.column_position + 1)
                     AND a.node_type_id = e.node_type_id
                 SQL
-              ).where('e.node_type_id' => nil).
-              group('a.id').
-              pluck('a.id')
+              ).where("e.node_type_id" => nil).
+              group("a.id").
+              pluck("a.id")
             @violating_flows.none?
           end
 
           def self.human_readable(_options)
-            'declared column positions match data'
+            "declared column positions match data"
           end
 
           private
 
           def actual_column_positions_subquery
             Api::V3::Flow.
-              select('flows.id', 'a."position"', 'nodes.node_type_id').
+              select("flows.id", 'a."position"', "nodes.node_type_id").
               from(
                 'flows, LATERAL unnest(flows.path) WITH ORDINALITY a(node_id, "position")'
               ).
-              joins('JOIN nodes ON nodes.id = a.node_id').
+              joins("JOIN nodes ON nodes.id = a.node_id").
               where(context_id: @object.id).
-              group('flows.id', 'a."position"', 'nodes.node_type_id')
+              group("flows.id", 'a."position"', "nodes.node_type_id")
           end
 
           def expected_column_positions_subquery
@@ -57,7 +57,7 @@ module Api
           def error
             super.merge(
               message: error_message(
-                'Path positions should match context node types'
+                "Path positions should match context node types"
               )
             )
           end

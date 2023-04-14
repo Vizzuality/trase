@@ -1,14 +1,14 @@
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe 'Get posts', type: :request do
-  include_context 'posts'
+RSpec.describe "Get posts", type: :request do
+  include_context "posts"
 
-  describe 'GET /content/posts' do
-    it 'has the correct response structure' do
-      get '/content/posts'
+  describe "GET /content/posts" do
+    it "has the correct response structure" do
+      get "/content/posts"
 
       expect(@response.status).to eq 200
-      expect(@response).to match_response_schema('posts')
+      expect(@response).to match_response_schema("posts")
     end
   end
 end

@@ -1,7 +1,7 @@
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe 'Countries', type: :request do
-  include_context 'api v3 brazil soy flow quants'
+RSpec.describe "Countries", type: :request do
+  include_context "api v3 brazil soy flow quants"
 
   before(:each) do
     Api::V3::Readonly::FlowNode.refresh(
@@ -10,21 +10,21 @@ RSpec.describe 'Countries', type: :request do
     Api::V3::Readonly::Dashboards::Country.refresh(sync: true)
   end
 
-  describe 'GET /api/v3/dashboards/countries' do
-    it 'has the correct response structure' do
-      get '/api/v3/dashboards/countries'
+  describe "GET /api/v3/dashboards/countries" do
+    it "has the correct response structure" do
+      get "/api/v3/dashboards/countries"
 
       expect(@response).to have_http_status(:ok)
-      expect(@response).to match_response_schema('dashboards_countries')
+      expect(@response).to match_response_schema("dashboards_countries")
     end
   end
 
-  describe 'GET /api/v3/dashboards/countries/search' do
-    it 'has the correct response structure' do
-      get '/api/v3/dashboards/countries/search?q=b'
+  describe "GET /api/v3/dashboards/countries/search" do
+    it "has the correct response structure" do
+      get "/api/v3/dashboards/countries/search?q=b"
 
       expect(@response).to have_http_status(:ok)
-      expect(@response).to match_response_schema('dashboards_countries_search')
+      expect(@response).to match_response_schema("dashboards_countries_search")
     end
   end
 end

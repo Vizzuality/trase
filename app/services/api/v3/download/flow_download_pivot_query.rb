@@ -27,13 +27,13 @@ module Api
 
         def pivot_select_columns
           [
-            'row_name',
+            "row_name",
             'year AS "YEAR"'
           ] + @path_columns +
             [
               "'#{commodity_type}'::TEXT AS \"TYPE\"",
-              'download_attributes_v.display_name',
-              'total'
+              "download_attributes_v.display_name",
+              "total"
             ]
         end
 
@@ -43,7 +43,7 @@ module Api
             '"' + c.display_name + '"'
           end
           @categories_names_with_type = @categories_names_quoted.map do |cn|
-            cn + ' text'
+            cn + " text"
           end
         end
 
@@ -57,7 +57,7 @@ module Api
 
         def crosstab_columns
           [
-            'row_name text',
+            "row_name text",
             '"YEAR" int'
           ] + @path_crosstab_columns + [
             '"TYPE" text'
@@ -76,7 +76,7 @@ module Api
               '#{source_sql}',
               '#{categories_sql}'
             )
-            AS CT(#{crosstab_columns.join(',')})
+            AS CT(#{crosstab_columns.join(",")})
           SQL
 
           Api::V3::Flow.

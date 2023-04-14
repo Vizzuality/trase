@@ -21,15 +21,15 @@ module Api
       class FlowQuantTotal < Api::Readonly::BaseModel
         include Api::V3::Readonly::MaterialisedView
 
-        self.table_name = 'flow_quant_totals_mv'
+        self.table_name = "flow_quant_totals_mv"
 
         scope :with_attribute_id, -> {
-          select('flow_quant_totals_mv.*, attributes.id AS attribute_id').
+          select("flow_quant_totals_mv.*, attributes.id AS attribute_id").
             joins("JOIN attributes ON original_type = 'Quant' AND original_id = quant_id")
         }
 
         def attribute_id
-          attributes['attribute_id']
+          attributes["attribute_id"]
         end
       end
     end

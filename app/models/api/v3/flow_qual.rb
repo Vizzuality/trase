@@ -26,8 +26,8 @@ module Api
 
       def self.import_key
         [
-          {name: :flow_id, sql_type: 'INT'},
-          {name: :qual_id, sql_type: 'INT'}
+          {name: :flow_id, sql_type: "INT"},
+          {name: :qual_id, sql_type: "INT"}
         ]
       end
 

@@ -1,3 +1,3 @@
-server 'indonesiademo.trase.earth', user: 'ubuntu', roles: %w{web app db}, primary: true
+server "indonesiademo.trase.earth", user: "ubuntu", roles: %w{web app db}, primary: true
 
-set :branch, 'develop'
+set :branch, "develop"

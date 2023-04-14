@@ -3,11 +3,11 @@ module Api
   module V3
     module CountriesComTradeIndicators
       class CommodityCodes
-        DATA_FILE_PATH = 'db/commodity_codes.csv'.freeze
-        COMMODITY_COLUMN = 'parent_commodity'.freeze
-        COM_TRADE_CODES_COLUMN = 'hs6_codes'.freeze
-        EQ_FACTOR_COLUMN = 'eq_factor'.freeze
-        WORLD = 'WORLD'.freeze
+        DATA_FILE_PATH = "db/commodity_codes.csv".freeze
+        COMMODITY_COLUMN = "parent_commodity".freeze
+        COM_TRADE_CODES_COLUMN = "hs6_codes".freeze
+        EQ_FACTOR_COLUMN = "eq_factor".freeze
+        WORLD = "WORLD".freeze
 
         def initialize
           load_data
@@ -43,7 +43,7 @@ module Api
 
             trase_name = row[commodity_column]
             {
-              com_trade_codes: codes_str.sub(/\{/, '').sub(/\}/, '').split(','),
+              com_trade_codes: codes_str.sub(/\{/, "").sub(/\}/, "").split(","),
               trase_name: trase_name,
               trase_id: commodities[trase_name],
               eq_factor: row[eq_factor_column]&.to_f

@@ -1,8 +1,8 @@
-require 'rails_helper'
-require 'services/api/v3/database_validation/checks/shared_check_examples'
+require "rails_helper"
+require "services/api/v3/database_validation/checks/shared_check_examples"
 
 RSpec.describe Api::V3::DatabaseValidation::Checks::PathPositionsMatchContextNodeTypes do
-  include_context 'api v3 node types'
+  include_context "api v3 node types"
 
   let(:context) { FactoryBot.create(:api_v3_context) }
   let!(:context_node_type_1) {
@@ -56,7 +56,7 @@ RSpec.describe Api::V3::DatabaseValidation::Checks::PathPositionsMatchContextNod
   let(:report_status) {
     Api::V3::DatabaseValidation::ErrorsList.new
   }
-  context 'when node types don\'t match positions' do
+  context "when node types don't match positions" do
     let!(:flow) {
       FactoryBot.create(
         :api_v3_flow,
@@ -64,10 +64,10 @@ RSpec.describe Api::V3::DatabaseValidation::Checks::PathPositionsMatchContextNod
         path: [node_4, node_1, node_2, node_3].map(&:id)
       )
     }
-    include_examples 'failing checks'
+    include_examples "failing checks"
   end
 
-  context 'when node types match positions' do
+  context "when node types match positions" do
     let!(:flow) {
       FactoryBot.create(
         :api_v3_flow,
@@ -75,6 +75,6 @@ RSpec.describe Api::V3::DatabaseValidation::Checks::PathPositionsMatchContextNod
         path: [node_1, node_2, node_3, node_4].map(&:id)
       )
     }
-    include_examples 'passing checks'
+    include_examples "passing checks"
   end
 end

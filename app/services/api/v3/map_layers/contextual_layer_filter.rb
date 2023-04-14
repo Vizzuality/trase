@@ -9,13 +9,13 @@ module Api
         def call
           @contextual_layers = Api::V3::ContextualLayer.
             select([
-              'title',
+              "title",
               "#{Api::V3::ContextualLayer.table_name}.identifier",
-              'tooltip_text',
+              "tooltip_text",
               "#{Api::V3::ContextualLayer.table_name}.id",
-              'position',
-              'is_default',
-              'legend'
+              "position",
+              "is_default",
+              "legend"
             ]).
             includes(:carto_layers).
             where(context_id: @context.id).

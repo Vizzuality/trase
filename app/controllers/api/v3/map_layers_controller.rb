@@ -12,9 +12,9 @@ module Api
         ).call
 
         dimension_groups = Api::V3::MapAttributeGroup.
-          select('DISTINCT name, id, position').
+          select("DISTINCT name, id, position").
           where(context_id: @context.id).
-          order('position ASC, id ASC')
+          order("position ASC, id ASC")
 
         dimensions = Api::V3::MapLayers::MapAttributeFilter.new(
           @context, @start_year, @end_year
@@ -24,14 +24,14 @@ module Api
           ActiveModelSerializers::SerializableResource.new(
             contextual_layers,
             each_serializer: Api::V3::MapLayers::ContextualLayerSerializer,
-            root: 'contextualLayers'
+            root: "contextualLayers"
           ).serializable_hash
 
         serialized_layer_groups =
           ActiveModelSerializers::SerializableResource.new(
             dimension_groups,
             each_serializer: Api::V3::MapLayers::DimensionGroupSerializer,
-            root: 'dimensionGroups'
+            root: "dimensionGroups"
           ).serializable_hash
 
         serialized_layers = {

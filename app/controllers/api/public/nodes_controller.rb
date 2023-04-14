@@ -10,7 +10,7 @@ module Api
         @result = Api::Public::Node::Filter.new(filter_params).call
 
         render json: @result,
-               root: 'data',
+               root: "data",
                serializer: Api::Public::Node::NodeSerializer
       end
 

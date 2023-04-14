@@ -1,11 +1,11 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Api::V3::SankeyCardLinks::ResponseBuilder do
-  include_context 'api v3 brazil soy flows'
-  include_context 'api v3 brazil beef nodes'
-  include_context 'api v3 brazil soy flow quals'
-  include_context 'api v3 brazil resize by attributes'
-  include_context 'api v3 brazil beef context node types'
+  include_context "api v3 brazil soy flows"
+  include_context "api v3 brazil beef nodes"
+  include_context "api v3 brazil soy flow quals"
+  include_context "api v3 brazil resize by attributes"
+  include_context "api v3 brazil beef context node types"
 
   before do
     Api::V3::Readonly::FlowNode.refresh(sync: true)
@@ -19,14 +19,14 @@ RSpec.describe Api::V3::SankeyCardLinks::ResponseBuilder do
       @node_type = api_v3_brazil_beef_port_of_export_context_node_type.
         node_type
       @query_params = {
-        'commodities' => api_v3_beef.id,
-        'countries' => api_v3_brazil.id,
-        'selectedResizeBy' => api_v3_volume.readonly_attribute.id,
-        'selectedRecolorBy' => api_v3_biome.readonly_attribute.id,
-        'selectedYears' => [2015, 2017],
-        'selectedBiomeFilterName' => api_v3_biome_node.name,
-        'selectedColumnsIds' => "1_#{@node_type.id}",
-        'selectedNodesIds' => [
+        "commodities" => api_v3_beef.id,
+        "countries" => api_v3_brazil.id,
+        "selectedResizeBy" => api_v3_volume.readonly_attribute.id,
+        "selectedRecolorBy" => api_v3_biome.readonly_attribute.id,
+        "selectedYears" => [2015, 2017],
+        "selectedBiomeFilterName" => api_v3_biome_node.name,
+        "selectedColumnsIds" => "1_#{@node_type.id}",
+        "selectedNodesIds" => [
           api_v3_brazil_beef_country_of_production_node.id,
           api_v3_country_of_destination_node.id
         ]
@@ -41,7 +41,7 @@ RSpec.describe Api::V3::SankeyCardLinks::ResponseBuilder do
       @builder.call
     end
 
-    it 'should return data' do
+    it "should return data" do
       data = @builder.data.first
       expect(data[:id]).to eq(@sankey_card_link.id)
       %w[countries commodities selectedRecolorBy
@@ -52,7 +52,7 @@ RSpec.describe Api::V3::SankeyCardLinks::ResponseBuilder do
       end
     end
 
-    it 'should return meta' do
+    it "should return meta" do
       nodes = @builder.meta[:nodes]
       expect(nodes.map { |n| n[:id] }).to match_array([
         api_v3_brazil_beef_country_of_production_node.id,

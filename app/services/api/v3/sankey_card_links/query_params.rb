@@ -30,13 +30,13 @@ module Api
 
         def node_query_param_wrappers
           {
-            'selectedNodesIds' => ArrayList,
-            'extraColumnNodeId' => SingleElement,
-            'sources' => CommaSeparatedList,
-            'companies' => CommaSeparatedList,
-            'exporters' => CommaSeparatedList,
-            'importers' => CommaSeparatedList,
-            'destinations' => CommaSeparatedList
+            "selectedNodesIds" => ArrayList,
+            "extraColumnNodeId" => SingleElement,
+            "sources" => CommaSeparatedList,
+            "companies" => CommaSeparatedList,
+            "exporters" => CommaSeparatedList,
+            "importers" => CommaSeparatedList,
+            "destinations" => CommaSeparatedList
           }
         end
 
@@ -48,7 +48,7 @@ module Api
 
         def node_type_query_param_wrappers
           {
-            'selectedColumnsIds' => SankeyColumnsList
+            "selectedColumnsIds" => SankeyColumnsList
           }
         end
       end
@@ -122,11 +122,11 @@ module Api
 
           value_to_split =
             if excluded_prefix?
-              value.sub(/^excluded_/, '')
+              value.sub(/^excluded_/, "")
             else
               value
             end
-          value_to_split.split(',').map(&:to_i)
+          value_to_split.split(",").map(&:to_i)
         end
 
         def &(ary)
@@ -138,12 +138,12 @@ module Api
         end
 
         def delete!(ary)
-          joined_value = (to_ary - ary).join(',')
+          joined_value = (to_ary - ary).join(",")
           update_value(joined_value)
         end
 
         def replace!(old_ary, new_ary)
-          joined_value = (to_ary - old_ary + new_ary).join(',')
+          joined_value = (to_ary - old_ary + new_ary).join(",")
           update_value(joined_value)
         end
 
@@ -166,8 +166,8 @@ module Api
           return {} unless value.is_a? String
 
           Hash[
-            value.split('-').map do |column_with_id|
-              column, id = column_with_id.split('_').map(&:to_i)
+            value.split("-").map do |column_with_id|
+              column, id = column_with_id.split("_").map(&:to_i)
             end
           ]
         end
@@ -175,7 +175,7 @@ module Api
         def columns_list(columns_map)
           columns_map.map do |column, id|
             "#{column}_#{id}"
-          end.join('-')
+          end.join("-")
         end
 
         def to_ary

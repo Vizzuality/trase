@@ -20,7 +20,7 @@ module Api
         def call(attribute_ref)
           return @memo[attribute_ref] if @memo.key?(attribute_ref)
 
-          attribute_ref_parts = attribute_ref.split('.').map(&:to_sym)
+          attribute_ref_parts = attribute_ref.split(".").map(&:to_sym)
           source = attribute_ref_parts.shift
           value =
             if source == :wb
@@ -45,8 +45,8 @@ module Api
 
           row = Api::V3::CountriesWbIndicator.
             where(iso2: @iso2, name: attribute[:wb_name]).
-            where('year <= ?', @year).
-            order('year DESC').
+            where("year <= ?", @year).
+            order("year DESC").
             limit(1).
             first
           return nil unless row

@@ -25,14 +25,14 @@ module Api
   module V3
     module Readonly
       class Context < Api::Readonly::BaseModel
-        self.table_name = 'contexts_v'
+        self.table_name = "contexts_v"
 
         belongs_to :country
         has_many :context_node_types
         has_many :node_types, through: :context_node_types
         has_many :flows
-        has_many :readonly_recolor_by_attributes, class_name: 'Readonly::RecolorByAttribute'
-        has_many :readonly_resize_by_attributes, class_name: 'Readonly::ResizeByAttribute'
+        has_many :readonly_recolor_by_attributes, class_name: "Readonly::RecolorByAttribute"
+        has_many :readonly_resize_by_attributes, class_name: "Readonly::ResizeByAttribute"
         has_many :methods_and_data_docs
 
         def biome_nodes

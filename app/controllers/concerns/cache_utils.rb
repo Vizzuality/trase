@@ -17,6 +17,6 @@ module CacheUtils
 
   def set_caching_headers
     return true if Rails.env.development?
-    expires_in 15.minutes, private: true, 's-maxage' => 2.hours
+    expires_in 15.minutes, private: true, "s-maxage" => 2.hours
   end
 end

@@ -5,8 +5,8 @@ module Api
         class ComTradeError < StandardError; end
 
         RG_TO_ACTIVITY = {
-          1 => 'importer',
-          2 => 'exporter'
+          1 => "importer",
+          2 => "exporter"
         }
 
         def initialize(url)
@@ -17,8 +17,8 @@ module Api
         def call
           response = @connection.get(@url)
           data = JSON.parse(response.body)
-          ensure_valid_response(data['validation']) or return
-          data['dataset'].each do |element|
+          ensure_valid_response(data["validation"]) or return
+          data["dataset"].each do |element|
             attributes = parse_attributes(element)
             next unless attributes
 
@@ -40,13 +40,13 @@ module Api
         # Invalid parameter (5004)
         # There's no point retrying, must be fixed first
         def ensure_valid_response(validation)
-          status = validation['status']
-          return true if status['name'] == 'Ok'
+          status = validation["status"]
+          return true if status["name"] == "Ok"
 
           error = ComTradeError.new(
-            validation['message'] + ' (' +
-            status['name'] + ' ' +
-            status['description'] + ')'
+            validation["message"] + " (" +
+            status["name"] + " " +
+            status["description"] + ")"
           )
           Rails.logger.error error
           Appsignal.send_error(error)
@@ -54,7 +54,7 @@ module Api
         end
 
         def parse_attributes(element)
-          commodity_code = element['cmdCode']
+          commodity_code = element["cmdCode"]
           commodity = commodity_codes.lookup_by_com_trade_code(commodity_code)
           unless commodity
             error = ComTradeError.new(
@@ -66,8 +66,8 @@ module Api
             return nil
           end
 
-          iso3 = element['rt3ISO']
-          return nil if iso3.blank? || iso3 == 'WLD' # ignore, e.g. country groupings
+          iso3 = element["rt3ISO"]
+          return nil if iso3.blank? || iso3 == "WLD" # ignore, e.g. country groupings
 
           country = country_codes.lookup_by_iso3(iso3)
           unless country
@@ -80,18 +80,18 @@ module Api
             return nil
           end
 
-          raw_quantity = element['TradeQuantity']
+          raw_quantity = element["TradeQuantity"]
           eq_factor = commodity[:eq_factor] || 1
           quantity = raw_quantity && raw_quantity * eq_factor
-          activity = RG_TO_ACTIVITY[element['rgCode']]
+          activity = RG_TO_ACTIVITY[element["rgCode"]]
           return nil if activity.nil? # ignore, e.g. re-export / re-import
 
           {
             raw_quantity: raw_quantity,
             quantity: quantity,
-            value: element['TradeValue'],
+            value: element["TradeValue"],
             commodity_id: commodity[:trase_id],
-            year: element['yr'],
+            year: element["yr"],
             iso3: iso3,
             iso2: country[:iso2],
             commodity_code: commodity_code,

@@ -25,7 +25,7 @@ module Api
         class Country < Api::Readonly::BaseModel
           include Api::V3::Readonly::MaterialisedTable
 
-          self.table_name = 'dashboards_countries'
+          self.table_name = "dashboards_countries"
           belongs_to :country
 
           INDEXES = [

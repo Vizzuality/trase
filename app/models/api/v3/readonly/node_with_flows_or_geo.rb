@@ -27,7 +27,7 @@ module Api
       class NodeWithFlowsOrGeo < Api::Readonly::BaseModel
         include Api::V3::Readonly::MaterialisedTable
 
-        self.table_name = 'nodes_with_flows_or_geo'
+        self.table_name = "nodes_with_flows_or_geo"
 
         INDEXES = [
           {columns: :context_id},

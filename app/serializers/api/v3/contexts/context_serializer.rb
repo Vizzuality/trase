@@ -54,20 +54,20 @@ module Api
             geo_id: object.country.iso2,
             annotation_position_x_pos: object.country.annotation_position_x_pos,
             annotation_position_y_pos: object.country.annotation_position_y_pos,
-            country_column_id: object['node_types_by_name'][NodeTypeName::COUNTRY_OF_DESTINATION] ||
-              object['node_types_by_name'][NodeTypeName::COUNTRY_OF_IMPORT] ||
-              object['node_types_by_name'][NodeTypeName::COUNTRY],
-            exporter_column_id: object['node_types_by_name'][NodeTypeName::EXPORTER]
+            country_column_id: object["node_types_by_name"][NodeTypeName::COUNTRY_OF_DESTINATION] ||
+              object["node_types_by_name"][NodeTypeName::COUNTRY_OF_IMPORT] ||
+              object["node_types_by_name"][NodeTypeName::COUNTRY],
+            exporter_column_id: object["node_types_by_name"][NodeTypeName::EXPORTER]
           }
         end
 
         attribute :default_columns do
-          object['node_types'].map do |node_type_props|
-            next unless node_type_props['is_default']
+          object["node_types"].map do |node_type_props|
+            next unless node_type_props["is_default"]
 
             {
-              id: node_type_props['node_type_id'],
-              group: node_type_props['column_group']
+              id: node_type_props["node_type_id"],
+              group: node_type_props["column_group"]
             }
           end.compact
         end

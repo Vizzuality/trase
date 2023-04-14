@@ -4,13 +4,13 @@
 module Api
   module V3
     class MapAttributesExport
-      EXPORT_DIR = 'tmp/export'.freeze
-      S3_PREFIX = 'SITE_CONTENT'.freeze
+      EXPORT_DIR = "tmp/export".freeze
+      S3_PREFIX = "SITE_CONTENT".freeze
 
       def initialize
         @carto_name = "map_attributes_values_#{Rails.env.downcase}"
-        @local_filename = EXPORT_DIR + '/' + @carto_name + '.csv.gz'
-        @s3_filename = S3_PREFIX + '/' + Rails.env.upcase + '/' + @carto_name + '.csv.gz'
+        @local_filename = EXPORT_DIR + "/" + @carto_name + ".csv.gz"
+        @s3_filename = S3_PREFIX + "/" + Rails.env.upcase + "/" + @carto_name + ".csv.gz"
       end
 
       def call
@@ -26,14 +26,14 @@ module Api
         FileUtils.mkdir_p(EXPORT_DIR) unless dir_exists?
         csv = PgCsv.new(
           type: :gzip,
-          sql: 'SELECT * FROM map_attributes_values_v',
+          sql: "SELECT * FROM map_attributes_values_v",
           header: true,
-          delimiter: ',',
-          encoding: 'UTF8',
+          delimiter: ",",
+          encoding: "UTF8",
           logger: Rails.logger
         )
         csv.export(@local_filename)
-        Rails.logger.debug 'Map attributes values file generated'
+        Rails.logger.debug "Map attributes values file generated"
       end
 
       def column_definitions

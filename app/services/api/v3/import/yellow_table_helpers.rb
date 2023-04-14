@@ -18,7 +18,7 @@ module Api
           end
 
           def full_backup_table
-            'bkp_' + table_name
+            "bkp_" + table_name
           end
 
           def yellow_foreign_keys

@@ -25,9 +25,9 @@
 module Api
   module V3
     class Profile < YellowTable
-      ACTOR = 'actor'.freeze
-      PLACE = 'place'.freeze
-      COUNTRY = 'country'.freeze
+      ACTOR = "actor".freeze
+      PLACE = "place".freeze
+      COUNTRY = "country".freeze
 
       NAMES = [ACTOR, PLACE, COUNTRY].freeze
 
@@ -50,7 +50,7 @@ module Api
         Api::V3::Profile.includes(
           context_node_type: [{context: [:country, :commodity]}, :node_type]
         ).order(
-          'countries.name, commodities.name, node_types.name'
+          "countries.name, commodities.name, node_types.name"
         ).all.map do |profile|
           context_node_type = profile&.context_node_type
           [
@@ -59,7 +59,7 @@ module Api
               context_node_type&.context&.commodity&.name,
               context_node_type&.node_type&.name,
               profile.name
-            ].join(' / '),
+            ].join(" / "),
             profile.id
           ]
         end

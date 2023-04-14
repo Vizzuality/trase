@@ -22,7 +22,7 @@ module Api
         zero_based_idx = ContextNodeType.
           joins(:node_type).
           where(context_id: context.id).
-          where('node_types.name' => node_type_name).
+          where("node_types.name" => node_type_name).
           pluck(:column_position).first
         zero_based_idx && zero_based_idx + 1 || 0
       end
@@ -41,7 +41,7 @@ module Api
 
       def self.import_key
         [
-          {name: :name, sql_type: 'TEXT'}
+          {name: :name, sql_type: "TEXT"}
         ]
       end
     end

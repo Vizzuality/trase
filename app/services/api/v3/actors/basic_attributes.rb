@@ -18,21 +18,21 @@ module Api
           @year = year
           @node_type_name = @node.node_type
           # Assumption: Volume is a special quant which always exists
-          @volume_attribute = Dictionary::Quant.instance.get('Volume')
+          @volume_attribute = Dictionary::Quant.instance.get("Volume")
           unless @volume_attribute.present?
-            raise ActiveRecord::RecordNotFound.new 'Quant Volume not found'
+            raise ActiveRecord::RecordNotFound.new "Quant Volume not found"
           end
 
           @values = Api::V3::NodeAttributeValuesPreloader.new(@node, @year)
           initialize_chart_config(:actor, nil, :actor_basic_attributes)
-          @source_node_type = @chart_config.named_node_type('source')
+          @source_node_type = @chart_config.named_node_type("source")
           unless @source_node_type
             raise ActiveRecord::RecordNotFound.new(
               'Chart node type "source" not found'
             )
           end
 
-          @destination_node_type = @chart_config.named_node_type('destination')
+          @destination_node_type = @chart_config.named_node_type("destination")
           # rubocop:disable Style/GuardClause
           unless @destination_node_type
             raise ActiveRecord::RecordNotFound.new(
@@ -100,7 +100,7 @@ module Api
           )
           attribute_value = @values.get(attribute.simple_type, attribute.id)
           year = attribute_value.year
-          tooltip_text = name_and_tooltip.tooltip_text || ''
+          tooltip_text = name_and_tooltip.tooltip_text || ""
           tooltip_text += "(#{year})" if year && year != @year
           {
             value: attribute_value.value,
@@ -151,13 +151,13 @@ module Api
           # accounting for 66% of the total.
 
           initialize_trade_volume_for_summary
-          text = summary_of_total_trade_volume('exporter')
+          text = summary_of_total_trade_volume("exporter")
           return text if @trade_total_current_year_raw.zero?
 
           initialize_sources_for_summary
           initialize_destinations_for_summary
-          text += summary_of_sources('exporter')
-          text += summary_of_destinations('exporter')
+          text += summary_of_sources("exporter")
+          text += summary_of_destinations("exporter")
           text
         end
 
@@ -176,13 +176,13 @@ module Api
           # accounting for 66% of the total.
 
           initialize_trade_volume_for_summary
-          text = summary_of_total_trade_volume('importer')
+          text = summary_of_total_trade_volume("importer")
           return text if @trade_total_current_year_raw.zero?
 
           initialize_sources_for_summary
           initialize_destinations_for_summary
-          text += summary_of_sources('importer')
-          text += summary_of_destinations('importer')
+          text += summary_of_sources("importer")
+          text += summary_of_destinations("importer")
           text
         end
 
@@ -208,21 +208,21 @@ largest #{profile_type} of #{@commodity_name} from \
                                 helper.number_to_percentage(
                                   @trade_total_perc_difference * 100,
                                   precision: 0
-                                ) + '</span> increase vs'
+                                ) + "</span> increase vs"
                             elsif @trade_total_perc_difference.negative?
                               'a <span class="notranslate">' +
                                 helper.number_to_percentage(
                                   -@trade_total_perc_difference * 100,
                                   precision: 0
-                                ) + '</span> decrease vs'
+                                ) + "</span> decrease vs"
                             else
-                              'no change from'
+                              "no change from"
                             end
           text + " This is #{difference_from} the previous year."
         end
 
         def summary_of_sources(profile_type)
-          return '' unless @context.is_subnational
+          return "" unless @context.is_subnational
 
           source_node_name_plural = @source_node_type.name.downcase.pluralize
 
@@ -243,7 +243,7 @@ of the #{@commodity_name} production #{source_node_name_plural}."
 accounting for \
 <span class=\"notranslate\">#{@perc_exports_formatted}</span> of the total."
           else
-            ''
+            ""
           end
         end
 
@@ -258,36 +258,36 @@ accounting for \
           trade_flows_current_year = @flow_stats.flow_values(
             @year, @volume_attribute
           )
-          @trade_total_current_year = trade_flows_current_year.sum('value')
+          @trade_total_current_year = trade_flows_current_year.sum("value")
           if @trade_total_current_year < 1000
             trade_total_current_year_value = @trade_total_current_year
-            trade_total_current_year_unit = 'tons'
+            trade_total_current_year_unit = "tons"
             trade_total_current_year_precision = 0
           elsif @trade_total_current_year < 1_000_000
             trade_total_current_year_value = (
               @trade_total_current_year / 1000
             )
-            trade_total_current_year_unit = 'thousand tons'
+            trade_total_current_year_unit = "thousand tons"
             trade_total_current_year_precision = 0
           else
             trade_total_current_year_value = (
               @trade_total_current_year / 1_000_000
             )
-            trade_total_current_year_unit = 'million tons'
+            trade_total_current_year_unit = "million tons"
             trade_total_current_year_precision = 1
           end
 
           @trade_total_current_year_raw = trade_total_current_year_value
           @trade_total_current_year_formatted = helper.number_with_precision(
             trade_total_current_year_value,
-            delimiter: ',', precision: trade_total_current_year_precision
-          ) + ' ' + trade_total_current_year_unit
+            delimiter: ",", precision: trade_total_current_year_precision
+          ) + " " + trade_total_current_year_unit
         end
 
         def initialize_trade_total_difference
           trade_flows_previous_year = @flow_stats.
             flow_values(@year - 1, @volume_attribute)
-          @trade_total_previous_year = trade_flows_previous_year.sum('value')
+          @trade_total_previous_year = trade_flows_previous_year.sum("value")
           if @trade_total_previous_year.present? &&
               @trade_total_previous_year.positive?
             @trade_total_perc_difference = (
@@ -305,7 +305,7 @@ accounting for \
           end
 
           @trade_total_rank_in_country_formatted = trade_total_rank_in_country.
-            ordinalize + ' '
+            ordinalize + " "
         end
 
         def initialize_sources_for_summary
@@ -323,7 +323,7 @@ accounting for \
             precision: 0
           )
           @source_nodes_count_formatted = helper.number_with_precision(
-            source_nodes_count, delimiter: ',', precision: 0
+            source_nodes_count, delimiter: ",", precision: 0
           )
         end
 
@@ -331,7 +331,7 @@ accounting for \
           return unless @main_destination.present?
 
           @main_destination_name = @main_destination.name
-          main_destination_exports = @main_destination['value']
+          main_destination_exports = @main_destination["value"]
           return unless main_destination_exports && @trade_total_current_year &&
             @trade_total_current_year.positive?
 

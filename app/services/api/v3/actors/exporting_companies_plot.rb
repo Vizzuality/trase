@@ -13,15 +13,15 @@ module Api
           @node = node
           @year = year
           # Assumption: Volume is a special quant which always exists
-          @volume_attribute = Dictionary::Quant.instance.get('Volume')
+          @volume_attribute = Dictionary::Quant.instance.get("Volume")
           unless @volume_attribute.present?
-            raise ActiveRecord::RecordNotFound.new 'Quant Volume not found'
+            raise ActiveRecord::RecordNotFound.new "Quant Volume not found"
           end
 
           initialize_chart_config(:actor, nil, :actor_exporting_companies)
           # rubocop:disable Style/GuardClause
           unless @chart_config.attributes.any?
-            raise ActiveRecord::RecordNotFound.new 'No attributes found'
+            raise ActiveRecord::RecordNotFound.new "No attributes found"
           end
           # rubocop:enable Style/GuardClause
         end
@@ -43,8 +43,8 @@ module Api
         def generate_response(production_totals, attributes_totals)
           unit = @volume_attribute.unit
           value_divisor = 1
-          if unit.casecmp('tn').zero?
-            unit = 'kt'
+          if unit.casecmp("tn").zero?
+            unit = "kt"
             value_divisor = 1000
           end
           values_map =
@@ -56,9 +56,9 @@ module Api
         def initialize_production_values(production_totals, value_divisor)
           tmp_array = production_totals.map do |total|
             element = {
-              name: total['name'],
-              id: total['node_id'],
-              y: total['value'].to_f / value_divisor,
+              name: total["name"],
+              id: total["node_id"],
+              y: total["value"].to_f / value_divisor,
               # this will be populated with values of chart attributes
               x: Array.new(@chart_config.attributes.length)
             }
@@ -70,10 +70,10 @@ module Api
         def populate_attribute_values(attributes_totals, values_map)
           attributes_totals.each.with_index do |attribute_totals, idx|
             attribute_totals.each do |total|
-              node_id = total['node_id']
+              node_id = total["node_id"]
               next unless values_map.key?(node_id)
 
-              values_map[node_id][:x][idx] = total['value']
+              values_map[node_id][:x][idx] = total["value"]
             end
           end
           values_map
@@ -81,7 +81,7 @@ module Api
 
         def format_response(values_map, unit)
           {
-            dimension_y: {name: 'Trade Volume', unit: unit},
+            dimension_y: {name: "Trade Volume", unit: unit},
             dimensions_x: @chart_config.chart_attributes.
               map do |chart_attribute|
                 {name: chart_attribute.display_name, unit: chart_attribute.unit}

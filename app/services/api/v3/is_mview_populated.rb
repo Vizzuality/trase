@@ -9,7 +9,7 @@ module Api
 
       def call
         return false unless @result.any?
-        @result[0]['relispopulated']
+        @result[0]["relispopulated"]
       end
 
       private
@@ -18,7 +18,7 @@ module Api
         BaseModel.send(
           :sanitize_sql_array,
           [
-            'SELECT relispopulated FROM pg_class WHERE relname = ?',
+            "SELECT relispopulated FROM pg_class WHERE relname = ?",
             @mview
           ]
         )

@@ -58,7 +58,7 @@ module Api
         # @param identifier [Symbol] chart identifier
         def initialize_chart(profile_type, parent_identifier, identifier)
           profile = @context.profiles.where(
-            'context_node_types.node_type_id' => @node.node_type_id,
+            "context_node_types.node_type_id" => @node.node_type_id,
             name: profile_type
           ).first
           unless profile
@@ -71,7 +71,7 @@ module Api
           charts =
             if parent_identifier.present?
               charts.includes(:parent).
-                where('parents_charts.identifier' => parent_identifier)
+                where("parents_charts.identifier" => parent_identifier)
             else
               charts.where(parent_id: nil)
             end

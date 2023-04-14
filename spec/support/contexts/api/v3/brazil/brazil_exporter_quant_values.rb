@@ -1,6 +1,6 @@
-shared_context 'api v3 brazil exporter quant values' do
-  include_context 'api v3 quants'
-  include_context 'api v3 brazil soy nodes'
+shared_context "api v3 brazil exporter quant values" do
+  include_context "api v3 quants"
+  include_context "api v3 brazil soy nodes"
 
   let!(:api_v3_exporter_soy_tn_value) do
     Api::V3::NodeQuant.where(

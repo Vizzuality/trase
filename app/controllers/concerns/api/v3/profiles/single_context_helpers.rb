@@ -16,7 +16,7 @@ module Api
           return if @node.present?
 
           raise ActiveRecord::RecordNotFound.new(
-            'Node not found for given parameters'
+            "Node not found for given parameters"
           )
         end
 

@@ -19,7 +19,7 @@
 module Content
   class StaffMember < Content::Base
     belongs_to :staff_group
-    has_attached_file :image, styles: {small: '260x260>'}
+    has_attached_file :image, styles: {small: "260x260>"}
 
     validates :staff_group, presence: true
     validates :name, presence: true

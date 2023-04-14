@@ -1,6 +1,6 @@
 namespace :db do
   namespace :country_profiles do
-    desc 'Clear & populate country profiles configuration'
+    desc "Clear & populate country profiles configuration"
     task clear_and_populate: :environment do
       without_chart_callbacks do
         delete_profiles
@@ -14,7 +14,7 @@ namespace :db do
       Api::V3::Readonly::ChartAttribute.refresh(sync: false, skip_dependencies: true)
     end
 
-    desc 'Populate country profiles configuration'
+    desc "Populate country profiles configuration"
     task populate: :environment do
       without_chart_callbacks do
         delete_charts_in_wrong_running_order
@@ -50,8 +50,8 @@ namespace :db do
         joins(profile: :context_node_type).
         where(
           parent_id: nil,
-          'profiles.name' => Api::V3::Profile::COUNTRY,
-          'context_node_types.node_type_id' => country_of_export_node_type.id
+          "profiles.name" => Api::V3::Profile::COUNTRY,
+          "context_node_types.node_type_id" => country_of_export_node_type.id
         )
       to_delete = charts.select { |chart| chart.position != EXPORTERS_RUNNING_ORDER[chart.identifier.to_sym] }
       to_delete.each(&:delete)
@@ -60,8 +60,8 @@ namespace :db do
         joins(profile: :context_node_type).
         where(
           parent_id: nil,
-          'profiles.name' => Api::V3::Profile::COUNTRY,
-          'context_node_types.node_type_id' => country_of_import_node_type.id
+          "profiles.name" => Api::V3::Profile::COUNTRY,
+          "context_node_types.node_type_id" => country_of_import_node_type.id
         )
       to_delete = charts.select { |chart| chart.position != IMPORTERS_RUNNING_ORDER[chart.identifier.to_sym] }
       to_delete.each(&:delete)
@@ -99,35 +99,35 @@ namespace :db do
 
     def populate_basic_attributes(profile)
       country_chart = find_or_create_chart(
-        profile, nil, :country_basic_attributes, 0, 'Basic attributes'
+        profile, nil, :country_basic_attributes, 0, "Basic attributes"
       )
       find_or_create_chart_ind(
         country_chart,
-        'HDI',
-        {identifier: 'hdi'}
+        "HDI",
+        {identifier: "hdi"}
       )
       if profile.context_node_type.node_type_id == country_of_import_node_type.id
         find_or_create_chart_quant(
           country_chart,
-          'AGRICULTURAL_IMPORTS', # TODO
-          {identifier: 'agricultural_imports'}
+          "AGRICULTURAL_IMPORTS", # TODO
+          {identifier: "agricultural_imports"}
         )
       else
         find_or_create_chart_quant(
           country_chart,
-          'AGRICULTURAL_EXPORT_VALUE',
-          {identifier: 'agricultural_exports'}
+          "AGRICULTURAL_EXPORT_VALUE",
+          {identifier: "agricultural_exports"}
         )
       end
       find_or_create_chart_qual(
         country_chart,
-        'NYDF_ENDORSER',
-        {identifier: 'nydf'}
+        "NYDF_ENDORSER",
+        {identifier: "nydf"}
       )
       find_or_create_chart_qual(
         country_chart,
-        'ADP_SIGNATORY',
-        {identifier: 'amsterdam'}
+        "ADP_SIGNATORY",
+        {identifier: "amsterdam"}
       )
     end
 
@@ -135,7 +135,7 @@ namespace :db do
       identifier = :country_commodity_exports
       position = EXPORTERS_RUNNING_ORDER[identifier]
       find_or_create_chart(
-        profile, nil, identifier, position, 'Top exports in {{year}}'
+        profile, nil, identifier, position, "Top exports in {{year}}"
       )
     end
 
@@ -143,14 +143,14 @@ namespace :db do
       identifier = :country_commodity_imports
       position = IMPORTERS_RUNNING_ORDER[identifier]
       find_or_create_chart(
-        profile, nil, identifier, position, 'Top imports in {{year}}'
+        profile, nil, identifier, position, "Top imports in {{year}}"
       )
     end
 
     def populate_deforestation_trajectory(profile)
       identifier = :country_trajectory_deforestation
       position = EXPORTERS_RUNNING_ORDER[identifier]
-      title = 'Deforestation trajectory of {{country_name}}'
+      title = "Deforestation trajectory of {{country_name}}"
       country_chart = find_or_create_chart(
         profile, nil, identifier, position, title
       )
@@ -174,8 +174,8 @@ namespace :db do
         {
           position: position + 1,
           legend_name: "Production of #{commodity_name}",
-          display_type: 'line',
-          display_style: 'line-dashed-black'
+          display_type: "line",
+          display_style: "line-dashed-black"
         }
       )
     end
@@ -183,7 +183,7 @@ namespace :db do
     def populate_import_trajectory(profile)
       identifier = :country_trajectory_import
       position = IMPORTERS_RUNNING_ORDER[identifier]
-      title = 'Import trajectory of {{country_name}}'
+      title = "Import trajectory of {{country_name}}"
       find_or_create_chart(
         profile, nil, identifier, position, title
       )
@@ -192,55 +192,55 @@ namespace :db do
     def populate_exporter_top_traders(profile)
       identifier = :country_top_consumer_actors
       position = EXPORTERS_RUNNING_ORDER[identifier]
-      title = 'Top import traders of {{commodity_name}} in {{country_name}} in {{year}}'
+      title = "Top import traders of {{commodity_name}} in {{country_name}} in {{year}}"
       top_traders_chart = find_or_create_chart(
         profile, nil, identifier, position, title
       )
       find_or_create_chart_node_type(
-        top_traders_chart, exporter_node_type, 'trader'
+        top_traders_chart, exporter_node_type, "trader"
       )
     end
 
     def populate_exporter_top_countries(profile)
       identifier = :country_top_consumer_countries
       position = EXPORTERS_RUNNING_ORDER[identifier]
-      title = 'Top import countries of {{commodity_name}} from {{country_name}} in {{year}}'
+      title = "Top import countries of {{commodity_name}} from {{country_name}} in {{year}}"
       top_countries_chart = find_or_create_chart(
         profile, nil, identifier, position, title
       )
       find_or_create_chart_node_type(
-        top_countries_chart, country_of_import_node_type, 'destination'
+        top_countries_chart, country_of_import_node_type, "destination"
       )
     end
 
     def populate_importer_top_traders(profile)
       identifier = :country_top_consumer_actors
       position = IMPORTERS_RUNNING_ORDER[identifier]
-      title = 'Top export traders of {{commodity_name}} in {{country_name}} in {{year}}'
+      title = "Top export traders of {{commodity_name}} in {{country_name}} in {{year}}"
       top_traders_chart = find_or_create_chart(
         profile, nil, identifier, position, title
       )
       find_or_create_chart_node_type(
-        top_traders_chart, exporter_node_type, 'trader'
+        top_traders_chart, exporter_node_type, "trader"
       )
     end
 
     def populate_importer_top_countries(profile)
       identifier = :country_top_consumer_countries
       position = IMPORTERS_RUNNING_ORDER[identifier]
-      title = 'Top export countries of {{commodity_name}} to {{country_name}} in {{year}}'
+      title = "Top export countries of {{commodity_name}} to {{country_name}} in {{year}}"
       top_countries_chart = find_or_create_chart(
         profile, nil, identifier, position, title
       )
       find_or_create_chart_node_type(
-        top_countries_chart, country_of_export_node_type, 'source'
+        top_countries_chart, country_of_export_node_type, "source"
       )
     end
 
     def populate_sustainability_indicators(profile)
       identifier = :country_indicators
       position = EXPORTERS_RUNNING_ORDER[identifier]
-      title = 'Sustainability indicators in {{year}}'
+      title = "Sustainability indicators in {{year}}"
       parent_country_chart = find_or_create_chart(
         profile, nil, identifier, position, title
       )
@@ -274,19 +274,19 @@ namespace :db do
         target_chart_attribute ||= Api::V3::ChartAttribute.create(
           source_chart_attribute.
             attributes.
-            except('id', 'created_at', 'updated_at').
+            except("id", "created_at", "updated_at").
             merge(chart_id: target_chart.id)
         )
 
         source_assoc_attr = source_chart_attribute.original_chart_attribute
-        name = source_assoc_attr.class.name.split('::').last.underscore
+        name = source_assoc_attr.class.name.split("::").last.underscore
         target_assoc_attr = target_chart_attribute.send(name)
         next if target_assoc_attr.present?
 
         source_assoc_attr.class.create(
           source_assoc_attr.
             attributes.
-            except('id', 'created_at', 'updated_at').
+            except("id", "created_at", "updated_at").
             merge(chart_attribute_id: target_chart_attribute.id)
         )
       end
@@ -397,7 +397,7 @@ namespace :db do
         joins(context_node_type: :context).
         find_by(
           name: Api::V3::Profile::PLACE,
-          'contexts.country_id' => country_id
+          "contexts.country_id" => country_id
         )
       return nil unless place_profile
 

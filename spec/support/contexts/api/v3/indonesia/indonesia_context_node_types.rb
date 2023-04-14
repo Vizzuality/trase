@@ -1,6 +1,6 @@
-shared_context 'api v3 indonesia context node types' do
-  include_context 'api v3 indonesia context'
-  include_context 'api v3 indonesia node types'
+shared_context "api v3 indonesia context node types" do
+  include_context "api v3 indonesia context"
+  include_context "api v3 indonesia node types"
 
   let!(:api_v3_indonesia_country_of_production_context_node_type) do
     cnt = Api::V3::ContextNodeType.where(
@@ -18,7 +18,7 @@ shared_context 'api v3 indonesia context node types' do
         :api_v3_context_node_type_property,
         context_node_type: cnt,
         column_group: 0,
-        role: 'source',
+        role: "source",
         is_geo_column: true
       )
     end
@@ -41,7 +41,7 @@ shared_context 'api v3 indonesia context node types' do
         :api_v3_context_node_type_property,
         context_node_type: cnt,
         column_group: 0,
-        role: 'source',
+        role: "source",
         is_geo_column: true,
         is_default: true
       )
@@ -65,7 +65,7 @@ shared_context 'api v3 indonesia context node types' do
         :api_v3_context_node_type_property,
         context_node_type: cnt,
         column_group: 0,
-        role: 'source',
+        role: "source",
         is_geo_column: true
       )
     end
@@ -88,7 +88,7 @@ shared_context 'api v3 indonesia context node types' do
         :api_v3_context_node_type_property,
         context_node_type: cnt,
         column_group: 1,
-        role: 'exporter'
+        role: "exporter"
       )
     end
     cnt
@@ -110,7 +110,7 @@ shared_context 'api v3 indonesia context node types' do
         :api_v3_context_node_type_property,
         context_node_type: cnt,
         column_group: 1,
-        role: 'exporter',
+        role: "exporter",
         is_default: true
       )
     end
@@ -133,7 +133,7 @@ shared_context 'api v3 indonesia context node types' do
         :api_v3_context_node_type_property,
         context_node_type: cnt,
         column_group: 2,
-        role: 'importer',
+        role: "importer",
         is_default: true
       )
     end
@@ -156,7 +156,7 @@ shared_context 'api v3 indonesia context node types' do
         :api_v3_context_node_type_property,
         context_node_type: cnt,
         column_group: 3,
-        role: 'destination'
+        role: "destination"
       )
     end
     cnt
@@ -178,7 +178,7 @@ shared_context 'api v3 indonesia context node types' do
         :api_v3_context_node_type_property,
         context_node_type: cnt,
         column_group: 3,
-        role: 'destination',
+        role: "destination",
         is_default: true
       )
     end

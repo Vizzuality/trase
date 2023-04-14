@@ -4,7 +4,7 @@ module Api
       class SourceSerializer < ActiveModel::Serializer
         attributes :id, :name
         attribute :node_type do
-          object['node_type']
+          object["node_type"]
         end
       end
     end

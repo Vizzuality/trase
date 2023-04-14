@@ -44,7 +44,7 @@ module Api
       has_many :nodes_stats
 
       has_one :readonly_context,
-              class_name: 'Api::V3::Readonly::Context',
+              class_name: "Api::V3::Readonly::Context",
               foreign_key: :id
 
       delegate :is_default, to: :context_property
@@ -52,24 +52,24 @@ module Api
       delegate :is_highlighted, to: :context_property
       delegate :is_subnational, to: :context_property
       delegate :default_basemap, to: :context_property
-      delegate :name, prefix: 'commodity', to: :commodity
-      delegate :name, prefix: 'country', to: :country
+      delegate :name, prefix: "commodity", to: :commodity
+      delegate :name, prefix: "country", to: :country
 
       validates :country, presence: true
       validates :commodity, presence: true, uniqueness: {scope: :country}
 
       def self.select_options
         Api::V3::Context.includes(:country, :commodity).order(
-          'countries.name, commodities.name'
+          "countries.name, commodities.name"
         ).all.map do |ctx|
-          [[ctx.country&.name, ctx.commodity&.name].join(' / '), ctx.id]
+          [[ctx.country&.name, ctx.commodity&.name].join(" / "), ctx.id]
         end
       end
 
       def self.import_key
         [
-          {name: :country_id, sql_type: 'INT'},
-          {name: :commodity_id, sql_type: 'INT'}
+          {name: :country_id, sql_type: "INT"},
+          {name: :commodity_id, sql_type: "INT"}
         ]
       end
 

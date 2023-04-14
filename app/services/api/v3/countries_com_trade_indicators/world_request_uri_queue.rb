@@ -2,12 +2,12 @@ module Api
   module V3
     module CountriesComTradeIndicators
       class WorldRequestUriQueue
-        API_URL = 'https://comtrade.un.org/api/get'.freeze
+        API_URL = "https://comtrade.un.org/api/get".freeze
 
-        COMMODITY_CODES_PARAMETER = 'cc'.freeze
-        YEAR_PARAMETER = 'ps'.freeze
-        REPORTER_PARAMETER = 'r'.freeze
-        TRADE_REGIME_PARAMETER = 'rg'.freeze
+        COMMODITY_CODES_PARAMETER = "cc".freeze
+        YEAR_PARAMETER = "ps".freeze
+        REPORTER_PARAMETER = "r".freeze
+        TRADE_REGIME_PARAMETER = "rg".freeze
         PARAMETER_LIMITS = {
           COMMODITY_CODES_PARAMETER => 20,
           YEAR_PARAMETER => 5,
@@ -19,7 +19,7 @@ module Api
           parameters = {
             COMMODITY_CODES_PARAMETER => commodity_codes,
             YEAR_PARAMETER => years,
-            TRADE_REGIME_PARAMETER => ['1', '2'] # imports & exports
+            TRADE_REGIME_PARAMETER => ["1", "2"] # imports & exports
           }
           @request_queue = initialize_request_queue(parameters)
         end
@@ -30,12 +30,12 @@ module Api
 
         def fixed_params
           {
-            type: 'C', # Commodities (merchandise trade data)
-            freq: 'A', # Annual
-            px: 'HS', # HS Harmonized System (HS), as reported
-            r: 'all', # reporter
+            type: "C", # Commodities (merchandise trade data)
+            freq: "A", # Annual
+            px: "HS", # HS Harmonized System (HS), as reported
+            r: "all", # reporter
             p: 0, # partner area World
-            fmt: 'json'
+            fmt: "json"
           }
         end
 
@@ -49,7 +49,7 @@ module Api
           formatted_parameters = format_parameters(parameters, parameter_constraints)
 
           formatted_parameters.map do |params|
-            URI(API_URL + '?' + fixed_params.merge(params).to_query)
+            URI(API_URL + "?" + fixed_params.merge(params).to_query)
           end
         end
 
@@ -88,7 +88,7 @@ module Api
           # raise an exception in case the optimisation was not possible
           if estimated > RESULTSET_LIMIT
             error = ComTradeError.new(
-              'Impossible to parametrise request without exceeding maximum resultset size. ' +
+              "Impossible to parametrise request without exceeding maximum resultset size. " +
               "Estimated #{estimated} results with the following parameter list constraints:" +
               parameter_constraints.inspect
             )
@@ -103,7 +103,7 @@ module Api
             new_formatted_parameters = []
             formatted_parameters.each do |params|
               values_list.each_slice(parameter_constraints[param][:size]) do |slice|
-                new_formatted_parameters << params.merge(param => slice.join(','))
+                new_formatted_parameters << params.merge(param => slice.join(","))
               end
             end
             formatted_parameters = new_formatted_parameters

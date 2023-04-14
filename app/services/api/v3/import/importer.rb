@@ -10,7 +10,7 @@ module Api
           @database_update = database_update
           @source_schema = source_schema
           @stats = Api::V3::Import::Stats.new(database_update.stats)
-          @stats.update_key('elapsed_seconds', {})
+          @stats.update_key("elapsed_seconds", {})
         end
 
         def call

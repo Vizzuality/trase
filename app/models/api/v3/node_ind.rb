@@ -27,8 +27,8 @@ module Api
 
       def self.import_key
         [
-          {name: :node_id, sql_type: 'INT'},
-          {name: :ind_id, sql_type: 'INT'}
+          {name: :node_id, sql_type: "INT"},
+          {name: :ind_id, sql_type: "INT"}
         ]
       end
 

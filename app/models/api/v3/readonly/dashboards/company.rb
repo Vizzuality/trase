@@ -32,7 +32,7 @@ module Api
         class Company < Api::Readonly::BaseModel
           include Api::V3::Readonly::MaterialisedTable
 
-          self.table_name = 'dashboards_companies'
+          self.table_name = "dashboards_companies"
           belongs_to :node
 
           INDEXES = [

@@ -30,13 +30,13 @@ module Api
   module V3
     module Readonly
       class Attribute < Api::Readonly::BaseModel
-        self.table_name = 'attributes'
+        self.table_name = "attributes"
 
         has_many :cont_attribute_sankey_card_links,
-                 class_name: 'Api::V3::SankeyCardLink',
+                 class_name: "Api::V3::SankeyCardLink",
                  inverse_of: :cont_attribute
         has_many :ncont_attribute_sankey_card_links,
-                 class_name: 'Api::V3::SankeyCardLink',
+                 class_name: "Api::V3::SankeyCardLink",
                  inverse_of: :ncont_attribute
 
         delegate :values_meta, to: :original_attribute
@@ -82,7 +82,7 @@ module Api
           protected
 
           def upsert_attributes
-            connection.execute('SELECT upsert_attributes()')
+            connection.execute("SELECT upsert_attributes()")
           end
         end
 
@@ -93,7 +93,7 @@ module Api
         def node_values_meta_per_context(context)
           return unless values_meta.present?
 
-          values_meta.node_values.dig('context', context.id.to_s)
+          values_meta.node_values.dig("context", context.id.to_s)
         end
 
         # Used in dashbooards to determine whether values are present in flows
@@ -117,15 +117,15 @@ module Api
         end
 
         def ind?
-          original_type == 'Ind'
+          original_type == "Ind"
         end
 
         def qual?
-          original_type == 'Qual'
+          original_type == "Qual"
         end
 
         def quant?
-          original_type == 'Quant'
+          original_type == "Quant"
         end
 
         def aggregatable?
@@ -134,15 +134,15 @@ module Api
 
         def temporal?(context)
           meta = node_values_meta_per_context(context)
-          meta['years'].any?
+          meta["years"].any?
         end
 
         # overrides aggregate_method
         def value_aggregate_method
           if quant?
-            'SUM'
+            "SUM"
           elsif ind?
-            'AVG'
+            "AVG"
           end
         end
       end

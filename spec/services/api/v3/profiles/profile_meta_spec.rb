@@ -1,8 +1,8 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Api::V3::Profiles::ProfileMeta do
-  include_context 'api v3 brazil exporter actor profile'
-  include_context 'api v3 brazil soy flow quants'
+  include_context "api v3 brazil exporter actor profile"
+  include_context "api v3 brazil soy flow quants"
 
   before(:each) do
     Api::V3::Readonly::FlowNode.refresh(sync: true)
@@ -23,8 +23,8 @@ RSpec.describe Api::V3::Profiles::ProfileMeta do
     )
   end
 
-  describe 'activities' do
-    it 'includes BUNGE importer' do
+  describe "activities" do
+    it "includes BUNGE importer" do
       expect(profile_meta.activities).to include(
         {
           id: bunge_importer.id,

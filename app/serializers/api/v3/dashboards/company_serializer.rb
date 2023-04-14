@@ -4,7 +4,7 @@ module Api
       class CompanySerializer < ActiveModel::Serializer
         attributes :id, :name, :country_id
         attribute :node_type do
-          object['node_type']
+          object["node_type"]
         end
       end
     end

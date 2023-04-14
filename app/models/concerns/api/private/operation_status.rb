@@ -1,14 +1,14 @@
-require 'active_support/concern'
+require "active_support/concern"
 
 module Api
   module Private
     module OperationStatus
       extend ActiveSupport::Concern
 
-      QUEUED = 'QUEUED'.freeze
-      STARTED = 'STARTED'.freeze
-      FINISHED = 'FINISHED'.freeze
-      FAILED = 'FAILED'.freeze
+      QUEUED = "QUEUED".freeze
+      STARTED = "STARTED".freeze
+      FINISHED = "FINISHED".freeze
+      FAILED = "FAILED".freeze
 
       included do
         scope :queued, -> { where(status: QUEUED) }

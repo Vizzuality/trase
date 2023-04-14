@@ -1,45 +1,45 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Admin::ResizeByAttributesController, type: :controller do
   let(:user) { FactoryBot.create(:user) }
   before { sign_in user }
   let(:context) { FactoryBot.create(:api_v3_context) }
 
-  describe 'POST create' do
+  describe "POST create" do
     let(:valid_attributes) {
       FactoryBot.attributes_for(:api_v3_resize_by_attribute)
     }
-    it 'clears cache' do
+    it "clears cache" do
       expect(controller).to receive(:clear_cache_for_regexp)
       post :create, params: {
         context_id: context.id, api_v3_resize_by_attribute: valid_attributes
       }
     end
-    it 'redirects to index' do
+    it "redirects to index" do
       post :create, params: {
         context_id: context.id, api_v3_resize_by_attribute: valid_attributes
       }
       expect(response).to redirect_to(admin_context_resize_by_attributes_path(context))
     end
-    context 'managing download attribute' do
-      it 'is_downloadable = true' do
-        expect_any_instance_of(Api::V3::ManageDownloadAttribute).to receive(:call).with('true', 'AAA')
+    context "managing download attribute" do
+      it "is_downloadable = true" do
+        expect_any_instance_of(Api::V3::ManageDownloadAttribute).to receive(:call).with("true", "AAA")
         post :create, params: {
           context_id: context.id,
-          api_v3_resize_by_attribute: valid_attributes.merge(is_downloadable: 'true', download_name: 'AAA')
+          api_v3_resize_by_attribute: valid_attributes.merge(is_downloadable: "true", download_name: "AAA")
         }
       end
-      it 'is_downloadable = false' do
-        expect_any_instance_of(Api::V3::ManageDownloadAttribute).to receive(:call).with('false', nil)
+      it "is_downloadable = false" do
+        expect_any_instance_of(Api::V3::ManageDownloadAttribute).to receive(:call).with("false", nil)
         post :create, params: {
           context_id: context.id,
-          api_v3_resize_by_attribute: valid_attributes.merge(is_downloadable: 'false')
+          api_v3_resize_by_attribute: valid_attributes.merge(is_downloadable: "false")
         }
       end
     end
   end
 
-  describe 'PUT update' do
+  describe "PUT update" do
     let(:resize_by_attribute) {
       FactoryBot.create(:api_v3_resize_by_attribute, context: context)
     }
@@ -51,33 +51,33 @@ RSpec.describe Admin::ResizeByAttributesController, type: :controller do
     let(:valid_attributes) {
       FactoryBot.attributes_for(:api_v3_resize_by_attribute)
     }
-    it 'clears cache' do
+    it "clears cache" do
       expect(controller).to receive(:clear_cache_for_regexp)
       put :update, params: {
         context_id: context.id, id: resize_by_attribute.id, api_v3_resize_by_attribute: valid_attributes
       }
     end
-    it 'redirects to index' do
+    it "redirects to index" do
       put :update, params: {
         context_id: context.id, id: resize_by_attribute.id, api_v3_resize_by_attribute: valid_attributes
       }
       expect(response).to redirect_to(admin_context_resize_by_attributes_path(context))
     end
-    context 'managing download attribute' do
-      it 'is_downloadable = true' do
-        expect_any_instance_of(Api::V3::ManageDownloadAttribute).to receive(:call).with('true', 'AAA')
+    context "managing download attribute" do
+      it "is_downloadable = true" do
+        expect_any_instance_of(Api::V3::ManageDownloadAttribute).to receive(:call).with("true", "AAA")
         put :update, params: {
           context_id: context.id,
           id: resize_by_attribute.id,
-          api_v3_resize_by_attribute: valid_attributes.merge(is_downloadable: 'true', download_name: 'AAA')
+          api_v3_resize_by_attribute: valid_attributes.merge(is_downloadable: "true", download_name: "AAA")
         }
       end
-      it 'is_downloadable = false' do
-        expect_any_instance_of(Api::V3::ManageDownloadAttribute).to receive(:call).with('false', nil)
+      it "is_downloadable = false" do
+        expect_any_instance_of(Api::V3::ManageDownloadAttribute).to receive(:call).with("false", nil)
         put :update, params: {
           context_id: context.id,
           id: resize_by_attribute.id,
-          api_v3_resize_by_attribute: valid_attributes.merge(is_downloadable: 'false')
+          api_v3_resize_by_attribute: valid_attributes.merge(is_downloadable: "false")
         }
       end
     end

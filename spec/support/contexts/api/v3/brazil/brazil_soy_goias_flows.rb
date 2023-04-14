@@ -1,8 +1,8 @@
-shared_context 'api v3 brazil soy goias flows' do
-  include_context 'api v3 quants'
+shared_context "api v3 brazil soy goias flows" do
+  include_context "api v3 quants"
 
   let!(:api_v3_municipality_goias) {
-    name = 'GOIAS'
+    name = "GOIAS"
     node = Api::V3::Node.find_by(
       name: name, node_type_id: api_v3_municipality_node_type.id
     )
@@ -11,7 +11,7 @@ shared_context 'api v3 brazil soy goias flows' do
         :api_v3_node,
         name: name,
         node_type: api_v3_municipality_node_type,
-        geo_id: 'BR-5208905'
+        geo_id: "BR-5208905"
       )
       FactoryBot.create(
         :api_v3_node_property,
@@ -22,7 +22,7 @@ shared_context 'api v3 brazil soy goias flows' do
   }
 
   let!(:api_v3_municipality_abadia_de_goias) {
-    name = 'ABADIA DE GOIAS'
+    name = "ABADIA DE GOIAS"
     node = Api::V3::Node.find_by(
       name: name, node_type_id: api_v3_municipality_node_type.id
     )
@@ -31,7 +31,7 @@ shared_context 'api v3 brazil soy goias flows' do
         :api_v3_node,
         name: name,
         node_type: api_v3_municipality_node_type,
-        geo_id: 'BR-5200050'
+        geo_id: "BR-5200050"
       )
       FactoryBot.create(
         :api_v3_node_property,

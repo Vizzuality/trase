@@ -1,5 +1,5 @@
-shared_context 'api v3 paraguay flows' do
-  include_context 'api v3 paraguay soy nodes'
+shared_context "api v3 paraguay flows" do
+  include_context "api v3 paraguay soy nodes"
 
   let!(:api_v3_paraguay_flow) do
     FactoryBot.create(

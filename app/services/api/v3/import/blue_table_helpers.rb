@@ -8,11 +8,11 @@ module Api
 
         module ClassMethods
           def local_table
-            ENV['TRASE_LOCAL_SCHEMA'] + '.' + table_name
+            ENV["TRASE_LOCAL_SCHEMA"] + "." + table_name
           end
 
           def source_table(source_schema)
-            source_schema + '.' + table_name
+            source_schema + "." + table_name
           end
 
           def key_backup(source_schema)
@@ -40,21 +40,21 @@ module Api
               CREATE TEMPORARY TABLE #{key_backup_table} AS
               SELECT source.id AS new_id, local.id
               FROM #{local_table} local
-              #{joins&.join(' ')}
+              #{joins&.join(" ")}
               JOIN #{source_table(source_schema)} source
-              ON #{source_join_condition.join(' AND ')}
+              ON #{source_join_condition.join(" AND ")}
             SQL
             connection.execute query
           end
 
           def key_backup_table
-            'bkp_key_' + table_name
+            "bkp_key_" + table_name
           end
 
           def ids_map
             query = "SELECT id, new_id FROM #{key_backup_table}"
             result = connection.execute query
-            Hash[result.map { |r| [r['id'], r['new_id']] }]
+            Hash[result.map { |r| [r["id"], r["new_id"]] }]
           end
         end
       end

@@ -1,6 +1,6 @@
-shared_context 'api v3 brazil soy context' do
-  include_context 'api v3 brazil country'
-  include_context 'api v3 commodities'
+shared_context "api v3 brazil soy context" do
+  include_context "api v3 brazil country"
+  include_context "api v3 commodities"
 
   let!(:api_v3_brazil_soy_context) do
     Api::V3::Context.where(

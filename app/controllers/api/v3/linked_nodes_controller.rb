@@ -10,7 +10,7 @@ module Api
           @context, params[:nodes_ids], params[:target_column_id].to_i, params[:years]
         ).result
 
-        render json: result, root: 'nodes',
+        render json: result, root: "nodes",
                each_serializer: Api::V3::LinkedNodeSerializer
       end
     end

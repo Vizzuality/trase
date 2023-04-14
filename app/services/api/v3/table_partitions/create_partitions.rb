@@ -26,17 +26,17 @@ module Api
         def drop_indexes
           indexes.each do |index_properties|
             columns = index_properties[:columns]
-            execute 'DROP INDEX IF EXISTS ' + index_name(columns)
+            execute "DROP INDEX IF EXISTS " + index_name(columns)
           end
         end
 
         def create_indexes
           indexes.each do |index_properties|
             columns = index_properties[:columns]
-            unique = index_properties[:unique] ? 'UNIQUE' : ''
+            unique = index_properties[:unique] ? "UNIQUE" : ""
             execute <<~SQL
               CREATE #{unique} INDEX IF NOT EXISTS #{index_name(columns)}
-              ON #{@table_name} (#{columns_to_string(columns, ',')})
+              ON #{@table_name} (#{columns_to_string(columns, ",")})
             SQL
           end
         end
@@ -77,7 +77,7 @@ module Api
           SQL
           result = execute(sql)
           result.each do |row|
-            execute "DROP TABLE #{row['table_name']}"
+            execute "DROP TABLE #{row["table_name"]}"
           end
         end
 
@@ -116,8 +116,8 @@ module Api
 
         def index_name(columns)
           index_name = "#{@table_name}_"
-          index_name << columns_to_string(columns, '_')
-          index_name << '_idx'
+          index_name << columns_to_string(columns, "_")
+          index_name << "_idx"
           index_name
         end
 

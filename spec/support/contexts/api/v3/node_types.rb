@@ -1,4 +1,4 @@
-shared_context 'api v3 node types' do
+shared_context "api v3 node types" do
   let(:api_v3_country_of_production_node_type) do
     Api::V3::NodeType.find_by_name(NodeTypeName::COUNTRY_OF_PRODUCTION) ||
       FactoryBot.create(:api_v3_node_type, name: NodeTypeName::COUNTRY_OF_PRODUCTION)

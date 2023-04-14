@@ -19,9 +19,9 @@ module Api
           @node_type_name = @node.node_type
           quant_dictionary = Dictionary::Quant.instance
           # Assumption: Volume is a special quant which always exists
-          @volume_attribute = quant_dictionary.get('Volume')
+          @volume_attribute = quant_dictionary.get("Volume")
           unless @volume_attribute.present?
-            raise ActiveRecord::RecordNotFound.new 'Quant Volume not found'
+            raise ActiveRecord::RecordNotFound.new "Quant Volume not found"
           end
 
           @values = Api::V3::NodeAttributeValuesPreloader.new(@node, @year)
@@ -74,7 +74,7 @@ module Api
               identifier: :place_top_consumer_countries
             )
           @destination_node_type = top_countries_chart_config.
-            named_node_type('destination')
+            named_node_type("destination")
           unless @destination_node_type
             raise ActiveRecord::RecordNotFound.new(
               'Chart node type "destination" not found (top countries)'
@@ -89,7 +89,7 @@ module Api
             identifier: :place_top_consumer_actors
           )
           @trader_node_type = top_traders_chart_config.
-            named_node_type('trader')
+            named_node_type("trader")
           # rubocop:disable Style/GuardClause
           unless @trader_node_type
             raise ActiveRecord::RecordNotFound.new(
@@ -104,7 +104,7 @@ module Api
           @ancestor_chart_node_types = @chart_config.chart.
             chart_node_types.
             includes(:node_type).
-            where(identifier: 'ancestor').
+            where(identifier: "ancestor").
             order(:position)
           @ancestor_chart_node_types.each do |chart_node_type|
             node_type = chart_node_type.node_type
@@ -142,8 +142,8 @@ module Api
 
         def initialize_commodity_production
           @commodity_name =
-            if @context.commodity.name == 'WOOD PULP'
-              'pulpwood'
+            if @context.commodity.name == "WOOD PULP"
+              "pulpwood"
             else
               @context.commodity.name.downcase
             end
@@ -156,7 +156,7 @@ module Api
           return unless @commodity_production
 
           @commodity_production_formatted = helper.number_with_precision(
-            @commodity_production, delimiter: ',', precision: 0
+            @commodity_production, delimiter: ",", precision: 0
           )
         end
 
@@ -171,9 +171,9 @@ module Api
 
           @commodity_area_formatted = helper.number_with_precision(
             @commodity_production / @commodity_yield,
-            delimiter: ',', precision: 0
+            delimiter: ",", precision: 0
           )
-          @commodity_area_unit = 'ha' # soy prod in Tn, soy yield in Tn/Ha
+          @commodity_area_unit = "ha" # soy prod in Tn, soy yield in Tn/Ha
         end
 
         def initialize_commodity_attributes
@@ -182,20 +182,20 @@ module Api
           initialize_pasture_area
           if @pasture_area
             commodity_attributes[:header_attributes][:pasture_area] =
-              header_attributes('pasture_area')
+              header_attributes("pasture_area")
           end
           initialize_area
           if @area
             commodity_attributes[:area] = @area
             commodity_attributes[:header_attributes][:area] =
-              header_attributes('area')
+              header_attributes("area")
           end
 
           initialize_commodity_production
           if @commodity_production
             commodity_attributes[:commodity_production] = @commodity_production
             commodity_attributes[:header_attributes][:commodity_production] =
-              header_attributes('commodity_production')
+              header_attributes("commodity_production")
           end
 
           initialize_commodity_yield
@@ -207,7 +207,7 @@ module Api
           commodity_attributes[:header_attributes][:commodity_area] = {
             value: @commodity_area_formatted,
             name: "#{@commodity_name} land",
-            unit: 'ha',
+            unit: "ha",
             tooltip: "Area of land used to grow #{@commodity_name}"
           }
 
@@ -263,7 +263,7 @@ module Api
         end
 
         def summary_of_production
-          return '' unless @commodity_production
+          return "" unless @commodity_production
 
           if @commodity_production.zero?
             return "<span class=\"notranslate\">#{@node_name}</span> \
@@ -289,7 +289,7 @@ did not produce any #{@commodity_name} in \
 
         # rubocop:disable Metrics/AbcSize
         def summary_of_production_ranking
-          return '' unless @commodity_production_attribute
+          return "" unless @commodity_production_attribute
 
           total_commodity_production = Api::V3::NodeQuant.
             for_context(@context.id).
@@ -300,7 +300,7 @@ did not produce any #{@commodity_name} in \
             if @commodity_production && total_commodity_production.positive?
               helper.number_to_percentage(
                 (@commodity_production / total_commodity_production) * 100,
-                delimiter: ',', precision: 2
+                delimiter: ",", precision: 2
               )
             end
           country_ranking = CountryRanking.new(@context, @node, @year).
@@ -322,8 +322,8 @@ did not produce any #{@commodity_name} in \
           end
 
           text =
-            if percentage_total_production == '0.00%'
-              ' With less than 0.01% '
+            if percentage_total_production == "0.00%"
+              " With less than 0.01% "
             else
               " With #{percentage_total_production} "
             end
@@ -340,17 +340,17 @@ production#{state_ranking_text}."
         def summary_of_top_exporter_and_top_consumer
           top_exporter = @top_exporters.first
           if top_exporter.present?
-            top_exporter_name = top_exporter['name']&.upcase
+            top_exporter_name = top_exporter["name"]&.upcase
             if @total_exports.present?
               percentage_total_exports = helper.number_to_percentage(
                 ((top_exporter[:value] || 0) / @total_exports) * 100,
-                delimiter: ',', precision: 1
+                delimiter: ",", precision: 1
               )
             end
           end
 
           top_consumer = @top_consumers.first
-          top_consumer_name = top_consumer['name']&.upcase if top_consumer
+          top_consumer_name = top_consumer["name"]&.upcase if top_consumer
 
           if top_exporter && percentage_total_exports && top_consumer
             " The largest exporter of #{@commodity_name} in \
@@ -360,7 +360,7 @@ production#{state_ranking_text}."
 the total exports, and the main destination was \
 <span class=\"notranslate\">#{top_consumer_name}</span>."
           else
-            ''
+            ""
           end
         end
 

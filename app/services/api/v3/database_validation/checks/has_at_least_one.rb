@@ -28,10 +28,10 @@ module Api
 
           def error
             message = [
-              'At least one',
+              "At least one",
               @association.to_s.singularize,
-              'should be present'
-            ].join(' ')
+              "should be present"
+            ].join(" ")
             super.merge(
               message: message
             )

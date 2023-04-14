@@ -66,7 +66,7 @@ module Api
           @chart_config.chart_attributes.map.with_index do |chart_attribute, idx|
             attribute = @chart_config.attributes[idx]
             data = fetch_values_for_attribute(chart_attribute, attribute)
-            Hash[data.map { |element| [element['year'], element] }]
+            Hash[data.map { |element| [element["year"], element] }]
           end
         end
 
@@ -115,7 +115,7 @@ module Api
         def inject_missing_values(values, years)
           years.map do |year|
             values_of_year = values[year]
-            values_of_year['value'] unless values_of_year.blank?
+            values_of_year["value"] unless values_of_year.blank?
           end
         end
       end

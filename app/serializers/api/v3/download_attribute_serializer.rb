@@ -11,7 +11,7 @@ module Api
       end
 
       def filter_options
-        return qual_filter_options if object.original_type == 'Qual'
+        return qual_filter_options if object.original_type == "Qual"
 
         quant_filter_options
       end

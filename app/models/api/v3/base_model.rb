@@ -7,9 +7,9 @@ module Api
       class << self
         def column_comment(column_name)
           tmp = column_comments.find do |cc|
-            cc['name'] == column_name
+            cc["name"] == column_name
           end
-          tmp && tmp['comment']
+          tmp && tmp["comment"]
         end
 
         private
@@ -17,7 +17,7 @@ module Api
         def all_column_comments
           unless defined?(@@all_comments)
             data = load_from_file
-            @@all_comments = data && data['tables']
+            @@all_comments = data && data["tables"]
           end
           @@all_comments
         end
@@ -25,9 +25,9 @@ module Api
         def column_comments
           unless @comments
             tmp = all_column_comments.find do |cc|
-              cc['name'] == table_name
+              cc["name"] == table_name
             end
-            @comments = tmp && tmp['columns']
+            @comments = tmp && tmp["columns"]
           end
           @comments
         end

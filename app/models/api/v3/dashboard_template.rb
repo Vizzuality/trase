@@ -32,7 +32,7 @@ module Api
       has_many :sources, through: :dashboard_template_sources, source: :node
       has_many :sources_mv, through: :dashboard_template_sources, source: :readonly_dashboards_source
 
-      has_attached_file :image, styles: {small: '320x320>', large: '640x640>'}
+      has_attached_file :image, styles: {small: "320x320>", large: "640x640>"}
       validates_attachment_content_type :image, content_type: /\Aimage\/.*\z/
     end
   end

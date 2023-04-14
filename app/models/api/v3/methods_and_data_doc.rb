@@ -26,7 +26,7 @@ module Api
       validates :context, presence: true, uniqueness: {scope: :language}
       validates :version, presence: true
       validates :language, presence: true, inclusion: I18nData.languages.keys
-      validates :url, presence: true, format: {with: URI::DEFAULT_PARSER.make_regexp(['http', 'https'])}
+      validates :url, presence: true, format: {with: URI::DEFAULT_PARSER.make_regexp(["http", "https"])}
 
       before_validation { fixup }
 

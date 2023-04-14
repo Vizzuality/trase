@@ -1,6 +1,6 @@
-shared_context 'api v3 brazil context node types' do
-  include_context 'api v3 brazil soy context'
-  include_context 'api v3 node types'
+shared_context "api v3 brazil context node types" do
+  include_context "api v3 brazil soy context"
+  include_context "api v3 node types"
 
   let!(:api_v3_biome_context_node) do
     cnt = Api::V3::ContextNodeType.where(
@@ -18,7 +18,7 @@ shared_context 'api v3 brazil context node types' do
         context_node_type: cnt,
         is_geo_column: true,
         column_group: 0,
-        role: 'source'
+        role: "source"
       )
     end
     cnt
@@ -39,7 +39,7 @@ shared_context 'api v3 brazil context node types' do
         context_node_type: cnt,
         is_geo_column: true,
         column_group: 0,
-        role: 'source'
+        role: "source"
       )
     end
     cnt
@@ -60,7 +60,7 @@ shared_context 'api v3 brazil context node types' do
         context_node_type: cnt,
         column_group: 0,
         is_geo_column: true,
-        role: 'source',
+        role: "source",
         is_default: true
       )
     end
@@ -82,7 +82,7 @@ shared_context 'api v3 brazil context node types' do
         context_node_type: cnt,
         column_group: 0,
         is_geo_column: true,
-        role: 'source'
+        role: "source"
       )
     end
     cnt
@@ -103,7 +103,7 @@ shared_context 'api v3 brazil context node types' do
         context_node_type: cnt,
         column_group: 1,
         is_geo_column: false,
-        role: 'exporter'
+        role: "exporter"
       )
     end
     cnt
@@ -124,7 +124,7 @@ shared_context 'api v3 brazil context node types' do
         context_node_type: cnt,
         column_group: 1,
         is_geo_column: false,
-        role: 'exporter'
+        role: "exporter"
       )
     end
     cnt
@@ -145,7 +145,7 @@ shared_context 'api v3 brazil context node types' do
         context_node_type: cnt,
         column_group: 2,
         is_geo_column: false,
-        role: 'importer'
+        role: "importer"
       )
     end
     cnt
@@ -166,7 +166,7 @@ shared_context 'api v3 brazil context node types' do
         context_node_type: cnt,
         column_group: 3,
         is_geo_column: false,
-        role: 'destination'
+        role: "destination"
       )
     end
     cnt

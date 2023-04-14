@@ -1,6 +1,6 @@
 namespace :dashboards do
   namespace :attributes do
-    desc 'Reloads dashboards attributes tables'
+    desc "Reloads dashboards attributes tables"
     task reload: :environment do
       Api::V3::RefreshDependencies.instance.classes_with_dependents.each do |class_with_dependents|
         class_with_dependents.skip_callback(:create, :after, :refresh_dependents_after_create)
@@ -33,13 +33,13 @@ namespace :dashboards do
 
       attr_idx = 0
       %w(ind qual quant).each do |attribute_type|
-        attribute_class = ('Api::V3::' + attribute_type.camelize).constantize
+        attribute_class = ("Api::V3::" + attribute_type.camelize).constantize
         properties["#{attribute_type}s".to_sym].each do |attribute_name|
           attribute = attribute_class.find_by_name(attribute_name)
           next unless attribute
 
           dashboards_attribute = Api::V3::DashboardsAttribute.new(
-            chart_type: 'line', # TODO: temporary
+            chart_type: "line", # TODO: temporary
             dashboards_attribute_group: group,
             position: attr_idx
           )
@@ -61,7 +61,7 @@ namespace :dashboards do
     def attribute_groups
       [
         {
-          group: 'Agricultural',
+          group: "Agricultural",
           inds: %w(
             SOY_YIELD_
             COFFEE_YIELD_
@@ -78,7 +78,7 @@ namespace :dashboards do
           )
         },
         {
-          group: 'Environmental',
+          group: "Environmental",
           inds: %w(
             FOREST_500
             PERC_SOY_ZD_COMMITMENT
@@ -100,7 +100,7 @@ namespace :dashboards do
           )
         },
         {
-          group: 'Socio-economic',
+          group: "Socio-economic",
           inds: %w(
             MULTIDIMENSIONAL_POVERTY_INDEX
             PERC_FARM_GDP_
@@ -114,7 +114,7 @@ namespace :dashboards do
           )
         },
         {
-          group: 'Territorial governance',
+          group: "Territorial governance",
           inds: %w(
             SMALLHOLDERS
           ),

@@ -27,7 +27,7 @@ module Api
         attribute_values_rel = send(:"preload_#{original_type}_values")
         attributes_values_hash = Hash[
           attribute_values_rel.map do |attribute_value|
-            [attribute_value['original_id'], AttributeValue.new(attribute_value.value, attribute_value.year)]
+            [attribute_value["original_id"], AttributeValue.new(attribute_value.value, attribute_value.year)]
           end
         ]
 
@@ -36,18 +36,18 @@ module Api
       end
 
       def preload_ind_values
-        @node.node_inds.select(['ind_id AS original_id', :value, :year]).
-          where('year = ? OR year IS NULL', @year)
+        @node.node_inds.select(["ind_id AS original_id", :value, :year]).
+          where("year = ? OR year IS NULL", @year)
       end
 
       def preload_qual_values
-        @node.node_quals.select(['qual_id AS original_id', :value, :year]).
-          where('year = ? OR year IS NULL', @year)
+        @node.node_quals.select(["qual_id AS original_id", :value, :year]).
+          where("year = ? OR year IS NULL", @year)
       end
 
       def preload_quant_values
-        @node.node_quants.select(['quant_id AS original_id', :value, :year]).
-          where('year = ? OR year IS NULL', @year)
+        @node.node_quants.select(["quant_id AS original_id", :value, :year]).
+          where("year = ? OR year IS NULL", @year)
       end
     end
   end

@@ -1,6 +1,6 @@
 module SearchPathHelpers
   def search_path
-    ActiveRecord::Base.connection.execute('SHOW search_path')[0]['search_path']
+    ActiveRecord::Base.connection.execute("SHOW search_path")[0]["search_path"]
   end
 
   def set_search_path(sp)

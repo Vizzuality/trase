@@ -17,9 +17,9 @@ module Api
         private
 
         def write_readme(stream)
-          stream.write_deflated_file('Read Me.pdf') do |writer|
+          stream.write_deflated_file("Read Me.pdf") do |writer|
             IO.copy_stream(
-              File.open("#{Rails.root}/public/Read Me.pdf", 'rb'), writer
+              File.open("#{Rails.root}/public/Read Me.pdf", "rb"), writer
             )
           end
         end

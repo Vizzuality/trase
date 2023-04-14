@@ -33,28 +33,28 @@ module Api
       class NodeWithFlows < Api::Readonly::BaseModel
         include Api::V3::Readonly::MaterialisedTable
 
-        self.table_name = 'nodes_with_flows'
+        self.table_name = "nodes_with_flows"
         belongs_to :node,
-                   class_name: 'Api::V3::Node',
-                   foreign_key: 'id'
+                   class_name: "Api::V3::Node",
+                   foreign_key: "id"
         belongs_to :context,
-                   class_name: 'Api::V3::Context',
-                   foreign_key: 'context_id'
+                   class_name: "Api::V3::Context",
+                   foreign_key: "context_id"
         belongs_to :readonly_context,
-                   class_name: 'Api::V3::Readonly::Context',
-                   foreign_key: 'context_id'
+                   class_name: "Api::V3::Readonly::Context",
+                   foreign_key: "context_id"
         belongs_to :commodity,
-                   class_name: 'Api::V3::Commodity',
-                   foreign_key: 'commodity_id'
+                   class_name: "Api::V3::Commodity",
+                   foreign_key: "commodity_id"
         has_many :node_inds,
-                 class_name: 'Api::V3::NodeInd',
-                 foreign_key: 'node_id'
+                 class_name: "Api::V3::NodeInd",
+                 foreign_key: "node_id"
         has_many :node_quals,
-                 class_name: 'Api::V3::NodeQual',
-                 foreign_key: 'node_id'
+                 class_name: "Api::V3::NodeQual",
+                 foreign_key: "node_id"
         has_many :node_quants,
-                 class_name: 'Api::V3::NodeQuant',
-                 foreign_key: 'node_id'
+                 class_name: "Api::V3::NodeQuant",
+                 foreign_key: "node_id"
 
         scope :with_profile, -> { where(profile: Api::V3::Profile::NAMES) }
         scope :without_unknowns, -> { where(is_unknown: false) }
@@ -73,7 +73,7 @@ module Api
               }
             },
             order_within_rank: sanitize_sql_for_order(
-              [Arel.sql('levenshtein(name, ?), name'), query]
+              [Arel.sql("levenshtein(name, ?), name"), query]
             )
           }
         }

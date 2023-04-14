@@ -114,8 +114,8 @@ module Api
         end
 
         def filter_by_year
-          @query = @query.where('year >= ?', @start_year) if @start_year
-          @query = @query.where('year <= ?', @end_year) if @end_year
+          @query = @query.where("year >= ?", @start_year) if @start_year
+          @query = @query.where("year <= ?", @end_year) if @end_year
         end
       end
     end

@@ -24,7 +24,7 @@ module Api
         def query_all_years(attribute, options)
           query = super(attribute, options)
 
-          query.where('? = path[?]', @node.id, @node_index)
+          query.where("? = path[?]", @node.id, @node_index)
         end
       end
     end

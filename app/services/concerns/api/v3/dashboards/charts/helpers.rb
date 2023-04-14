@@ -14,32 +14,32 @@ module Api
             {
               type: type,
               label: name_and_tooltip.display_name,
-              prefix: '',
-              format: '',
+              prefix: "",
+              format: "",
               suffix: attribute.unit
             }
           end
 
           def year_axis_meta
             {
-              type: 'category', # category || date || number
-              label: 'Year',
-              prefix: '',
-              format: '',
-              suffix: ''
+              type: "category", # category || date || number
+              label: "Year",
+              prefix: "",
+              format: "",
+              suffix: ""
             }
           end
 
           def legend_meta(attribute)
             {
               label: attribute.display_name,
-              tooltip: {prefix: '', format: '', suffix: attribute.unit}
+              tooltip: {prefix: "", format: "", suffix: attribute.unit}
             }
           end
 
           def year_legend_meta
             {
-              label: 'Year', tooltip: {prefix: '', format: '', suffix: ''}
+              label: "Year", tooltip: {prefix: "", format: "", suffix: ""}
             }
           end
 
@@ -48,11 +48,11 @@ module Api
           end
 
           def apply_multi_year_filter
-            @query = @query.where('year BETWEEN ? AND ?', @start_year, @end_year)
+            @query = @query.where("year BETWEEN ? AND ?", @start_year, @end_year)
           end
 
           def apply_year_x
-            @query = @query.select('year AS x').group(:year)
+            @query = @query.select("year AS x").group(:year)
           end
 
           def profile_for_node_type_id(node_type_id)

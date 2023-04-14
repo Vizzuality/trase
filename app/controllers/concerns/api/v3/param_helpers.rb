@@ -6,7 +6,7 @@ module Api
       end
 
       def cs_string_to_int_array(str)
-        str&.split(',')&.map(&:to_i) || []
+        str&.split(",")&.map(&:to_i) || []
       end
     end
   end

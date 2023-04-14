@@ -6,7 +6,7 @@ module Api
       def index
         @contexts = Api::V3::Contexts::Filter.new.call
 
-        render json: @contexts, root: 'data',
+        render json: @contexts, root: "data",
                each_serializer: Api::V3::Contexts::ContextSerializer
       end
     end

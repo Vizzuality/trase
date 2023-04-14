@@ -1,8 +1,8 @@
-shared_context 'staff members' do
+shared_context "staff members" do
   let!(:staff_group_1) do
     FactoryBot.create(
       :staff_group,
-      name: 'Staff Group 1',
+      name: "Staff Group 1",
       position: 1
     )
   end
@@ -10,7 +10,7 @@ shared_context 'staff members' do
     FactoryBot.create(
       :staff_member,
       staff_group: staff_group_1,
-      name: 'Staff Member 1',
+      name: "Staff Member 1",
       position: 1
     )
   end
@@ -18,7 +18,7 @@ shared_context 'staff members' do
     FactoryBot.create(
       :staff_member,
       staff_group: staff_group_1,
-      name: 'Staff Member 2',
+      name: "Staff Member 2",
       position: 2
     )
   end

@@ -1,5 +1,5 @@
-ActiveAdmin.register Content::SiteDive, as: 'Site Dive' do
-  menu parent: 'Content'
+ActiveAdmin.register Content::SiteDive, as: "Site Dive" do
+  menu parent: "Content"
 
   permit_params :title, :page_url, :description
 
@@ -17,7 +17,7 @@ ActiveAdmin.register Content::SiteDive, as: 'Site Dive' do
     inputs do
       input :title, required: true
       input :page_url, required: true
-      input :description, required: true, as: :ckeditor, label: 'Content'
+      input :description, required: true, as: :ckeditor, label: "Content"
     end
     f.actions
   end
@@ -25,10 +25,10 @@ ActiveAdmin.register Content::SiteDive, as: 'Site Dive' do
   show do
     attributes_table do
       row :title
-      row('Content', style: 'word-break: break-all') do |site_dive|
+      row("Content", style: "word-break: break-all") do |site_dive|
         site_dive.description.html_safe
       end
-      row('Site dive link', style: 'word-break: break-all', &:site_dive_url)
+      row("Site dive link", style: "word-break: break-all", &:site_dive_url)
     end
   end
 

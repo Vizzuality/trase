@@ -1,8 +1,8 @@
-ActiveAdmin.register Api::V3::ResizeByAttribute, as: 'ResizeByAttribute' do
+ActiveAdmin.register Api::V3::ResizeByAttribute, as: "ResizeByAttribute" do
   belongs_to :context, parent_class: Api::V3::Context
 
   include ActiveAdmin::SortableTable # creates the controller action which handles the sorting
-  config.sort_order = '' # overriding scoped_collection to sort by 2 columns
+  config.sort_order = "" # overriding scoped_collection to sort by 2 columns
 
   includes [
     {context: [:country, :commodity]},
@@ -19,7 +19,7 @@ ActiveAdmin.register Api::V3::ResizeByAttribute, as: 'ResizeByAttribute' do
 
   controller do
     def clear_cache
-      clear_cache_for_regexp('/api/v3/contexts')
+      clear_cache_for_regexp("/api/v3/contexts")
     end
 
     before_action { @page_title = "#{parent.country.name} #{parent.commodity.name} resize by attributes" }
@@ -51,9 +51,9 @@ ActiveAdmin.register Api::V3::ResizeByAttribute, as: 'ResizeByAttribute' do
     end
 
     def isolate_download_attribute_params
-      ra_params = params['api_v3_resize_by_attribute']
-      @is_downloadable = ra_params.delete('is_downloadable')
-      @download_name = ra_params.delete('download_name')
+      ra_params = params["api_v3_resize_by_attribute"]
+      @is_downloadable = ra_params.delete("is_downloadable")
+      @download_name = ra_params.delete("download_name")
     end
 
     def manage_download_attribute
@@ -70,17 +70,17 @@ ActiveAdmin.register Api::V3::ResizeByAttribute, as: 'ResizeByAttribute' do
     inputs do
       input :readonly_attribute_id, as: :select, collection: Api::V3::Readonly::Attribute.
         select_options,
-                                    label: 'Resize By Property'
+                                    label: "Resize By Property"
       input :group_number, required: true,
-                           hint: object.class.column_comment('group_number')
+                           hint: object.class.column_comment("group_number")
       input :tooltip_text, as: :string,
-                           hint: object.class.column_comment('tooltip_text')
+                           hint: object.class.column_comment("tooltip_text")
       input :is_disabled,
             as: :boolean,
-            hint: object.class.column_comment('is_disabled')
+            hint: object.class.column_comment("is_disabled")
       input :is_default,
             as: :boolean,
-            hint: object.class.column_comment('is_default')
+            hint: object.class.column_comment("is_default")
       input :is_downloadable,
             as: :boolean
       input :download_name
@@ -89,10 +89,10 @@ ActiveAdmin.register Api::V3::ResizeByAttribute, as: 'ResizeByAttribute' do
   end
 
   index do
-    column('Resize By Property', sortable: true, &:readonly_attribute_display_name)
-    column('Group', :group_number) do |ra|
+    column("Resize By Property", sortable: true, &:readonly_attribute_display_name)
+    column("Group", :group_number) do |ra|
       activator_id = "activator_api_v3_resize_by_attribute_#{ra.id}_group_number"
-      div(id: activator_id, class: 'best_in_place_activator', title: 'Click to edit') do
+      div(id: activator_id, class: "best_in_place_activator", title: "Click to edit") do
         best_in_place(
           ra,
           :group_number,
@@ -104,15 +104,15 @@ ActiveAdmin.register Api::V3::ResizeByAttribute, as: 'ResizeByAttribute' do
     end
     column :tooltip_text do |ra|
       activator_id = "activator_api_v3_resize_by_attribute_#{ra.id}_tooltip_text"
-      div(id: activator_id, class: 'best_in_place_activator', title: 'Click to edit') do
+      div(id: activator_id, class: "best_in_place_activator", title: "Click to edit") do
         best_in_place(
           ra,
           :tooltip_text,
           as: :textarea,
           url: admin_context_resize_by_attribute_path(ra.context, ra),
           activator: "##{activator_id}",
-          ok_button: 'Save',
-          cancel_button: 'Cancel'
+          ok_button: "Save",
+          cancel_button: "Cancel"
         )
       end
     end
@@ -131,14 +131,14 @@ ActiveAdmin.register Api::V3::ResizeByAttribute, as: 'ResizeByAttribute' do
   show do
     attributes_table do
       row :readonly_attribute_display_name
-      row('Country') { |property| property.context&.country&.name }
-      row('Commodity') { |property| property.context&.commodity&.name }
-      row('Resize By Property', &:readonly_attribute_display_name)
+      row("Country") { |property| property.context&.country&.name }
+      row("Commodity") { |property| property.context&.commodity&.name }
+      row("Resize By Property", &:readonly_attribute_display_name)
 
       row :group_number
       row :position
       row :tooltip_text
-      row('Years', &:years_str)
+      row("Years", &:years_str)
       row :is_disabled
       row :is_default
       row :is_downloadable

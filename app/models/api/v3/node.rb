@@ -43,7 +43,7 @@ module Api
       has_many :sankey_card_links, through: :sankey_card_link_nodes
 
       def stringify
-        name + ' - ' + node_type.name + ' - ' + node_type&.context_node_types&.first&.context&.country&.name + ' ' + node_type&.context_node_types&.first&.context&.commodity&.name
+        name + " - " + node_type.name + " - " + node_type&.context_node_types&.first&.context&.country&.name + " " + node_type&.context_node_types&.first&.context&.commodity&.name
       end
 
       def self.select_options
@@ -52,9 +52,9 @@ module Api
 
       def self.import_key
         [
-          {name: :name, sql_type: 'TEXT'},
-          {name: :main_id, sql_type: 'INT'},
-          {name: :node_type_id, sql_type: 'INT'}
+          {name: :name, sql_type: "TEXT"},
+          {name: :main_id, sql_type: "INT"},
+          {name: :node_type_id, sql_type: "INT"}
         ]
       end
 

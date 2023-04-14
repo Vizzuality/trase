@@ -25,7 +25,7 @@ module Api
 
           profile_type = Api::V3::Profile::COUNTRY
           chart_identifier = :country_top_consumer_countries
-          node_type_identifier = 'source'
+          node_type_identifier = "source"
           initialize_chart_config(profile_type, nil, chart_identifier)
 
           @top_node_type = @chart_config.named_node_type(node_type_identifier)
@@ -35,9 +35,9 @@ module Api
             )
           end
           # Assumption: Volume is a special quant which always exists
-          @volume_attribute = Dictionary::Quant.instance.get('Volume')
+          @volume_attribute = Dictionary::Quant.instance.get("Volume")
           unless @volume_attribute.present?
-            raise ActiveRecord::RecordNotFound.new 'Quant Volume not found'
+            raise ActiveRecord::RecordNotFound.new "Quant Volume not found"
           end
         end
 
@@ -83,7 +83,7 @@ module Api
               where(
                 iso2: @node.geo_id,
                 year: @year,
-                activity: 'importer',
+                activity: "importer",
                 commodity_id: @commodity.id
               ).
               order(quantity: :desc).
@@ -95,7 +95,7 @@ module Api
           country_nodes = Api::V3::Node.
             joins(:node_type).
             where(
-              'node_types.name' => NodeTypeName.destination_country_names + [NodeTypeName::COUNTRY_OF_PRODUCTION]
+              "node_types.name" => NodeTypeName.destination_country_names + [NodeTypeName::COUNTRY_OF_PRODUCTION]
             )
           country_names_by_iso2 = Hash[
             country_nodes.map { |n| [n.geo_id, n.name] }
@@ -103,12 +103,12 @@ module Api
           result = []
           included_countries = Set.new
           @top_nodes.each do |trase_top_node|
-            included_countries.add(trase_top_node['geo_id'])
+            included_countries.add(trase_top_node["geo_id"])
             result << {
-              node_id: trase_top_node['node_id'],
-              geo_id: trase_top_node['geo_id'],
-              name: trase_top_node['name'],
-              value: trase_top_node['value']
+              node_id: trase_top_node["node_id"],
+              geo_id: trase_top_node["geo_id"],
+              name: trase_top_node["name"],
+              value: trase_top_node["value"]
             }
           end
           @com_trade_top_countries.each do |com_trade_record|

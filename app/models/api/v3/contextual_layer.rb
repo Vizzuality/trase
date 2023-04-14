@@ -44,7 +44,7 @@ module Api
               layer.context&.country&.name,
               layer.context&.commodity&.name,
               layer.title
-            ].join(' / '),
+            ].join(" / "),
             layer.id
           ]
         end

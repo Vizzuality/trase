@@ -1,7 +1,7 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Api::V3::Dashboards::ParametrisedCharts::NodeTypesToBreakBy do
-  include_context 'api v3 node types'
+  include_context "api v3 node types"
 
   let(:context) { FactoryBot.create(:api_v3_context) }
 
@@ -10,7 +10,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::NodeTypesToBreakBy do
       :api_v3_context_node_type, context: context, node_type: api_v3_exporter_node_type
     )
     FactoryBot.create(
-      :api_v3_context_node_type_property, context_node_type: cnt, column_group: 1, role: 'exporter'
+      :api_v3_context_node_type_property, context_node_type: cnt, column_group: 1, role: "exporter"
     )
   }
 
@@ -19,7 +19,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::NodeTypesToBreakBy do
       :api_v3_context_node_type, context: context, node_type: api_v3_country_node_type
     )
     FactoryBot.create(
-      :api_v3_context_node_type_property, context_node_type: cnt, column_group: 3, role: 'destination'
+      :api_v3_context_node_type_property, context_node_type: cnt, column_group: 3, role: "destination"
     )
   }
 
@@ -36,14 +36,14 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::NodeTypesToBreakBy do
     FactoryBot.create(:api_v3_node, node_type: api_v3_country_node_type)
   }
 
-  describe 'selected_node_types' do
-    context 'when subnational context with importer node' do
+  describe "selected_node_types" do
+    context "when subnational context with importer node" do
       let!(:source_node_type) {
         cnt = FactoryBot.create(
           :api_v3_context_node_type, context: context, node_type: api_v3_biome_node_type
         )
         FactoryBot.create(
-          :api_v3_context_node_type_property, context_node_type: cnt, column_group: 0, role: 'source'
+          :api_v3_context_node_type_property, context_node_type: cnt, column_group: 0, role: "source"
         )
       }
       let!(:another_source_node_type) {
@@ -51,7 +51,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::NodeTypesToBreakBy do
           :api_v3_context_node_type, context: context, node_type: api_v3_state_node_type
         )
         FactoryBot.create(
-          :api_v3_context_node_type_property, context_node_type: cnt, column_group: 0, role: 'source'
+          :api_v3_context_node_type_property, context_node_type: cnt, column_group: 0, role: "source"
         )
       }
       let!(:importer_node_type) {
@@ -59,7 +59,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::NodeTypesToBreakBy do
           :api_v3_context_node_type, context: context, node_type: api_v3_importer_node_type
         )
         FactoryBot.create(
-          :api_v3_context_node_type_property, context_node_type: cnt, column_group: 2, role: 'importer'
+          :api_v3_context_node_type_property, context_node_type: cnt, column_group: 2, role: "importer"
         )
       }
 
@@ -69,7 +69,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::NodeTypesToBreakBy do
           [biome_node, exporter_node, importer_node, country_node]
         )
       }
-      it 'returns available node types to break by' do
+      it "returns available node types to break by" do
         expect(node_types_to_break_by.selected_node_types).to match_array([
           api_v3_biome_node_type,
           api_v3_exporter_node_type,
@@ -79,13 +79,13 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::NodeTypesToBreakBy do
       end
     end
 
-    context 'when national context with importer node' do
+    context "when national context with importer node" do
       let!(:importer_node_type) {
         cnt = FactoryBot.create(
           :api_v3_context_node_type, context: context, node_type: api_v3_importer_node_type
         )
         FactoryBot.create(
-          :api_v3_context_node_type_property, context_node_type: cnt, column_group: 2, role: 'importer'
+          :api_v3_context_node_type_property, context_node_type: cnt, column_group: 2, role: "importer"
         )
       }
 
@@ -95,7 +95,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::NodeTypesToBreakBy do
           [exporter_node, importer_node, country_node]
         )
       }
-      it 'returns available node types to break by' do
+      it "returns available node types to break by" do
         expect(node_types_to_break_by.selected_node_types).to match_array([
           api_v3_exporter_node_type,
           api_v3_importer_node_type,
@@ -104,13 +104,13 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::NodeTypesToBreakBy do
       end
     end
 
-    context 'when subnational context without importer node' do
+    context "when subnational context without importer node" do
       let!(:source_node_type) {
         cnt = FactoryBot.create(
           :api_v3_context_node_type, context: context, node_type: api_v3_biome_node_type
         )
         FactoryBot.create(
-          :api_v3_context_node_type_property, context_node_type: cnt, column_group: 0, role: 'source'
+          :api_v3_context_node_type_property, context_node_type: cnt, column_group: 0, role: "source"
         )
       }
       let!(:another_source_node_type) {
@@ -118,7 +118,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::NodeTypesToBreakBy do
           :api_v3_context_node_type, context: context, node_type: api_v3_state_node_type
         )
         FactoryBot.create(
-          :api_v3_context_node_type_property, context_node_type: cnt, column_group: 0, role: 'source'
+          :api_v3_context_node_type_property, context_node_type: cnt, column_group: 0, role: "source"
         )
       }
 
@@ -128,7 +128,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::NodeTypesToBreakBy do
           [biome_node, exporter_node, country_node]
         )
       }
-      it 'returns available node types to break by' do
+      it "returns available node types to break by" do
         expect(node_types_to_break_by.selected_node_types).to match_array([
           api_v3_biome_node_type,
           api_v3_exporter_node_type,
@@ -137,14 +137,14 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::NodeTypesToBreakBy do
       end
     end
 
-    context 'when national context without importer node' do
+    context "when national context without importer node" do
       let(:node_types_to_break_by) {
         Api::V3::Dashboards::ParametrisedCharts::NodeTypesToBreakBy.new(
           context,
           [exporter_node, country_node]
         )
       }
-      it 'returns available node types to break by' do
+      it "returns available node types to break by" do
         expect(node_types_to_break_by.selected_node_types).to match_array([
           api_v3_exporter_node_type,
           api_v3_country_node_type

@@ -1,10 +1,10 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
-  include_context 'api v3 brazil context node types'
-  include_context 'api v3 brazil recolor by attributes'
-  include_context 'api v3 brazil resize by attributes'
-  include_context 'api v3 brazil soy nodes'
+  include_context "api v3 brazil context node types"
+  include_context "api v3 brazil recolor by attributes"
+  include_context "api v3 brazil resize by attributes"
+  include_context "api v3 brazil soy nodes"
 
   before(:each) do
     Api::V3::Readonly::FlowQualDistinctValues.refresh(sync: true, skip_dependents: true)
@@ -48,7 +48,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
       value = chart_type[key] || parameters[key]
       chart_type[key] =
         if value.is_a?(Array)
-          value.join(',')
+          value.join(",")
         else
           value
         end
@@ -62,7 +62,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
     end
   }
 
-  context 'when single year, no non-cont indicator, no flow-path filters' do
+  context "when single year, no non-cont indicator, no flow-path filters" do
     let(:parameters) {
       mandatory_parameters.merge(single_year).merge(no_flow_path_filters).merge(
         ncont_attribute_id: nil
@@ -93,12 +93,12 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
         }
       end
     }
-    it 'returns expected chart types' do
+    it "returns expected chart types" do
       expect(chart_types).to match_array(expected_chart_types)
     end
   end
 
-  context 'when multiple years, no non-cont indicator, no flow path filters' do
+  context "when multiple years, no non-cont indicator, no flow path filters" do
     let(:parameters) {
       mandatory_parameters.merge(multi_year).merge(no_flow_path_filters).merge(
         ncont_attribute_id: nil
@@ -130,12 +130,12 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
         }
       end
     }
-    it 'returns expected chart types' do
+    it "returns expected chart types" do
       expect(chart_types).to match_array(expected_chart_types)
     end
   end
 
-  context 'when single year, non-cont indicator, no flow path filters' do
+  context "when single year, non-cont indicator, no flow path filters" do
     let(:parameters) {
       mandatory_parameters.merge(single_year).merge(no_flow_path_filters).merge(
         ncont_attribute_id: ncont_attribute.id
@@ -167,12 +167,12 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
         }
       end
     }
-    it 'returns expected chart types' do
+    it "returns expected chart types" do
       expect(chart_types).to match_array(expected_chart_types)
     end
   end
 
-  context 'when multiple years, non-cont indicator, no flow path filters' do
+  context "when multiple years, non-cont indicator, no flow path filters" do
     let(:parameters) {
       mandatory_parameters.merge(multi_year).merge(no_flow_path_filters).merge(
         ncont_attribute_id: ncont_attribute.id
@@ -206,13 +206,13 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
       end
     }
 
-    it 'returns expected chart types' do
+    it "returns expected chart types" do
       expect(chart_types).to match_array(expected_chart_types)
     end
   end
 
   # TODO: remove once dashboards_companies_mv retired
-  context 'when multiple years, non-cont indicator, 1 exporter' do
+  context "when multiple years, non-cont indicator, 1 exporter" do
     let(:overview_parameters) {
       mandatory_parameters.merge(multi_year).merge(
         ncont_attribute_id: ncont_attribute.id
@@ -265,12 +265,12 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
       end
     }
 
-    it 'returns expected chart types' do
+    it "returns expected chart types" do
       expect(chart_types).to match_array(expected_chart_types)
     end
   end
 
-  context 'when multiple years, non-cont indicator, 1 exporter' do
+  context "when multiple years, non-cont indicator, 1 exporter" do
     let(:overview_parameters) {
       mandatory_parameters.merge(multi_year).merge(
         ncont_attribute_id: ncont_attribute.id
@@ -323,13 +323,13 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
       end
     }
 
-    it 'returns expected chart types' do
+    it "returns expected chart types" do
       expect(chart_types).to match_array(expected_chart_types)
     end
   end
 
   # TODO: remove once dashboards_companies_mv retired
-  context 'when multiple years, non-cont indicator, 1 exporter, 1 excluded source' do
+  context "when multiple years, non-cont indicator, 1 exporter, 1 excluded source" do
     let(:overview_parameters) {
       mandatory_parameters.merge(multi_year).merge(
         ncont_attribute_id: ncont_attribute.id
@@ -384,12 +384,12 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
       end
     }
 
-    it 'returns expected chart types' do
+    it "returns expected chart types" do
       expect(chart_types).to match_array(expected_chart_types)
     end
   end
 
-  context 'when multiple years, non-cont indicator, 1 exporter, 1 excluded source' do
+  context "when multiple years, non-cont indicator, 1 exporter, 1 excluded source" do
     let(:overview_parameters) {
       mandatory_parameters.merge(multi_year).merge(
         ncont_attribute_id: ncont_attribute.id
@@ -444,13 +444,13 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
       end
     }
 
-    it 'returns expected chart types' do
+    it "returns expected chart types" do
       expect(chart_types).to match_array(expected_chart_types)
     end
   end
 
   # TODO: remove once dashboards_companies_mv retired
-  context 'when multiple years, non-cont indicator, 2 exporters' do
+  context "when multiple years, non-cont indicator, 2 exporters" do
     let(:overview_parameters) {
       mandatory_parameters.merge(multi_year).merge(
         ncont_attribute_id: ncont_attribute.id
@@ -515,12 +515,12 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
       end
     }
 
-    it 'returns expected chart types' do
+    it "returns expected chart types" do
       expect(chart_types).to match_array(expected_chart_types)
     end
   end
 
-  context 'when multiple years, non-cont indicator, 2 exporters' do
+  context "when multiple years, non-cont indicator, 2 exporters" do
     let(:overview_parameters) {
       mandatory_parameters.merge(multi_year).merge(
         ncont_attribute_id: ncont_attribute.id
@@ -585,7 +585,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
       end
     }
 
-    it 'returns expected chart types' do
+    it "returns expected chart types" do
       expect(chart_types).to match_array(expected_chart_types)
     end
   end

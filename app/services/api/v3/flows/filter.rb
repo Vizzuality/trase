@@ -76,36 +76,36 @@ module Api
 
         def initialize_int_set_param(param)
           ary = param || []
-          ary = ary.split(',') if ary.is_a?(String)
+          ary = ary.split(",") if ary.is_a?(String)
           ary.map(&:to_i).to_set # for fast lookups
         end
 
         def initialize_errors
           @errors = []
-          @errors << 'Context not given' unless @context
+          @errors << "Context not given" unless @context
           unless @year_start && @year_end
-            @errors << 'Both start and end date not given'
+            @errors << "Both start and end date not given"
           end
-          @errors << 'Cont attribute not given' unless @cont_attribute
+          @errors << "Cont attribute not given" unless @cont_attribute
           return if @node_types_ids.any?
-          @errors << 'No columns given'
+          @errors << "No columns given"
         end
 
         def initialize_node_types
           @node_types = Api::V3::NodeType.
             select(
               [
-                'node_types.id AS id',
-                'node_types.name AS name',
-                'context_node_types.column_position',
-                'context_node_type_properties.column_group'
+                "node_types.id AS id",
+                "node_types.name AS name",
+                "context_node_types.column_position",
+                "context_node_type_properties.column_group"
               ]
             ).
             joins(context_node_types: :context_node_type_property).
-            where('context_node_types.context_id' => @context.id).
-            where('context_node_type_properties.is_visible').
-            order('context_node_types.column_position ASC')
-          @errors << 'No node types for context' unless @node_types.any?
+            where("context_node_types.context_id" => @context.id).
+            where("context_node_type_properties.is_visible").
+            order("context_node_types.column_position ASC")
+          @errors << "No node types for context" unless @node_types.any?
         end
 
         # columns to be displayed on frontend
@@ -114,7 +114,7 @@ module Api
         # same column group
         def initialize_active_node_types
           @active_node_types = @node_types.select do |c|
-            @node_types_ids.include?(c['id'])
+            @node_types_ids.include?(c["id"])
           end
           # TODO: do not allow to select more than one column from same group
           @active_node_types_positions = @active_node_types.map(&:column_position)
@@ -122,7 +122,7 @@ module Api
 
         def initialize_biome_position
           @biome_position = @biome_id && @node_types.index do |c|
-            c['name'] == NodeTypeName::BIOME
+            c["name"] == NodeTypeName::BIOME
           end + 1
         end
 
@@ -131,12 +131,12 @@ module Api
           # filter out nodes not involved in any flows in this context
           @selected_nodes_ids = @selected_nodes_ids.select do |node_id|
             Api::V3::Flow.
-              select('true').
+              select("true").
               joins(:flow_quants).
-              where('flow_quants.quant_id' => @cont_attribute.original_id).
+              where("flow_quants.quant_id" => @cont_attribute.original_id).
               where(context_id: @context.id). # TODO: verify this
-              where('? = ANY(flows.path)', node_id).
-              where('year >= ? AND year <= ?', @year_start, @year_end).any?
+              where("? = ANY(flows.path)", node_id).
+              where("year >= ? AND year <= ?", @year_start, @year_end).any?
           end
           @selected_nodes = Api::V3::Node.where(
             id: @selected_nodes_ids,
@@ -152,7 +152,7 @@ module Api
 
         def initialize_other_nodes_ids
           @other_nodes_ids = @active_node_types.map do |node_type|
-            Api::V3::Node.where(node_type_id: node_type.id, name: 'OTHER').
+            Api::V3::Node.where(node_type_id: node_type.id, name: "OTHER").
               pluck(:id).first
             # TODO: maybe we could not rely on those nodes in db?
             # problem is the id of those nodes is referenced
@@ -163,12 +163,12 @@ module Api
           # filter out nodes not involved in any flows in this context
           @excluded_nodes_ids = @excluded_nodes_ids.select do |node_id|
             Api::V3::Flow.
-              select('true').
+              select("true").
               joins(:flow_quants).
-              where('flow_quants.quant_id' => @cont_attribute.original_id).
+              where("flow_quants.quant_id" => @cont_attribute.original_id).
               where(context_id: @context.id). # TODO: verify this
-              where('NOT(? = ANY(flows.path))', node_id).
-              where('year >= ? AND year <= ?', @year_start, @year_end).any?
+              where("NOT(? = ANY(flows.path))", node_id).
+              where("year >= ? AND year <= ?", @year_start, @year_end).any?
           end
           @excluded_nodes = Api::V3::Node.where(
             id: @excluded_nodes_ids,
@@ -200,7 +200,7 @@ module Api
           @total_height = active_nodes_by_position.first[1].values.
             reduce(:+)
 
-          @errors << 'No flows found' if @total_height.zero?
+          @errors << "No flows found" if @total_height.zero?
 
           @active_nodes = active_nodes_by_position.values.
             reduce(:merge)
@@ -243,10 +243,10 @@ module Api
           result = {other_node_id => 0}
           other = {id: other_node_id, count: 0}
           flows_through_position.each.with_index do |flow, i|
-            if i < @limit || @locked_nodes_ids.include?(flow['node_id'])
-              result[flow['node_id']] = flow['total']
+            if i < @limit || @locked_nodes_ids.include?(flow["node_id"])
+              result[flow["node_id"]] = flow["total"]
             else
-              result[other_node_id] += flow['total']
+              result[other_node_id] += flow["total"]
               other[:count] += 1
             end
           end
@@ -257,10 +257,10 @@ module Api
           result = {other_node_id => 0}
           other = {id: other_node_id, count: 0}
           flows_through_position.each do |flow|
-            if @selected_nodes_ids.include?(flow['node_id']) || @locked_nodes_ids.include?(flow['node_id'])
-              result[flow['node_id']] = flow['total']
+            if @selected_nodes_ids.include?(flow["node_id"]) || @locked_nodes_ids.include?(flow["node_id"])
+              result[flow["node_id"]] = flow["total"]
             else
-              result[other_node_id] += flow['total']
+              result[other_node_id] += flow["total"]
               other[:count] += 1
             end
           end
@@ -272,16 +272,16 @@ module Api
             :sanitize_sql_array,
             [
               [
-                'year',
-                'flows.path[?] AS node_id',
+                "year",
+                "flows.path[?] AS node_id",
                 "SUM(flow_quants.value::DOUBLE PRECISION) AS total"
-              ].join(', '),
+              ].join(", "),
               position + 1
             ]
           )
           group_clause = ActiveRecord::Base.send(
             :sanitize_sql_array,
-            ['year, flows.path[?]', position + 1]
+            ["year, flows.path[?]", position + 1]
           )
 
           subquery = basic_flows_query.
@@ -311,12 +311,12 @@ module Api
           #   order_by_unknown_clause, 'total DESC'
           # ].compact
 
-          order_clause = ['total DESC']
+          order_clause = ["total DESC"]
 
           Api::V3::Flow.
             from("(#{subquery.to_sql}) s").
             select("node_id, #{@cont_attribute.aggregation_method}(total) AS total").
-            group('node_id').
+            group("node_id").
             order(order_clause)
         end
 
@@ -324,7 +324,7 @@ module Api
           case_expressions, case_substitutions = [], []
           @active_node_types_positions.map.with_index do |position, i|
             case_expressions <<
-              'CASE WHEN flows.path[?] IN (?) THEN flows.path[?] ELSE ? END'
+              "CASE WHEN flows.path[?] IN (?) THEN flows.path[?] ELSE ? END"
             other_node_id = @other_nodes_ids[i]
             nodes_ids = @active_nodes_ids_by_position[position].
               reject { |e| e == other_node_id}
@@ -333,28 +333,28 @@ module Api
             ]
           end
           select_clause_path = ActiveRecord::Base.send(
-            :sanitize_sql_array, ['ARRAY[' + case_expressions.join(', ') + '] AS path', *case_substitutions]
+            :sanitize_sql_array, ["ARRAY[" + case_expressions.join(", ") + "] AS path", *case_substitutions]
           )
           cont_attr_table = @cont_attribute.flow_values_class.table_name
           subquery_select_clause_parts = [
-            'year',
+            "year",
             select_clause_path,
             "SUM(#{cont_attr_table}.value) AS quant_value"
           ]
           query_select_clause_parts = [
-            'path',
+            "path",
             "#{@cont_attribute.aggregation_method}(quant_value) AS quant_value"
           ]
 
           if @ncont_attribute
             subquery_select_clause_parts << select_clause_ncont_attribute
-            query_select_clause_parts += ['ind_value', 'qual_value']
+            query_select_clause_parts += ["ind_value", "qual_value"]
           end
 
           subquery = basic_flows_query.
-            select(subquery_select_clause_parts.join(',')).
+            select(subquery_select_clause_parts.join(",")).
             where("#{cont_attr_table}.value > 0").
-            group('1,2') # year and path
+            group("1,2") # year and path
 
           if @ncont_attribute
             ncont_attr_table = @ncont_attribute.flow_values_class.table_name
@@ -373,9 +373,9 @@ module Api
           end
           query = Api::V3::Flow.
             from("(#{subquery.to_sql}) s").
-            select(query_select_clause_parts.join(',')).
-            group('1') # path
-          query = query.group('ind_value, qual_value') if @ncont_attribute
+            select(query_select_clause_parts.join(",")).
+            group("1") # path
+          query = query.group("ind_value, qual_value") if @ncont_attribute
           query
         end
 
@@ -384,36 +384,36 @@ module Api
           if @ncont_attribute.ind?
             [
               "#{ncont_attr_table}.value::DOUBLE PRECISION AS ind_value",
-              'NULL::TEXT AS qual_value'
-            ].join(', ')
+              "NULL::TEXT AS qual_value"
+            ].join(", ")
           elsif @ncont_attribute.qual?
             [
-              'NULL::DOUBLE PRECISION AS ind_value',
+              "NULL::DOUBLE PRECISION AS ind_value",
               "#{ncont_attr_table}.value::TEXT AS qual_value"
-            ].join(', ')
+            ].join(", ")
           end
         end
 
         def basic_flows_query
           cont_attr_table = @cont_attribute.flow_values_class.table_name
           query = Api::V3::Flow.
-            from('partitioned_flows flows').
+            from("partitioned_flows flows").
             joins("JOIN partitioned_#{cont_attr_table} #{cont_attr_table} ON #{cont_attr_table}.flow_id = flows.id").
             where(context_id: @context.id).
-            where('year >= ? AND year <= ?', @year_start, @year_end).
+            where("year >= ? AND year <= ?", @year_start, @year_end).
             where(
               "#{cont_attr_table}.#{@cont_attribute.attribute_id_name}" =>
                 @cont_attribute.original_id
             )
 
           if @biome_position
-            query = query.where('path[?] = ?', @biome_position, @biome_id)
+            query = query.where("path[?] = ?", @biome_position, @biome_id)
           end
 
           if @selected_nodes.any?
             @selected_nodes_by_position.each do |position, nodes_ids|
               query = query.where(
-                'flows.path[?] = ANY(ARRAY[?])',
+                "flows.path[?] = ANY(ARRAY[?])",
                 position + 1,
                 nodes_ids
               )
@@ -423,7 +423,7 @@ module Api
           if @excluded_nodes.any?
             @excluded_nodes_by_position.each do |position, nodes_ids|
               query = query.where(
-                'NOT(flows.path[?] = ANY(ARRAY[?]))',
+                "NOT(flows.path[?] = ANY(ARRAY[?]))",
                 position + 1,
                 nodes_ids
               )

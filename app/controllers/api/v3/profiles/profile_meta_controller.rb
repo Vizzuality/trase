@@ -11,7 +11,7 @@ module Api
           )
 
           render json: @result,
-                 root: 'data',
+                 root: "data",
                  key_transform: :underscore,
                  chart_params: {
                    id: @result.id,

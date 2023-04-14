@@ -29,7 +29,7 @@ module Api
         class Destination < Api::Readonly::BaseModel
           include Api::V3::Readonly::MaterialisedTable
 
-          self.table_name = 'dashboards_destinations'
+          self.table_name = "dashboards_destinations"
           belongs_to :node
 
           INDEXES = [

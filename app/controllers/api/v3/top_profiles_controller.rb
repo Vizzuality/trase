@@ -10,7 +10,7 @@ module Api
         end
 
         render json: top_profiles,
-               root: 'data',
+               root: "data",
                each_serializer: Api::V3::TopProfilesSerializer
       end
     end

@@ -15,7 +15,7 @@ module Api
             if options[:prefix]
               columns = columns.map { |c| "#{options[:prefix]}.#{c}" }
             end
-            columns.join(', ')
+            columns.join(", ")
           end
 
           def blue_foreign_keys

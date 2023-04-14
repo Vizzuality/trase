@@ -1,7 +1,7 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Api::V3::Dashboards::DestinationsController, type: :controller do
-  include_context 'api v3 brazil soy flow quants'
+  include_context "api v3 brazil soy flow quants"
 
   before(:each) do
     Api::V3::Readonly::FlowNode.refresh(
@@ -16,11 +16,11 @@ RSpec.describe Api::V3::Dashboards::DestinationsController, type: :controller do
     Api::V3::Readonly::Dashboards::Destination.refresh(sync: true)
   end
 
-  describe 'GET search' do
-    it 'returns destinations by name' do
+  describe "GET search" do
+    it "returns destinations by name" do
       get :search, params: {
-        countries_ids: [api_v3_brazil.id].join(','),
-        q: 'rus'
+        countries_ids: [api_v3_brazil.id].join(","),
+        q: "rus"
       }
       expect(assigns(:collection).map(&:name)).to eq(
         [api_v3_country_of_destination1_node.name]
@@ -28,7 +28,7 @@ RSpec.describe Api::V3::Dashboards::DestinationsController, type: :controller do
     end
   end
 
-  describe 'GET index' do
+  describe "GET index" do
     let(:all_results_alphabetically) {
       [
         api_v3_country_of_destination2_node,
@@ -36,16 +36,16 @@ RSpec.describe Api::V3::Dashboards::DestinationsController, type: :controller do
       ]
     }
 
-    it 'returns list in alphabetical order' do
-      get :index, params: {countries_ids: [api_v3_brazil.id].join(',')}
+    it "returns list in alphabetical order" do
+      get :index, params: {countries_ids: [api_v3_brazil.id].join(",")}
       expect(assigns(:collection).map(&:name)).to eq(
         all_results_alphabetically.map(&:name)
       )
     end
 
-    it 'returns destinations by id' do
+    it "returns destinations by id" do
       get :index, params: {
-        countries_ids: [api_v3_brazil.id].join(','),
+        countries_ids: [api_v3_brazil.id].join(","),
         destinations_ids: api_v3_country_of_destination1_node.id
       }
       expect(assigns(:collection).map(&:id)).to eq(
@@ -55,17 +55,17 @@ RSpec.describe Api::V3::Dashboards::DestinationsController, type: :controller do
 
     let(:per_page) { 1 }
 
-    it 'accepts per_page' do
+    it "accepts per_page" do
       get :index, params: {
-        countries_ids: [api_v3_brazil.id].join(','), per_page: per_page
+        countries_ids: [api_v3_brazil.id].join(","), per_page: per_page
       }
       expect(assigns(:collection).size).to eq(per_page)
     end
 
-    it 'allows multiple destinations selection' do
+    it "allows multiple destinations selection" do
       get :index, params: {
-        countries_ids: [api_v3_brazil.id].join(','),
-        destinations_ids: [api_v3_country_of_destination1_node.id, api_v3_country_of_destination2_node.id].join(',')
+        countries_ids: [api_v3_brazil.id].join(","),
+        destinations_ids: [api_v3_country_of_destination1_node.id, api_v3_country_of_destination2_node.id].join(",")
       }
       expect(assigns(:collection).map(&:id)).to eq([api_v3_country_of_destination2_node.id, api_v3_country_of_destination1_node.id])
     end

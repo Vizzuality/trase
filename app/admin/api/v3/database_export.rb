@@ -1,5 +1,5 @@
-ActiveAdmin.register_page 'Database Export' do
-  menu parent: 'Database', priority: 1
+ActiveAdmin.register_page "Database Export" do
+  menu parent: "Database", priority: 1
 
   content do
     database_versions = S3::ObjectList.instance.call(
@@ -12,7 +12,7 @@ ActiveAdmin.register_page 'Database Export' do
 
     database_versions.keep_if { |v| v[:key].eql? params[:key] } if params[:key].present?
 
-    render partial: 'admin/database_export/form', locals: {
+    render partial: "admin/database_export/form", locals: {
       database_versions: database_versions,
       keys: keys
     }

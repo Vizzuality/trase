@@ -11,7 +11,7 @@ module Api
           initialize_collection_for_index
 
           render json: @collection,
-                 root: 'data',
+                 root: "data",
                  each_serializer: Api::V3::Dashboards::DestinationSerializer
         end
 
@@ -20,7 +20,7 @@ module Api
           initialize_collection_for_search
 
           render json: @collection,
-                 root: 'data',
+                 root: "data",
                  each_serializer: Api::V3::Dashboards::NodeSerializer
         end
 

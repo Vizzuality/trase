@@ -19,22 +19,22 @@ module Api
         def call
           map_attributes = Api::V3::Readonly::MapAttribute.
             select([
-              'color_scale',
+              "color_scale",
               "#{Api::V3::Readonly::MapAttribute.table_name}.id",
               "aggregated_buckets(dual_layer_buckets, ARRAY#{@context.years}, ARRAY#{@years}, aggregation_method::TEXT) AS dual_layer_buckets",
               "aggregated_buckets(single_layer_buckets, ARRAY#{@context.years}, ARRAY#{@years}, aggregation_method::TEXT) AS single_layer_buckets",
-              'map_attribute_group_id AS group_id',
-              'is_default',
-              'is_disabled',
-              'years',
+              "map_attribute_group_id AS group_id",
+              "is_default",
+              "is_disabled",
+              "years",
               "#{Api::V3::Readonly::MapAttribute.table_name}.name",
-              'attribute_type AS type',
-              'unit',
-              'aggregation_method',
-              'description',
-              'original_attribute_id AS layer_attribute_id',
-              'map_attribute_group_id AS group_id',
-              'attribute_id'
+              "attribute_type AS type",
+              "unit",
+              "aggregation_method",
+              "description",
+              "original_attribute_id AS layer_attribute_id",
+              "map_attribute_group_id AS group_id",
+              "attribute_id"
             ]).
             joins(:map_attribute_group).
             where(
@@ -56,7 +56,7 @@ module Api
               context: @context,
               defaults: Api::V3::AttributeNameAndTooltip::NameAndTooltip.new(map_attribute.name, map_attribute.description)
             )
-            new_hash['description'] = name_and_tooltip.tooltip_text
+            new_hash["description"] = name_and_tooltip.tooltip_text
             new_hash
           end
           # rubocop:enable Style/EachWithObject
