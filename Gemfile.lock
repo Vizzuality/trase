@@ -612,7 +612,7 @@ DEPENDENCIES
   spring
   spring-watcher-listen (~> 2.1.0)
   staccato
-  standard
+  standard (>= 1.0)
   turbolinks (~> 5)
   twitter
   tzinfo-data

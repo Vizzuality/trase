@@ -73,7 +73,7 @@ group :development, :test do
   gem "rails-controller-testing"
   gem "rspec-collection_matchers"
   gem "rspec-rails"
-  gem "standard"
+  gem "standard", ">= 1.0"
 end
 
 group :development do
