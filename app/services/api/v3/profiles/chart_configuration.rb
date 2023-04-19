@@ -53,7 +53,7 @@ module Api
 
         private
 
-        # @param profile_type [Symbol] either :actor or :place
+        # @param profile_type [Symbol] either :actor, :place or :country
         # @param parent_identifier [Symbol] parent chart identifier (or nil)
         # @param identifier [Symbol] chart identifier
         def initialize_chart(profile_type, parent_identifier, identifier)
@@ -64,7 +64,7 @@ module Api
           unless profile
             node_type = @node.node_type
             raise ActiveRecord::RecordNotFound.new(
-              "Profile not configured: #{profile_type} for #{node_type}"
+              "Profile not configured: PROFILE: #{profile_type} NODE TYPE: #{node_type} #{@context.country_name} / #{@context.commodity_name}"
             )
           end
           charts = profile.charts.where(identifier: identifier)
@@ -79,7 +79,7 @@ module Api
           return if @chart.present?
 
           raise ActiveRecord::RecordNotFound.new(
-            "Chart not configured: #{identifier} for #{profile_type}"
+            "Chart not configured: CHART: #{identifier} PROFILE: #{profile_type} NODE TYPE: #{node_type} #{@context.country_name} / #{@context.commodity_name}"
           )
         end
 
