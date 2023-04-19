@@ -83,7 +83,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
         api_v3_port_node_type,
         api_v3_exporter_node_type,
         api_v3_importer_node_type,
-        api_v3_country_node_type
+        api_v3_country_of_first_import_node_type
       ].map do |node_type|
         {
           source: :single_year_no_ncont_node_type_view,
@@ -119,7 +119,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
         api_v3_port_node_type,
         api_v3_exporter_node_type,
         api_v3_importer_node_type,
-        api_v3_country_node_type
+        api_v3_country_of_first_import_node_type
       ].map do |node_type|
         {
           source: :multi_year_no_ncont_node_type_view,
@@ -156,7 +156,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
         api_v3_port_node_type,
         api_v3_exporter_node_type,
         api_v3_importer_node_type,
-        api_v3_country_node_type
+        api_v3_country_of_first_import_node_type
       ].map do |node_type|
         {
           source: :single_year_ncont_node_type_view,
@@ -194,7 +194,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
         api_v3_port_node_type,
         api_v3_exporter_node_type,
         api_v3_importer_node_type,
-        api_v3_country_node_type
+        api_v3_country_of_first_import_node_type
       ].map do |node_type|
         {
           source: :multi_year_no_ncont_node_type_view,
@@ -253,7 +253,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
         api_v3_logistics_hub_node_type,
         api_v3_port_node_type,
         api_v3_importer_node_type,
-        api_v3_country_node_type
+        api_v3_country_of_first_import_node_type
       ].map do |node_type|
         {
           source: :multi_year_no_ncont_node_type_view,
@@ -311,7 +311,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
         api_v3_logistics_hub_node_type,
         api_v3_port_node_type,
         api_v3_importer_node_type,
-        api_v3_country_node_type
+        api_v3_country_of_first_import_node_type
       ].map do |node_type|
         {
           source: :multi_year_no_ncont_node_type_view,
@@ -372,7 +372,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
         api_v3_logistics_hub_node_type,
         api_v3_port_node_type,
         api_v3_importer_node_type,
-        api_v3_country_node_type
+        api_v3_country_of_first_import_node_type
       ].map do |node_type|
         {
           source: :multi_year_no_ncont_node_type_view,
@@ -432,7 +432,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
         api_v3_logistics_hub_node_type,
         api_v3_port_node_type,
         api_v3_importer_node_type,
-        api_v3_country_node_type
+        api_v3_country_of_first_import_node_type
       ].map do |node_type|
         {
           source: :multi_year_no_ncont_node_type_view,
@@ -503,7 +503,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
         api_v3_port_node_type,
         api_v3_importer_node_type,
         api_v3_exporter_node_type,
-        api_v3_country_node_type
+        api_v3_country_of_first_import_node_type
       ].map do |node_type|
         {
           source: :multi_year_no_ncont_node_type_view,
@@ -573,7 +573,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
         api_v3_port_node_type,
         api_v3_importer_node_type,
         api_v3_exporter_node_type,
-        api_v3_country_node_type
+        api_v3_country_of_first_import_node_type
       ].map do |node_type|
         {
           source: :multi_year_no_ncont_node_type_view,

@@ -69,7 +69,7 @@ RSpec.describe Api::V3::ResizeByAttribute, type: :model do
             FactoryBot.create(:api_v3_node, node_type: api_v3_port_node_type),
             FactoryBot.create(:api_v3_node, node_type: api_v3_exporter_node_type),
             FactoryBot.create(:api_v3_node, node_type: api_v3_importer_node_type),
-            FactoryBot.create(:api_v3_node, node_type: api_v3_country_node_type)
+            FactoryBot.create(:api_v3_node, node_type: api_v3_country_of_first_import_node_type)
           ].map(&:id),
           context: api_v3_brazil_soy_context,
           year: year

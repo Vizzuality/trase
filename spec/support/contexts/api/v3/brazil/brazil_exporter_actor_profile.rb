@@ -34,13 +34,13 @@ shared_context "api v3 brazil exporter actor profile" do
   let!(:api_v3_exporter_basic_attributes_destination_node_type) do
     chart_node_type = Api::V3::ChartNodeType.where(
       chart_id: api_v3_exporter_basic_attributes.id,
-      node_type_id: api_v3_country_node_type.id,
+      node_type_id: api_v3_country_of_first_import_node_type.id,
       identifier: "destination"
     ).first
     chart_node_type || FactoryBot.create(
       :api_v3_chart_node_type,
       chart: api_v3_exporter_basic_attributes,
-      node_type: api_v3_country_node_type,
+      node_type: api_v3_country_of_first_import_node_type,
       identifier: "destination"
     )
   end
@@ -172,13 +172,13 @@ shared_context "api v3 brazil exporter actor profile" do
   let!(:api_v3_exporter_top_countries_destination_node_type) do
     chart_node_type = Api::V3::ChartNodeType.where(
       chart_id: api_v3_exporter_top_countries.id,
-      node_type_id: api_v3_country_node_type.id,
+      node_type_id: api_v3_country_of_first_import_node_type.id,
       identifier: "destination"
     ).first
     chart_node_type || FactoryBot.create(
       :api_v3_chart_node_type,
       chart: api_v3_exporter_top_countries,
-      node_type: api_v3_country_node_type,
+      node_type: api_v3_country_of_first_import_node_type,
       identifier: "destination"
     )
   end

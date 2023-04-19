@@ -15,7 +15,7 @@ RSpec.describe "Nodes stats", type: :request do
           start_year: 2003,
           end_year: 2019,
           other_attributes_ids: api_v3_deforestation_v2.readonly_attribute.id,
-          column_id: api_v3_country_node_type.id,
+          column_id: api_v3_country_of_first_import_node_type.id,
           contexts_ids: api_v3_brazil_soy_context.id.to_s
         }
 
@@ -26,8 +26,8 @@ RSpec.describe "Nodes stats", type: :request do
         nodes_ids =
           parsed_response["data"].first["top_nodes"].map { |a| a["id"] }
         expect(nodes_ids).to eql([
-          api_v3_country_of_destination1_node.id,
-          api_v3_country_of_destination2_node.id
+          api_v3_country_of_first_import_node_ru.id,
+          api_v3_country_of_first_import_node_de.id
         ])
       end
     end
@@ -39,7 +39,7 @@ RSpec.describe "Nodes stats", type: :request do
           end_year: 2019,
           attribute_id: api_v3_volume.readonly_attribute.id,
           other_attributes_ids: api_v3_deforestation_v2.readonly_attribute.id,
-          column_id: api_v3_country_node_type.id,
+          column_id: api_v3_country_of_first_import_node_type.id,
           contexts_ids: api_v3_brazil_soy_context.id.to_s
         }
 
@@ -50,8 +50,8 @@ RSpec.describe "Nodes stats", type: :request do
         nodes_ids =
           parsed_response["data"].first["top_nodes"].map { |a| a["id"] }
         expect(nodes_ids).to eql([
-          api_v3_country_of_destination1_node.id,
-          api_v3_country_of_destination2_node.id
+          api_v3_country_of_first_import_node_ru.id,
+          api_v3_country_of_first_import_node_de.id
         ])
       end
     end
@@ -62,7 +62,7 @@ RSpec.describe "Nodes stats", type: :request do
           start_year: 2003,
           end_year: 2019,
           attribute_id: api_v3_volume.readonly_attribute.id,
-          column_id: api_v3_country_node_type.id,
+          column_id: api_v3_country_of_first_import_node_type.id,
           commodity_id: api_v3_soy.id
         }
 
@@ -73,8 +73,8 @@ RSpec.describe "Nodes stats", type: :request do
         nodes_ids =
           parsed_response["data"].first["top_nodes"].map { |a| a["id"] }
         expect(nodes_ids).to eql([
-          api_v3_country_of_destination1_node.id,
-          api_v3_country_of_destination2_node.id
+          api_v3_country_of_first_import_node_ru.id,
+          api_v3_country_of_first_import_node_de.id
         ])
       end
     end

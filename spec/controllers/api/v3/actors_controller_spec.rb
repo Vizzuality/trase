@@ -193,7 +193,7 @@ RSpec.describe Api::V3::ActorsController, type: :controller do
         allow(chart_config).to(
           receive(:named_node_type).
             with("destination").
-            and_return(api_v3_country_node_type)
+            and_return(api_v3_country_of_first_import_node_type)
         )
         allow(chart_config).to(
           receive(:named_attribute).

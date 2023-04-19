@@ -19,7 +19,7 @@ RSpec.describe "Flows", type: :request do
         api_v3_municipality_node_type,
         api_v3_exporter_node_type,
         api_v3_importer_node_type,
-        api_v3_country_node_type
+        api_v3_country_of_first_import_node_type
       ]
     }
     let(:filter_params) {

@@ -68,7 +68,7 @@ RSpec.describe Api::V3::Actors::BasicAttributes do
             api_v3_port1_node,
             api_v3_exporter1_node,
             api_v3_importer1_node,
-            api_v3_country_of_destination1_node
+            api_v3_country_of_first_import_node_ru
           ].map(&:id),
           year: 2014
         )

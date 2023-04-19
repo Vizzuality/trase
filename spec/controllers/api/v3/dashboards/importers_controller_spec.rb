@@ -64,7 +64,7 @@ RSpec.describe Api::V3::Dashboards::ImportersController, type: :controller do
         get :index, params: {
           countries_ids: [api_v3_brazil.id].join(","),
           sources_ids: [api_v3_biome_node.id].join(","),
-          destinations_ids: [api_v3_country_of_destination1_node.id].join(","),
+          destinations_ids: [api_v3_country_of_first_import_node_ru.id].join(","),
           node_types_ids: [api_v3_importer_node_type.id].join(",")
         }
         expect(assigns(:collection).map(&:id)).to eq(
@@ -75,7 +75,7 @@ RSpec.describe Api::V3::Dashboards::ImportersController, type: :controller do
       it "returns companies importing to country" do
         get :index, params: {
           destinations_ids: [
-            api_v3_country_of_destination1_node.id
+            api_v3_country_of_first_import_node_ru.id
           ].join(","),
           node_types_ids: [api_v3_importer_node_type.id].join(",")
         }
@@ -88,7 +88,7 @@ RSpec.describe Api::V3::Dashboards::ImportersController, type: :controller do
         get :index, params: {
           sources_ids: [api_v3_municipality2_node.id].join(","),
           destinations_ids: [
-            api_v3_country_of_destination1_node.id
+            api_v3_country_of_first_import_node_ru.id
           ].join(","),
           node_types_ids: [api_v3_importer_node_type.id].join(",")
         }
@@ -100,8 +100,8 @@ RSpec.describe Api::V3::Dashboards::ImportersController, type: :controller do
       it "returns companies importing to either country" do
         get :index, params: {
           destinations_ids: [
-            api_v3_country_of_destination1_node.id,
-            api_v3_country_of_destination2_node.id
+            api_v3_country_of_first_import_node_ru.id,
+            api_v3_country_of_first_import_node_de.id
           ].join(","),
           node_types_ids: [api_v3_importer_node_type.id].join(",")
         }

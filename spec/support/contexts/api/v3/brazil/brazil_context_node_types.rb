@@ -150,15 +150,15 @@ shared_context "api v3 brazil context node types" do
     end
     cnt
   end
-  let!(:country_of_destination1_context_node) do
+  let!(:api_v3_brazil_soy_country_of_first_import_context_node_type) do
     cnt = Api::V3::ContextNodeType.where(
-      context_id: api_v3_brazil_soy_context.id, node_type_id: api_v3_country_node_type.id
+      context_id: api_v3_brazil_soy_context.id, node_type_id: api_v3_country_of_first_import_node_type.id
     ).first
     unless cnt
       cnt = FactoryBot.create(
         :api_v3_context_node_type,
         context: api_v3_brazil_soy_context,
-        node_type: api_v3_country_node_type,
+        node_type: api_v3_country_of_first_import_node_type,
         column_position: 7
       )
       FactoryBot.create(

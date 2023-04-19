@@ -50,13 +50,13 @@ shared_context "api v3 brazil two flows" do
     node
   end
 
-  let(:api_v3_country_of_destination2_node) do
+  let(:api_v3_country_of_first_import_node_cn) do
     node = Api::V3::Node.where(
-      name: "CHINA", node_type_id: api_v3_country_node_type.id
+      name: "CHINA", node_type_id: api_v3_country_of_first_import_node_type.id
     ).first
     unless node
       node = FactoryBot.create(
-        :api_v3_node, name: "CHINA", node_type: api_v3_country_node_type
+        :api_v3_node, name: "CHINA", node_type: api_v3_country_of_first_import_node_type, geo_id: "CN"
       )
       FactoryBot.create(
         :api_v3_node_property,
@@ -78,7 +78,7 @@ shared_context "api v3 brazil two flows" do
         api_v3_port1_node,
         api_v3_exporter1_node,
         api_v3_importer1_node,
-        api_v3_country_of_destination1_node
+        api_v3_country_of_first_import_node_ru
       ].map(&:id),
       year: 2015
     )
@@ -95,7 +95,7 @@ shared_context "api v3 brazil two flows" do
         api_v3_port2_node,
         api_v3_exporter2_node,
         api_v3_importer2_node,
-        api_v3_country_of_destination2_node
+        api_v3_country_of_first_import_node_cn
       ].map(&:id),
       year: 2015
     )
@@ -112,7 +112,7 @@ shared_context "api v3 brazil two flows" do
         api_v3_port2_node,
         api_v3_exporter2_node,
         api_v3_importer2_node,
-        api_v3_country_of_destination2_node
+        api_v3_country_of_first_import_node_cn
       ].map(&:id),
       year: 2015
     )

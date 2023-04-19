@@ -421,13 +421,13 @@ shared_context "api v3 brazil municipality place profile" do
   let!(:api_v3_place_top_consumer_countries_destination_node_type) do
     chart_node_type = Api::V3::ChartNodeType.where(
       chart_id: api_v3_place_top_consumer_countries.id,
-      node_type_id: api_v3_country_node_type.id,
+      node_type_id: api_v3_country_of_first_import_node_type.id,
       identifier: "destination"
     ).first
     chart_node_type || FactoryBot.create(
       :api_v3_chart_node_type,
       chart: api_v3_place_top_consumer_countries,
-      node_type: api_v3_country_node_type,
+      node_type: api_v3_country_of_first_import_node_type,
       identifier: "destination"
     )
   end

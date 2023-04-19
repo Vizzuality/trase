@@ -35,7 +35,7 @@ RSpec.describe Api::V3::Dashboards::Charts::MultiYearNoNcontNodeTypeView do
         api_v3_port1_node,
         api_v3_unknown_exporter_node,
         api_v3_importer1_node,
-        api_v3_country_of_destination1_node
+        api_v3_country_of_first_import_node_ru
       ].map(&:id),
       year: 2015
     )
@@ -121,7 +121,7 @@ RSpec.describe Api::V3::Dashboards::Charts::MultiYearNoNcontNodeTypeView do
         shared_parameters_hash.merge(
           companies_ids: [api_v3_exporter1_node.id],
           excluded_destinations_ids: [
-            api_v3_country_of_destination2_node.id
+            api_v3_country_of_first_import_node_de.id
           ]
         )
       }

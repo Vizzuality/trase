@@ -22,7 +22,7 @@ RSpec.describe "Charts::MultiYearNoNcontOverview", type: :request do
         cont_attribute_id: cont_attribute.id,
         sources_ids: api_v3_municipality_node.id,
         companies_ids: [api_v3_exporter1_node.id, api_v3_exporter1_node.id].join(","),
-        destinations_ids: api_v3_country_of_destination1_node.id,
+        destinations_ids: api_v3_country_of_first_import_node_ru.id,
         start_year: 2015,
         end_year: 2016
       }

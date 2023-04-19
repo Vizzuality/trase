@@ -67,7 +67,7 @@ RSpec.describe Api::V3::Dashboards::Charts::SingleYearNcontOverview do
         shared_parameters_hash.merge(
           companies_ids: [api_v3_exporter1_node.id],
           excluded_destinations_ids: [
-            api_v3_country_of_destination2_node.id
+            api_v3_country_of_first_import_node_de.id
           ]
         )
       }

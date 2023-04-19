@@ -5,7 +5,7 @@ RSpec.describe "Top nodes", type: :request do
 
   describe "GET /api/v3/contexts/:context_id/top_nodes" do
     it "has the correct response structure for countries" do
-      get "/api/v3/contexts/#{api_v3_brazil_soy_context.id}/top_nodes?year=2015&column_id=#{api_v3_country_node_type.id}"
+      get "/api/v3/contexts/#{api_v3_brazil_soy_context.id}/top_nodes?year=2015&column_id=#{api_v3_country_of_first_import_node_type.id}"
 
       expect(@response).to have_http_status(:ok)
       expect(@response).to match_response_schema("v3_top_nodes")

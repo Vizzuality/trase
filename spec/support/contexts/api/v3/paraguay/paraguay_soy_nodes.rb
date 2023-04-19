@@ -80,15 +80,15 @@ shared_context "api v3 paraguay soy nodes" do
     node
   end
 
-  let!(:api_v3_paraguay_country_node) do
+  let!(:api_v3_paraguay_country_of_destination_node) do
     node = Api::V3::Node.where(
-      name: "BANGLADESH", node_type_id: api_v3_country_node_type.id
+      name: "BANGLADESH", node_type_id: api_v3_country_of_destination_node_type.id
     ).first
     unless node
       node = FactoryBot.create(
         :api_v3_node,
         name: "BANGLADESH",
-        node_type: api_v3_country_node_type,
+        node_type: api_v3_country_of_destination_node_type,
         geo_id: "BD"
       )
       FactoryBot.create(
