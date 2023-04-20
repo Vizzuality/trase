@@ -124,7 +124,7 @@ RSpec.describe Api::V3::Download::FlowDownloadQueryBuilder, type: :model do
         f["PORT"],
         f["EXPORTER"],
         f["IMPORTER"],
-        f["COUNTRY"],
+        f["COUNTRY OF FIRST IMPORT"],
         f["INDICATOR"],
         f["TOTAL"]
       ]

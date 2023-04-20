@@ -34,13 +34,13 @@ shared_context "api v3 brazil importer actor profile" do
   let!(:api_v3_importer_basic_attributes_destination_node_type) do
     chart_node_type = Api::V3::ChartNodeType.where(
       chart_id: api_v3_importer_basic_attributes.id,
-      node_type_id: api_v3_country_node_type.id,
+      node_type_id: api_v3_country_of_first_import_node_type.id,
       identifier: "destination"
     ).first
     chart_node_type || FactoryBot.create(
       :api_v3_chart_node_type,
       chart: api_v3_importer_basic_attributes,
-      node_type: api_v3_country_node_type,
+      node_type: api_v3_country_of_first_import_node_type,
       identifier: "destination"
     )
   end
@@ -60,11 +60,11 @@ shared_context "api v3 brazil importer actor profile" do
   end
 
   let!(:api_v3_importer_top_countries_commodity_production) do
-    chart_attribute = Api::V3::ChartQuant.
-      includes(:chart_attribute).
-      where(
+    chart_attribute = Api::V3::ChartQuant
+      .includes(:chart_attribute)
+      .where(
         "chart_attributes.chart_id" => api_v3_importer_top_countries.id,
-        quant_id: api_v3_soy_tn.id
+        :quant_id => api_v3_soy_tn.id
       ).first&.chart_attribute
     unless chart_attribute
       chart_attribute = FactoryBot.create(
@@ -84,13 +84,13 @@ shared_context "api v3 brazil importer actor profile" do
   let!(:api_v3_importer_top_countries_destination_node_type) do
     chart_node_type = Api::V3::ChartNodeType.where(
       chart_id: api_v3_importer_top_countries.id,
-      node_type_id: api_v3_country_node_type.id,
+      node_type_id: api_v3_country_of_first_import_node_type.id,
       identifier: "destination"
     ).first
     chart_node_type || FactoryBot.create(
       :api_v3_chart_node_type,
       chart: api_v3_importer_top_countries,
-      node_type: api_v3_country_node_type,
+      node_type: api_v3_country_of_first_import_node_type,
       identifier: "destination"
     )
   end
@@ -110,11 +110,11 @@ shared_context "api v3 brazil importer actor profile" do
   end
 
   let!(:api_v3_importer_top_sources_commodity_production) do
-    chart_attribute = Api::V3::ChartQuant.
-      includes(:chart_attribute).
-      where(
+    chart_attribute = Api::V3::ChartQuant
+      .includes(:chart_attribute)
+      .where(
         "chart_attributes.chart_id" => api_v3_importer_top_sources.id,
-        quant_id: api_v3_soy_tn.id
+        :quant_id => api_v3_soy_tn.id
       ).first&.chart_attribute
     unless chart_attribute
       chart_attribute = FactoryBot.create(
@@ -167,11 +167,11 @@ shared_context "api v3 brazil importer actor profile" do
   end
 
   let!(:api_v3_importer_sustainability_deforestation_v2) do
-    chart_attribute = Api::V3::ChartQuant.
-      includes(:chart_attribute).
-      where(
+    chart_attribute = Api::V3::ChartQuant
+      .includes(:chart_attribute)
+      .where(
         "chart_attributes.chart_id" => api_v3_importer_sustainability.id,
-        quant_id: api_v3_deforestation_v2.id
+        :quant_id => api_v3_deforestation_v2.id
       ).first&.chart_attribute
     unless chart_attribute
       chart_attribute = FactoryBot.create(
@@ -223,11 +223,11 @@ shared_context "api v3 brazil importer actor profile" do
   end
 
   let!(:api_v3_importer_exporting_companies_land_use) do
-    chart_attribute = Api::V3::ChartQuant.
-      includes(:chart_attribute).
-      where(
+    chart_attribute = Api::V3::ChartQuant
+      .includes(:chart_attribute)
+      .where(
         "chart_attributes.chart_id" => api_v3_importer_exporting_companies.id,
-        quant_id: api_v3_land_use.id
+        :quant_id => api_v3_land_use.id
       ).first&.chart_attribute
     unless chart_attribute
       chart_attribute = FactoryBot.create(

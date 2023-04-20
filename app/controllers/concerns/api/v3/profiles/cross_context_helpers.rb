@@ -37,7 +37,11 @@ module Api
 
         def set_year
           node_years = @node.years
-          raise ActiveRecord::RecordNotFound unless node_years.any?
+          unless node_years.any?
+            raise ActiveRecord::RecordNotFound.new(
+              "No years of data found for node #{params[:id]}"
+            )
+          end
 
           year = params[:year]&.to_i
           @year =
@@ -52,7 +56,7 @@ module Api
           return if params[:commodity_id].present? || params[:context_id].present?
 
           raise ActionController::ParameterMissing,
-                "Required param commodity_id or context_id missing"
+            "Required param commodity_id or context_id missing"
         end
       end
     end

@@ -28,6 +28,7 @@ RSpec.describe Api::V3::Dashboards::Charts::SingleYearNoNcontNodeTypeView do
       :api_v3_flow,
       context: api_v3_brazil_soy_context,
       path: [
+        api_v3_brazil_soy_country_of_production_node,
         api_v3_unknown_biome_node,
         api_v3_state_node,
         api_v3_municipality_node,
@@ -35,7 +36,7 @@ RSpec.describe Api::V3::Dashboards::Charts::SingleYearNoNcontNodeTypeView do
         api_v3_port1_node,
         api_v3_exporter1_node,
         api_v3_importer1_node,
-        api_v3_country_of_destination1_node
+        api_v3_country_of_first_import_node_ru
       ].map(&:id),
       year: 2015
     )
@@ -107,7 +108,7 @@ RSpec.describe Api::V3::Dashboards::Charts::SingleYearNoNcontNodeTypeView do
         shared_parameters_hash.merge(
           companies_ids: [api_v3_exporter1_node.id],
           excluded_destinations_ids: [
-            api_v3_country_of_destination2_node.id
+            api_v3_country_of_first_import_node_de.id
           ]
         )
       }

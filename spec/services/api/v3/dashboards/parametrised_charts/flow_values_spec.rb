@@ -83,7 +83,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
         api_v3_port_node_type,
         api_v3_exporter_node_type,
         api_v3_importer_node_type,
-        api_v3_country_node_type
+        api_v3_country_of_first_import_node_type
       ].map do |node_type|
         {
           source: :single_year_no_ncont_node_type_view,
@@ -119,7 +119,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
         api_v3_port_node_type,
         api_v3_exporter_node_type,
         api_v3_importer_node_type,
-        api_v3_country_node_type
+        api_v3_country_of_first_import_node_type
       ].map do |node_type|
         {
           source: :multi_year_no_ncont_node_type_view,
@@ -156,7 +156,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
         api_v3_port_node_type,
         api_v3_exporter_node_type,
         api_v3_importer_node_type,
-        api_v3_country_node_type
+        api_v3_country_of_first_import_node_type
       ].map do |node_type|
         {
           source: :single_year_ncont_node_type_view,
@@ -194,7 +194,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
         api_v3_port_node_type,
         api_v3_exporter_node_type,
         api_v3_importer_node_type,
-        api_v3_country_node_type
+        api_v3_country_of_first_import_node_type
       ].map do |node_type|
         {
           source: :multi_year_no_ncont_node_type_view,
@@ -219,9 +219,9 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
       )
     }
     let(:parameters) {
-      overview_parameters.
-        merge(no_flow_path_filters).
-        merge(
+      overview_parameters
+        .merge(no_flow_path_filters)
+        .merge(
           companies_ids: [
             api_v3_exporter1_node.id
           ]
@@ -253,7 +253,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
         api_v3_logistics_hub_node_type,
         api_v3_port_node_type,
         api_v3_importer_node_type,
-        api_v3_country_node_type
+        api_v3_country_of_first_import_node_type
       ].map do |node_type|
         {
           source: :multi_year_no_ncont_node_type_view,
@@ -277,9 +277,9 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
       )
     }
     let(:parameters) {
-      overview_parameters.
-        merge(no_flow_path_filters).
-        merge(
+      overview_parameters
+        .merge(no_flow_path_filters)
+        .merge(
           exporters_ids: [
             api_v3_exporter1_node.id
           ]
@@ -311,7 +311,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
         api_v3_logistics_hub_node_type,
         api_v3_port_node_type,
         api_v3_importer_node_type,
-        api_v3_country_node_type
+        api_v3_country_of_first_import_node_type
       ].map do |node_type|
         {
           source: :multi_year_no_ncont_node_type_view,
@@ -336,9 +336,9 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
       )
     }
     let(:parameters) {
-      overview_parameters.
-        merge(no_flow_path_filters).
-        merge(
+      overview_parameters
+        .merge(no_flow_path_filters)
+        .merge(
           companies_ids: [
             api_v3_exporter1_node.id
           ],
@@ -372,7 +372,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
         api_v3_logistics_hub_node_type,
         api_v3_port_node_type,
         api_v3_importer_node_type,
-        api_v3_country_node_type
+        api_v3_country_of_first_import_node_type
       ].map do |node_type|
         {
           source: :multi_year_no_ncont_node_type_view,
@@ -396,9 +396,9 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
       )
     }
     let(:parameters) {
-      overview_parameters.
-        merge(no_flow_path_filters).
-        merge(
+      overview_parameters
+        .merge(no_flow_path_filters)
+        .merge(
           exporters_ids: [
             api_v3_exporter1_node.id
           ],
@@ -432,7 +432,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
         api_v3_logistics_hub_node_type,
         api_v3_port_node_type,
         api_v3_importer_node_type,
-        api_v3_country_node_type
+        api_v3_country_of_first_import_node_type
       ].map do |node_type|
         {
           source: :multi_year_no_ncont_node_type_view,
@@ -457,9 +457,9 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
       )
     }
     let(:parameters) {
-      overview_parameters.
-        merge(no_flow_path_filters).
-        merge(
+      overview_parameters
+        .merge(no_flow_path_filters)
+        .merge(
           companies_ids: [
             api_v3_exporter1_node.id, api_v3_exporter2_node.id
           ]
@@ -503,7 +503,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
         api_v3_port_node_type,
         api_v3_importer_node_type,
         api_v3_exporter_node_type,
-        api_v3_country_node_type
+        api_v3_country_of_first_import_node_type
       ].map do |node_type|
         {
           source: :multi_year_no_ncont_node_type_view,
@@ -527,9 +527,9 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
       )
     }
     let(:parameters) {
-      overview_parameters.
-        merge(no_flow_path_filters).
-        merge(
+      overview_parameters
+        .merge(no_flow_path_filters)
+        .merge(
           exporters_ids: [
             api_v3_exporter1_node.id, api_v3_exporter2_node.id
           ]
@@ -573,7 +573,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
         api_v3_port_node_type,
         api_v3_importer_node_type,
         api_v3_exporter_node_type,
-        api_v3_country_node_type
+        api_v3_country_of_first_import_node_type
       ].map do |node_type|
         {
           source: :multi_year_no_ncont_node_type_view,

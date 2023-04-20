@@ -61,6 +61,7 @@ RSpec.describe Api::V3::Actors::BasicAttributes do
           :api_v3_flow,
           context: api_v3_brazil_soy_context,
           path: [
+            api_v3_brazil_soy_country_of_production_node,
             api_v3_biome_node,
             api_v3_state_node,
             api_v3_municipality_node,
@@ -68,7 +69,7 @@ RSpec.describe Api::V3::Actors::BasicAttributes do
             api_v3_port1_node,
             api_v3_exporter1_node,
             api_v3_importer1_node,
-            api_v3_country_of_destination1_node
+            api_v3_country_of_first_import_node_ru
           ].map(&:id),
           year: 2014
         )
@@ -119,8 +120,6 @@ RSpec.describe Api::V3::Actors::BasicAttributes do
       }
 
       it "check header zero deforestation parameters" do
-        zero_deforestation =
-          chart_attributes.find_by(identifier: "zero_deforestation")
         expect(attrs[:zero_deforestation]).not_to eql nil
 
         expect(header_attributes[:zero_deforestation][:value]).to eql(
@@ -129,7 +128,7 @@ RSpec.describe Api::V3::Actors::BasicAttributes do
         expect(header_attributes[:zero_deforestation][:name]).to eql(
           api_v3_exporter_basic_attributes_zero_deforestation_property.display_name
         )
-        expect(header_attributes[:zero_deforestation][:unit]).to eql nil #Qual
+        expect(header_attributes[:zero_deforestation][:unit]).to eql nil # Qual
         expect(header_attributes[:zero_deforestation][:tooltip]).to eql(
           api_v3_exporter_basic_attributes_zero_deforestation_property.tooltip_text
         )

@@ -3,6 +3,25 @@ shared_context "api v3 brazil soy nodes" do
   include_context "api v3 quals"
   include_context "api v3 brazil context node types"
 
+  let!(:api_v3_brazil_soy_country_of_production_node) {
+    node = Api::V3::Node.where(
+      name: "BRAZIL", node_type_id: api_v3_country_of_production_node_type.id
+    ).first
+    unless node
+      node = FactoryBot.create(
+        :api_v3_node,
+        name: "BRAZIL",
+        node_type: api_v3_country_of_production_node_type,
+        geo_id: "BR"
+      )
+      FactoryBot.create(
+        :api_v3_node_property,
+        node: node
+      )
+    end
+    node
+  }
+
   let!(:api_v3_biome_node) do
     node = Api::V3::Node.where(
       name: "AMAZONIA", node_type_id: api_v3_biome_node_type.id
@@ -243,15 +262,15 @@ shared_context "api v3 brazil soy nodes" do
     node
   end
 
-  let!(:api_v3_country_of_destination1_node) do
+  let!(:api_v3_country_of_first_import_node_ru) do
     node = Api::V3::Node.where(
-      name: "RUSSIAN FEDERATION", node_type_id: api_v3_country_node_type.id
+      name: "RUSSIAN FEDERATION", node_type_id: api_v3_country_of_first_import_node_type.id
     ).first
     unless node
       node = FactoryBot.create(
         :api_v3_node,
         name: "RUSSIAN FEDERATION",
-        node_type: api_v3_country_node_type,
+        node_type: api_v3_country_of_first_import_node_type,
         geo_id: "RU"
       )
       FactoryBot.create(
@@ -262,15 +281,15 @@ shared_context "api v3 brazil soy nodes" do
     node
   end
 
-  let!(:api_v3_country_of_destination2_node) do
+  let!(:api_v3_country_of_first_import_node_de) do
     node = Api::V3::Node.where(
-      name: "GERMANY", node_type_id: api_v3_country_node_type.id
+      name: "GERMANY", node_type_id: api_v3_country_of_first_import_node_type.id
     ).first
     unless node
       node = FactoryBot.create(
         :api_v3_node,
         name: "GERMANY",
-        node_type: api_v3_country_node_type,
+        node_type: api_v3_country_of_first_import_node_type,
         geo_id: "DE"
       )
       FactoryBot.create(
@@ -283,13 +302,13 @@ shared_context "api v3 brazil soy nodes" do
 
   let!(:api_v3_other_country_of_destination_node) do
     node = Api::V3::Node.where(
-      name: "OTHER", node_type_id: api_v3_country_node_type.id
+      name: "OTHER", node_type_id: api_v3_country_of_first_import_node_type.id
     ).first
     unless node
       node = FactoryBot.create(
         :api_v3_node,
         name: "OTHER",
-        node_type: api_v3_country_node_type
+        node_type: api_v3_country_of_first_import_node_type
       )
       FactoryBot.create(
         :api_v3_node_property,

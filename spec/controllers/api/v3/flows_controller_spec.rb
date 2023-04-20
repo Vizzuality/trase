@@ -24,7 +24,7 @@ RSpec.describe Api::V3::FlowsController, type: :controller do
         api_v3_municipality_node_type,
         api_v3_exporter_node_type,
         api_v3_importer_node_type,
-        api_v3_country_node_type
+        api_v3_country_of_first_import_node_type
       ]
     }
     let(:filter_params) {
@@ -33,7 +33,7 @@ RSpec.describe Api::V3::FlowsController, type: :controller do
         end_year: 2015,
         cont_attribute_id: cont_attribute.id,
         include_columns: node_types.map(&:id),
-        limit: 1,
+        limit: 1
       }
     }
     context "when context without node types" do
@@ -52,7 +52,7 @@ RSpec.describe Api::V3::FlowsController, type: :controller do
         it "returns filtered flows" do
           get :index, params: {
             context_id: api_v3_brazil_soy_context.id,
-            ncont_attribute_id: ncont_attribute_qual.id,
+            ncont_attribute_id: ncont_attribute_qual.id
           }.merge(filter_params)
 
           expect(response).to have_http_status(200)
@@ -67,7 +67,7 @@ RSpec.describe Api::V3::FlowsController, type: :controller do
         it "returns filtered flows" do
           get :index, params: {
             context_id: api_v3_brazil_soy_context.id,
-            ncont_attribute_id: ncont_attribute_ind.id,
+            ncont_attribute_id: ncont_attribute_ind.id
           }.merge(filter_params)
 
           expect(response).to have_http_status(200)

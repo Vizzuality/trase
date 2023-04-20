@@ -191,14 +191,14 @@ RSpec.describe Api::V3::ActorsController, type: :controller do
           receive(:new).and_return(chart_config)
         )
         allow(chart_config).to(
-          receive(:named_node_type).
-            with("destination").
-            and_return(api_v3_country_node_type)
+          receive(:named_node_type)
+            .with("destination")
+            .and_return(api_v3_country_of_first_import_node_type)
         )
         allow(chart_config).to(
-          receive(:named_attribute).
-            with("commodity_production").
-            and_return(nil)
+          receive(:named_attribute)
+            .with("commodity_production")
+            .and_return(nil)
         )
 
         get :top_countries, params: valid_params
@@ -238,14 +238,14 @@ RSpec.describe Api::V3::ActorsController, type: :controller do
           receive(:new).and_return(chart_config)
         )
         allow(chart_config).to(
-          receive(:named_node_types).
-            with("source").
-            and_return([api_v3_department_node_type])
+          receive(:named_node_types)
+            .with("source")
+            .and_return([api_v3_department_node_type])
         )
         allow(chart_config).to(
-          receive(:named_attribute).
-            with("commodity_production").
-            and_return(nil)
+          receive(:named_attribute)
+            .with("commodity_production")
+            .and_return(nil)
         )
 
         get :top_sources, params: valid_params

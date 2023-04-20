@@ -23,7 +23,7 @@ RSpec.describe Api::V3::Dashboards::DestinationsController, type: :controller do
         q: "rus"
       }
       expect(assigns(:collection).map(&:name)).to eq(
-        [api_v3_country_of_destination1_node.name]
+        [api_v3_country_of_first_import_node_ru.name]
       )
     end
   end
@@ -31,8 +31,8 @@ RSpec.describe Api::V3::Dashboards::DestinationsController, type: :controller do
   describe "GET index" do
     let(:all_results_alphabetically) {
       [
-        api_v3_country_of_destination2_node,
-        api_v3_country_of_destination1_node
+        api_v3_country_of_first_import_node_de,
+        api_v3_country_of_first_import_node_ru
       ]
     }
 
@@ -46,10 +46,10 @@ RSpec.describe Api::V3::Dashboards::DestinationsController, type: :controller do
     it "returns destinations by id" do
       get :index, params: {
         countries_ids: [api_v3_brazil.id].join(","),
-        destinations_ids: api_v3_country_of_destination1_node.id
+        destinations_ids: api_v3_country_of_first_import_node_ru.id
       }
       expect(assigns(:collection).map(&:id)).to eq(
-        [api_v3_country_of_destination1_node.id]
+        [api_v3_country_of_first_import_node_ru.id]
       )
     end
 
@@ -65,9 +65,9 @@ RSpec.describe Api::V3::Dashboards::DestinationsController, type: :controller do
     it "allows multiple destinations selection" do
       get :index, params: {
         countries_ids: [api_v3_brazil.id].join(","),
-        destinations_ids: [api_v3_country_of_destination1_node.id, api_v3_country_of_destination2_node.id].join(",")
+        destinations_ids: [api_v3_country_of_first_import_node_ru.id, api_v3_country_of_first_import_node_de.id].join(",")
       }
-      expect(assigns(:collection).map(&:id)).to eq([api_v3_country_of_destination2_node.id, api_v3_country_of_destination1_node.id])
+      expect(assigns(:collection).map(&:id)).to eq([api_v3_country_of_first_import_node_de.id, api_v3_country_of_first_import_node_ru.id])
     end
   end
 end

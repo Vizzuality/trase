@@ -207,7 +207,7 @@ shared_context "api v3 quants" do
       q = FactoryBot.create(
         :api_v3_quant,
         name: "Volume",
-        unit: "Tn"
+        unit: "t"
       )
       FactoryBot.create(
         :api_v3_quant_property,

@@ -29,6 +29,7 @@ RSpec.describe Api::V3::Flows::Filter do
       :api_v3_flow,
       context: api_v3_brazil_soy_context,
       path: [
+        api_v3_brazil_soy_country_of_production_node,
         api_v3_biome_node,
         api_v3_state_node,
         api_v3_diamantino_node,
@@ -36,7 +37,7 @@ RSpec.describe Api::V3::Flows::Filter do
         api_v3_port1_node,
         api_v3_exporter1_node,
         api_v3_importer1_node,
-        api_v3_country_of_destination1_node
+        api_v3_country_of_first_import_node_ru
       ].map(&:id),
       year: 2015
     )
@@ -64,12 +65,12 @@ RSpec.describe Api::V3::Flows::Filter do
         api_v3_municipality_node_type,
         api_v3_exporter_node_type,
         api_v3_importer_node_type,
-        api_v3_country_node_type
+        api_v3_country_of_first_import_node_type
       ]
     }
 
     let(:node_types_positions) {
-      [2,5,6,7]
+      [3, 6, 7, 8]
     }
 
     let(:filter_params) {
@@ -129,7 +130,7 @@ RSpec.describe Api::V3::Flows::Filter do
 
     context "when expanded mode" do
       let(:expanded_nodes) {
-        {selected_nodes_ids: [api_v3_country_of_destination1_node.id]}
+        {selected_nodes_ids: [api_v3_country_of_first_import_node_ru.id]}
       }
 
       context "when no locked nodes present" do
@@ -157,7 +158,7 @@ RSpec.describe Api::V3::Flows::Filter do
 
     context "when excluded nodes" do
       let(:excluded_nodes) {
-        {excluded_nodes_ids: [api_v3_country_of_destination1_node.id]}
+        {excluded_nodes_ids: [api_v3_country_of_first_import_node_ru.id]}
       }
 
       it "does not include paths with excluded nodes" do
@@ -167,7 +168,7 @@ RSpec.describe Api::V3::Flows::Filter do
         )
         result = filter.call
         result.data.each do |flow|
-          expect(flow[:path]).not_to include(api_v3_country_of_destination1_node.id)
+          expect(flow[:path]).not_to include(api_v3_country_of_first_import_node_ru.id)
         end
       end
     end

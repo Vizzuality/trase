@@ -1,5 +1,5 @@
 require "rails_helper"
-require "responses/api/v3/dashboards/charts/required_chart_parameters_examples.rb"
+require "responses/api/v3/dashboards/charts/required_chart_parameters_examples"
 
 RSpec.describe "Charts::MultiYearNoNcontOverview", type: :request do
   include_context "api v3 brazil resize by attributes"
@@ -22,7 +22,7 @@ RSpec.describe "Charts::MultiYearNoNcontOverview", type: :request do
         cont_attribute_id: cont_attribute.id,
         sources_ids: api_v3_municipality_node.id,
         companies_ids: [api_v3_exporter1_node.id, api_v3_exporter1_node.id].join(","),
-        destinations_ids: api_v3_country_of_destination1_node.id,
+        destinations_ids: api_v3_country_of_first_import_node_ru.id,
         start_year: 2015,
         end_year: 2016
       }

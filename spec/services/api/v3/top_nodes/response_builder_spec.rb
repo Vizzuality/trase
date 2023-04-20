@@ -27,14 +27,14 @@ RSpec.describe Api::V3::TopNodes::ResponseBuilder do
     it "should return top countries" do
       builder = Api::V3::TopNodes::ResponseBuilder.new(
         api_v3_brazil_soy_context,
-        node_type_id: api_v3_country_node_type.id,
+        node_type_id: api_v3_country_of_first_import_node_type.id,
         year_start: 2015,
         year_end: 2015
       )
 
       builder.call
 
-      expect(builder.top_nodes.first["node_id"]).to eq(api_v3_country_of_destination1_node.id)
+      expect(builder.top_nodes.first["node_id"]).to eq(api_v3_country_of_first_import_node_ru.id)
     end
   end
 end

@@ -3,10 +3,10 @@ module Api
   module V3
     class RefreshProfiles
       def initialize(commodity_id = nil, country_id = nil)
-        @nodes_with_flows = Api::V3::Readonly::NodeWithFlows.
-          without_unknowns.
-          without_domestic.
-          where(profile: Api::V3::Profile::ACTOR)
+        @nodes_with_flows = Api::V3::Readonly::NodeWithFlows
+          .without_unknowns
+          .without_domestic
+          .where(profile: Api::V3::Profile::ACTOR)
         if commodity_id
           @nodes_with_flows = @nodes_with_flows.where(commodity_id: commodity_id)
         end
@@ -26,7 +26,7 @@ module Api
         clear
         @nodes_with_flows.select(:id, :context_id).distinct.each.with_index do |node, idx|
           NodeWithFlowsRefreshActorBasicAttributesWorker.perform_in(
-            idx * 5.seconds, node.id, node.context_id
+            idx * 0.5.seconds, node.id, node.context_id
           )
         end
       end

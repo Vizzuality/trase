@@ -6,6 +6,7 @@ shared_context "api v3 brazil soy flows" do
       :api_v3_flow,
       context: api_v3_brazil_soy_context,
       path: [
+        api_v3_brazil_soy_country_of_production_node,
         api_v3_biome_node,
         api_v3_state_node,
         api_v3_municipality_node,
@@ -13,7 +14,7 @@ shared_context "api v3 brazil soy flows" do
         api_v3_port1_node,
         api_v3_exporter1_node,
         api_v3_importer1_node,
-        api_v3_country_of_destination1_node
+        api_v3_country_of_first_import_node_ru
       ].map(&:id),
       year: 2015
     )
@@ -24,6 +25,7 @@ shared_context "api v3 brazil soy flows" do
       :api_v3_flow,
       context: api_v3_brazil_soy_context,
       path: [
+        api_v3_brazil_soy_country_of_production_node,
         api_v3_biome_node,
         api_v3_state_node,
         api_v3_municipality_node,
@@ -31,7 +33,7 @@ shared_context "api v3 brazil soy flows" do
         api_v3_port1_node,
         api_v3_exporter1_node,
         api_v3_importer1_node,
-        api_v3_country_of_destination1_node
+        api_v3_country_of_first_import_node_ru
       ].map(&:id),
       year: 2015
     )
@@ -43,6 +45,7 @@ shared_context "api v3 brazil soy flows" do
       :api_v3_flow,
       context: api_v3_brazil_soy_context,
       path: [
+        api_v3_brazil_soy_country_of_production_node,
         api_v3_biome_node,
         api_v3_state_node,
         api_v3_municipality_node,
@@ -50,7 +53,7 @@ shared_context "api v3 brazil soy flows" do
         api_v3_port1_node,
         api_v3_exporter1_node,
         api_v3_importer1_node,
-        api_v3_country_of_destination2_node
+        api_v3_country_of_first_import_node_de
       ].map(&:id),
       year: 2015
     )
@@ -62,6 +65,7 @@ shared_context "api v3 brazil soy flows" do
       :api_v3_flow,
       context: api_v3_brazil_soy_context,
       path: [
+        api_v3_brazil_soy_country_of_production_node,
         api_v3_biome_node,
         api_v3_state_node,
         api_v3_municipality_node,
@@ -69,7 +73,7 @@ shared_context "api v3 brazil soy flows" do
         api_v3_port1_node,
         api_v3_exporter2_node,
         api_v3_importer1_node,
-        api_v3_country_of_destination1_node
+        api_v3_country_of_first_import_node_ru
       ].map(&:id),
       year: 2015
     )
@@ -81,6 +85,7 @@ shared_context "api v3 brazil soy flows" do
       :api_v3_flow,
       context: api_v3_brazil_soy_context,
       path: [
+        api_v3_brazil_soy_country_of_production_node,
         api_v3_biome_node,
         api_v3_state_node,
         api_v3_municipality_node,
@@ -88,7 +93,7 @@ shared_context "api v3 brazil soy flows" do
         api_v3_port1_node,
         api_v3_exporter1_node,
         api_v3_importer2_node,
-        api_v3_country_of_destination1_node
+        api_v3_country_of_first_import_node_ru
       ].map(&:id),
       year: 2015
     )
@@ -100,6 +105,7 @@ shared_context "api v3 brazil soy flows" do
       :api_v3_flow,
       context: api_v3_brazil_soy_context,
       path: [
+        api_v3_brazil_soy_country_of_production_node,
         api_v3_biome_node,
         api_v3_state_node,
         api_v3_municipality2_node,
@@ -107,7 +113,7 @@ shared_context "api v3 brazil soy flows" do
         api_v3_port1_node,
         api_v3_exporter1_node,
         api_v3_importer1_node,
-        api_v3_country_of_destination1_node
+        api_v3_country_of_first_import_node_ru
       ].map(&:id),
       year: 2015
     )
