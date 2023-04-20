@@ -3,6 +3,25 @@ shared_context "api v3 brazil soy nodes" do
   include_context "api v3 quals"
   include_context "api v3 brazil context node types"
 
+  let!(:api_v3_brazil_soy_country_of_production_node) {
+    node = Api::V3::Node.where(
+      name: "BRAZIL", node_type_id: api_v3_country_of_production_node_type.id
+    ).first
+    unless node
+      node = FactoryBot.create(
+        :api_v3_node,
+        name: "BRAZIL",
+        node_type: api_v3_country_of_production_node_type,
+        geo_id: "BR"
+      )
+      FactoryBot.create(
+        :api_v3_node_property,
+        node: node
+      )
+    end
+    node
+  }
+
   let!(:api_v3_biome_node) do
     node = Api::V3::Node.where(
       name: "AMAZONIA", node_type_id: api_v3_biome_node_type.id

@@ -71,6 +71,7 @@ shared_context "api v3 brazil two flows" do
       :api_v3_flow,
       context: api_v3_brazil_soy_context,
       path: [
+        api_v3_brazil_soy_country_of_production_node,
         api_v3_biome_node,
         api_v3_state_node,
         api_v3_municipality_node,
@@ -88,6 +89,7 @@ shared_context "api v3 brazil two flows" do
       :api_v3_flow,
       context: api_v3_brazil_soy_context,
       path: [
+        api_v3_brazil_soy_country_of_production_node,
         api_v3_biome_node,
         api_v3_state_node,
         api_v3_municipality_node,
@@ -105,6 +107,7 @@ shared_context "api v3 brazil two flows" do
       :api_v3_flow,
       context: api_v3_brazil_soy_context,
       path: [
+        api_v3_brazil_soy_country_of_production_node,
         api_v3_biome_node,
         api_v3_state_node,
         api_v3_municipality_node,

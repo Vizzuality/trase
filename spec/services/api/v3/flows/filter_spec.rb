@@ -29,6 +29,7 @@ RSpec.describe Api::V3::Flows::Filter do
       :api_v3_flow,
       context: api_v3_brazil_soy_context,
       path: [
+        api_v3_brazil_soy_country_of_production_node,
         api_v3_biome_node,
         api_v3_state_node,
         api_v3_diamantino_node,
@@ -69,7 +70,7 @@ RSpec.describe Api::V3::Flows::Filter do
     }
 
     let(:node_types_positions) {
-      [2,5,6,7]
+      [3,6,7,8]
     }
 
     let(:filter_params) {

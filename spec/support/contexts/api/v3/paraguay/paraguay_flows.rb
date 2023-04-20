@@ -6,6 +6,7 @@ shared_context "api v3 paraguay flows" do
       :api_v3_flow,
       context: api_v3_paraguay_context,
       path: [
+        api_v3_paraguay_soy_country_of_production_node,
         api_v3_paraguay_biome_node,
         api_v3_paraguay_department_node,
         api_v3_paraguay_customs_department_node,

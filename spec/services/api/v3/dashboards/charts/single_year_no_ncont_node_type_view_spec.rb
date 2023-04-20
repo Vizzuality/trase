@@ -28,6 +28,7 @@ RSpec.describe Api::V3::Dashboards::Charts::SingleYearNoNcontNodeTypeView do
       :api_v3_flow,
       context: api_v3_brazil_soy_context,
       path: [
+        api_v3_brazil_soy_country_of_production_node,
         api_v3_unknown_biome_node,
         api_v3_state_node,
         api_v3_municipality_node,
