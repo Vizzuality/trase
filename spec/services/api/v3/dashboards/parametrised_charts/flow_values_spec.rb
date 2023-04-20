@@ -219,9 +219,9 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
       )
     }
     let(:parameters) {
-      overview_parameters.
-        merge(no_flow_path_filters).
-        merge(
+      overview_parameters
+        .merge(no_flow_path_filters)
+        .merge(
           companies_ids: [
             api_v3_exporter1_node.id
           ]
@@ -277,9 +277,9 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
       )
     }
     let(:parameters) {
-      overview_parameters.
-        merge(no_flow_path_filters).
-        merge(
+      overview_parameters
+        .merge(no_flow_path_filters)
+        .merge(
           exporters_ids: [
             api_v3_exporter1_node.id
           ]
@@ -336,9 +336,9 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
       )
     }
     let(:parameters) {
-      overview_parameters.
-        merge(no_flow_path_filters).
-        merge(
+      overview_parameters
+        .merge(no_flow_path_filters)
+        .merge(
           companies_ids: [
             api_v3_exporter1_node.id
           ],
@@ -396,9 +396,9 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
       )
     }
     let(:parameters) {
-      overview_parameters.
-        merge(no_flow_path_filters).
-        merge(
+      overview_parameters
+        .merge(no_flow_path_filters)
+        .merge(
           exporters_ids: [
             api_v3_exporter1_node.id
           ],
@@ -457,9 +457,9 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
       )
     }
     let(:parameters) {
-      overview_parameters.
-        merge(no_flow_path_filters).
-        merge(
+      overview_parameters
+        .merge(no_flow_path_filters)
+        .merge(
           companies_ids: [
             api_v3_exporter1_node.id, api_v3_exporter2_node.id
           ]
@@ -527,9 +527,9 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
       )
     }
     let(:parameters) {
-      overview_parameters.
-        merge(no_flow_path_filters).
-        merge(
+      overview_parameters
+        .merge(no_flow_path_filters)
+        .merge(
           exporters_ids: [
             api_v3_exporter1_node.id, api_v3_exporter2_node.id
           ]

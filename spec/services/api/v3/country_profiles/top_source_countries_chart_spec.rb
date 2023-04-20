@@ -133,7 +133,7 @@ RSpec.describe Api::V3::CountryProfiles::TopSourceCountriesChart do
   let(:service_object) {
     Api::V3::CountryProfiles::TopSourceCountriesChart.new(
       api_v3_soy.id,
-      'FR',
+      "FR",
       2020,
       {}
     )

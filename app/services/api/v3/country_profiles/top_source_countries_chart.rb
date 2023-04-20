@@ -124,33 +124,30 @@ module Api
               limit: 10
             )
           end.flatten
-
-          @top_nodes_by_iso2 = Hash[@top_nodes.map { |n| [n.geo_id, n]}]
+          @top_nodes_by_iso2 = @top_nodes.map { |n| [n.geo_id, n] }.to_h
         end
 
         def initialize_com_trade_top_countries
           @com_trade_top_countries =
-            Api::V3::Readonly::CountriesComTradePartnerAggregatedIndicator.
-              where(
+            Api::V3::Readonly::CountriesComTradePartnerAggregatedIndicator
+              .where(
                 iso2: @geo_id,
                 year: @year,
                 activity: "importer",
                 commodity_id: @commodity.id
-              ).
-              order(quantity: :desc).
-              limit(10)
+              )
+              .order(quantity: :desc)
+              .limit(10)
         end
 
         def target_nodes_formatted
           # lazy
-          country_nodes = Api::V3::Node.
-            joins(:node_type).
-            where(
+          country_nodes = Api::V3::Node
+            .joins(:node_type)
+            .where(
               "node_types.name" => NodeTypeName.destination_country_names + [NodeTypeName::COUNTRY_OF_PRODUCTION]
             )
-          country_names_by_iso2 = Hash[
-            country_nodes.map { |n| [n.geo_id, n.name] }
-          ]
+          country_names_by_iso2 = country_nodes.map { |n| [n.geo_id, n.name] }.to_h
           result = []
           included_countries = Set.new
           @top_nodes.each do |trase_top_node|

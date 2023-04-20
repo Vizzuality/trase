@@ -3,24 +3,24 @@ module Api
     module Contexts
       class ContextSerializer < ActiveModel::Serializer
         attributes :id,
-                   :is_default,
-                   :is_disabled,
-                   :years,
-                   :subnational_years,
-                   :default_year,
-                   :country_id,
-                   :country_name,
-                   :commodity_id,
-                   :commodity_name,
-                   :default_basemap,
-                   :is_subnational,
-                   :is_highlighted,
-                   :has_profiles
+          :is_default,
+          :is_disabled,
+          :years,
+          :subnational_years,
+          :default_year,
+          :country_id,
+          :country_name,
+          :commodity_id,
+          :commodity_name,
+          :default_basemap,
+          :is_subnational,
+          :is_highlighted,
+          :has_profiles
 
         has_many :readonly_recolor_by_attributes,
-                 serializer: RecolorByAttributeSerializer, key: :recolor_by
+          serializer: RecolorByAttributeSerializer, key: :recolor_by
         has_many :readonly_resize_by_attributes,
-                 serializer: ResizeByAttributeSerializer, key: :resize_by
+          serializer: ResizeByAttributeSerializer, key: :resize_by
         has_many :methods_and_data_docs
 
         attribute :map do

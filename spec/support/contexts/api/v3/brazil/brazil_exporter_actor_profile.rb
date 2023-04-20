@@ -48,11 +48,11 @@ shared_context "api v3 brazil exporter actor profile" do
   let!(:api_v3_exporter_basic_attributes_zero_deforestation) do
     return unless defined?(api_v3_zero_deforestation)
 
-    chart_attribute = Api::V3::ChartQual.
-      includes(:chart_attribute).
-      where(
+    chart_attribute = Api::V3::ChartQual
+      .includes(:chart_attribute)
+      .where(
         "chart_attributes.chart_id" => api_v3_exporter_basic_attributes.id,
-        qual_id: api_v3_zero_deforestation.id
+        :qual_id => api_v3_zero_deforestation.id
       ).first&.chart_attribute
     unless chart_attribute
       chart_attribute = FactoryBot.create(
@@ -72,31 +72,29 @@ shared_context "api v3 brazil exporter actor profile" do
   let!(:api_v3_exporter_basic_attributes_zero_deforestation_property) do
     return unless defined?(api_v3_zero_deforestation)
 
-    qual_context_property = Api::V3::QualContextProperty.
-      where(
+    qual_context_property = Api::V3::QualContextProperty
+      .where(
         context_id: api_v3_brazil_soy_context.id,
         qual_id: api_v3_zero_deforestation.id
       ).first
-    unless qual_context_property
-      qual_context_property = FactoryBot.create(
-        :api_v3_qual_context_property,
-        context: api_v3_brazil_soy_context,
-        qual: api_v3_zero_deforestation,
-        display_name: "Brazil soy zero deforestation",
-        tooltip_text: "Brazil soy zero deforestation tooltip"
-      )
-    end
+    qual_context_property ||= FactoryBot.create(
+      :api_v3_qual_context_property,
+      context: api_v3_brazil_soy_context,
+      qual: api_v3_zero_deforestation,
+      display_name: "Brazil soy zero deforestation",
+      tooltip_text: "Brazil soy zero deforestation tooltip"
+    )
     qual_context_property
   end
 
   let!(:api_v3_exporter_basic_attributes_forest_500) do
     return unless defined?(api_v3_forest_500)
 
-    chart_attribute = Api::V3::ChartInd.
-      includes(:chart_attribute).
-      where(
+    chart_attribute = Api::V3::ChartInd
+      .includes(:chart_attribute)
+      .where(
         "chart_attributes.chart_id" => api_v3_exporter_basic_attributes.id,
-        ind_id: api_v3_forest_500.id
+        :ind_id => api_v3_forest_500.id
       ).first&.chart_attribute
     unless chart_attribute
       chart_attribute = FactoryBot.create(
@@ -116,20 +114,18 @@ shared_context "api v3 brazil exporter actor profile" do
   let!(:api_v3_exporter_basic_attributes_forest_500_property) do
     return unless defined?(api_v3_forest_500)
 
-    ind_context_property = Api::V3::IndContextProperty.
-      where(
+    ind_context_property = Api::V3::IndContextProperty
+      .where(
         context_id: api_v3_brazil_soy_context.id,
         ind_id: api_v3_forest_500.id
       ).first
-    unless ind_context_property
-      ind_context_property = FactoryBot.create(
-        :api_v3_ind_context_property,
-        context: api_v3_brazil_soy_context,
-        ind: api_v3_forest_500,
-        display_name: "Brazil soy forest 500",
-        tooltip_text: "Brazil soy forest 500 tooltip"
-      )
-    end
+    ind_context_property ||= FactoryBot.create(
+      :api_v3_ind_context_property,
+      context: api_v3_brazil_soy_context,
+      ind: api_v3_forest_500,
+      display_name: "Brazil soy forest 500",
+      tooltip_text: "Brazil soy forest 500 tooltip"
+    )
     ind_context_property
   end
 
@@ -148,11 +144,11 @@ shared_context "api v3 brazil exporter actor profile" do
   end
 
   let!(:api_v3_exporter_top_countries_commodity_production) do
-    chart_attribute = Api::V3::ChartQuant.
-      includes(:chart_attribute).
-      where(
+    chart_attribute = Api::V3::ChartQuant
+      .includes(:chart_attribute)
+      .where(
         "chart_attributes.chart_id" => api_v3_exporter_top_countries.id,
-        quant_id: api_v3_soy_tn.id
+        :quant_id => api_v3_soy_tn.id
       ).first&.chart_attribute
     unless chart_attribute
       chart_attribute = FactoryBot.create(
@@ -198,11 +194,11 @@ shared_context "api v3 brazil exporter actor profile" do
   end
 
   let!(:api_v3_exporter_top_sources_commodity_production) do
-    chart_attribute = Api::V3::ChartQuant.
-      includes(:chart_attribute).
-      where(
+    chart_attribute = Api::V3::ChartQuant
+      .includes(:chart_attribute)
+      .where(
         "chart_attributes.chart_id" => api_v3_exporter_top_sources.id,
-        quant_id: api_v3_soy_tn.id
+        :quant_id => api_v3_soy_tn.id
       ).first&.chart_attribute
     unless chart_attribute
       chart_attribute = FactoryBot.create(
@@ -255,11 +251,11 @@ shared_context "api v3 brazil exporter actor profile" do
   end
 
   let!(:api_v3_exporter_sustainability_deforestation_v2) do
-    chart_attribute = Api::V3::ChartQuant.
-      includes(:chart_attribute).
-      where(
+    chart_attribute = Api::V3::ChartQuant
+      .includes(:chart_attribute)
+      .where(
         "chart_attributes.chart_id" => api_v3_exporter_sustainability.id,
-        quant_id: api_v3_deforestation_v2.id
+        :quant_id => api_v3_deforestation_v2.id
       ).first&.chart_attribute
     unless chart_attribute
       chart_attribute = FactoryBot.create(
@@ -311,11 +307,11 @@ shared_context "api v3 brazil exporter actor profile" do
   end
 
   let!(:api_v3_exporter_exporting_companies_land_use) do
-    chart_attribute = Api::V3::ChartQuant.
-      includes(:chart_attribute).
-      where(
+    chart_attribute = Api::V3::ChartQuant
+      .includes(:chart_attribute)
+      .where(
         "chart_attributes.chart_id" => api_v3_exporter_exporting_companies.id,
-        quant_id: api_v3_land_use.id
+        :quant_id => api_v3_land_use.id
       ).first&.chart_attribute
     unless chart_attribute
       chart_attribute = FactoryBot.create(

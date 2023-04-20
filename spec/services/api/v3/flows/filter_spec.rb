@@ -70,7 +70,7 @@ RSpec.describe Api::V3::Flows::Filter do
     }
 
     let(:node_types_positions) {
-      [3,6,7,8]
+      [3, 6, 7, 8]
     }
 
     let(:filter_params) {

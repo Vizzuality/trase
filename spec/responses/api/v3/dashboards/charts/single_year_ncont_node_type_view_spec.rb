@@ -1,5 +1,5 @@
 require "rails_helper"
-require "responses/api/v3/dashboards/charts/required_chart_parameters_examples.rb"
+require "responses/api/v3/dashboards/charts/required_chart_parameters_examples"
 
 RSpec.describe "Charts::SingleYearNcontNodeTypeView", type: :request do
   include_context "api v3 brazil resize by attributes"

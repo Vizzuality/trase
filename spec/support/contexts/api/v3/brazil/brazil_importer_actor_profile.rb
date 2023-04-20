@@ -60,11 +60,11 @@ shared_context "api v3 brazil importer actor profile" do
   end
 
   let!(:api_v3_importer_top_countries_commodity_production) do
-    chart_attribute = Api::V3::ChartQuant.
-      includes(:chart_attribute).
-      where(
+    chart_attribute = Api::V3::ChartQuant
+      .includes(:chart_attribute)
+      .where(
         "chart_attributes.chart_id" => api_v3_importer_top_countries.id,
-        quant_id: api_v3_soy_tn.id
+        :quant_id => api_v3_soy_tn.id
       ).first&.chart_attribute
     unless chart_attribute
       chart_attribute = FactoryBot.create(
@@ -110,11 +110,11 @@ shared_context "api v3 brazil importer actor profile" do
   end
 
   let!(:api_v3_importer_top_sources_commodity_production) do
-    chart_attribute = Api::V3::ChartQuant.
-      includes(:chart_attribute).
-      where(
+    chart_attribute = Api::V3::ChartQuant
+      .includes(:chart_attribute)
+      .where(
         "chart_attributes.chart_id" => api_v3_importer_top_sources.id,
-        quant_id: api_v3_soy_tn.id
+        :quant_id => api_v3_soy_tn.id
       ).first&.chart_attribute
     unless chart_attribute
       chart_attribute = FactoryBot.create(
@@ -167,11 +167,11 @@ shared_context "api v3 brazil importer actor profile" do
   end
 
   let!(:api_v3_importer_sustainability_deforestation_v2) do
-    chart_attribute = Api::V3::ChartQuant.
-      includes(:chart_attribute).
-      where(
+    chart_attribute = Api::V3::ChartQuant
+      .includes(:chart_attribute)
+      .where(
         "chart_attributes.chart_id" => api_v3_importer_sustainability.id,
-        quant_id: api_v3_deforestation_v2.id
+        :quant_id => api_v3_deforestation_v2.id
       ).first&.chart_attribute
     unless chart_attribute
       chart_attribute = FactoryBot.create(
@@ -223,11 +223,11 @@ shared_context "api v3 brazil importer actor profile" do
   end
 
   let!(:api_v3_importer_exporting_companies_land_use) do
-    chart_attribute = Api::V3::ChartQuant.
-      includes(:chart_attribute).
-      where(
+    chart_attribute = Api::V3::ChartQuant
+      .includes(:chart_attribute)
+      .where(
         "chart_attributes.chart_id" => api_v3_importer_exporting_companies.id,
-        quant_id: api_v3_land_use.id
+        :quant_id => api_v3_land_use.id
       ).first&.chart_attribute
     unless chart_attribute
       chart_attribute = FactoryBot.create(

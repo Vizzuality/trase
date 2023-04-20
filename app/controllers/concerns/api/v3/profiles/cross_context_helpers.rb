@@ -56,7 +56,7 @@ module Api
           return if params[:commodity_id].present? || params[:context_id].present?
 
           raise ActionController::ParameterMissing,
-                "Required param commodity_id or context_id missing"
+            "Required param commodity_id or context_id missing"
         end
       end
     end

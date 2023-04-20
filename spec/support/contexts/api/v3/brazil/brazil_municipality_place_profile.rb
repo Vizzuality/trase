@@ -18,11 +18,11 @@ shared_context "api v3 brazil municipality place profile" do
   end
 
   let!(:api_v3_place_basic_attributes_area) do
-    chart_attribute = Api::V3::ChartQuant.
-      includes(:chart_attribute).
-      where(
+    chart_attribute = Api::V3::ChartQuant
+      .includes(:chart_attribute)
+      .where(
         "chart_attributes.chart_id" => api_v3_place_basic_attributes.id,
-        quant_id: api_v3_area.id
+        :quant_id => api_v3_area.id
       ).first&.chart_attribute
     unless chart_attribute
       chart_attribute = FactoryBot.create(
@@ -41,29 +41,27 @@ shared_context "api v3 brazil municipality place profile" do
   end
 
   let!(:api_v3_place_basic_attributes_area_property) do
-    quant_context_property = Api::V3::QuantContextProperty.
-      where(
+    quant_context_property = Api::V3::QuantContextProperty
+      .where(
         context_id: api_v3_brazil_soy_context.id,
         quant_id: api_v3_area.id
       ).first
-    unless quant_context_property
-      quant_context_property = FactoryBot.create(
-        :api_v3_quant_context_property,
-        context: api_v3_brazil_soy_context,
-        quant: api_v3_area,
-        display_name: "Brazil soy area",
-        tooltip_text: "Brazil soy area tooltip"
-      )
-    end
+    quant_context_property ||= FactoryBot.create(
+      :api_v3_quant_context_property,
+      context: api_v3_brazil_soy_context,
+      quant: api_v3_area,
+      display_name: "Brazil soy area",
+      tooltip_text: "Brazil soy area tooltip"
+    )
     quant_context_property
   end
 
   let!(:api_v3_place_basic_attributes_commodity_area) do
-    chart_attribute = Api::V3::ChartInd.
-      includes(:chart_attribute).
-      where(
+    chart_attribute = Api::V3::ChartInd
+      .includes(:chart_attribute)
+      .where(
         "chart_attributes.chart_id" => api_v3_place_basic_attributes.id,
-        ind_id: api_v3_soy_areaperc.id
+        :ind_id => api_v3_soy_areaperc.id
       ).first&.chart_attribute
     unless chart_attribute
       chart_attribute = FactoryBot.create(
@@ -82,11 +80,11 @@ shared_context "api v3 brazil municipality place profile" do
   end
 
   let!(:api_v3_place_basic_attributes_commodity_production) do
-    chart_attribute = Api::V3::ChartQuant.
-      includes(:chart_attribute).
-      where(
+    chart_attribute = Api::V3::ChartQuant
+      .includes(:chart_attribute)
+      .where(
         "chart_attributes.chart_id" => api_v3_place_basic_attributes.id,
-        quant_id: api_v3_soy_tn.id
+        :quant_id => api_v3_soy_tn.id
       ).first&.chart_attribute
     unless chart_attribute
       chart_attribute = FactoryBot.create(
@@ -105,29 +103,27 @@ shared_context "api v3 brazil municipality place profile" do
   end
 
   let!(:api_v3_place_basic_attributes_commodity_production_property) do
-    quant_context_property = Api::V3::QuantContextProperty.
-      where(
+    quant_context_property = Api::V3::QuantContextProperty
+      .where(
         context_id: api_v3_brazil_soy_context.id,
         quant_id: api_v3_soy_tn.id
       ).first
-    unless quant_context_property
-      quant_context_property = FactoryBot.create(
-        :api_v3_quant_context_property,
-        context: api_v3_brazil_soy_context,
-        quant: api_v3_soy_tn,
-        display_name: "Brazil soy commodity production",
-        tooltip_text: "Brazil soy commodity production tooltip"
-      )
-    end
+    quant_context_property ||= FactoryBot.create(
+      :api_v3_quant_context_property,
+      context: api_v3_brazil_soy_context,
+      quant: api_v3_soy_tn,
+      display_name: "Brazil soy commodity production",
+      tooltip_text: "Brazil soy commodity production tooltip"
+    )
     quant_context_property
   end
 
   let!(:api_v3_place_basic_attributes_commodity_yield) do
-    chart_attribute = Api::V3::ChartInd.
-      includes(:chart_attribute).
-      where(
+    chart_attribute = Api::V3::ChartInd
+      .includes(:chart_attribute)
+      .where(
         "chart_attributes.chart_id" => api_v3_place_basic_attributes.id,
-        ind_id: api_v3_soy_yield.id
+        :ind_id => api_v3_soy_yield.id
       ).first&.chart_attribute
     unless chart_attribute
       chart_attribute = FactoryBot.create(
@@ -196,11 +192,11 @@ shared_context "api v3 brazil municipality place profile" do
   end
 
   let!(:api_v3_place_environmental_indicators_deforestation_v2) do
-    chart_attribute = Api::V3::ChartQuant.
-      includes(:chart_attribute).
-      where(
+    chart_attribute = Api::V3::ChartQuant
+      .includes(:chart_attribute)
+      .where(
         "chart_attributes.chart_id" => api_v3_place_environmental_indicators.id,
-        quant_id: api_v3_deforestation_v2.id
+        :quant_id => api_v3_deforestation_v2.id
       ).first&.chart_attribute
     unless chart_attribute
       chart_attribute = FactoryBot.create(
@@ -235,11 +231,11 @@ shared_context "api v3 brazil municipality place profile" do
   end
 
   let!(:api_v3_place_socioeconomic_indicators_human_development_index) do
-    chart_attribute = Api::V3::ChartInd.
-      includes(:chart_attribute).
-      where(
+    chart_attribute = Api::V3::ChartInd
+      .includes(:chart_attribute)
+      .where(
         "chart_attributes.chart_id" => api_v3_place_socioeconomic_indicators.id,
-        ind_id: api_v3_human_development_index.id
+        :ind_id => api_v3_human_development_index.id
       ).first&.chart_attribute
     unless chart_attribute
       chart_attribute = FactoryBot.create(
@@ -274,11 +270,11 @@ shared_context "api v3 brazil municipality place profile" do
   end
 
   let!(:api_v3_place_agricultural_indicators_soy_tn) do
-    chart_attribute = Api::V3::ChartQuant.
-      includes(:chart_attribute).
-      where(
+    chart_attribute = Api::V3::ChartQuant
+      .includes(:chart_attribute)
+      .where(
         "chart_attributes.chart_id" => api_v3_place_agricultural_indicators.id,
-        quant_id: api_v3_soy_tn.id
+        :quant_id => api_v3_soy_tn.id
       ).first&.chart_attribute
     unless chart_attribute
       chart_attribute = FactoryBot.create(
@@ -313,11 +309,11 @@ shared_context "api v3 brazil municipality place profile" do
   end
 
   let!(:api_v3_place_territorial_governance_embargoes) do
-    chart_attribute = Api::V3::ChartQuant.
-      includes(:chart_attribute).
-      where(
+    chart_attribute = Api::V3::ChartQuant
+      .includes(:chart_attribute)
+      .where(
         "chart_attributes.chart_id" => api_v3_place_territorial_governance.id,
-        quant_id: api_v3_embargoes.id
+        :quant_id => api_v3_embargoes.id
       ).first&.chart_attribute
     unless chart_attribute
       chart_attribute = FactoryBot.create(
@@ -350,11 +346,11 @@ shared_context "api v3 brazil municipality place profile" do
   end
 
   let!(:api_v3_place_trajectory_deforestation_deforestation_v2) do
-    chart_attribute = Api::V3::ChartQuant.
-      includes(:chart_attribute).
-      where(
+    chart_attribute = Api::V3::ChartQuant
+      .includes(:chart_attribute)
+      .where(
         "chart_attributes.chart_id" => api_v3_place_trajectory_deforestation.id,
-        quant_id: api_v3_deforestation_v2.id
+        :quant_id => api_v3_deforestation_v2.id
       ).first&.chart_attribute
     unless chart_attribute
       chart_attribute = FactoryBot.create(
