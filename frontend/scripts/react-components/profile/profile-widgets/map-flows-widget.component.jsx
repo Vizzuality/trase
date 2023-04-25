@@ -16,6 +16,7 @@ import {
   GET_COUNTRY_TOP_CONSUMER_COUNTRIES
 } from 'utils/getURLFromParams';
 import ShrinkingSpinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
+import ChartError from 'react-components/chart-error';
 
 class MapFlowsWidget extends React.PureComponent {
   showLink(item) {
@@ -41,13 +42,8 @@ class MapFlowsWidget extends React.PureComponent {
             );
           }
           if (error) {
-            // TODO: display a proper error message to the user
             console.error('Error loading sustainability table data for profile page', error);
-            return (
-              <div className="section-placeholder" data-test="loading-section">
-                <ShrinkingSpinner className="-large" />
-              </div>
-            );
+            return <ChartError />;
           }
 
           if (error) {

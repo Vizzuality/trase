@@ -9,6 +9,7 @@ import Widget from 'react-components/widgets/widget.component';
 import { getSummaryEndpoint } from 'utils/getURLFromParams';
 import stripHtml from 'utils/stripHtml';
 import ShrinkingSpinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
+import ChartError from 'react-components/chart-error';
 
 function SummaryWidget(props) {
   const {
@@ -42,9 +43,8 @@ function SummaryWidget(props) {
         }
 
         if (error) {
-          // TODO: display a proper error message to the user
           console.error('Error loading summary data for profile page', error);
-          return null;
+          return <ChartError />;
         }
         const summaryComponents = {
           actor: ActorSummary,

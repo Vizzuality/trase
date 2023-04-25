@@ -11,6 +11,7 @@ import {
 import flatMap from 'lodash/flatMap';
 import ShrinkingSpinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
 import ProfileTitle from 'react-components/profile/profile-components/profile-title.component';
+import ChartError from 'react-components/chart-error';
 
 class SustainabilityTableWidget extends React.PureComponent {
   showLink(item) {
@@ -71,13 +72,8 @@ class SustainabilityTableWidget extends React.PureComponent {
           }
 
           if (error) {
-            // TODO: display a proper error message to the user
             console.error('Error loading sustainability table data for profile page', error);
-            return (
-              <div className="section-placeholder" data-test="loading-section">
-                <ShrinkingSpinner className="-large" />
-              </div>
-            );
+            return <ChartError />;
           }
 
           if (error) {

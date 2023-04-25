@@ -8,6 +8,7 @@ import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.co
 import formatValue from 'utils/formatValue';
 import ShrinkingSpinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
 import ProfileTitle from 'react-components/profile/profile-components/profile-title.component';
+import ChartError from 'react-components/chart-error';
 
 class ImportingCompaniesWidget extends React.PureComponent {
   state = {
@@ -71,7 +72,7 @@ class ImportingCompaniesWidget extends React.PureComponent {
           if (error) {
             // TODO: display a proper error message to the user
             console.error('Error loading importing companies data for profile page', error);
-            return null;
+            return <ChartError />;
           }
 
           const { dimensionsX, companies, dimensionY } = data[GET_ACTOR_EXPORTING_COMPANIES];
