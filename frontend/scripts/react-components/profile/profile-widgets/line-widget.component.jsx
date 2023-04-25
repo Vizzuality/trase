@@ -8,6 +8,7 @@ import Heading from 'react-components/shared/heading/heading.component';
 import ProfileTitle from 'react-components/profile/profile-components/profile-title.component';
 
 import { GET_COUNTRY_NODE_SUMMARY_URL } from 'utils/getURLFromParams';
+import ChartError from 'react-components/chart-error';
 
 class LineComponent extends React.PureComponent {
   renderSpinner() {
@@ -39,9 +40,8 @@ class LineComponent extends React.PureComponent {
       >
         {({ data, error, loading }) => {
           if (error) {
-            // TODO: display a proper error message to the user
             console.error('Error loading summary data for profile page', error);
-            return null;
+            return <ChartError />;
           }
 
           if (loading) {

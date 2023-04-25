@@ -1,6 +1,6 @@
-RSpec.shared_examples 'passing checks' do
+RSpec.shared_examples "passing checks" do
   describe :passing? do
-    it 'passes' do
+    it "passes" do
       expect(check).to be_passing
     end
   end
@@ -13,9 +13,9 @@ RSpec.shared_examples 'passing checks' do
   end
 end
 
-RSpec.shared_examples 'passing checks (warnings)' do
+RSpec.shared_examples "passing checks (warnings)" do
   describe :passing? do
-    it 'passes' do
+    it "passes" do
       expect(check).to be_passing
     end
   end
@@ -28,14 +28,14 @@ RSpec.shared_examples 'passing checks (warnings)' do
   end
 end
 
-RSpec.shared_examples 'failing checks' do
+RSpec.shared_examples "failing checks" do
   describe :passing? do
     it "doesn't pass" do
       expect(check).not_to be_passing
     end
   end
   describe :call do
-    it 'adds an error' do
+    it "adds an error" do
       expect {
         check.call(report_status)
       }.to change(report_status, :error_count).by(1)
@@ -43,14 +43,14 @@ RSpec.shared_examples 'failing checks' do
   end
 end
 
-RSpec.shared_examples 'failing checks (warnings)' do
+RSpec.shared_examples "failing checks (warnings)" do
   describe :passing? do
     it "doesn't pass" do
       expect(check).not_to be_passing
     end
   end
   describe :call do
-    it 'adds a warning' do
+    it "adds a warning" do
       expect {
         check.call(report_status)
       }.to change(report_status, :warning_count).by(1)

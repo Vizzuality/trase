@@ -17,11 +17,11 @@
 module Api
   module V3
     class DatabaseUpdate < BaseModel
-      STARTED = 'STARTED'.freeze
-      FINISHED = 'FINISHED'.freeze
-      FAILED = 'FAILED'.freeze
+      STARTED = "STARTED".freeze
+      FINISHED = "FINISHED".freeze
+      FAILED = "FAILED".freeze
 
-      S3_PREFIX = 'MAIN'.freeze # prefix within bucket
+      S3_PREFIX = "MAIN".freeze # prefix within bucket
 
       validate :only_one_update_started
       scope :started, -> { where(status: STARTED) }
@@ -30,21 +30,21 @@ module Api
         return [] unless stats.present?
 
         ary = []
-        elapsed_seconds = stats.delete('elapsed_seconds')
+        elapsed_seconds = stats.delete("elapsed_seconds")
         elapsed_seconds&.map do |key, value|
           ary << "DURATION #{key}: #{value} seconds"
         end
         stats.each do |blue_table, blue_stats|
           b_line = "#{blue_table}: "
-          b_line << blue_stats.except('yellow_tables').keys.map do |key|
+          b_line << blue_stats.except("yellow_tables").keys.map do |key|
             "#{key.upcase}: #{blue_stats[key]}"
-          end.join(', ')
+          end.join(", ")
           ary << b_line
-          blue_stats['yellow_tables']&.each do |yellow_table, yellow_stats|
+          blue_stats["yellow_tables"]&.each do |yellow_table, yellow_stats|
             y_line = "#{yellow_table}: "
             y_line << yellow_stats.keys.map do |key|
               "#{key.upcase}: #{yellow_stats[key]}"
-            end.join(', ')
+            end.join(", ")
             ary << y_line
           end
         end
@@ -52,7 +52,7 @@ module Api
       end
 
       def stats_to_s
-        stats_to_ary.map { |line| "#{line}\n" }.join('')
+        stats_to_ary.map { |line| "#{line}\n" }.join("")
       end
 
       def update_stats(stats)
@@ -94,8 +94,8 @@ module Api
         return unless started?
 
         matches = DatabaseUpdate.started
-        matches = matches.where('id != ?', id) if persisted?
-        errors.add(:started, 'cannot start another update') if matches.exists?
+        matches = matches.where("id != ?", id) if persisted?
+        errors.add(:started, "cannot start another update") if matches.exists?
       end
     end
   end

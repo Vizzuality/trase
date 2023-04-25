@@ -18,7 +18,7 @@ module Api
 
         def sorted_list(attribute, options)
           limit = limit_from_options(options)
-          result = query(attribute, options).order('value DESC')
+          result = query(attribute, options).order("value DESC")
           result = result.limit(limit) if limit.present?
           result
         end
@@ -52,21 +52,21 @@ module Api
           include_domestic_consumption = options.
             delete(:include_domestic_consumption)
           attribute_type = attribute.class.name.demodulize.downcase
-          value_table = 'flow_' + attribute_type + 's'
+          value_table = "flow_" + attribute_type + "s"
           query = Api::V3::Flow.
             select(select_clause(value_table)).
             joins(value_table_join_clause(value_table)).
             joins(nodes_join_clause).
             where(
               context_id: @contexts.map(&:id),
-              'nodes.node_type_id' => @node_type.id,
-              'nodes.is_unknown' => false,
+              "nodes.node_type_id" => @node_type.id,
+              "nodes.is_unknown" => false,
               "#{value_table}.#{attribute_type}_id" => attribute.id
             )
 
           unless include_domestic_consumption
             query = query.where(
-              'nodes.is_domestic_consumption' => false
+              "nodes.is_domestic_consumption" => false
             )
           end
           query.group(group_clause)
@@ -85,11 +85,11 @@ module Api
 
         def select_clause(value_table)
           [
-            'flows.path[nodes.column_position + 1] AS node_id',
+            "flows.path[nodes.column_position + 1] AS node_id",
             "SUM(#{value_table}.value)::DOUBLE PRECISION AS value",
-            'nodes.name AS name',
-            'nodes.is_domestic_consumption AS is_domestic_consumption',
-            'nodes.geo_id'
+            "nodes.name AS name",
+            "nodes.is_domestic_consumption AS is_domestic_consumption",
+            "nodes.geo_id"
           ]
         end
 
@@ -106,10 +106,10 @@ module Api
 
         def group_clause
           [
-            '1',
-            'nodes.name',
-            'nodes.geo_id',
-            'nodes.is_domestic_consumption'
+            "1",
+            "nodes.name",
+            "nodes.geo_id",
+            "nodes.is_domestic_consumption"
           ]
         end
       end

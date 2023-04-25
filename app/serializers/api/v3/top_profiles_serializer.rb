@@ -26,7 +26,7 @@ module Api
           end
         return url if Rails.env.development? || Rails.env.test?
 
-        '/content' + url
+        "/content" + url
       end
     end
   end

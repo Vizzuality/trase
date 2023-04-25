@@ -6,7 +6,7 @@ module Api
     module DatabaseValidation
       module Checks
         class AbstractCheck
-          delegate :url_helpers, to: 'Rails.application.routes'
+          delegate :url_helpers, to: "Rails.application.routes"
 
           # @param object [subclass of Api::V3::BaseModel]
           # @param options [Hash]

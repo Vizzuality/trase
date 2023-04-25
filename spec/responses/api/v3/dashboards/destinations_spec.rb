@@ -1,7 +1,7 @@
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe 'destinations', type: :request do
-  include_context 'api v3 brazil soy flow quants'
+RSpec.describe "destinations", type: :request do
+  include_context "api v3 brazil soy flow quants"
 
   before(:each) do
     Api::V3::Readonly::FlowNode.refresh(
@@ -13,21 +13,21 @@ RSpec.describe 'destinations', type: :request do
     Api::V3::Readonly::Dashboards::Destination.refresh(sync: true)
   end
 
-  describe 'GET /api/v3/dashboards/destinations' do
-    it 'has the correct response structure' do
-      get '/api/v3/dashboards/destinations'
+  describe "GET /api/v3/dashboards/destinations" do
+    it "has the correct response structure" do
+      get "/api/v3/dashboards/destinations"
 
       expect(@response).to have_http_status(:ok)
-      expect(@response).to match_response_schema('dashboards_destinations')
+      expect(@response).to match_response_schema("dashboards_destinations")
     end
   end
 
-  describe 'GET /api/v3/dashboards/destinations/search' do
-    it 'has the correct response structure' do
-      get '/api/v3/dashboards/destinations/search?q=a'
+  describe "GET /api/v3/dashboards/destinations/search" do
+    it "has the correct response structure" do
+      get "/api/v3/dashboards/destinations/search?q=a"
 
       expect(@response).to have_http_status(:ok)
-      expect(@response).to match_response_schema('dashboards_destinations_search')
+      expect(@response).to match_response_schema("dashboards_destinations_search")
     end
   end
 end

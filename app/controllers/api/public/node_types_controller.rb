@@ -9,7 +9,7 @@ module Api
         ).call
 
         render json: @result,
-               root: 'data',
+               root: "data",
                each_serializer: Api::Public::NodeTypes::PathNodeTypesSerializer
       end
 

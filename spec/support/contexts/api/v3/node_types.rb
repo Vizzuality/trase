@@ -1,4 +1,4 @@
-shared_context 'api v3 node types' do
+shared_context "api v3 node types" do
   let(:api_v3_country_of_production_node_type) do
     Api::V3::NodeType.find_by_name(NodeTypeName::COUNTRY_OF_PRODUCTION) ||
       FactoryBot.create(:api_v3_node_type, name: NodeTypeName::COUNTRY_OF_PRODUCTION)
@@ -50,5 +50,13 @@ shared_context 'api v3 node types' do
   let(:api_v3_economic_bloc_node_type) do
     Api::V3::NodeType.find_by_name(NodeTypeName::ECONOMIC_BLOC) ||
       FactoryBot.create(:api_v3_node_type, name: NodeTypeName::ECONOMIC_BLOC)
+  end
+  let(:api_v3_country_of_destination_node_type) do
+    Api::V3::NodeType.find_by_name(NodeTypeName::COUNTRY_OF_DESTINATION) ||
+      FactoryBot.create(:api_v3_node_type, name: NodeTypeName::COUNTRY_OF_DESTINATION)
+  end
+  let(:api_v3_country_of_first_import_node_type) do
+    Api::V3::NodeType.find_by_name(NodeTypeName::COUNTRY_OF_FIRST_IMPORT) ||
+      FactoryBot.create(:api_v3_node_type, name: NodeTypeName::COUNTRY_OF_FIRST_IMPORT)
   end
 end

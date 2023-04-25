@@ -16,7 +16,7 @@ module Api
           def passing?
             tmp = @object.profiles
             if Api::V3::Profile::NAMES.include? @profile_type
-              tmp = tmp.where('profiles.name' => @profile_type)
+              tmp = tmp.where("profiles.name" => @profile_type)
             end
             tmp.any?
           end
@@ -29,10 +29,10 @@ module Api
 
           def error
             message = [
-              'At least one',
+              "At least one",
               @profile_type,
-              'profile should be present'
-            ].join(' ')
+              "profile should be present"
+            ].join(" ")
             super.merge(
               message: message
             )

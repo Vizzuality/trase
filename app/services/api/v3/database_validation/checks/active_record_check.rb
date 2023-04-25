@@ -53,14 +53,14 @@ module Api
                 "#{k}: #{v}"
               end
               if validator.respond_to?(:attributes)
-                validated_attributes = validator.attributes.join(', ')
+                validated_attributes = validator.attributes.join(", ")
               end
               [
                 validator.kind,
-                'of',
+                "of",
                 validated_attributes,
                 human_readable_options
-              ].join(' ')
+              ].join(" ")
             end
           end
         end

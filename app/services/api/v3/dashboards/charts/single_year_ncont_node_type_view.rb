@@ -7,7 +7,7 @@ module Api
           include Api::V3::Dashboards::Charts::Helpers
           include Api::V3::Dashboards::Charts::FlowValuesHelpers
 
-          OTHER = 'OTHER'.freeze
+          OTHER = "OTHER".freeze
 
           # @param chart_parameters [Api::V3::Dashboards::ChartParameters::FlowValues]
           def initialize(chart_parameters)
@@ -24,16 +24,16 @@ module Api
           end
 
           def call
-            break_by_values = @query.map { |e| e['break_by'] }.uniq.sort
+            break_by_values = @query.map { |e| e["break_by"] }.uniq.sort
 
             data_by_x = {}
             x_labels_profile_info = []
             profile = profile_for_node_type_id(@node_type.id)
             @top_n_and_others_query.each do |record|
-              x_labels_profile_info << {id: record['id'], profile: profile}
+              x_labels_profile_info << {id: record["id"], profile: profile}
               break_by_values.each.with_index do |break_by, idx|
-                data_by_x[record['x']] ||= {}
-                data_by_x[record['x']]["y#{idx}"] = record['per_break_by'][break_by]
+                data_by_x[record["x"]] ||= {}
+                data_by_x[record["x"]]["y#{idx}"] = record["per_break_by"][break_by]
               end
             end
 
@@ -44,7 +44,7 @@ module Api
             @meta = {
               xAxis: node_type_axis_meta(@node_type),
               xLabelsProfileInfo: x_labels_profile_info,
-              yAxis: axis_meta(@cont_attribute, 'number'),
+              yAxis: axis_meta(@cont_attribute, "number"),
               x: node_type_legend_meta(@node_type),
               info: info
             }

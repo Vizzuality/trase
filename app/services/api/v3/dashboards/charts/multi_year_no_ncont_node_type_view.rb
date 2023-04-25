@@ -7,7 +7,7 @@ module Api
           include Api::V3::Dashboards::Charts::Helpers
           include Api::V3::Dashboards::Charts::FlowValuesHelpers
 
-          OTHER = 'OTHER'.freeze
+          OTHER = "OTHER".freeze
 
           # @param chart_parameters [Api::V3::Dashboards::ChartParameters::FlowValues]
           def initialize(chart_parameters)
@@ -29,9 +29,9 @@ module Api
             data_by_x = {}
 
             @top_n_and_others_query.each do |record|
-              idx = break_by_values_indexes[record['break_by']]
-              data_by_x[record['x']] ||= {}
-              data_by_x[record['x']]["y#{idx}"] = record['y0']
+              idx = break_by_values_indexes[record["break_by"]]
+              data_by_x[record["x"]] ||= {}
+              data_by_x[record["x"]]["y#{idx}"] = record["y0"]
             end
 
             @data = data_by_x.map do |key, value|
@@ -40,7 +40,7 @@ module Api
 
             @meta = {
               xAxis: year_axis_meta,
-              yAxis: axis_meta(@cont_attribute, 'number'),
+              yAxis: axis_meta(@cont_attribute, "number"),
               x: year_legend_meta,
               info: info
             }
@@ -48,7 +48,7 @@ module Api
             profile = profile_for_node_type_id(@node_type.id)
             break_by_values_indexes.each do |break_by, idx|
               node = top_nodes[idx]
-              profile_info = {id: node['id'], profile: profile} if node
+              profile_info = {id: node["id"], profile: profile} if node
               @meta[:"y#{idx}"] = series_legend_meta(break_by, @cont_attribute).
                 merge(profileInfo: profile_info)
             end
@@ -89,7 +89,7 @@ module Api
                 "flows.path[#{@node_type_idx}]",
                 "flows.names[#{@node_type_idx}]"
               ]).
-              order(Arel.sql('SUM(flow_quants.value) DESC')).
+              order(Arel.sql("SUM(flow_quants.value) DESC")).
               limit(@top_n)
           end
 
@@ -107,7 +107,7 @@ module Api
             @query = @query.
               select("COALESCE(top_nodes.name, '#{OTHER}'::TEXT) AS break_by").
               joins("LEFT JOIN top_nodes ON top_nodes.id = flows.path[#{@node_type_idx}]").
-              group('top_nodes.name')
+              group("top_nodes.name")
           end
 
           def top_nodes
@@ -127,7 +127,7 @@ module Api
             selected_node_types = selected_nodes.map { |id| Api::V3::Node.includes(:node_type).find(id).node_type.id }
             is_current_node_type_in_selected_node_types = selected_node_types.include?(@node_type_idx)
             array = is_current_node_type_in_selected_node_types ? [] : [OTHER]
-            top_nodes.map { |r| r['name'] } + array
+            top_nodes.map { |r| r["name"] } + array
           end
 
           def top_nodes_break_by_values_map

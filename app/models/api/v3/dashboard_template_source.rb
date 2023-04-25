@@ -13,8 +13,8 @@ module Api
       belongs_to :node
 
       belongs_to :readonly_dashboards_source,
-                 class_name: 'Api::V3::Readonly::Dashboards::Source',
-                 foreign_key: 'node_id'
+                 class_name: "Api::V3::Readonly::Dashboards::Source",
+                 foreign_key: "node_id"
 
       def self.blue_foreign_keys
         [

@@ -4,8 +4,8 @@ module Api
       class FilterNodes < BaseFilter
         include CallWithQueryTerm
 
-        ORDER_BY_VOLUME = 'volume'.freeze
-        ORDER_BY_NAME = 'name'.freeze
+        ORDER_BY_VOLUME = "volume".freeze
+        ORDER_BY_NAME = "name".freeze
 
           # @see Api::V3::Dashboards::FilterNodes::BaseFilter
           # @option params [String] order_by
@@ -69,16 +69,16 @@ module Api
           # no path can match more than pone node id of a given node type
           path_conditions = @nodes_to_filter_by.node_types_ids.map do |node_type_id|
             nodes = @nodes_to_filter_by.nodes_by_node_type_id(node_type_id)
-            "flows.path && ARRAY[#{nodes.map(&:id).join(', ')}]"
-          end.join(' AND ')
+            "flows.path && ARRAY[#{nodes.map(&:id).join(", ")}]"
+          end.join(" AND ")
           # get a list of all matching nodes without checking role / position
           # because that's more complicated and identical performance-wise
           @subquery = Api::V3::Flow.
-            select('UNNEST(path) AS node_id').
+            select("UNNEST(path) AS node_id").
             where(path_conditions)
           @subquery = @subquery.where(context_id: @contexts.pluck(:id))
-          @subquery = @subquery.where('year >= ?', @start_year) if @start_year
-          @subquery = @subquery.where('year <= ?', @end_year) if @end_year
+          @subquery = @subquery.where("year >= ?", @start_year) if @start_year
+          @subquery = @subquery.where("year <= ?", @end_year) if @end_year
 
           @query = @query.
             joins(
@@ -126,7 +126,7 @@ module Api
         def apply_order_by_average_volume
           years = (@start_year..@end_year).to_a
           no_of_years = years.length
-          rank_sum = years.map { |y| "(rank_by_year->'#{y}')::INT" }.join(' + ')
+          rank_sum = years.map { |y| "(rank_by_year->'#{y}')::INT" }.join(" + ")
           avg_rank = "(#{rank_sum}) / #{no_of_years}"
           @query = @query.order(Arel.sql(avg_rank))
         end

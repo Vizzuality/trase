@@ -1,4 +1,4 @@
-require 'active_support/concern'
+require "active_support/concern"
 module Api
   module V3
     module AssociatedAttributes
@@ -21,7 +21,7 @@ module Api
 
         def destroy_zombies
           zombies = all
-          zombies = zombies.where('id NOT IN (?)', active_ids) if active_ids.any?
+          zombies = zombies.where("id NOT IN (?)", active_ids) if active_ids.any?
           zombies.destroy_all
         end
       end
@@ -112,7 +112,7 @@ module Api
 
       def assoc_attr_names_with_types
         associated_attributes.map do |attr_name|
-          attr_type = attr_name.to_s.split('_').last
+          attr_type = attr_name.to_s.split("_").last
           raise "Cannot infer type from #{attr_name}" unless attr_type
           [attr_name, attr_type]
         end

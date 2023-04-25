@@ -16,7 +16,7 @@ module Api
       class QuantValuesMeta < Api::Readonly::BaseModel
         include Api::V3::Readonly::MaterialisedView
 
-        self.table_name = 'quant_values_meta_mv'
+        self.table_name = "quant_values_meta_mv"
 
         belongs_to :quant
       end

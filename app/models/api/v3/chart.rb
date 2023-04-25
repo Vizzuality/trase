@@ -24,11 +24,11 @@ module Api
   module V3
     class Chart < YellowTable
       belongs_to :profile, optional: false
-      belongs_to :parent, class_name: 'Chart', optional: true
-      has_many :children, -> { order(:position) }, class_name: 'Chart', foreign_key: :parent_id
+      belongs_to :parent, class_name: "Chart", optional: true
+      has_many :children, -> { order(:position) }, class_name: "Chart", foreign_key: :parent_id
       has_many :chart_attributes, dependent: :delete_all
       has_many :readonly_chart_attributes,
-               class_name: 'Readonly::ChartAttribute'
+               class_name: "Readonly::ChartAttribute"
       has_many :chart_node_types, dependent: :delete_all
 
       validates :identifier,
@@ -74,36 +74,36 @@ module Api
 
       def chart_type
         case identifier
-        when 'actor_top_countries', 'actor_top_sources'
+        when "actor_top_countries", "actor_top_sources"
           :line_chart_with_map
         when
-          'actor_sustainability',
-          'place_environmental_indicators',
-          'place_socioeconomic_indicators',
-          'place_agricultural_indicators',
-          'place_territorial_governance',
-          'place_indicators',
-          'country_indicators'
+          "actor_sustainability",
+          "place_environmental_indicators",
+          "place_socioeconomic_indicators",
+          "place_agricultural_indicators",
+          "place_territorial_governance",
+          "place_indicators",
+          "country_indicators"
           :tabs_table
         when
-          'country_commodity_exports',
-          'country_commodity_imports'
+          "country_commodity_exports",
+          "country_commodity_imports"
           :table
-        when 'actor_exporting_companies'
+        when "actor_exporting_companies"
           :scatterplot
         when
-          'place_trajectory_deforestation',
-          'country_trajectory_deforestation'
+          "place_trajectory_deforestation",
+          "country_trajectory_deforestation"
           :stacked_line_chart
-        when 'country_trajectory_import'
+        when "country_trajectory_import"
           :line_chart
         when
-          'place_top_consumer_actors',
-          'place_top_consumer_countries',
-          'country_top_consumer_actors'
+          "place_top_consumer_actors",
+          "place_top_consumer_countries",
+          "country_top_consumer_actors"
           :sankey
         when
-          'country_top_consumer_countries'
+          "country_top_consumer_countries"
           :map_with_flows
         end
       end
@@ -112,7 +112,7 @@ module Api
         Api::V3::Chart.includes(
           profile: {context_node_type: [{context: [:country, :commodity]}, :node_type]}
         ).order(
-          'countries.name, commodities.name, node_types.name'
+          "countries.name, commodities.name, node_types.name"
         ).all.map do |chart|
           profile = chart.profile
           context_node_type = profile&.context_node_type
@@ -124,7 +124,7 @@ module Api
               context_node_type&.node_type&.name,
               profile&.name,
               chart.identifier
-            ].join(' / '),
+            ].join(" / "),
             chart.id
           ]
         end
@@ -179,13 +179,13 @@ module Api
       def parent_is_in_same_profile
         return if parent.nil? || parent.profile_id == profile_id
 
-        errors.add(:parent, 'cannot belong to a different profile')
+        errors.add(:parent, "cannot belong to a different profile")
       end
 
       def parent_is_root
         return if parent.nil? || parent.parent.nil?
 
-        errors.add(:parent, 'cannot be a nested chart')
+        errors.add(:parent, "cannot be a nested chart")
       end
 
       def identifier_is_supported
@@ -206,7 +206,7 @@ module Api
 
         errors.add(
           :identifier,
-          "not supported, select one of: #{supported_identifiers.join(', ')}"
+          "not supported, select one of: #{supported_identifiers.join(", ")}"
         )
       end
     end

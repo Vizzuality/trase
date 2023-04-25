@@ -13,12 +13,12 @@ module Api
 
         def fixed_params
           {
-            type: 'C', # Commodities (merchandise trade data)
-            freq: 'A', # Annual
-            px: 'HS', # HS Harmonized System (HS), as reported
-            rg: '1', # trade regime (imports)
-            p: 'all', # partner
-            fmt: 'json'
+            type: "C", # Commodities (merchandise trade data)
+            freq: "A", # Annual
+            px: "HS", # HS Harmonized System (HS), as reported
+            rg: "1", # trade regime (imports)
+            p: "all", # partner
+            fmt: "json"
           }
         end
 

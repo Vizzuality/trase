@@ -1,15 +1,15 @@
-require 'rails_helper'
-require 'models/api/v3/shared_attributes_examples'
+require "rails_helper"
+require "models/api/v3/shared_attributes_examples"
 
 RSpec.describe Api::V3::RecolorByAttribute, type: :model do
-  include_context 'api v3 brazil recolor by attributes'
-  include_context 'api v3 node types'
+  include_context "api v3 brazil recolor by attributes"
+  include_context "api v3 node types"
 
   describe :validate do
     let(:attribute_without_context) {
       FactoryBot.build(:api_v3_recolor_by_attribute, context: nil)
     }
-    it 'fails when context missing' do
+    it "fails when context missing" do
       expect(attribute_without_context).to have(2).errors_on(:context)
     end
   end
@@ -25,7 +25,7 @@ RSpec.describe Api::V3::RecolorByAttribute, type: :model do
     }
     let!(:zombie) { FactoryBot.create(:api_v3_recolor_by_attribute) }
     let(:subject) { Api::V3::RecolorByAttribute }
-    include_examples 'destroys zombies'
+    include_examples "destroys zombies"
   end
 
   describe :save do
@@ -53,7 +53,7 @@ RSpec.describe Api::V3::RecolorByAttribute, type: :model do
             FactoryBot.create(:api_v3_node, node_type: api_v3_port_node_type),
             FactoryBot.create(:api_v3_node, node_type: api_v3_exporter_node_type),
             FactoryBot.create(:api_v3_node, node_type: api_v3_importer_node_type),
-            FactoryBot.create(:api_v3_node, node_type: api_v3_country_node_type)
+            FactoryBot.create(:api_v3_node, node_type: api_v3_country_of_first_import_node_type)
           ].map(&:id),
           context: api_v3_brazil_soy_context,
           year: year
@@ -62,7 +62,7 @@ RSpec.describe Api::V3::RecolorByAttribute, type: :model do
       end
     end
 
-    it 'automatically populates available years' do
+    it "automatically populates available years" do
       Sidekiq::Testing.inline! do
         recolor_by_attribute.save
       end

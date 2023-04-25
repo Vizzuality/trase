@@ -15,11 +15,11 @@ module Api
   module V3
     module Readonly
       class DownloadAttribute < Api::Readonly::BaseModel
-        self.table_name = 'download_attributes_v'
-        self.primary_key = 'id'
+        self.table_name = "download_attributes_v"
+        self.primary_key = "id"
 
         belongs_to :context
-        belongs_to :readonly_attribute, foreign_key: :attribute_id, class_name: 'Attribute'
+        belongs_to :readonly_attribute, foreign_key: :attribute_id, class_name: "Attribute"
 
         delegate :name, to: :readonly_attribute
         delegate :unit, to: :readonly_attribute

@@ -29,7 +29,7 @@ module Api
       delegate :column_group, to: :context_node_type_property
       delegate :prefix, to: :context_node_type_property
       delegate :role, to: :context_node_type_property
-      delegate :name, prefix: 'node_type', to: :node_type
+      delegate :name, prefix: "node_type", to: :node_type
 
       validates :context, presence: true
       validates :node_type, presence: true, uniqueness: {scope: :context}
@@ -39,14 +39,14 @@ module Api
         Api::V3::ContextNodeType.includes(
           {context: [:country, :commodity]}, :node_type
         ).order(
-          'countries.name', 'commodities.name', :column_position
+          "countries.name", "commodities.name", :column_position
         ).map do |ctx_nt|
           [
             [
               ctx_nt.context&.country&.name,
               ctx_nt.context&.commodity&.name,
               ctx_nt.node_type&.name
-            ].join(' / '),
+            ].join(" / "),
             ctx_nt.id
           ]
         end
@@ -54,8 +54,8 @@ module Api
 
       def self.import_key
         [
-          {name: :context_id, sql_type: 'INT'},
-          {name: :node_type_id, sql_type: 'INT'}
+          {name: :context_id, sql_type: "INT"},
+          {name: :node_type_id, sql_type: "INT"}
         ]
       end
 

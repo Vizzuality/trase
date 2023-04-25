@@ -29,7 +29,7 @@ module Api
         class Source < Api::Readonly::BaseModel
           include Api::V3::Readonly::MaterialisedTable
 
-          self.table_name = 'dashboards_sources'
+          self.table_name = "dashboards_sources"
           belongs_to :node
 
           INDEXES = [

@@ -1,5 +1,5 @@
-shared_context 'api v3 brazil map attribute groups' do
-  include_context 'api v3 brazil soy context'
+shared_context "api v3 brazil map attribute groups" do
+  include_context "api v3 brazil soy context"
 
   let!(:api_v3_map_attribute_group1) do
     Api::V3::MapAttributeGroup.where(
@@ -8,7 +8,7 @@ shared_context 'api v3 brazil map attribute groups' do
       FactoryBot.create(
         :api_v3_map_attribute_group,
         context_id: api_v3_brazil_soy_context.id,
-        name: 'Context layer group one',
+        name: "Context layer group one",
         position: 1
       )
   end
@@ -20,7 +20,7 @@ shared_context 'api v3 brazil map attribute groups' do
       FactoryBot.create(
         :api_v3_map_attribute_group,
         context_id: api_v3_brazil_soy_context.id,
-        name: 'Context layer group two',
+        name: "Context layer group two",
         position: 2
       )
   end

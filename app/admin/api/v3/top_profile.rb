@@ -1,5 +1,5 @@
-ActiveAdmin.register Api::V3::TopProfile, as: 'Top Profile' do
-  belongs_to :context, class_name: 'Api::V3::Context'
+ActiveAdmin.register Api::V3::TopProfile, as: "Top Profile" do
+  belongs_to :context, class_name: "Api::V3::Context"
   permit_params :context_id, :node_id, :top_profile_image_id
   config.filters = false
 
@@ -7,7 +7,7 @@ ActiveAdmin.register Api::V3::TopProfile, as: 'Top Profile' do
 
   controller do
     def clear_cache
-      clear_cache_for_regexp('/api/v3/top_profiles')
+      clear_cache_for_regexp("/api/v3/top_profiles")
     end
 
     def create
@@ -27,11 +27,11 @@ ActiveAdmin.register Api::V3::TopProfile, as: 'Top Profile' do
   end
 
   index do
-    column('Node name') { |property| property&.node&.name }
-    column('Node type') { |property| property&.node&.node_type }
-    column('Image') do |property|
+    column("Node name") { |property| property&.node&.name }
+    column("Node type") { |property| property&.node&.node_type }
+    column("Image") do |property|
       if property.top_profile_image.nil?
-        'No image assigned'
+        "No image assigned"
       else
         image_tag property&.top_profile_image&.image_url(:small)
       end
@@ -51,13 +51,13 @@ ActiveAdmin.register Api::V3::TopProfile, as: 'Top Profile' do
       select_options
 
     f.semantic_errors
-    if params[:action] == 'edit'
+    if params[:action] == "edit"
       available_top_profile_images =
         Api::V3::TopProfileImage.includes(:top_profiles).where(
           commodity_id: resource.context.commodity_id,
           profile_type: resource.profile_type
         )
-      render partial: 'admin/form_select_top_profile_images', locals: {
+      render partial: "admin/form_select_top_profile_images", locals: {
         available_top_profile_images: available_top_profile_images,
         top_profile_image_id: resource.top_profile_image_id,
         node_name: resource.node.name,
@@ -76,13 +76,13 @@ ActiveAdmin.register Api::V3::TopProfile, as: 'Top Profile' do
 
   show do
     attributes_table do
-      row('Country') { |property| property&.context&.country&.name }
-      row('Commodity') { |property| property&.context&.commodity&.name }
-      row('Node name') { |property| property&.node&.name }
-      row('Node type') { |property| property&.node&.node_type }
-      row('Profile type') { |property| property&.profile_type }
-      row('Year') { |property| property&.year }
-      row('Summary') { |property| property&.summary }
+      row("Country") { |property| property&.context&.country&.name }
+      row("Commodity") { |property| property&.context&.commodity&.name }
+      row("Node name") { |property| property&.node&.name }
+      row("Node type") { |property| property&.node&.node_type }
+      row("Profile type") { |property| property&.profile_type }
+      row("Year") { |property| property&.year }
+      row("Summary") { |property| property&.summary }
     end
   end
 end

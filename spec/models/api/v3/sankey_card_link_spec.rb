@@ -1,7 +1,7 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Api::V3::SankeyCardLink, type: :model do
-  include_context 'api v3 brazil beef nodes'
+  include_context "api v3 brazil beef nodes"
 
   before do
     Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
@@ -16,7 +16,7 @@ RSpec.describe Api::V3::SankeyCardLink, type: :model do
       FactoryBot.build(:api_v3_sankey_card_link, title: nil)
     }
 
-    it 'fails when title blank' do
+    it "fails when title blank" do
       expect(sankey_card_link_without_title).to have(1).errors_on(:title)
     end
 
@@ -31,20 +31,20 @@ RSpec.describe Api::V3::SankeyCardLink, type: :model do
   end
 
   describe :callbacks do
-    describe 'before_validation' do
-      describe '#extract_link_params' do
-        it 'extract parameters from link' do
+    describe "before_validation" do
+      describe "#extract_link_params" do
+        it "extract parameters from link" do
           sankey_card_link.update(
             link: "#{sankey_card_link.link}&selectedYears%5B%5D=2009"
           )
           expect(sankey_card_link.query_params).to include(
-            'selectedYears' => ['2009']
+            "selectedYears" => ["2009"]
           )
         end
       end
 
-      describe '#extract_relations' do
-        it 'extracts relations from the params' do
+      describe "#extract_relations" do
+        it "extracts relations from the params" do
           sankey_card_link.update(
             link: "http://test.com?selectedCommodityId=#{api_v3_beef.id}&"\
                   "selectedCountryId=#{api_v3_brazil.id}"

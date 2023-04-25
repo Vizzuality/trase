@@ -21,7 +21,7 @@ module Api
           end
 
           def self.human_readable(_options)
-            required_node_types = REQUIRED_NODE_TYPES.join(', ')
+            required_node_types = REQUIRED_NODE_TYPES.join(", ")
             "presence of required node types or variants (#{required_node_types})"
           end
 
@@ -29,7 +29,7 @@ module Api
 
           def error
             super.merge(
-              message: "Required node type(s) or variants missing: #{@missing_node_types.join(', ')}. Make sure node type(s) with this/these name(s) exist."
+              message: "Required node type(s) or variants missing: #{@missing_node_types.join(", ")}. Make sure node type(s) with this/these name(s) exist."
             )
           end
         end

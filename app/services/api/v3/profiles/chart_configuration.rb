@@ -3,8 +3,8 @@ module Api
     module Profiles
       class ChartConfiguration
         attr_reader :chart,
-                    :chart_attributes, :attributes,
-                    :chart_node_types, :node_types
+          :chart_attributes, :attributes,
+          :chart_node_types, :node_types
 
         # @param context [Api::V3::Context]
         # @param node [Api::V3::Readonly::NodeWithFlows]
@@ -53,25 +53,25 @@ module Api
 
         private
 
-        # @param profile_type [Symbol] either :actor or :place
+        # @param profile_type [Symbol] either :actor, :place or :country
         # @param parent_identifier [Symbol] parent chart identifier (or nil)
         # @param identifier [Symbol] chart identifier
         def initialize_chart(profile_type, parent_identifier, identifier)
           profile = @context.profiles.where(
-            'context_node_types.node_type_id' => @node.node_type_id,
-            name: profile_type
+            "context_node_types.node_type_id" => @node.node_type_id,
+            :name => profile_type
           ).first
           unless profile
             node_type = @node.node_type
             raise ActiveRecord::RecordNotFound.new(
-              "Profile not configured: #{profile_type} for #{node_type}"
+              "Profile not configured: PROFILE: #{profile_type} NODE TYPE: #{node_type} #{@context.country_name} / #{@context.commodity_name}"
             )
           end
           charts = profile.charts.where(identifier: identifier)
           charts =
             if parent_identifier.present?
-              charts.includes(:parent).
-                where('parents_charts.identifier' => parent_identifier)
+              charts.includes(:parent)
+                .where("parents_charts.identifier" => parent_identifier)
             else
               charts.where(parent_id: nil)
             end
@@ -79,7 +79,7 @@ module Api
           return if @chart.present?
 
           raise ActiveRecord::RecordNotFound.new(
-            "Chart not configured: #{identifier} for #{profile_type}"
+            "Chart not configured: CHART: #{identifier} PROFILE: #{profile_type} NODE TYPE: #{node_type} #{@context.country_name} / #{@context.commodity_name}"
           )
         end
 

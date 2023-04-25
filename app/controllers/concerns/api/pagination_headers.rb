@@ -13,9 +13,9 @@ module Api
     # but none of them (pager_api, api-pagination) would work
     # when using with_no_count to avoid long count calculations
     def set_pagination_headers
-      headers['Access-Control-Expose-Headers'] = 'Link, Page, Per-Page'
-      headers['Page'] = current_page
-      headers['Per-Page'] = current_per_page
+      headers["Access-Control-Expose-Headers"] = "Link, Page, Per-Page"
+      headers["Page"] = current_page
+      headers["Per-Page"] = current_per_page
     end
 
     # rubocop:disable Naming/AccessorMethodName
@@ -28,7 +28,7 @@ module Api
         pagination_links << "<#{prev_page_url(scope)}>; rel=\"prev\""
       end
 
-      headers['Link'] = pagination_links.join(', ')
+      headers["Link"] = pagination_links.join(", ")
     end
     # rubocop:enable Naming/AccessorMethodName
 

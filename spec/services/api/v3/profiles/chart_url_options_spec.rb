@@ -1,10 +1,10 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Api::V3::Profiles::ChartUrlOptions do
-  include_context 'api v3 indonesia palm oil profiles'
-  include_context 'api v3 indonesia palm oil nodes'
+  include_context "api v3 indonesia palm oil profiles"
+  include_context "api v3 indonesia palm oil nodes"
 
-  describe 'url_options' do
+  describe "url_options" do
     let(:params) {
       {
         context_id: api_v3_indonesia_context.id,
@@ -12,7 +12,7 @@ RSpec.describe Api::V3::Profiles::ChartUrlOptions do
         year: 2015
       }
     }
-    context 'when exporter country chart' do
+    context "when exporter country chart" do
       let(:chart) {
         FactoryBot.create(
           :api_v3_chart,
@@ -20,7 +20,7 @@ RSpec.describe Api::V3::Profiles::ChartUrlOptions do
           profile: api_v3_indonesia_exporter_country_profile
         )
       }
-      it 'returns correct options' do
+      it "returns correct options" do
         options = Api::V3::Profiles::ChartUrlOptions.url_options(
           chart,
           params.merge(id: api_v3_indonesia_country_of_production_node.id),
@@ -30,7 +30,7 @@ RSpec.describe Api::V3::Profiles::ChartUrlOptions do
       end
     end
 
-    context 'when importer country chart' do
+    context "when importer country chart" do
       let(:chart) {
         FactoryBot.create(
           :api_v3_chart,
@@ -38,7 +38,7 @@ RSpec.describe Api::V3::Profiles::ChartUrlOptions do
           profile: api_v3_indonesia_importer_country_profile
         )
       }
-      it 'returns correct options' do
+      it "returns correct options" do
         options = Api::V3::Profiles::ChartUrlOptions.url_options(
           chart, params.merge(id: api_v3_indonesia_country_node.id), :importer
         )
@@ -46,7 +46,7 @@ RSpec.describe Api::V3::Profiles::ChartUrlOptions do
       end
     end
 
-    context 'when place chart' do
+    context "when place chart" do
       let(:chart) {
         FactoryBot.create(
           :api_v3_chart,
@@ -54,7 +54,7 @@ RSpec.describe Api::V3::Profiles::ChartUrlOptions do
           profile: api_v3_indonesia_kabupaten_place_profile
         )
       }
-      it 'returns correct options' do
+      it "returns correct options" do
         options = Api::V3::Profiles::ChartUrlOptions.url_options(
           chart, params.merge(id: api_v3_indonesia_kabupaten_node.id), nil
         )
@@ -62,7 +62,7 @@ RSpec.describe Api::V3::Profiles::ChartUrlOptions do
       end
     end
 
-    context 'when actor chart' do
+    context "when actor chart" do
       let(:chart) {
         FactoryBot.create(
           :api_v3_chart,
@@ -70,7 +70,7 @@ RSpec.describe Api::V3::Profiles::ChartUrlOptions do
           profile: api_v3_indonesia_exporter_actor_profile
         )
       }
-      it 'returns correct options' do
+      it "returns correct options" do
         options = Api::V3::Profiles::ChartUrlOptions.url_options(
           chart, params.merge(id: api_v3_indonesia_exporter_node.id), :exporter
         )

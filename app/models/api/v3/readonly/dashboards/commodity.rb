@@ -24,7 +24,7 @@ module Api
         class Commodity < Api::Readonly::BaseModel
           include Api::V3::Readonly::MaterialisedTable
 
-          self.table_name = 'dashboards_commodities'
+          self.table_name = "dashboards_commodities"
           belongs_to :commodity
 
           INDEXES = [

@@ -1,5 +1,5 @@
-shared_context 'minimal config for tooltips' do
-  include_context 'minimum complete configuration'
+shared_context "minimal config for tooltips" do
+  include_context "minimum complete configuration"
 
   ### Boilerplate
 
@@ -52,7 +52,7 @@ shared_context 'minimal config for tooltips' do
 
   ### Context specific
 
-  let(:context_tooltip_text) { 'Context specific tooltip text' }
+  let(:context_tooltip_text) { "Context specific tooltip text" }
   let(:ind_context_property) {
     FactoryBot.create(
       :api_v3_ind_context_property,
@@ -82,7 +82,7 @@ shared_context 'minimal config for tooltips' do
 
   ### Country specific
 
-  let(:country_tooltip_text) { 'Country specific tooltip text' }
+  let(:country_tooltip_text) { "Country specific tooltip text" }
 
   let(:ind_country_property) {
     FactoryBot.create(
@@ -113,7 +113,7 @@ shared_context 'minimal config for tooltips' do
 
   ### Commodity specific
 
-  let(:commodity_tooltip_text) { 'Commodity specific tooltip text' }
+  let(:commodity_tooltip_text) { "Commodity specific tooltip text" }
 
   let(:ind_commodity_property) {
     FactoryBot.create(

@@ -35,7 +35,7 @@ module Api
           @data = ActiveModelSerializers::SerializableResource.new(
             @sankey_card_links,
             each_serializer: Api::V3::SankeyCardLinks::SankeyCardLinkSerializer,
-            root: 'data'
+            root: "data"
           ).serializable_hash[:data]
         end
 
@@ -47,7 +47,7 @@ module Api
           @meta[:nodes] = ActiveModelSerializers::SerializableResource.new(
             nodes,
             each_serializer: Api::V3::SankeyCardLinks::NodeSerializer,
-            root: 'nodes'
+            root: "nodes"
           ).serializable_hash[:nodes].uniq
 
           context_node_types = @sankey_card_links.map do |card|
@@ -56,11 +56,11 @@ module Api
               includes(:context_node_type_property).
               references(:context_node_type_property).
               where(
-                'contexts.country_id' => card.country_id,
-                'contexts.commodity_id' => card.commodity_id,
+                "contexts.country_id" => card.country_id,
+                "contexts.commodity_id" => card.commodity_id,
                 node_type_id: card.node_types_ids
               ).
-              where('context_node_type_properties.is_visible')
+              where("context_node_type_properties.is_visible")
           end.flatten.uniq
 
           # sankey_card_link_node_type_ids =
@@ -70,7 +70,7 @@ module Api
           columns = ActiveModelSerializers::SerializableResource.new(
             context_node_types,
             each_serializer: Api::V3::SankeyCardLinks::ColumnSerializer,
-            root: 'columns'
+            root: "columns"
           ).serializable_hash[:columns]
           @meta[:columns] = {}
           columns.each { |col| @meta[:columns][col[:nodeTypeId]] = col }

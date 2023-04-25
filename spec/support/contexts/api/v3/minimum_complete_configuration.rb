@@ -1,8 +1,8 @@
-shared_context 'minimum complete configuration' do
+shared_context "minimum complete configuration" do
   let(:commodity) {
-    FactoryBot.create(:api_v3_commodity, name: 'Minimum commodity')
+    FactoryBot.create(:api_v3_commodity, name: "Minimum commodity")
   }
-  let(:country) { FactoryBot.create(:api_v3_country, name: 'Minimum country') }
+  let(:country) { FactoryBot.create(:api_v3_country, name: "Minimum country") }
   let!(:country_property) {
     FactoryBot.create(:api_v3_country_property, country: country)
   }
@@ -17,7 +17,7 @@ shared_context 'minimum complete configuration' do
     FactoryBot.create(
       :api_v3_ind_property,
       ind: ind,
-      tooltip_text: 'ind text'
+      tooltip_text: "ind text"
     )
   }
   let(:qual) { FactoryBot.create(:api_v3_qual) }
@@ -25,7 +25,7 @@ shared_context 'minimum complete configuration' do
     FactoryBot.create(
       :api_v3_qual_property,
       qual: qual,
-      tooltip_text: 'qual text'
+      tooltip_text: "qual text"
     )
   }
   let(:quant) { FactoryBot.create(:api_v3_quant) }
@@ -33,7 +33,7 @@ shared_context 'minimum complete configuration' do
     FactoryBot.create(
       :api_v3_quant_property,
       quant: quant,
-      tooltip_text: 'quant text'
+      tooltip_text: "quant text"
     )
   }
   let(:biome_node_type) {
@@ -153,8 +153,8 @@ shared_context 'minimum complete configuration' do
       :api_v3_recolor_by_attribute,
       context: context,
       years: [2014],
-      tooltip_text: 'text',
-      legend_type: 'linear'
+      tooltip_text: "text",
+      legend_type: "linear"
     )
   }
   let!(:recolor_by_ind) {
@@ -169,7 +169,7 @@ shared_context 'minimum complete configuration' do
       :api_v3_resize_by_attribute,
       context: context,
       years: [2014],
-      tooltip_text: 'text'
+      tooltip_text: "text"
     )
   }
   let!(:resize_by_quant) {

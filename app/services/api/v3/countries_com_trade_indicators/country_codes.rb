@@ -3,10 +3,10 @@ module Api
   module V3
     module CountriesComTradeIndicators
       class CountryCodes
-        DATA_FILE_PATH = 'db/country_codes.csv'.freeze
-        ISO2_COLUMN = 'ISO3166-1-Alpha-2'.freeze
-        ISO3_COLUMN = 'ISO3166-1-Alpha-3'.freeze
-        M49_COLUMN = 'M49'.freeze
+        DATA_FILE_PATH = "db/country_codes.csv".freeze
+        ISO2_COLUMN = "ISO3166-1-Alpha-2".freeze
+        ISO3_COLUMN = "ISO3166-1-Alpha-3".freeze
+        M49_COLUMN = "M49".freeze
 
         def initialize
           load_data

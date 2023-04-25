@@ -14,14 +14,14 @@ module Api
             context, node, year
           )
           initialize_chart_config(:actor, nil, :actor_top_countries)
-          @destination_node_type = @chart_config.named_node_type('destination')
+          @destination_node_type = @chart_config.named_node_type("destination")
           unless @destination_node_type
             raise ActiveRecord::RecordNotFound.new(
               'Chart node type "destination" not found'
             )
           end
 
-          attribute_name = 'commodity_production'
+          attribute_name = "commodity_production"
           attribute = @chart_config.named_attribute(attribute_name)
           unless attribute
             raise ActiveRecord::RecordNotFound.new(

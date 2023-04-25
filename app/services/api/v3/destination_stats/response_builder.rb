@@ -14,7 +14,7 @@ module Api
             if @commodity_id
               Api::V3::Context.
                 joins(:context_property).
-                where(commodity_id: @commodity_id, 'context_properties.is_disabled' => false).
+                where(commodity_id: @commodity_id, "context_properties.is_disabled" => false).
                 pluck(:context_id)
             else
               contexts_ids
@@ -56,7 +56,7 @@ module Api
           destination_context_node_types = Api::V3::ContextNodeType.
             joins(:node_type).
             where(
-              'node_types.name' => NodeTypeName.destination_country_names
+              "node_types.name" => NodeTypeName.destination_country_names
             ).
             pluck(:context_id, :node_type_id)
           @context_destination_node_types = Hash[destination_context_node_types]
@@ -71,11 +71,11 @@ module Api
 
         def initialize_errors
           if @year_start && @year_end && @year_start > @year_end
-            raise 'Year start can not be higher than year end'
+            raise "Year start can not be higher than year end"
           end
 
           if @commodity_id && (@contexts_ids || []).any?
-            raise 'Either commodity or contexts but not both'
+            raise "Either commodity or contexts but not both"
           end
 
           @attribute = initialize_attribute
@@ -84,15 +84,15 @@ module Api
         def initialize_attribute
           if @attribute_id
             attribute = Api::V3::Readonly::Attribute.find_by(
-              id: @attribute_id, original_type: 'Quant'
+              id: @attribute_id, original_type: "Quant"
             )
             raise "Attribute #{@attribute_id} not found" unless attribute
           else
-            volume_quant = Dictionary::Quant.instance.get('Volume')
+            volume_quant = Dictionary::Quant.instance.get("Volume")
             attribute = Api::V3::Readonly::Attribute.find_by(
-              original_id: volume_quant.id, original_type: 'Quant'
+              original_id: volume_quant.id, original_type: "Quant"
             )
-            raise 'Quant Volume not found' unless attribute
+            raise "Quant Volume not found" unless attribute
           end
           attribute
         end

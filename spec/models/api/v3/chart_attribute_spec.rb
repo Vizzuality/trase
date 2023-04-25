@@ -1,18 +1,18 @@
-require 'rails_helper'
-require 'models/api/v3/shared_attributes_examples'
+require "rails_helper"
+require "models/api/v3/shared_attributes_examples"
 
 RSpec.describe Api::V3::ChartAttribute, type: :model do
-  include_context 'api v3 brazil municipality place profile'
-  include_context 'api v3 brazil municipality place profile'
-  include_context 'api v3 brazil context node types'
-  include_context 'api v3 brazil soy profiles'
-  include_context 'api v3 brazil exporter actor profile'
-  include_context 'api v3 brazil importer actor profile'
-  include_context 'api v3 brazil exporter quant values'
-  include_context 'api v3 brazil exporter qual values'
-  include_context 'api v3 brazil exporter ind values'
-  include_context 'api v3 brazil importer quant values'
-  include_context 'api v3 brazil soy flow quants'
+  include_context "api v3 brazil municipality place profile"
+  include_context "api v3 brazil municipality place profile"
+  include_context "api v3 brazil context node types"
+  include_context "api v3 brazil soy profiles"
+  include_context "api v3 brazil exporter actor profile"
+  include_context "api v3 brazil importer actor profile"
+  include_context "api v3 brazil exporter quant values"
+  include_context "api v3 brazil exporter qual values"
+  include_context "api v3 brazil exporter ind values"
+  include_context "api v3 brazil importer quant values"
+  include_context "api v3 brazil soy flow quants"
 
   before do
     Api::V3::Readonly::FlowNode.refresh(sync: true)
@@ -42,7 +42,7 @@ RSpec.describe Api::V3::ChartAttribute, type: :model do
       FactoryBot.build(
         :api_v3_chart_attribute,
         chart: api_v3_place_basic_attributes,
-        identifier: api_v3_place_basic_attributes_commodity_area.identifier + 'zonk',
+        identifier: api_v3_place_basic_attributes_commodity_area.identifier + "zonk",
         position: nil
       )
     }
@@ -58,7 +58,7 @@ RSpec.describe Api::V3::ChartAttribute, type: :model do
       FactoryBot.build(
         :api_v3_chart_attribute,
         chart: api_v3_place_trajectory_deforestation,
-        identifier: '',
+        identifier: "",
         position: api_v3_place_trajectory_deforestation_deforestation_v2.position + 1
       )
     }
@@ -92,32 +92,32 @@ RSpec.describe Api::V3::ChartAttribute, type: :model do
       )
       chart_attribute
     end
-    it 'fails when chart missing' do
+    it "fails when chart missing" do
       expect(chart_attribute_without_chart).to have(1).error_on(:chart)
     end
-    it 'fails when chart + position duplicate' do
+    it "fails when chart + position duplicate" do
       expect(duplicate_on_position).to have(1).errors_on(:position)
     end
-    it 'is successful when chart + empty position duplicate' do
+    it "is successful when chart + empty position duplicate" do
       expect(non_duplicate_on_position).to have(0).errors_on(:position)
       expect { non_duplicate_on_position.save! }.not_to raise_error
     end
-    it 'fails when chart + identifier duplicate' do
+    it "fails when chart + identifier duplicate" do
       expect(duplicate_on_identifier).to have(1).errors_on(:identifier)
     end
-    it 'is successful when chart + empty identifier duplicate' do
+    it "is successful when chart + empty identifier duplicate" do
       expect(non_duplicate_on_identifier).to have(0).errors_on(:identifier)
       expect { non_duplicate_on_identifier.save! }.not_to raise_error
     end
-    it 'fails when same attribute associated more than once' do
+    it "fails when same attribute associated more than once" do
       duplicate_on_quant.valid?
       expect(duplicate_on_quant).to have(1).errors_on(:base)
     end
-    it 'is successful when same attribute associated as state average' do
+    it "is successful when same attribute associated as state average" do
       expect(state_average_variant).to have(0).errors_on(:base)
     end
-    it 'saves empty identifier as NULL' do
-      attribute = FactoryBot.create(:api_v3_chart_attribute, identifier: '')
+    it "saves empty identifier as NULL" do
+      attribute = FactoryBot.create(:api_v3_chart_attribute, identifier: "")
       expect(attribute.identifier).to be_nil
     end
   end
@@ -133,7 +133,7 @@ RSpec.describe Api::V3::ChartAttribute, type: :model do
     }
     let!(:zombie) { FactoryBot.create(:api_v3_chart_attribute) }
     let(:subject) { Api::V3::ChartAttribute }
-    include_examples 'destroys zombies'
+    include_examples "destroys zombies"
   end
 
   describe :hooks do
@@ -144,7 +144,7 @@ RSpec.describe Api::V3::ChartAttribute, type: :model do
           profile.charts.where(identifier: :actor_basic_attributes).first
         end
         let!(:chart_attribute) do
-          chart.chart_attributes.find_by(identifier: 'zero_deforestation')
+          chart.chart_attributes.find_by(identifier: "zero_deforestation")
         end
         let!(:related_node_with_flows) do
           context_node_type = Api::V3::ContextNodeType.find(
@@ -162,13 +162,13 @@ RSpec.describe Api::V3::ChartAttribute, type: :model do
           ActiveRecord::Base.connection.execute(
             "UPDATE nodes_with_flows
             SET actor_basic_attributes = null
-            WHERE id IN(#{related_node_with_flows.map(&:id).join(',')})"
+            WHERE id IN(#{related_node_with_flows.map(&:id).join(",")})"
           )
         end
 
-        context 'when the identifier changes' do
-          it 'refresh actor_basic_attributes of the related node_with_flows' do
-            chart_attribute.update(identifier: 'new identifier')
+        context "when the identifier changes" do
+          it "refresh actor_basic_attributes of the related node_with_flows" do
+            chart_attribute.update(identifier: "new identifier")
 
             related_node_with_flows.each do |node_with_flows|
               expect(node_with_flows.actor_basic_attributes).to be_nil
@@ -176,8 +176,8 @@ RSpec.describe Api::V3::ChartAttribute, type: :model do
           end
         end
 
-        context 'when chart_id changes' do
-          it 'refresh actor_basic_attributes of the related node_with_flows' do
+        context "when chart_id changes" do
+          it "refresh actor_basic_attributes of the related node_with_flows" do
             chart_attribute.update(chart_id: Api::V3::Chart.last.id)
 
             related_node_with_flows.each do |node_with_flows|
@@ -200,9 +200,9 @@ RSpec.describe Api::V3::ChartAttribute, type: :model do
           end
         end
 
-        context 'when changes any other field' do
-          it 'not refresh actor_basic_attributes of the related node_with_flows' do
-            chart_attribute.update(identifier: 'new identifier')
+        context "when changes any other field" do
+          it "not refresh actor_basic_attributes of the related node_with_flows" do
+            chart_attribute.update(identifier: "new identifier")
 
             related_node_with_flows.each do |node_with_flows|
               expect(node_with_flows.actor_basic_attributes).to be_nil

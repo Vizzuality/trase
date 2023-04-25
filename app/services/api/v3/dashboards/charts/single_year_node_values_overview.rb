@@ -19,11 +19,11 @@ module Api
 
           def call
             @data = @query.map do |r|
-              r.attributes.slice('y0').symbolize_keys
+              r.attributes.slice("y0").symbolize_keys
             end
             @meta = {
               xAxis: {},
-              yAxis: axis_meta(@cont_attribute, 'number'),
+              yAxis: axis_meta(@cont_attribute, "number"),
               x: {},
               y0: legend_meta(@cont_attribute),
               info: info
@@ -37,7 +37,7 @@ module Api
             @query = @cont_attribute.original_attribute.
               node_values.
               where(node_id: @node.id).
-              select('SUM(value) AS y0').
+              select("SUM(value) AS y0").
               group(:node_id, :year)
             apply_single_year_filter if temporal?
           end

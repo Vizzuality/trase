@@ -19,7 +19,7 @@ module Api
         end
 
         def sorted_list(quant_id, options)
-          unsorted_list(quant_id, options).order('value DESC')
+          unsorted_list(quant_id, options).order("value DESC")
         end
 
         private
@@ -48,8 +48,8 @@ module Api
               where(year: (@year_start..@year_end))
           else
             query_all_years(quant_id, options).
-              joins('INNER JOIN contexts ON contexts.id = node_stats_mv.context_id').
-              where('year = contexts.default_year')
+              joins("INNER JOIN contexts ON contexts.id = node_stats_mv.context_id").
+              where("year = contexts.default_year")
           end
         end
 
@@ -58,14 +58,14 @@ module Api
             :sanitize_sql_array,
             [
               [
-                'node_stats_mv.context_id',
-                'node_stats_mv.node_id',
-                'node_stats_mv.name',
-                'node_stats_mv.value',
-                'node_stats_mv.height',
-                'node_stats_mv.quant_id',
-                'node_stats_mv.geo_id'
-              ].join(', ')
+                "node_stats_mv.context_id",
+                "node_stats_mv.node_id",
+                "node_stats_mv.name",
+                "node_stats_mv.value",
+                "node_stats_mv.height",
+                "node_stats_mv.quant_id",
+                "node_stats_mv.geo_id"
+              ].join(", ")
             ]
           )
         end

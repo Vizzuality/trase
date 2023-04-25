@@ -42,14 +42,14 @@ module Api
         end
 
         def summary
-          surface_area_rank = @external_attribute_value.call('wb.surface_area.rank')
-          population_rank = @external_attribute_value.call('wb.population.rank')
-          gdp_rank = @external_attribute_value.call('wb.gdp.rank')
+          surface_area_rank = @external_attribute_value.call("wb.surface_area.rank")
+          population_rank = @external_attribute_value.call("wb.population.rank")
+          gdp_rank = @external_attribute_value.call("wb.gdp.rank")
           summary = overview(surface_area_rank, population_rank, gdp_rank)
 
-          surface_area = @external_attribute_value.call('wb.surface_area.value')
-          forested_land_area = @external_attribute_value.call('wb.forested_land_area.value')
-          agricultural_land_area = @external_attribute_value.call('wb.agricultural_land_area.value')
+          surface_area = @external_attribute_value.call("wb.surface_area.value")
+          forested_land_area = @external_attribute_value.call("wb.forested_land_area.value")
+          agricultural_land_area = @external_attribute_value.call("wb.agricultural_land_area.value")
           summary << land_summary(surface_area, forested_land_area, agricultural_land_area)
           summary << hdi_summary
           summary << declarations_summary
@@ -59,11 +59,11 @@ module Api
         private
 
         HEADER_ATTRIBUTES = [
-          'wb.population.value',
-          'wb.gdp.value',
-          'wb.surface_area.value',
-          'wb.agricultural_land_area.value',
-          'wb.forested_land_area.value'
+          "wb.population.value",
+          "wb.gdp.value",
+          "wb.surface_area.value",
+          "wb.agricultural_land_area.value",
+          "wb.forested_land_area.value"
         ].freeze
 
         def header_attributes
@@ -116,7 +116,7 @@ module Api
 
           attribute_value = @values.get(attribute.simple_type, attribute.id)
           year = attribute_value&.year
-          tooltip_text = name_and_tooltip.tooltip_text || ''
+          tooltip_text = name_and_tooltip.tooltip_text || ""
           tooltip_text += "(#{year})" if year && year != @year
           {
             value: attribute_value.value,
@@ -128,20 +128,20 @@ module Api
         end
 
         def substitutions
-          {trade_flow: @activity.to_s.sub(/er$/, '')}
+          {trade_flow: @activity.to_s.sub(/er$/, "")}
         end
 
         def overview(surface_area_rank, population_rank, gdp_rank)
           summary = "#{@node.name} is the world's"
-          summary << " #{surface_area_rank&.value&.ordinalize || 'UNKNOWN'} largest country by area"
-          summary << ", #{population_rank&.value&.ordinalize || 'UNKNOWN'} largest by population size"
-          summary << " and is the world's #{gdp_rank&.value&.ordinalize || 'UNKNOWN'} largest economy (by GDP)."
+          summary << " #{surface_area_rank&.value&.ordinalize || "UNKNOWN"} largest country by area"
+          summary << ", #{population_rank&.value&.ordinalize || "UNKNOWN"} largest by population size"
+          summary << " and is the world's #{gdp_rank&.value&.ordinalize || "UNKNOWN"} largest economy (by GDP)."
         end
 
         # rubocop:disable Metrics/CyclomaticComplexity
         # rubocop:disable Metrics/PerceivedComplexity
         def land_summary(surface_area, forested_land_area, agricultural_land_area)
-          return '' unless surface_area&.value && (forested_land_area&.value || agricultural_land_area&.value)
+          return "" unless surface_area&.value && (forested_land_area&.value || agricultural_land_area&.value)
 
           if forested_land_area
             forested_percent = helper.number_to_percentage(
@@ -168,7 +168,7 @@ module Api
 
         def hdi_summary
           hdi = @named_summary_attributes[:hdi]
-          return '' unless hdi && hdi[:value]
+          return "" unless hdi && hdi[:value]
 
           " Its Human Development Index score is #{hdi[:value]}."
         end
@@ -181,9 +181,9 @@ module Api
           amsterdam = @named_summary_attributes[:amsterdam]
           is_amsterdam_signatory = (amsterdam && ActiveModel::Type::Boolean.new.cast(amsterdam[:value]))
           declarations << amsterdam[:name] if is_amsterdam_signatory
-          return '' unless declarations.any?
+          return "" unless declarations.any?
 
-          " #{@node.name} is a signatory to the " + declarations.join(' and the ') + '.'
+          " #{@node.name} is a signatory to the " + declarations.join(" and the ") + "."
         end
 
         def helper

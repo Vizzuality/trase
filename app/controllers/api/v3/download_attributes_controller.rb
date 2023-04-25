@@ -7,7 +7,7 @@ module Api
           where(context_id: @context.id)
         render json: @attributes,
                each_serializer: Api::V3::DownloadAttributeSerializer,
-               root: 'indicators'
+               root: "indicators"
       end
     end
   end

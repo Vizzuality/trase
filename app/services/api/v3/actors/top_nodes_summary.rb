@@ -11,9 +11,9 @@ module Api
           @year = year
           quant_dictionary = Dictionary::Quant.instance
           # Assumption: Volume is a special quant which always exists
-          @volume_attribute = quant_dictionary.get('Volume')
+          @volume_attribute = quant_dictionary.get("Volume")
           unless @volume_attribute.present?
-            raise ActiveRecord::RecordNotFound.new 'Quant Volume not found'
+            raise ActiveRecord::RecordNotFound.new "Quant Volume not found"
           end
 
           initialize_flow_stats_for_node
@@ -83,10 +83,10 @@ module Api
             ).all
           @top_node_values_by_year_hash = {}
           top_node_values_by_year.map do |top_node_value|
-            year = top_node_value['year']
+            year = top_node_value["year"]
             @top_node_values_by_year_hash[year] ||= {}
-            @top_node_values_by_year_hash[year][top_node_value['node_id']] =
-              top_node_value['value']
+            @top_node_values_by_year_hash[year][top_node_value["node_id"]] =
+              top_node_value["value"]
           end
         end
 
@@ -98,24 +98,24 @@ module Api
           profile_type = Api::V3::Profile.
             joins(:context_node_type).
             where(
-              'context_node_types.context_id' => @context.id,
-              'context_node_types.node_type_id' => node_type.id
+              "context_node_types.context_id" => @context.id,
+              "context_node_types.node_type_id" => node_type.id
             ).
-            select('profiles.name').
+            select("profiles.name").
             first
 
           profile_type_name = profile_type.name unless profile_type.nil?
 
           lines = @top_nodes.map do |node|
             {
-              name: node['name'],
-              node_id: node['node_id'],
-              geo_id: node['geo_id'],
+              name: node["name"],
+              node_id: node["node_id"],
+              geo_id: node["geo_id"],
               values: years.map do |year|
                 values_for_year = @top_node_values_by_year_hash[year]
                 next nil unless values_for_year
 
-                values_for_year[node['node_id']]
+                values_for_year[node["node_id"]]
               end
             }
           end
@@ -128,11 +128,11 @@ module Api
 
           {
             lines: lines,
-            unit: 't',
+            unit: "t",
             profile_type: profile_type_name,
             style: {
-              type: 'line-points',
-              style: 'line-pink-with-points'
+              type: "line-points",
+              style: "line-pink-with-points"
             }
           }
         end

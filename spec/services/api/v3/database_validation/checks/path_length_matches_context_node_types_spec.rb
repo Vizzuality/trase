@@ -1,8 +1,8 @@
-require 'rails_helper'
-require 'services/api/v3/database_validation/checks/shared_check_examples'
+require "rails_helper"
+require "services/api/v3/database_validation/checks/shared_check_examples"
 
 RSpec.describe Api::V3::DatabaseValidation::Checks::PathLengthMatchesContextNodeTypes do
-  include_context 'api v3 node types'
+  include_context "api v3 node types"
   let(:context) { FactoryBot.create(:api_v3_context) }
 
   let!(:context_node_type_1) {
@@ -69,7 +69,7 @@ RSpec.describe Api::V3::DatabaseValidation::Checks::PathLengthMatchesContextNode
     Api::V3::DatabaseValidation::ErrorsList.new
   }
 
-  context 'path length matches context node types' do
+  context "path length matches context node types" do
     let!(:flow) {
       FactoryBot.create(
         :api_v3_flow,
@@ -77,10 +77,10 @@ RSpec.describe Api::V3::DatabaseValidation::Checks::PathLengthMatchesContextNode
         path: [node_1, node_2, node_3, node_4, node_5].map(&:id)
       )
     }
-    include_examples 'passing checks'
+    include_examples "passing checks"
   end
 
-  context 'path length too short' do
+  context "path length too short" do
     let!(:flow) {
       FactoryBot.create(
         :api_v3_flow,
@@ -88,10 +88,10 @@ RSpec.describe Api::V3::DatabaseValidation::Checks::PathLengthMatchesContextNode
         path: [node_1, node_2, node_3, node_4].map(&:id)
       )
     }
-    include_examples 'failing checks'
+    include_examples "failing checks"
   end
 
-  context 'path length too long' do
+  context "path length too long" do
     let(:node_6) { FactoryBot.create(:api_v3_node) }
     let!(:flow) {
       FactoryBot.create(
@@ -100,6 +100,6 @@ RSpec.describe Api::V3::DatabaseValidation::Checks::PathLengthMatchesContextNode
         path: [node_1, node_2, node_3, node_4, node_5, node_6].map(&:id)
       )
     }
-    include_examples 'failing checks'
+    include_examples "failing checks"
   end
 end

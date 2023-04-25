@@ -26,14 +26,14 @@ module Api
       belongs_to :node
 
       def self.for_context(context_id = nil)
-        joins('LEFT JOIN nodes_with_flows ON node_quants.node_id = nodes_with_flows.id').
-          where('nodes_with_flows.context_id = ?', context_id)
+        joins("LEFT JOIN nodes_with_flows ON node_quants.node_id = nodes_with_flows.id").
+          where("nodes_with_flows.context_id = ?", context_id)
       end
 
       def self.import_key
         [
-          {name: :node_id, sql_type: 'INT'},
-          {name: :quant_id, sql_type: 'INT'}
+          {name: :node_id, sql_type: "INT"},
+          {name: :quant_id, sql_type: "INT"}
         ]
       end
 

@@ -1,15 +1,15 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Api::V3::Profile, type: :model do
-  include_context 'api v3 brazil context node types'
-  include_context 'api v3 brazil soy profiles'
-  include_context 'api v3 brazil exporter actor profile'
-  include_context 'api v3 brazil importer actor profile'
-  include_context 'api v3 brazil exporter quant values'
-  include_context 'api v3 brazil exporter qual values'
-  include_context 'api v3 brazil exporter ind values'
-  include_context 'api v3 brazil importer quant values'
-  include_context 'api v3 brazil soy flow quants'
+  include_context "api v3 brazil context node types"
+  include_context "api v3 brazil soy profiles"
+  include_context "api v3 brazil exporter actor profile"
+  include_context "api v3 brazil importer actor profile"
+  include_context "api v3 brazil exporter quant values"
+  include_context "api v3 brazil exporter qual values"
+  include_context "api v3 brazil exporter ind values"
+  include_context "api v3 brazil importer quant values"
+  include_context "api v3 brazil soy flow quants"
 
   before do
     Api::V3::Readonly::FlowNode.refresh(sync: true)
@@ -28,14 +28,14 @@ RSpec.describe Api::V3::Profile, type: :model do
       FactoryBot.build(
         :api_v3_profile,
         context_node_type: api_v3_exporter1_context_node,
-        name: 'actor'
+        name: "actor"
       )
     }
-    it 'fails when context node type missing' do
+    it "fails when context node type missing" do
       expect(profile_without_context_node_type).to have(2).
         errors_on(:context_node_type)
     end
-    it 'fails when context node type taken' do
+    it "fails when context node type taken" do
       expect(duplicate).to have(1).errors_on(:name)
     end
   end
@@ -59,13 +59,13 @@ RSpec.describe Api::V3::Profile, type: :model do
           ActiveRecord::Base.connection.execute(
             "UPDATE nodes_with_flows
             SET actor_basic_attributes = null
-            WHERE id IN(#{related_node_with_flows.map(&:id).join(',')})"
+            WHERE id IN(#{related_node_with_flows.map(&:id).join(",")})"
           )
         end
 
-        context 'when the name changes' do
-          it 'refresh actor_basic_attributes of the related node_with_flows' do
-            profile.update(name: 'place')
+        context "when the name changes" do
+          it "refresh actor_basic_attributes of the related node_with_flows" do
+            profile.update(name: "place")
 
             related_node_with_flows.each do |node_with_flows|
               expect(node_with_flows.actor_basic_attributes).to be_nil
@@ -73,8 +73,8 @@ RSpec.describe Api::V3::Profile, type: :model do
           end
         end
 
-        context 'when context_node_type_id changes' do
-          it 'refresh actor_basic_attributes of the related node_with_flows' do
+        context "when context_node_type_id changes" do
+          it "refresh actor_basic_attributes of the related node_with_flows" do
             profile.update(
               context_node_type_id: Api::V3::ContextNodeType.last.id
             )
@@ -86,9 +86,9 @@ RSpec.describe Api::V3::Profile, type: :model do
           end
         end
 
-        context 'when changes any other field' do
-          it 'not refresh actor_basic_attributes of the related node_with_flows' do
-            profile.update(adm_1_name: 'new_name')
+        context "when changes any other field" do
+          it "not refresh actor_basic_attributes of the related node_with_flows" do
+            profile.update(adm_1_name: "new_name")
 
             related_node_with_flows.each do |node_with_flows|
               expect(node_with_flows.actor_basic_attributes).to be_nil

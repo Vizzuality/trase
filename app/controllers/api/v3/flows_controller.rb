@@ -12,7 +12,7 @@ module Api
         ).call
 
         if @flows_result.errors.any?
-          render json: {error: @flows_result.errors.join('; ')}, status: 400
+          render json: {error: @flows_result.errors.join("; ")}, status: 400
         else
           render json: @flows_result,
                  adapter: :attributes,

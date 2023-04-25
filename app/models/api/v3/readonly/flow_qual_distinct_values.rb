@@ -20,7 +20,7 @@ module Api
       class FlowQualDistinctValues < Api::Readonly::BaseModel
         include Api::V3::Readonly::MaterialisedView
 
-        self.table_name = 'flow_qual_distinct_values_mv'
+        self.table_name = "flow_qual_distinct_values_mv"
       end
     end
   end

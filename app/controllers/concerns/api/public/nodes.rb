@@ -9,7 +9,7 @@ module Api
       def index
         initialize_collection_for_index
         render json: @collection,
-               root: 'data',
+               root: "data",
                each_serializer: Api::Public::Nodes::NodeSerializer
       end
 

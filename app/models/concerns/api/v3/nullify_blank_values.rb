@@ -10,7 +10,7 @@ module Api
 
       def nullify_blank_values
         begin
-          self.class.const_get('NORMALIZABLE_ATTRIBUTES')
+          self.class.const_get("NORMALIZABLE_ATTRIBUTES")
         rescue NameError
           []
         end.each do |column|

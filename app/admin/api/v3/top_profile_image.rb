@@ -1,5 +1,5 @@
-ActiveAdmin.register Api::V3::TopProfileImage, as: 'Top Profile Image' do
-  menu parent: 'Profiles', priority: 3
+ActiveAdmin.register Api::V3::TopProfileImage, as: "Top Profile Image" do
+  menu parent: "Profiles", priority: 3
   permit_params :commodity_id, :profile_type, :image
 
   controller do
@@ -11,9 +11,9 @@ ActiveAdmin.register Api::V3::TopProfileImage, as: 'Top Profile Image' do
   end
 
   index do
-    column('Commodity') { |top_profile_image| top_profile_image&.commodity&.name }
-    column('Profile type') { |top_profile_image| top_profile_image&.profile_type }
-    column('Image') { |top_profile_image| image_tag top_profile_image.image_url(:small) }
+    column("Commodity") { |top_profile_image| top_profile_image&.commodity&.name }
+    column("Profile type") { |top_profile_image| top_profile_image&.profile_type }
+    column("Image") { |top_profile_image| image_tag top_profile_image.image_url(:small) }
     actions
   end
 
@@ -36,7 +36,7 @@ ActiveAdmin.register Api::V3::TopProfileImage, as: 'Top Profile Image' do
       row :image do |top_profile_image|
         image_tag top_profile_image.image_url(:small)
       end
-      row('Commodity') { |top_profile_image| top_profile_image&.commodity&.name }
+      row("Commodity") { |top_profile_image| top_profile_image&.commodity&.name }
       row :profile_type
     end
   end

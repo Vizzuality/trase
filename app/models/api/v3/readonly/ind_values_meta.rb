@@ -16,7 +16,7 @@ module Api
       class IndValuesMeta < Api::Readonly::BaseModel
         include Api::V3::Readonly::MaterialisedView
 
-        self.table_name = 'ind_values_meta_mv'
+        self.table_name = "ind_values_meta_mv"
 
         belongs_to :ind
       end

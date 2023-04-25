@@ -17,7 +17,7 @@
 module Content
   class Post < Content::Base
     CATEGORIES = [
-      'NEWS', 'BLOG', 'INSIGHT', 'INFO BRIEF', 'ISSUE BRIEF', 'LONGER READ'
+      "NEWS", "BLOG", "INSIGHT", "INFO BRIEF", "ISSUE BRIEF", "LONGER READ"
     ].freeze
     validates :title, presence: true
     validates :date, presence: true
@@ -26,7 +26,7 @@ module Content
     validates :highlighted, inclusion: {in: [true, false]}
     validates :category, presence: true, inclusion: CATEGORIES
 
-    has_attached_file :image, styles: {small: '320x320>', large: '640x640>'}
+    has_attached_file :image, styles: {small: "320x320>", large: "640x640>"}
     validates_attachment_content_type :image, content_type: /\Aimage\/.*\z/
 
     after_initialize :set_default_date
@@ -34,8 +34,8 @@ module Content
                 if: -> { highlighted && highlighted_changed? }
 
     def complete_post_url
-      return post_url if post_url.start_with?('http://', 'https://')
-      'http://' + post_url
+      return post_url if post_url.start_with?("http://", "https://")
+      "http://" + post_url
     end
 
     def set_default_date

@@ -51,9 +51,6 @@ module Api
       end
 
       def top_consumer_countries
-        if NodeTypeName.destination_country_names.include? @node.node_type
-          @contexts = Api::V3::Context.where(commodity_id: @node.commodity_id)
-        end
         @result =
           if @node.node_type == NodeTypeName::COUNTRY_OF_PRODUCTION
             Api::V3::Profiles::CrossContextTopNodesChart.new(
@@ -67,9 +64,12 @@ module Api
               }
             ).call
           else
+            # because it is a cross-context chart, and because the node
+            # may exist as multiple node types across contexts,
+            # this chart will need to consider all matching nodes and contexts for commodity
             Api::V3::CountryProfiles::TopSourceCountriesChart.new(
-              @contexts,
-              @node,
+              @node.commodity_id,
+              @node.geo_id,
               @year,
               {}
             ).call

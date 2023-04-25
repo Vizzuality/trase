@@ -1,5 +1,5 @@
-ActiveAdmin.register Api::V3::DashboardsAttribute, as: 'DashboardsAttribute' do
-  menu parent: 'Dashboards'
+ActiveAdmin.register Api::V3::DashboardsAttribute, as: "DashboardsAttribute" do
+  menu parent: "Dashboards"
 
   includes [
     :dashboards_attribute_group,
@@ -15,7 +15,7 @@ ActiveAdmin.register Api::V3::DashboardsAttribute, as: 'DashboardsAttribute' do
 
   controller do
     def clear_cache
-      clear_cache_for_regexp('/api/v3/dashboards/indicators')
+      clear_cache_for_regexp("/api/v3/dashboards/indicators")
     end
   end
 
@@ -31,14 +31,14 @@ ActiveAdmin.register Api::V3::DashboardsAttribute, as: 'DashboardsAttribute' do
             collection: Api::V3::DashboardsAttributeGroup.select_options
       input :position,
             required: true,
-            hint: object.class.column_comment('position')
+            hint: object.class.column_comment("position")
     end
     f.actions
   end
 
   index do
     column :readonly_attribute_display_name
-    column('Dashboards Attribute Group') { |attribute| attribute.dashboards_attribute_group&.name }
+    column("Dashboards Attribute Group") { |attribute| attribute.dashboards_attribute_group&.name }
     column :position
     actions
   end

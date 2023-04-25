@@ -22,7 +22,7 @@ module Api
             end
           end
           if (year = params[:year]&.to_i)
-            nodes = nodes.where('years && ARRAY[?]::INT[]', year)
+            nodes = nodes.where("years && ARRAY[?]::INT[]", year)
           end
 
           @contexts = Api::V3::Context.where(id: nodes.select(:context_id))
@@ -30,14 +30,18 @@ module Api
 
           unless @node.present?
             raise ActiveRecord::RecordNotFound.new(
-              'Node not found for given parameters'
+              "Node not found for given parameters"
             )
           end
         end
 
         def set_year
           node_years = @node.years
-          raise ActiveRecord::RecordNotFound unless node_years.any?
+          unless node_years.any?
+            raise ActiveRecord::RecordNotFound.new(
+              "No years of data found for node #{params[:id]}"
+            )
+          end
 
           year = params[:year]&.to_i
           @year =
@@ -52,7 +56,7 @@ module Api
           return if params[:commodity_id].present? || params[:context_id].present?
 
           raise ActionController::ParameterMissing,
-                "Required param commodity_id or context_id missing"
+            "Required param commodity_id or context_id missing"
         end
       end
     end

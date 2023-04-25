@@ -45,7 +45,7 @@ module Api
             DELETE FROM #{@backup_table}
             USING (#{subquery_for_delete}) updated_identifiers
             WHERE #{@backup_table}.id = updated_identifiers.id
-            AND #{where_conditions.join(' OR ')}
+            AND #{where_conditions.join(" OR ")}
           SQL
           @table_class.connection.execute stmt
         end
@@ -68,9 +68,9 @@ module Api
           end
 
           subquery_for_delete = <<~SQL
-            SELECT t.*, #{select_list.join(', ')}
+            SELECT t.*, #{select_list.join(", ")}
             FROM #{@backup_table} t
-            #{joins.join(' ')}
+            #{joins.join(" ")}
           SQL
           delete_obsolete_rows(subquery_for_delete, delete_where_conditions)
         end
@@ -90,9 +90,9 @@ module Api
           end
 
           subquery_for_delete = <<~SQL
-            SELECT t.*, #{select_list.join(', ')}
+            SELECT t.*, #{select_list.join(", ")}
             FROM #{@backup_table} t
-            #{joins.join(' ')}
+            #{joins.join(" ")}
           SQL
           delete_obsolete_rows(subquery_for_delete, delete_where_conditions)
         end
@@ -106,9 +106,9 @@ module Api
             select_list << "#{table_alias}.new_id AS new_#{fk[:name]}"
             join_type =
               if fk[:nullable]
-                'LEFT JOIN'
+                "LEFT JOIN"
               else
-                'JOIN'
+                "JOIN"
               end
             joins << <<~SQL
               #{join_type} #{fk[:table_class].key_backup_table} #{table_alias}
@@ -118,14 +118,14 @@ module Api
           end
 
           subquery_for_update = <<~SQL
-            SELECT t.*, #{select_list.join(', ')}
+            SELECT t.*, #{select_list.join(", ")}
             FROM #{@backup_table} t
-            #{joins.join(' ')}
+            #{joins.join(" ")}
           SQL
 
           stmt = <<~SQL
             UPDATE #{@backup_table}
-            SET #{update_set_expressions.join(', ')}
+            SET #{update_set_expressions.join(", ")}
             FROM (#{subquery_for_update}) updated_identifiers
             WHERE #{@backup_table}.id = updated_identifiers.id
           SQL

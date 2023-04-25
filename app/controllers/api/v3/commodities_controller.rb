@@ -12,12 +12,12 @@ module Api
         serialized_attributes = ActiveModelSerializers::SerializableResource.new(
           facts.attributes,
           each_serializer: Api::V3::AttributeSerializer,
-          root: 'attributes'
+          root: "attributes"
         )
 
         render json: facts.facts,
                each_serializer: Api::V3::Commodities::CountryFactsSerializer,
-               root: 'data',
+               root: "data",
                meta: serialized_attributes
       end
 

@@ -49,13 +49,13 @@ module Api
           @profile = Api::V3::Profile.
             joins(:context_node_type).
             where(
-              'context_node_types.context_id' => @node_with_flows.context_id,
-              'context_node_types.column_position' =>
+              "context_node_types.context_id" => @node_with_flows.context_id,
+              "context_node_types.column_position" =>
                 @node_with_flows.column_position
             ).
             includes(charts: :children).
             references(:charts).
-            where('charts.parent_id IS NULL').
+            where("charts.parent_id IS NULL").
             first
           @charts = @profile.charts
         end
@@ -63,8 +63,8 @@ module Api
         def initialize_commodities
           @commodities = exactly_same_node_all_commodities.map do |node|
             {
-              id: node['commodity_id'],
-              name: node['commodity']
+              id: node["commodity_id"],
+              name: node["commodity"]
             }
           end.uniq
         end
@@ -90,7 +90,7 @@ module Api
             select(:id, :role).
             joins(:context).
             where(
-              'contexts.commodity_id' => @context.commodity_id,
+              "contexts.commodity_id" => @context.commodity_id,
               profile: @node_with_flows.profile
             )
 
@@ -109,8 +109,8 @@ module Api
             without_unknowns.
             without_domestic.
             select(
-              'contexts.commodity_id',
-              'commodities.name AS commodity'
+              "contexts.commodity_id",
+              "commodities.name AS commodity"
             ).
             joins(context: :commodity).
             where(

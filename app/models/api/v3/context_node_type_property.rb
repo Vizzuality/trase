@@ -29,10 +29,10 @@ module Api
         0, 1, 2, 3
       ].freeze
 
-      SOURCE_ROLE = 'source'.freeze
-      EXPORTER_ROLE = 'exporter'.freeze
-      IMPORTER_ROLE = 'importer'.freeze
-      DESTINATION_ROLE = 'destination'.freeze
+      SOURCE_ROLE = "source".freeze
+      EXPORTER_ROLE = "exporter".freeze
+      IMPORTER_ROLE = "importer".freeze
+      DESTINATION_ROLE = "destination".freeze
 
       ROLES = [
         SOURCE_ROLE, EXPORTER_ROLE, IMPORTER_ROLE, DESTINATION_ROLE
@@ -42,7 +42,7 @@ module Api
 
       belongs_to :context_node_type
       belongs_to :geometry_context_node_type,
-        class_name: 'ContextNodeType',
+        class_name: "ContextNodeType",
         foreign_key: :geometry_context_node_type_id,
         optional: true
       has_many :sankey_card_link_node_types
@@ -78,10 +78,10 @@ module Api
 
       # by column group
       DEFAULT_PREFIXES = {
-        0 => 'sourced from',
-        1 => 'exported by',
-        2 => 'imported by',
-        3 => 'going into'
+        0 => "sourced from",
+        1 => "exported by",
+        2 => "imported by",
+        3 => "going into"
       }.freeze
 
       private

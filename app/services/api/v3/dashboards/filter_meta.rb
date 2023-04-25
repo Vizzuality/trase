@@ -7,7 +7,7 @@ module Api
         # @option params [Array<Integer>] commodities_ids
         def initialize(params)
           @tabs = Api::V3::NodeTypeTabs.new(
-            params.merge(include: ['prefix'])
+            params.merge(include: ["prefix"])
           )
         end
 
@@ -15,19 +15,19 @@ module Api
           {
             data: [
               {
-                section: 'SOURCES',
+                section: "SOURCES",
                 tabs: @tabs.call(ContextNodeTypeProperty::SOURCE_ROLE)
               },
               {
-                section: 'EXPORTERS',
+                section: "EXPORTERS",
                 tabs: @tabs.call(ContextNodeTypeProperty::EXPORTER_ROLE)
               },
               {
-                section: 'IMPORTERS',
+                section: "IMPORTERS",
                 tabs: @tabs.call(ContextNodeTypeProperty::IMPORTER_ROLE)
               },
               {
-                section: 'DESTINATIONS',
+                section: "DESTINATIONS",
                 tabs: @tabs.call(ContextNodeTypeProperty::DESTINATION_ROLE)
               }
             ]

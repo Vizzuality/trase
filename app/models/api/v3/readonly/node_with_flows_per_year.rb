@@ -28,7 +28,7 @@ module Api
       class NodeWithFlowsPerYear < Api::Readonly::BaseModel
         include Api::V3::Readonly::MaterialisedTable
 
-        self.table_name = 'nodes_with_flows_per_year'
+        self.table_name = "nodes_with_flows_per_year"
 
         INDEXES = [
           {columns: :id}

@@ -1,5 +1,5 @@
-ActiveAdmin.register Content::Testimonial, as: 'Testimonial' do
-  menu parent: 'Content'
+ActiveAdmin.register Content::Testimonial, as: "Testimonial" do
+  menu parent: "Content"
 
   permit_params :quote, :author_name, :author_title, :image
 

@@ -101,14 +101,14 @@ module Api
             context_meta = attribute.node_values_meta_per_context(@context)
             return [] unless context_meta.present?
 
-            attribute_years = context_meta['years']&.compact
+            attribute_years = context_meta["years"]&.compact
             is_temporal = attribute_years.any?
             if is_temporal
               # don't include charts for this attribute if years don't match
               matching_years = matching_years(attribute_years)
               return [] unless matching_years.any?
             end
-            attribute_node_types_ids = context_meta['node_types_ids']
+            attribute_node_types_ids = context_meta["node_types_ids"]
             matching_nodes = matching_nodes(attribute_node_types_ids)
             return [] unless matching_nodes.any?
 

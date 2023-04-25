@@ -17,7 +17,7 @@ module Api
       class NodesPerContextRankedByVolumePerYear < Api::Readonly::BaseModel
         include Api::V3::Readonly::MaterialisedView
 
-        self.table_name = 'nodes_per_context_ranked_by_volume_per_year_mv'
+        self.table_name = "nodes_per_context_ranked_by_volume_per_year_mv"
       end
     end
   end

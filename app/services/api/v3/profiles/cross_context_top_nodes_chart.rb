@@ -5,13 +5,13 @@ module Api
         include Api::V3::Profiles::AttributesInitializer
 
         NODE_TYPE_IDENTIFIERS = {
-          'place' => {
-            place_top_consumer_actors: 'trader',
-            place_top_consumer_countries: 'destination'
+          "place" => {
+            place_top_consumer_actors: "trader",
+            place_top_consumer_countries: "destination"
           },
-          'country' => {
-            country_top_consumer_actors: 'trader',
-            country_top_consumer_countries: 'destination'
+          "country" => {
+            country_top_consumer_actors: "trader",
+            country_top_consumer_countries: "destination"
           }
         }.freeze
 
@@ -45,9 +45,9 @@ module Api
             )
           end
           # Assumption: Volume is a special quant which always exists
-          @volume_attribute = Dictionary::Quant.instance.get('Volume')
+          @volume_attribute = Dictionary::Quant.instance.get("Volume")
           unless @volume_attribute.present?
-            raise ActiveRecord::RecordNotFound.new 'Quant Volume not found'
+            raise ActiveRecord::RecordNotFound.new "Quant Volume not found"
           end
           @include_other = profile_options[:include_other]
         end
@@ -70,14 +70,14 @@ module Api
 
         def target_nodes_formatted
           @top_nodes.map do |top_node|
-            top_node_id = top_node['node_id']
-            value = top_node['value']
+            top_node_id = top_node["node_id"]
+            value = top_node["value"]
             {
               id: top_node_id,
-              geo_id: top_node['geo_id'],
-              name: top_node['name'],
+              geo_id: top_node["geo_id"],
+              name: top_node["name"],
               height: value / @all_nodes_total,
-              is_domestic_consumption: top_node['is_domestic_consumption'].
+              is_domestic_consumption: top_node["is_domestic_consumption"].
                 present?,
               value: value
             }
@@ -88,8 +88,8 @@ module Api
           other_value = @all_nodes_total - @target_nodes_total
           {
             id: 0,
-            geo_id: 'XX',
-            name: 'OTHER',
+            geo_id: "XX",
+            name: "OTHER",
             height: @all_nodes_total.zero? ? 0 : other_value / @all_nodes_total,
             is_domestic_consumption: nil,
             value: other_value

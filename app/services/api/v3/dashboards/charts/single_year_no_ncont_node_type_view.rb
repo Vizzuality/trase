@@ -7,7 +7,7 @@ module Api
           include Api::V3::Dashboards::Charts::Helpers
           include Api::V3::Dashboards::Charts::FlowValuesHelpers
 
-          OTHER = 'OTHER'.freeze
+          OTHER = "OTHER".freeze
 
           # @param chart_parameters [Api::V3::Dashboards::ChartParameters::FlowValues]
           def initialize(chart_parameters)
@@ -27,8 +27,8 @@ module Api
             x_labels_profile_info = []
             profile = profile_for_node_type_id(@node_type.id)
             @top_n_and_others_query.map do |record|
-              x_labels_profile_info << {id: record['id'], profile: profile}
-              @data << record.attributes.slice('x', 'y0').symbolize_keys
+              x_labels_profile_info << {id: record["id"], profile: profile}
+              @data << record.attributes.slice("x", "y0").symbolize_keys
             end
             if (last = @data.last) && last[:x] == OTHER && last[:y0].blank?
               @data.pop
@@ -38,7 +38,7 @@ module Api
             @meta = {
               xAxis: node_type_axis_meta(@node_type),
               xLabelsProfileInfo: x_labels_profile_info,
-              yAxis: axis_meta(@cont_attribute, 'number'),
+              yAxis: axis_meta(@cont_attribute, "number"),
               x: node_type_legend_meta(@node_type),
               y0: legend_meta(@cont_attribute),
               info: info

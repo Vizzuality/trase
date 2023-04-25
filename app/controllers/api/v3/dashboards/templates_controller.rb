@@ -16,7 +16,7 @@ module Api
             )
 
           render json: dashboard_templates,
-                 root: 'data',
+                 root: "data",
                  each_serializer: Api::V3::Dashboards::TemplateSerializer
         end
       end

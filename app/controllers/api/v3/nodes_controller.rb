@@ -9,7 +9,7 @@ module Api
         ).call
 
         render json: @nodes,
-               root: 'data',
+               root: "data",
                each_serializer: Api::V3::Nodes::NodeSerializer
       end
 

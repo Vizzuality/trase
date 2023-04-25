@@ -16,11 +16,11 @@ module Api
             indicator: @volume_attribute.display_name,
             unit: @volume_attribute.unit,
             targetNodes: @top_nodes.map do |top_node|
-              value = top_node['value']
+              value = top_node["value"]
               {
-                id: top_node['node_id'],
-                name: top_node['name'],
-                geo_id: top_node['geo_id'],
+                id: top_node["node_id"],
+                name: top_node["name"],
+                geo_id: top_node["geo_id"],
                 height: value / @all_nodes_total,
                 value: value
               }
@@ -38,8 +38,8 @@ module Api
           @limit = params[:limit]&.to_i || 10
 
           # Assumption: Volume is a special quant which always exists
-          @volume_attribute = Dictionary::Quant.instance.get('Volume')
-          raise 'Quant Volume not found' unless @volume_attribute.present?
+          @volume_attribute = Dictionary::Quant.instance.get("Volume")
+          raise "Quant Volume not found" unless @volume_attribute.present?
         end
 
         def initialize_param(params, symbol)

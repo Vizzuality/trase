@@ -1,8 +1,8 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Content::StaffGroupsController, type: :controller do
-  describe 'GET index' do
-    it 'assigns staff members' do
+  describe "GET index" do
+    it "assigns staff members" do
       g1 = FactoryBot.create(:staff_group)
       m1 = FactoryBot.create(:staff_member, staff_group: g1)
       m2 = FactoryBot.create(:staff_member, staff_group: g1)

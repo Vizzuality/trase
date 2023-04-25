@@ -17,7 +17,7 @@ module Api
 
         # Calculating the total is too expensive, use an estimation instead
         def total
-          @size_query.sum('count::INT')
+          @size_query.sum("count::INT")
         end
 
         MAX_SIZE = 500_000
@@ -38,7 +38,7 @@ module Api
 
         def initialize_query
           @query = @base_query.select(flat_select_columns).
-            order(:row_name, 'flows.attribute_type', 'flows.attribute_id')
+            order(:row_name, "flows.attribute_type", "flows.attribute_id")
         end
 
         def flat_select_columns
@@ -54,25 +54,25 @@ module Api
 
         def commodity_type
           commodity_name = @context.commodity.try(:name)
-          if commodity_name == 'SOY'
-            'Soy bean equivalents'
+          if commodity_name == "SOY"
+            "Soy bean equivalents"
           else
             "#{commodity_name.try(:humanize)} equivalents" ||
-              'UNKNOWN'
+              "UNKNOWN"
           end
         end
 
         # rubocop:disable Metrics/MethodLength
         def initialize_path_column_names(context_id)
           context_node_types = Api::V3::ContextNodeType.
-            select([:column_position, 'node_types.name']).
+            select([:column_position, "node_types.name"]).
             where(context_id: context_id).
             joins(:node_type).
             order(:column_position)
           context_column_positions = context_node_types.pluck(:column_position)
           path_column_names = context_column_positions.map { |p| "names[#{p + 1}]" }
           @path_column_aliases = context_node_types.
-            pluck('node_types.name').
+            pluck("node_types.name").
             map { |nt| "\"#{nt}\"" }
           @path_columns = path_column_names.each_with_index.map do |n, idx|
             "#{n} AS #{@path_column_aliases[idx]}"

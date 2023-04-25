@@ -1,5 +1,5 @@
-shared_context 'api v3 brazil soy profiles' do
-  include_context 'api v3 brazil context node types'
+shared_context "api v3 brazil soy profiles" do
+  include_context "api v3 brazil context node types"
 
   let!(:api_v3_brazil_exporter_actor_profile) do
     profile = Api::V3::Profile.where(
@@ -34,12 +34,12 @@ shared_context 'api v3 brazil soy profiles' do
       :api_v3_profile,
       context_node_type: api_v3_municipality_context_node,
       name: Api::V3::Profile::PLACE,
-      adm_1_topojson_path: 'adm_1_topojson_path',
-      adm_1_topojson_root: 'adm_1_topojson_root',
-      adm_2_topojson_path: 'adm_2_topojson_path',
-      adm_2_topojson_root: 'adm_2_topojson_root',
-      main_topojson_path: 'main_topojson_path',
-      main_topojson_root: 'main_topojson_root'
+      adm_1_topojson_path: "adm_1_topojson_path",
+      adm_1_topojson_root: "adm_1_topojson_root",
+      adm_2_topojson_path: "adm_2_topojson_path",
+      adm_2_topojson_root: "adm_2_topojson_root",
+      main_topojson_path: "main_topojson_path",
+      main_topojson_root: "main_topojson_root"
     )
   end
 end

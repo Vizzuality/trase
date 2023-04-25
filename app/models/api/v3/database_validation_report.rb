@@ -10,8 +10,8 @@
 module Api
   module V3
     class DatabaseValidationReport < BaseModel
-      SUCCESS = 'SUCCESS'.freeze
-      FAILED = 'FAILED'.freeze
+      SUCCESS = "SUCCESS".freeze
+      FAILED = "FAILED".freeze
 
       alias_attribute :finished_at, :updated_at
 

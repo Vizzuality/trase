@@ -7,7 +7,7 @@ module Api
 
           def flow_query
             Api::V3::Flow.
-              from('partitioned_flows flows').
+              from("partitioned_flows flows").
               where(context_id: @context.id).
               order(false)
           end
@@ -65,38 +65,38 @@ module Api
             @chart_parameters.
               selected_nodes_ids_by_position.each do |position, nodes_ids|
                 @query = @query.where(
-                  'flows.path[?] IN (?)', position + 1, nodes_ids
+                  "flows.path[?] IN (?)", position + 1, nodes_ids
                 )
               end
             @chart_parameters.
               excluded_nodes_ids_by_position.each do |position, nodes_ids|
                 @query = @query.where(
-                  'flows.path[?] NOT IN (?)', position + 1, nodes_ids
+                  "flows.path[?] NOT IN (?)", position + 1, nodes_ids
                 )
               end
           end
 
           def node_type_axis_meta(node_type)
             {
-              type: 'category',
+              type: "category",
               label: node_type.name,
-              prefix: '',
-              format: '',
-              suffix: ''
+              prefix: "",
+              format: "",
+              suffix: ""
             }
           end
 
           def series_legend_meta(series_name, attribute)
             {
               label: series_name,
-              tooltip: {prefix: '', format: '', suffix: attribute.unit}
+              tooltip: {prefix: "", format: "", suffix: attribute.unit}
             }
           end
 
           def node_type_legend_meta(node_type)
             {
               label: node_type.name,
-              tooltip: {prefix: '', format: '', suffix: ''}
+              tooltip: {prefix: "", format: "", suffix: ""}
             }
           end
 

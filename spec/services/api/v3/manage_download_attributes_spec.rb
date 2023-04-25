@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Api::V3::ManageDownloadAttribute do
   describe :call do
@@ -7,17 +7,17 @@ RSpec.describe Api::V3::ManageDownloadAttribute do
     let(:subject) {
       Api::V3::ManageDownloadAttribute.new(context, quant)
     }
-    context 'when download attribute does not exist' do
-      it 'creates download attribute' do
+    context "when download attribute does not exist" do
+      it "creates download attribute" do
         expect { subject.call(true, nil) }.to change { context.download_attributes.count }.by(1)
       end
-      it 'does not create a download attribute' do
+      it "does not create a download attribute" do
         expect { subject.call(false, nil) }.not_to change { context.download_attributes.count }
       end
     end
-    context 'when download attribute exists' do
+    context "when download attribute exists" do
       let(:download_attribute) {
-        FactoryBot.create(:api_v3_download_attribute, context: context, display_name: 'AAA')
+        FactoryBot.create(:api_v3_download_attribute, context: context, display_name: "AAA")
       }
       let!(:download_quant){
         FactoryBot.create(
@@ -26,14 +26,14 @@ RSpec.describe Api::V3::ManageDownloadAttribute do
           quant: quant
         )
       }
-      it 'destroys download attribute' do
+      it "destroys download attribute" do
         expect { subject.call(false, nil) }.to change { context.download_attributes.count }.by(-1)
       end
-      it 'renames download attribute' do
-        subject.call(true, 'BBB')
-        expect(download_attribute.reload.display_name).to eq('BBB')
+      it "renames download attribute" do
+        subject.call(true, "BBB")
+        expect(download_attribute.reload.display_name).to eq("BBB")
       end
-      it 'does not create a duplicate' do
+      it "does not create a duplicate" do
         expect { subject.call(true, nil) }.not_to change { context.download_attributes.count }
       end
     end

@@ -1,5 +1,5 @@
-ActiveAdmin.register Api::V3::IndProperty, as: 'IndProperty' do
-  menu parent: 'Tooltips', priority: 4
+ActiveAdmin.register Api::V3::IndProperty, as: "IndProperty" do
+  menu parent: "Tooltips", priority: 4
 
   permit_params :ind_id, :display_name, :unit_type, :aggregation_method, :power_of_ten_for_rounding, :tooltip_text
 
@@ -7,7 +7,7 @@ ActiveAdmin.register Api::V3::IndProperty, as: 'IndProperty' do
 
   controller do
     def clear_cache
-      clear_cache_for_regexp('/api/v3/contexts')
+      clear_cache_for_regexp("/api/v3/contexts")
       Dictionary::Ind.instance.reset
     end
   end
@@ -18,23 +18,23 @@ ActiveAdmin.register Api::V3::IndProperty, as: 'IndProperty' do
       input :ind, as: :select, required: true,
                   collection: Api::V3::Ind.select_options
       input :display_name, required: true, as: :string,
-                           hint: object.class.column_comment('display_name')
+                           hint: object.class.column_comment("display_name")
       input :unit_type, as: :select,
                         collection: Api::V3::IndProperty::UNIT_TYPE,
-                        hint: object.class.column_comment('unit_type')
+                        hint: object.class.column_comment("unit_type")
       input :aggregation_method, as: :select,
-                        collection: Api::V3::IndProperty::AGGREGATION_METHOD,
-                        hint: object.class.column_comment('aggregation_method')
+                                 collection: Api::V3::IndProperty::AGGREGATION_METHOD,
+                                 hint: object.class.column_comment("aggregation_method")
       input :power_of_ten_for_rounding, required: true, as: :string,
-                           hint: object.class.column_comment('power_of_ten_for_rounding')
+                                        hint: object.class.column_comment("power_of_ten_for_rounding")
       input :tooltip_text, as: :string,
-                           hint: object.class.column_comment('tooltip_text')
+                           hint: object.class.column_comment("tooltip_text")
     end
     f.actions
   end
 
   index do
-    column('Name') { |property| property.ind&.name }
+    column("Name") { |property| property.ind&.name }
     column :display_name
     column :unit_type
     column :aggregation_method

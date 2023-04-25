@@ -1,8 +1,8 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Api::V3::Dashboards::ParametrisedCharts::NodeValuesCharts do
-  include_context 'api v3 brazil municipality quant values'
-  include_context 'api v3 brazil soy flows'
+  include_context "api v3 brazil municipality quant values"
+  include_context "api v3 brazil soy flows"
 
   before(:each) do
     Api::V3::Readonly::QuantValuesMeta.refresh(sync: true, skip_dependents: true)
@@ -44,7 +44,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::NodeValuesCharts do
       value = chart_type[key] || parameters[key]
       chart_type[key] =
         if value.is_a?(Array)
-          value.join(',')
+          value.join(",")
         else
           value
         end
@@ -58,7 +58,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::NodeValuesCharts do
     end
   }
 
-  context 'when single year' do
+  context "when single year" do
     let(:parameters) {
       mandatory_parameters.
         merge(single_year).
@@ -84,12 +84,12 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::NodeValuesCharts do
         }
       ]
     }
-    it 'returns expected chart types' do
+    it "returns expected chart types" do
       expect(chart_types).to match_array(expected_chart_types)
     end
   end
 
-  context 'when multiple years' do
+  context "when multiple years" do
     let(:parameters) {
       mandatory_parameters.
         merge(multi_year).
@@ -115,7 +115,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::NodeValuesCharts do
         }
       ]
     }
-    it 'returns expected chart types' do
+    it "returns expected chart types" do
       expect(chart_types).to match_array(expected_chart_types)
     end
   end

@@ -4,7 +4,7 @@ module Api
       class ApiConnection < Faraday::Connection
         include Singleton
 
-        API_HOST = 'https://comtrade.un.org'.freeze
+        API_HOST = "https://comtrade.un.org".freeze
 
         def initialize
           retry_options = {

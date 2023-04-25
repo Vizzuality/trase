@@ -1,12 +1,12 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Api::V3::Download::PrecomputedDownload do
-  include_context 'api v3 brazil two flows'
+  include_context "api v3 brazil two flows"
 
   before(:each) do
     stub_const(
-      'Api::V3::Download::PrecomputedDownload::ROOT_DIRNAME',
-      'spec/support/downloads'
+      "Api::V3::Download::PrecomputedDownload::ROOT_DIRNAME",
+      "spec/support/downloads"
     )
   end
 
@@ -18,31 +18,31 @@ RSpec.describe Api::V3::Download::PrecomputedDownload do
   end
 
   describe :call do
-    it 'stores a precomputed zip download' do
+    it "stores a precomputed zip download" do
       Api::V3::Download::PrecomputedDownload.new(api_v3_brazil_soy_context).call
       output_file_name = [
         Api::V3::Download::PrecomputedDownload::ROOT_DIRNAME,
-        'csv',
-        'BRAZIL_SOY_pc.zip'
-      ].join('/')
+        "csv",
+        "BRAZIL_SOY_pc.zip"
+      ].join("/")
       expect(File).to exist(output_file_name)
     end
   end
 
   describe :refresh do
-    it 'stores precomputed zip downloads' do
+    it "stores precomputed zip downloads" do
       Api::V3::Download::PrecomputedDownload.refresh
       output_file_name = [
         Api::V3::Download::PrecomputedDownload::ROOT_DIRNAME,
-        'csv',
-        'BRAZIL_SOY_pc.zip'
-      ].join('/')
+        "csv",
+        "BRAZIL_SOY_pc.zip"
+      ].join("/")
       expect(File).to exist(output_file_name)
     end
   end
 
   describe :refresh_later do
-    it 'queues zip downloads to precompute' do
+    it "queues zip downloads to precompute" do
       Sidekiq::Testing.fake! do
         expect {
           Api::V3::Download::PrecomputedDownload.refresh_later
@@ -54,7 +54,7 @@ RSpec.describe Api::V3::Download::PrecomputedDownload do
   end
 
   describe :clear do
-    it 'calls cache cleaner' do
+    it "calls cache cleaner" do
       expect(
         Cache::Cleaner
       ).to receive(:clear_cache_for_regexp).twice

@@ -1,5 +1,5 @@
-ActiveAdmin.register Content::StaffMember, as: 'Staff Member' do
-  menu parent: 'Content'
+ActiveAdmin.register Content::StaffMember, as: "Staff Member" do
+  menu parent: "Content"
 
   includes :staff_group
 
@@ -21,15 +21,15 @@ ActiveAdmin.register Content::StaffMember, as: 'Staff Member' do
             as: :select,
             collection: Content::StaffGroup.select_options
       input :name, required: true, as: :string
-      input :position, required: true, hint: 'Display order within staff group'
+      input :position, required: true, hint: "Display order within staff group"
       input :bio,
             required: true,
             as: :simplemde_editor,
-            hint: 'Staff member bio formatted in markdown'
+            hint: "Staff member bio formatted in markdown"
       input :image, as: :file, hint: if f.object.image.present?
                                        image_tag(f.object.image.url(:small))
                                      else
-                                       content_tag(:span, 'no image available')
+                                       content_tag(:span, "no image available")
                                      end
     end
     f.actions
@@ -37,7 +37,7 @@ ActiveAdmin.register Content::StaffMember, as: 'Staff Member' do
 
   show do
     attributes_table do
-      row('Staff Group') { |member| member.staff_group&.name }
+      row("Staff Group") { |member| member.staff_group&.name }
       row :name
       row :position
       row :bio
@@ -48,7 +48,7 @@ ActiveAdmin.register Content::StaffMember, as: 'Staff Member' do
   end
 
   index download_links: false do
-    column('Staff Group') { |member| member.staff_group&.name }
+    column("Staff Group") { |member| member.staff_group&.name }
     column :name
     column :position
     column :bio

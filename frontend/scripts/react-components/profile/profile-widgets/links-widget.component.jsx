@@ -5,6 +5,7 @@ import ButtonLinks from 'react-components/profile/profile-components/button-link
 import Heading from 'react-components/shared/heading';
 import { getSummaryEndpoint } from 'utils/getURLFromParams';
 import { translateText } from 'utils/transifex';
+import ChartError from 'react-components/chart-error';
 
 function LinksWidget(props) {
   const { activity, year, nodeId, countryId, commodityId, profileType, contextId } = props;
@@ -17,7 +18,7 @@ function LinksWidget(props) {
         if (error) {
           // TODO: display a proper error message to the user
           console.error('Error loading summary data for profile page', error);
-          return null;
+          return <ChartError />;
         }
 
         if (loading) return null;

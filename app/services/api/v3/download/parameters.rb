@@ -10,8 +10,8 @@ module Api
           @version = DownloadVersion.current_version_symbol(@context)
           initialize_filters(params)
           initialize_format(params)
-          @download_name = download_name_parts.compact.join('_')
-          @filename = @download_name + '.zip'
+          @download_name = download_name_parts.compact.join("_")
+          @filename = @download_name + ".zip"
         end
 
         def precompute?
@@ -19,18 +19,18 @@ module Api
         end
 
         def separator_name
-          if @separator == ';'
-            'semicolon'
+          if @separator == ";"
+            "semicolon"
           else
-            'comma'
+            "comma"
           end
         end
 
         def pivot_name
           if @pivot
-            'pivot'
+            "pivot"
           else
-            'table'
+            "table"
           end
         end
 
@@ -55,16 +55,16 @@ module Api
         def initialize_format(params)
           @pivot = params[:pivot].present?
           @separator =
-            if params[:separator].present? && params[:separator] == 'semicolon'
-              ';'
+            if params[:separator].present? && params[:separator] == "semicolon"
+              ";"
             else
-              ','
+              ","
             end
           @format =
-            if params[:format] && params[:format] == 'json'
-              'json'
+            if params[:format] && params[:format] == "json"
+              "json"
             else
-              'csv'
+              "csv"
             end
         end
       end

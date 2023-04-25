@@ -4,7 +4,7 @@ class UrlValidator < ActiveModel::EachValidator
       url = URI.parse(value)
       true
     rescue StandardError => error
-      record.errors[attribute] << 'Web address is invalid'
+      record.errors[attribute] << "Web address is invalid"
       false
     end
   end

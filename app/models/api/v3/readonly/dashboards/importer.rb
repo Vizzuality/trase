@@ -29,7 +29,7 @@ module Api
         class Importer < Api::Readonly::BaseModel
           include Api::V3::Readonly::MaterialisedTable
 
-          self.table_name = 'dashboards_importers'
+          self.table_name = "dashboards_importers"
           belongs_to :node
 
           INDEXES = [

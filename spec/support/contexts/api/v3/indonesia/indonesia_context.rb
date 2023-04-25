@@ -1,8 +1,8 @@
-shared_context 'api v3 indonesia context' do
+shared_context "api v3 indonesia context" do
   let!(:api_v3_indonesia) do
-    Api::V3::Country.find_by_iso2('ID') || FactoryBot.create(
+    Api::V3::Country.find_by_iso2("ID") || FactoryBot.create(
       :api_v3_country,
-      name: 'INDONESIA', iso2: 'ID'
+      name: "INDONESIA", iso2: "ID"
     )
   end
   let!(:api_v3_indonesia_properties) do
@@ -17,8 +17,8 @@ shared_context 'api v3 indonesia context' do
   end
 
   let!(:api_v3_palm_oil) do
-    Api::V3::Commodity.find_by_name('PALM OIL') ||
-      FactoryBot.create(:api_v3_commodity, name: 'PALM OIL')
+    Api::V3::Commodity.find_by_name("PALM OIL") ||
+      FactoryBot.create(:api_v3_commodity, name: "PALM OIL")
   end
 
   let!(:api_v3_indonesia_context) do

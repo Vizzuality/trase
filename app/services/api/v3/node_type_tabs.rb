@@ -39,27 +39,27 @@ module Api
       def initialize_dashboards_query
         base_query.
           left_joins(:profile).
-          where.not('node_types.name' => NodeTypeName::COUNTRY_OF_PRODUCTION)
+          where.not("node_types.name" => NodeTypeName::COUNTRY_OF_PRODUCTION)
       end
 
       def base_query
         query = Api::V3::ContextNodeType.
           select(
-            'node_types.id',
-            'node_types.name',
-            'profiles.name AS profile_type',
-            'context_node_type_properties.prefix',
-            'context_node_type_properties.role'
+            "node_types.id",
+            "node_types.name",
+            "profiles.name AS profile_type",
+            "context_node_type_properties.prefix",
+            "context_node_type_properties.role"
           ).
           joins(:context, :node_type, :context_node_type_property).
-          where('context_node_type_properties.is_visible').
+          where("context_node_type_properties.is_visible").
           order(:column_position)
 
         if @countries_ids.any?
-          query = query.where('contexts.country_id' => @countries_ids)
+          query = query.where("contexts.country_id" => @countries_ids)
         end
         if @commodities_ids.any?
-          query = query.where('contexts.commodity_id' => @commodities_ids)
+          query = query.where("contexts.commodity_id" => @commodities_ids)
         end
 
         query

@@ -25,7 +25,7 @@ module Api
           ensure_required_param_present(:commodity_id)
         end
 
-        ensure_required_param_present(:country_id) if params[:level].include? '3'
+        ensure_required_param_present(:country_id) if params[:level].include? "3"
       end
 
       def set_filter_params

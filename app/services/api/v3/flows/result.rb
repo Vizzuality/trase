@@ -33,7 +33,7 @@ module Api
         def initialize_flow_hash(flow, identifier)
           flow_hash = {
             path: flow.path,
-            quant: flow['quant_value']
+            quant: flow["quant_value"]
           }
 
           add_ncont_attribute_data(flow, flow_hash, identifier)
@@ -45,18 +45,18 @@ module Api
           return unless @ncont_attribute
 
           if @ncont_attribute.qual?
-            flow_hash[:qual] = flow['qual_value']
-            identifier << flow['qual_value']
+            flow_hash[:qual] = flow["qual_value"]
+            identifier << flow["qual_value"]
           elsif @ncont_attribute.ind?
-            flow_hash[:ind] = flow['ind_value']
-            identifier << flow['ind_value']
+            flow_hash[:ind] = flow["ind_value"]
+            identifier << flow["ind_value"]
           end
         end
 
         def process_data(result)
           result.values.map do |flow_hash|
-            flow_hash[:height] = format('%0.6f', (flow_hash[:quant] / @total_height)).to_f
-            flow_hash[:quant] = format('%0.6f', flow_hash[:quant]).to_f
+            flow_hash[:height] = format("%0.6f", (flow_hash[:quant] / @total_height)).to_f
+            flow_hash[:quant] = format("%0.6f", flow_hash[:quant]).to_f
             flow_hash
           end
         end
@@ -65,8 +65,8 @@ module Api
           node_heights = @active_nodes.map do |node_id, value|
             {
               id: node_id,
-              height: format('%0.6f', (value / @total_height)).to_f,
-              quant: format('%0.6f', value).to_f
+              height: format("%0.6f", (value / @total_height)).to_f,
+              quant: format("%0.6f", value).to_f
             }
           end
           @include = {

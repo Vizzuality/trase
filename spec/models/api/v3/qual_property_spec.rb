@@ -1,7 +1,7 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Api::V3::QualProperty, type: :model do
-  include_context 'api v3 quals'
+  include_context "api v3 quals"
 
   describe :validate do
     let(:property_without_qual) {
@@ -10,10 +10,10 @@ RSpec.describe Api::V3::QualProperty, type: :model do
     let(:duplicate) {
       FactoryBot.build(:api_v3_qual_property, qual: api_v3_state)
     }
-    it 'fails when qual missing' do
+    it "fails when qual missing" do
       expect(property_without_qual).to have(2).errors_on(:qual)
     end
-    it 'fails when qual taken' do
+    it "fails when qual taken" do
       expect(duplicate).to have(1).errors_on(:qual)
     end
   end

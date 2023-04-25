@@ -14,9 +14,9 @@ module Api
       # @option options [Integer] :end_year
       # @param elapsed [Float] elapsed_seconds
       def initialize
-        key = ENV['GOOGLE_ANALYTICS_KEY']
+        key = ENV["GOOGLE_ANALYTICS_KEY"]
         unless key
-          error = 'GOOGLE_ANALYTICS_KEY not set'
+          error = "GOOGLE_ANALYTICS_KEY not set"
           Rails.logger.error error
           Appsignal.send_error(error)
           return
@@ -29,9 +29,9 @@ module Api
         return unless @tracker
 
         options.symbolize_keys!
-        category = 'Public API v1'
+        category = "Public API v1"
         # set action based on path
-        action = path.sub(/^\/api\/public\//, '')
+        action = path.sub(/^\/api\/public\//, "")
         # set label based on selected filter params
         label = [
           commodities(options),
@@ -41,10 +41,10 @@ module Api
           geo_ids(options),
           attributes(options),
           years(options)
-        ].compact.join(' / ')
+        ].compact.join(" / ")
         value = (elapsed_seconds * 1000).to_i # milliseconds
         tracker_options = {
-          category: 'Public API V1',
+          category: "Public API V1",
           action: action,
           label: label,
           value: value
@@ -60,7 +60,7 @@ module Api
         return nil unless accepts_filter
 
         values = commodities_values(options[:commodities], options[:commodities_ids])
-        format_label_part('COMMODITY', values)
+        format_label_part("COMMODITY", values)
       end
 
       def commodities_values(commodities_names, commodities_ids)
@@ -76,7 +76,7 @@ module Api
         return nil unless accepts_filter
 
         values = countries_values(options[:countries], options[:countries_ids])
-        format_label_part('COUNTRY', values)
+        format_label_part("COUNTRY", values)
       end
 
       def countries_values(countries_names, countries_ids)
@@ -90,7 +90,7 @@ module Api
         return nil unless options.key?(:node_types)
 
         values = options[:node_types] || []
-        format_label_part('NODE TYPE', values)
+        format_label_part("NODE TYPE", values)
       end
 
       def nodes(options)
@@ -99,7 +99,7 @@ module Api
         return nil unless accepts_filter
 
         values = nodes_values(options[:nodes], options[:nodes_ids])
-        format_label_part('NODE', values)
+        format_label_part("NODE", values)
       end
 
       def nodes_values(nodes_names, nodes_ids)
@@ -113,21 +113,21 @@ module Api
         return nil unless options[:geo_ids] && options[:geo_ids].any?
 
         values = options[:geo_ids]
-        format_label_part('GEO ID', values)
+        format_label_part("GEO ID", values)
       end
 
       def attributes(options)
         return nil unless options[:attributes_ids] && options[:attributes_ids].any?
 
         values = options[:attributes_ids].map { |id| Api::V3::Readonly::Attribute.find_by_id(id)&.name }
-        format_label_part('ATTRIBUTE', values)
+        format_label_part("ATTRIBUTE", values)
       end
 
       def years(options)
         return nil unless options[:start_year]
 
         values = [options[:start_year], options[:end_year]].compact
-        format_label_part('YEARS', values, sort: false, separator: '-')
+        format_label_part("YEARS", values, sort: false, separator: "-")
       end
 
       # @param name [String]
@@ -148,7 +148,7 @@ module Api
           if !options[:separator].nil?
             options[:separator]
           else
-            ','
+            ","
           end
         values = values.compact
         values = values.sort if sort

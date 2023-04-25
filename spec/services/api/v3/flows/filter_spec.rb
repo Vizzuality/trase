@@ -1,20 +1,20 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Api::V3::Flows::Filter do
-  include_context 'api v3 brazil resize by attributes'
-  include_context 'api v3 brazil recolor by attributes'
-  include_context 'api v3 brazil soy flow quants'
+  include_context "api v3 brazil resize by attributes"
+  include_context "api v3 brazil recolor by attributes"
+  include_context "api v3 brazil soy flow quants"
 
   let!(:api_v3_diamantino_node) {
     node = Api::V3::Node.where(
-      name: 'DIAMANTINO', node_type_id: api_v3_municipality_node_type.id
+      name: "DIAMANTINO", node_type_id: api_v3_municipality_node_type.id
     ).first
     unless node
       node = FactoryBot.create(
         :api_v3_node,
-        name: 'DIAMANTINO',
+        name: "DIAMANTINO",
         node_type: api_v3_municipality_node_type,
-        geo_id: 'BR5103502'
+        geo_id: "BR5103502"
       )
       FactoryBot.create(
         :api_v3_node_property,
@@ -29,6 +29,7 @@ RSpec.describe Api::V3::Flows::Filter do
       :api_v3_flow,
       context: api_v3_brazil_soy_context,
       path: [
+        api_v3_brazil_soy_country_of_production_node,
         api_v3_biome_node,
         api_v3_state_node,
         api_v3_diamantino_node,
@@ -36,7 +37,7 @@ RSpec.describe Api::V3::Flows::Filter do
         api_v3_port1_node,
         api_v3_exporter1_node,
         api_v3_importer1_node,
-        api_v3_country_of_destination1_node
+        api_v3_country_of_first_import_node_ru
       ].map(&:id),
       year: 2015
     )
@@ -64,12 +65,12 @@ RSpec.describe Api::V3::Flows::Filter do
         api_v3_municipality_node_type,
         api_v3_exporter_node_type,
         api_v3_importer_node_type,
-        api_v3_country_node_type
+        api_v3_country_of_first_import_node_type
       ]
     }
 
     let(:node_types_positions) {
-      [2,5,6,7]
+      [3, 6, 7, 8]
     }
 
     let(:filter_params) {
@@ -86,9 +87,9 @@ RSpec.describe Api::V3::Flows::Filter do
       {locked_nodes_ids: [api_v3_diamantino_node.id]}
     }
 
-    context 'when overview mode' do
-      context 'when no locked nodes present' do
-        it 'does not include low volume nodes in active nodes' do
+    context "when overview mode" do
+      context "when no locked nodes present" do
+        it "does not include low volume nodes in active nodes" do
           filter = Api::V3::Flows::Filter.new(
             api_v3_brazil_soy_context,
             filter_params.merge(limit: 1)
@@ -98,8 +99,8 @@ RSpec.describe Api::V3::Flows::Filter do
           expect(filter.active_nodes).not_to have_key(api_v3_diamantino_node.id)
         end
       end
-      context 'when locked nodes' do
-        it 'includes locked low volume nodes in active nodes' do
+      context "when locked nodes" do
+        it "includes locked low volume nodes in active nodes" do
           filter = Api::V3::Flows::Filter.new(
             api_v3_brazil_soy_context,
             filter_params.merge(locked_nodes)
@@ -108,8 +109,8 @@ RSpec.describe Api::V3::Flows::Filter do
           expect(filter.active_nodes).to have_key(api_v3_diamantino_node.id)
         end
       end
-      context 'when recolor by attribute' do
-        it 'includes flows with null value of recolor by attribute' do
+      context "when recolor by attribute" do
+        it "includes flows with null value of recolor by attribute" do
           filter = Api::V3::Flows::Filter.new(
             api_v3_brazil_soy_context,
             filter_params.merge(
@@ -127,13 +128,13 @@ RSpec.describe Api::V3::Flows::Filter do
       end
     end
 
-    context 'when expanded mode' do
+    context "when expanded mode" do
       let(:expanded_nodes) {
-        {selected_nodes_ids: [api_v3_country_of_destination1_node.id]}
+        {selected_nodes_ids: [api_v3_country_of_first_import_node_ru.id]}
       }
 
-      context 'when no locked nodes present' do
-        it 'does not include low volume nodes in active nodes' do
+      context "when no locked nodes present" do
+        it "does not include low volume nodes in active nodes" do
           filter = Api::V3::Flows::Filter.new(
             api_v3_brazil_soy_context,
             filter_params.merge(expanded_nodes).merge(limit: 1)
@@ -143,8 +144,8 @@ RSpec.describe Api::V3::Flows::Filter do
         end
       end
 
-      context 'when locked nodes' do
-        it 'includes locked low volume nodes in active nodes' do
+      context "when locked nodes" do
+        it "includes locked low volume nodes in active nodes" do
           filter = Api::V3::Flows::Filter.new(
             api_v3_brazil_soy_context,
             filter_params.merge(expanded_nodes).merge(locked_nodes)
@@ -155,31 +156,31 @@ RSpec.describe Api::V3::Flows::Filter do
       end
     end
 
-    context 'when excluded nodes' do
+    context "when excluded nodes" do
       let(:excluded_nodes) {
-        {excluded_nodes_ids: [api_v3_country_of_destination1_node.id]}
+        {excluded_nodes_ids: [api_v3_country_of_first_import_node_ru.id]}
       }
 
-      it 'does not include paths with excluded nodes' do
+      it "does not include paths with excluded nodes" do
         filter = Api::V3::Flows::Filter.new(
           api_v3_brazil_soy_context,
           filter_params.merge(excluded_nodes)
         )
         result = filter.call
         result.data.each do |flow|
-          expect(flow[:path]).not_to include(api_v3_country_of_destination1_node.id)
+          expect(flow[:path]).not_to include(api_v3_country_of_first_import_node_ru.id)
         end
       end
     end
 
-    context 'when required options missing' do
-      context 'node_type_ids missing' do
+    context "when required options missing" do
+      context "node_type_ids missing" do
         let(:filter) { Api::V3::Flows::Filter.new(api_v3_brazil_soy_context, {}) }
-        it 'should have errors set' do
+        it "should have errors set" do
           filter.call
           expect(filter.errors).not_to be_empty
         end
-        it 'should return no flows' do
+        it "should return no flows" do
           filter.call
           expect(filter.flows).to be_nil
         end

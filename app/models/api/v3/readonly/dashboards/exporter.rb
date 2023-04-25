@@ -29,7 +29,7 @@ module Api
         class Exporter < Api::Readonly::BaseModel
           include Api::V3::Readonly::MaterialisedTable
 
-          self.table_name = 'dashboards_exporters'
+          self.table_name = "dashboards_exporters"
           belongs_to :node
 
           INDEXES = [

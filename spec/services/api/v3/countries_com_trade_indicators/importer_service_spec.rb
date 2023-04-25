@@ -1,10 +1,10 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Api::V3::CountriesComTradeIndicators::ImporterService do
   include FixtureRequestsHelpers
-  include_context 'api v3 brazil beef context'
-  include_context 'api v3 brazil beef nodes'
-  include_context 'api v3 brazil beef flows'
+  include_context "api v3 brazil beef context"
+  include_context "api v3 brazil beef nodes"
+  include_context "api v3 brazil beef flows"
 
   let(:commodity_codes) {
     instance_double(Api::V3::CountriesComTradeIndicators::CommodityCodes)
@@ -44,18 +44,18 @@ RSpec.describe Api::V3::CountriesComTradeIndicators::ImporterService do
     end.flatten
 
     world_uri = com_trade_world_uri(codes, 2015)
-    world_response = File.read(com_trade_world_request_path('BEEF', 'BRA', 2015))
+    world_response = File.read(com_trade_world_request_path("BEEF", "BRA", 2015))
     stub_request(:get, world_uri).to_return(body: world_response)
     partner_uri = com_trade_partner_uri(codes, 2015)
-    partner_response = File.read(com_trade_partner_request_path('BEEF', 'BRA', 2015))
+    partner_response = File.read(com_trade_partner_request_path("BEEF", "BRA", 2015))
     stub_request(:get, partner_uri).to_return(body: partner_response)
     jip = instance_double(Api::V3::JobsInProgress)
     allow(Api::V3::JobsInProgress).to receive(:instance).and_return(jip)
     allow(jip).to receive(:call).and_return(false)
   end
 
-  describe '#call' do
-    it 'saves rows in primary table' do
+  describe "#call" do
+    it "saves rows in primary table" do
       importer = Api::V3::CountriesComTradeIndicators::ImporterService.new
       Sidekiq::Testing.inline! do
         expect do
@@ -64,7 +64,7 @@ RSpec.describe Api::V3::CountriesComTradeIndicators::ImporterService do
       end
     end
 
-    it 'aggregates rows by commodity' do
+    it "aggregates rows by commodity" do
       importer = Api::V3::CountriesComTradeIndicators::ImporterService.new
       Sidekiq::Testing.inline! do
         expect do

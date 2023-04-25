@@ -15,7 +15,7 @@ class OneAssociatedAttributeValidator < ActiveModel::Validator
     return if count <= 1
     record.errors.add(
       :base,
-      "can only be associated with one of #{attributes.join(', ')}"
+      "can only be associated with one of #{attributes.join(", ")}"
     )
   end
 end

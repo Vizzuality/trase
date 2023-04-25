@@ -10,6 +10,7 @@ import {
 } from 'utils/getURLFromParams';
 import Widget from 'react-components/widgets/widget.component';
 import ShrinkingSpinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
+import ChartError from 'react-components/chart-error';
 
 class TopDestinationsWidget extends React.PureComponent {
   state = {
@@ -78,9 +79,8 @@ class TopDestinationsWidget extends React.PureComponent {
           }
 
           if (error) {
-            // TODO: display a proper error message to the user
             console.error('Error loading top destinations data for profile page', error);
-            return null;
+            return <ChartError />;
           }
 
           const {

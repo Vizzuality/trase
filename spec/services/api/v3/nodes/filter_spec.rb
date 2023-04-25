@@ -1,29 +1,29 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Api::V3::Nodes::Filter do
-  include_context 'api v3 brazil soy flow quants'
+  include_context "api v3 brazil soy flow quants"
 
   before(:each) do
     Api::V3::Readonly::FlowNode.refresh(sync: true)
     Api::V3::Readonly::NodeWithFlowsOrGeo.refresh(sync: true)
   end
 
-  context 'when no params' do
+  context "when no params" do
     let(:result) { Api::V3::Nodes::Filter.new(api_v3_brazil_soy_context, {}).call }
 
-    it 'returns all nodes' do
+    it "returns all nodes" do
       expect(result.size).to eq(Api::V3::Node.count)
     end
   end
 
-  context 'when filtered by node type' do
+  context "when filtered by node type" do
     let(:result) {
       Api::V3::Nodes::Filter.new(
         api_v3_brazil_soy_context, {node_types_ids: [api_v3_municipality_node_type.id]}
       ).call
     }
 
-    it 'returns municipalities only' do
+    it "returns municipalities only" do
       expect(result.pluck(:id)).to match_array(
         Api::V3::Node.where(
           node_type_id: api_v3_municipality_node_type.id
@@ -32,14 +32,14 @@ RSpec.describe Api::V3::Nodes::Filter do
     end
   end
 
-  context 'when filtered by nodes' do
+  context "when filtered by nodes" do
     let(:result) {
       Api::V3::Nodes::Filter.new(
         api_v3_brazil_soy_context, {nodes_ids: [api_v3_municipality_node.id]}
       ).call
     }
 
-    it 'returns selected municipality only' do
+    it "returns selected municipality only" do
       expect(result.pluck(:id)).to match_array(
         Api::V3::Node.where(
           id: api_v3_municipality_node.id

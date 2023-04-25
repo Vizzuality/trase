@@ -12,6 +12,7 @@ import {
 import ProfileTitle from 'react-components/profile/profile-components/profile-title.component';
 import ShrinkingSpinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
 import Heading from 'react-components/shared/heading/heading.component';
+import ChartError from 'react-components/chart-error';
 
 class DeforestationWidget extends React.PureComponent {
   resolveMainQuery() {
@@ -52,13 +53,8 @@ class DeforestationWidget extends React.PureComponent {
           }
 
           if (error) {
-            // TODO: display a proper error message to the user
             console.error('Error loading deforestation widget data for profile page', error);
-            return (
-              <div className="section-placeholder" data-test="loading-section">
-                <ShrinkingSpinner className="-large" />
-              </div>
-            );
+            return <ChartError />;
           }
 
           const { lines, unit, includedYears, multiUnit = false } = data[mainQuery];

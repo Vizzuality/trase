@@ -1,7 +1,7 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Api::V3::MapAttributeGroup, type: :model do
-  include_context 'api v3 brazil map attribute groups'
+  include_context "api v3 brazil map attribute groups"
 
   describe :validate do
     let(:group_without_context) {
@@ -14,10 +14,10 @@ RSpec.describe Api::V3::MapAttributeGroup, type: :model do
         position: 1
       )
     }
-    it 'fails when context missing' do
+    it "fails when context missing" do
       expect(group_without_context).to have(2).errors_on(:context)
     end
-    it 'fails when context + position taken' do
+    it "fails when context + position taken" do
       expect(duplicate).to have(1).errors_on(:position)
     end
   end

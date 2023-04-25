@@ -23,16 +23,16 @@ module Api
 
           flows_join_clause = ActiveRecord::Base.send(
             :sanitize_sql_array,
-            ['JOIN flows ON nodes.id = flows.path[?]', @node_index]
+            ["JOIN flows ON nodes.id = flows.path[?]", @node_index]
           )
           query = Node.
             select(
-              'nodes.id AS node_id',
+              "nodes.id AS node_id",
               "DENSE_RANK() OVER (ORDER BY #{value_table}.value DESC) AS rank"
             ).
             where(node_type_id: @node.node_type_id).
             joins(flows_join_clause).
-            where('flows.context_id' => @context.id).
+            where("flows.context_id" => @context.id).
             joins(
               value_table => {attribute_type => "#{attribute_type}_property"}
             ).
@@ -42,16 +42,16 @@ module Api
               @year
             ).
             joins(:node_property).
-            where('NOT is_domestic_consumption').
+            where("NOT is_domestic_consumption").
             distinct
 
-          result = Node.from('(' + query.to_sql + ') s').
-            select('s.*').
-            where('s.node_id' => @node.id).
-            order('rank ASC').
+          result = Node.from("(" + query.to_sql + ") s").
+            select("s.*").
+            where("s.node_id" => @node.id).
+            order("rank ASC").
             first
 
-          result && result['rank'] || nil # TODO
+          result && result["rank"] || nil # TODO
         end
       end
     end

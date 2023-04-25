@@ -1,8 +1,8 @@
-shared_context 'api v3 brazil soy goias flows' do
-  include_context 'api v3 quants'
+shared_context "api v3 brazil soy goias flows" do
+  include_context "api v3 quants"
 
   let!(:api_v3_municipality_goias) {
-    name = 'GOIAS'
+    name = "GOIAS"
     node = Api::V3::Node.find_by(
       name: name, node_type_id: api_v3_municipality_node_type.id
     )
@@ -11,7 +11,7 @@ shared_context 'api v3 brazil soy goias flows' do
         :api_v3_node,
         name: name,
         node_type: api_v3_municipality_node_type,
-        geo_id: 'BR-5208905'
+        geo_id: "BR-5208905"
       )
       FactoryBot.create(
         :api_v3_node_property,
@@ -22,7 +22,7 @@ shared_context 'api v3 brazil soy goias flows' do
   }
 
   let!(:api_v3_municipality_abadia_de_goias) {
-    name = 'ABADIA DE GOIAS'
+    name = "ABADIA DE GOIAS"
     node = Api::V3::Node.find_by(
       name: name, node_type_id: api_v3_municipality_node_type.id
     )
@@ -31,7 +31,7 @@ shared_context 'api v3 brazil soy goias flows' do
         :api_v3_node,
         name: name,
         node_type: api_v3_municipality_node_type,
-        geo_id: 'BR-5200050'
+        geo_id: "BR-5200050"
       )
       FactoryBot.create(
         :api_v3_node_property,
@@ -46,6 +46,7 @@ shared_context 'api v3 brazil soy goias flows' do
       :api_v3_flow,
       context: api_v3_brazil_soy_context,
       path: [
+        api_v3_brazil_soy_country_of_production_node,
         api_v3_biome_node,
         api_v3_state_node,
         api_v3_municipality_goias,
@@ -53,7 +54,7 @@ shared_context 'api v3 brazil soy goias flows' do
         api_v3_port1_node,
         api_v3_exporter1_node,
         api_v3_importer1_node,
-        api_v3_country_of_destination1_node
+        api_v3_country_of_first_import_node_ru
       ].map(&:id),
       year: 2015
     )
@@ -64,6 +65,7 @@ shared_context 'api v3 brazil soy goias flows' do
       :api_v3_flow,
       context: api_v3_brazil_soy_context,
       path: [
+        api_v3_brazil_soy_country_of_production_node,
         api_v3_biome_node,
         api_v3_state_node,
         api_v3_municipality_abadia_de_goias,
@@ -71,7 +73,7 @@ shared_context 'api v3 brazil soy goias flows' do
         api_v3_port1_node,
         api_v3_exporter1_node,
         api_v3_importer1_node,
-        api_v3_country_of_destination1_node
+        api_v3_country_of_first_import_node_ru
       ].map(&:id),
       year: 2015
     )

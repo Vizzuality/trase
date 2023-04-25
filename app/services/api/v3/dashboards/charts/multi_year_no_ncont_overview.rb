@@ -19,11 +19,11 @@ module Api
 
           def call
             @data = @query.map do |r|
-              r.attributes.slice('x', 'y0').symbolize_keys
+              r.attributes.slice("x", "y0").symbolize_keys
             end
             @meta = {
               xAxis: year_axis_meta,
-              yAxis: axis_meta(@cont_attribute, 'number'),
+              yAxis: axis_meta(@cont_attribute, "number"),
               x: year_legend_meta,
               y0: legend_meta(@cont_attribute),
               info: info

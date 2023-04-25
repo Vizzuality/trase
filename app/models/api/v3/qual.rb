@@ -13,7 +13,7 @@ module Api
   module V3
     class Qual < BlueTable
       has_one :qual_property
-      has_one :qual_values_meta, class_name: 'Api::V3::Readonly::QualValuesMeta'
+      has_one :qual_values_meta, class_name: "Api::V3::Readonly::QualValuesMeta"
       has_many :node_quals
       has_many :flow_quals
       has_many :flows, through: :flow_quals
@@ -27,18 +27,18 @@ module Api
 
       def readonly_attribute
         Api::V3::Readonly::Attribute.
-          where(original_type: 'Qual', original_id: id).
+          where(original_type: "Qual", original_id: id).
           first
       end
 
       def simple_type
-        'qual'
+        "qual"
       end
 
       def download_original_attribute(context)
         Api::V3::DownloadQual.
           joins(:download_attribute).
-          find_by('download_attributes.context_id' => context.id, qual_id: id)
+          find_by("download_attributes.context_id" => context.id, qual_id: id)
       end
 
       def self.select_options
@@ -47,7 +47,7 @@ module Api
 
       def self.import_key
         [
-          {name: :name, sql_type: 'TEXT'}
+          {name: :name, sql_type: "TEXT"}
         ]
       end
     end
