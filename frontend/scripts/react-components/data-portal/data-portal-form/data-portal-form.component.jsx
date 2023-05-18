@@ -14,6 +14,7 @@ class DataPortalForm extends Component {
 
     this.formFieldWhiteList = [
       'name',
+      'lastname',
       'country',
       'organisation',
       'organisationType',
@@ -76,14 +77,13 @@ class DataPortalForm extends Component {
     });
     axios.post(DATA_FORM_ENDPOINT, dataSubmitBody);
 
-    if (payload.email) {
-      sendSubscriptionEmail({
-        email: payload.email,
-        firstname: payload.name,
-        lastname: payload.lastname,
-        organisation: payload.organisation
-      });
-    }
+    sendSubscriptionEmail({
+      email: payload.email,
+      firstname: payload.name,
+      lastname: payload.lastname,
+      organisation: payload.organisation,
+      country: payload.country
+    });
 
     closeForm();
   }
@@ -118,15 +118,19 @@ class DataPortalForm extends Component {
               </p>
               {isBrazilSoyException && <MethodsDisclaimer />}
               <label htmlFor="name">
-                Name:
-                <input type="text" placeholder="type name" id="name" />
+                First name:
+                <input type="text" placeholder="Type first name" id="name" />
+              </label>
+              <label htmlFor="lastname">
+                Last name:
+                <input type="text" placeholder="Type last name" id="lastname" />
               </label>
 
               <label htmlFor="country">
                 Country:
                 <input
                   type="text"
-                  placeholder="select or type country..."
+                  placeholder="Select or type country..."
                   id="country"
                   list="countriesList"
                 />
@@ -135,14 +139,14 @@ class DataPortalForm extends Component {
 
               <label htmlFor="organisation">
                 Organisation name:
-                <input type="text" placeholder="type organisation name" id="organisation" />
+                <input type="text" placeholder="Type organisation name" id="organisation" />
               </label>
 
               <label htmlFor="organisationType">
                 Select or type the option that best describes your organisation:
                 <input
                   type="text"
-                  placeholder="select or type..."
+                  placeholder="Select or type..."
                   id="organisationType"
                   list="organisationTypeList"
                 />
@@ -159,7 +163,7 @@ class DataPortalForm extends Component {
                 How will you use the data?
                 <input
                   type="text"
-                  placeholder="select or type..."
+                  placeholder="Select or type..."
                   id="dataUse"
                   list="dataUseList"
                 />
@@ -173,13 +177,13 @@ class DataPortalForm extends Component {
               <label htmlFor="comments">
                 Please tell us more about your work and if you are interested in helping improve
                 Trase:
-                <input type="text" placeholder="type comments" id="comments" />
+                <input type="text" placeholder="Type comments" id="comments" />
               </label>
 
               <label htmlFor="email">
                 If you would like to sign up for the Trase quarterly newsletter, please provide your
                 email address:
-                <input type="email" placeholder="type email" id="email" />
+                <input type="email" placeholder="Type email" id="email" />
               </label>
 
               <p

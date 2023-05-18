@@ -194,7 +194,7 @@ class NewsletterForm extends React.PureComponent {
                 })}
                 {renderFormInput({
                   field: 'organisation',
-                  placeholder: 'Your organisation...',
+                  placeholder: 'Enter your organisation...',
                   formName: 'footer'
                 })}
                 <div className="footer-conditions">

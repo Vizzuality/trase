@@ -1,6 +1,13 @@
 @import 'styles/settings';
 @import 'styles/mixins';
 
+.subscription-success {
+  color: $white;
+  font-family: $font-family-2;
+  font-size: $font-size-regular;
+  line-height: $line-height-regular;
+}
+
 .c-newsletter {
   width: 100%;
   padding: 0;
@@ -32,15 +39,6 @@
 
   .link-text {
     text-decoration: underline;
-  }
-
-  .subscription-success {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: $font-family-2;
-    font-size: $font-size-xx-regular;
-    color: $charcoal-grey;
   }
 
   .newsletter-input-container {
@@ -136,11 +134,5 @@
         transition: transform 0.5s;
       }
     }
-  }
-
-  .subscription-success {
-    color: $white;
-    font-family: $font-family-2;
-    font-size: $font-size-regular;
   }
 }
