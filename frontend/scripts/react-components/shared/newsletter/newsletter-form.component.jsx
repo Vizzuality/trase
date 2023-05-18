@@ -19,7 +19,8 @@ class NewsletterForm extends React.PureComponent {
         firstname: '',
         lastname: '',
         organisation: '',
-        country: ''
+        country: '',
+        subscribe: true // Always true in the newsletter form
       },
       formErrors: {}
     };

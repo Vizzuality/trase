@@ -13,7 +13,8 @@ module Api
             "LNAME" => (params[:lastname] && params[:lastname] != "") ? params[:lastname] : "-",
             "MMERGE3" => params[:organisation],
             "MMERGE4" => params[:country] || "-",
-            "MMERGE5" => "-"
+            "MMERGE5" => params[:subscribe] || 0,
+            "MMERGE6" => "-"
           }
         )
         p response

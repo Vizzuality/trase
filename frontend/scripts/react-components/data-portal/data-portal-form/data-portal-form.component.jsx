@@ -15,6 +15,7 @@ class DataPortalForm extends Component {
     this.formFieldWhiteList = [
       'name',
       'lastname',
+      'subscribe',
       'country',
       'organisation',
       'organisationType',
@@ -24,7 +25,8 @@ class DataPortalForm extends Component {
     ];
 
     this.state = {
-      showTOSWarning: false
+      showTOSWarning: false,
+      showEmailWarning: false
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -55,8 +57,12 @@ class DataPortalForm extends Component {
       }
     });
 
-    if (!downloaded && !data.tos_check) {
-      this.setState({ showTOSWarning: true });
+    if (!downloaded && !(data.tos_check && data.email)) {
+      this.setState({ showTOSWarning: !data.tos_check, showEmailWarning: !data.email });
+      return;
+    }
+
+    if (!downloaded && !data.email) {
       return;
     }
 
@@ -77,13 +83,16 @@ class DataPortalForm extends Component {
     });
     axios.post(DATA_FORM_ENDPOINT, dataSubmitBody);
 
-    sendSubscriptionEmail({
-      email: payload.email,
-      firstname: payload.name,
-      lastname: payload.lastname,
-      organisation: payload.organisation,
-      country: payload.country
-    });
+    if (payload.email) {
+      sendSubscriptionEmail({
+        email: payload.email,
+        firstname: payload.name,
+        lastname: payload.lastname,
+        organisation: payload.organisation,
+        country: payload.country,
+        subscribe: payload.subscribe
+      });
+    }
 
     closeForm();
   }
@@ -180,10 +189,16 @@ class DataPortalForm extends Component {
                 <input type="text" placeholder="Type comments" id="comments" />
               </label>
 
-              <label htmlFor="email">
-                If you would like to sign up for the Trase quarterly newsletter, please provide your
-                email address:
+              <label
+                htmlFor="email"
+                className={cx('email', { '-highlighted': this.state.showEmailWarning })}
+              >
+                * Please provide your email address: (required field)
                 <input type="email" placeholder="Type email" id="email" />
+              </label>
+              <label htmlFor="subscribe">
+                <input type="checkbox" id="subscribe" /> Would you like to hear more about
+                Trase&apos;s work by signing up to the mailing list?
               </label>
 
               <p

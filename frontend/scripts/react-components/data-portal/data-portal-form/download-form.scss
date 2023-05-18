@@ -49,6 +49,7 @@
     height: 36px;
     transform: translateY(4px);
     -webkit-appearance: none;
+    appearance: none;
     background: $white;
     outline: none;
     display: block;
@@ -68,6 +69,12 @@
     margin-top: 30px;
     font-weight: bold;
 
+    &.-highlighted {
+      color: $medium-pink;
+    }
+  }
+
+  .email {
     &.-highlighted {
       color: $medium-pink;
     }
