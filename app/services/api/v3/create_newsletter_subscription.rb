@@ -24,28 +24,70 @@ module Api
       # Type of organisation - *|TRASETYPE|*
       # Use of Trase data - *|TRASEUSE|*
       # About your work - *|TRASEWORK|*
+      # Subscribe to newsletter - *|TRASEMAIL|*
+      # *|SIGNUPLOC|*
       def call(params, referrer)
+        @email = params[:email]&.downcase&.squish
+        raise ArgumentError.new("Missing email") unless @email
+
+        @source = params[:source]&.downcase&.squish
+        unless ["footer", "download"].include?(@source)
+          raise ArgumentError.new("Invalid source")
+        end
         body = {
           email_address: params[:email],
-          status: "subscribed",
-          merge_fields: {
-            "FNAME" => params[:firstname].presence || "-", # mandatory
-            "LNAME" => params[:lastname].presence || "-", # mandatory
-            "COUNTRY" => params[:country].presence || "-", # mandatory
-            "MMERGE3" => params[:organisation].presence || "-", # mandatory
-            "TRASETYPE" => params[:trase_type].presence || "-", # mandatory
-            "TRASEUSE" => params[:trase_use].presence || "-", # mandatory
-            "TRASEWORK" => params[:trase_work].presence || "-", # mandatory
-            "SIGNUPLOC" => referrer # from request
-          }
+          status: subscription_status(params[:trase_mail]),
+          merge_fields: merge_fields(params, referrer)
         }
-        response = @client.lists.add_list_member(ENV["MAILCHIMP_LIST_ID"], body)
+        response = @client.lists.add_list_member(audience_id, body)
         Rails.logger.debug response
         CreateNewsletterSubscriptionResult.new(:ok, response, nil)
       rescue MailchimpMarketing::ApiError => e
         Rails.logger.debug e
         Appsignal.send_error(e)
         CreateNewsletterSubscriptionResult.new(e.status, nil, e.message)
+      end
+
+      private
+
+      def footer_form?
+        @source == "footer"
+      end
+
+      def audience_id
+        if footer_form?
+          ENV["MAILCHIMP_MAIN_LIST_ID"]
+        else
+          ENV["MAILCHIMP_LIST_ID"]
+        end
+      end
+
+      def subscription_status(trase_mail)
+        return :subscribed if footer_form?
+
+        if ["yes", "true", "1"].include?(trase_mail&.downcase)
+          :subscribed
+        else
+          :unsubscribed
+        end
+      end
+
+      def merge_fields(params, referrer)
+        common_merge_fields = {
+          "FNAME" => params[:firstname].presence || "-",
+          "LNAME" => params[:lastname].presence || "-",
+          "MMERGE3" => params[:organisation].presence || "-",
+          "SIGNUPLOC" => referrer # from request
+        }
+        return common_merge_fields if footer_form?
+
+        common_merge_fields.merge({
+          "COUNTRY" => params[:country].presence || "-",
+          "TRASETYPE" => params[:trase_type].presence || "-",
+          "TRASEUSE" => params[:trase_use].presence || "-",
+          "TRASEWORK" => params[:trase_work].presence || "-",
+          "TRASEMAIL" => params[:trase_mail]
+        })
       end
     end
   end

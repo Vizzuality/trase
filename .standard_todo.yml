@@ -239,9 +239,6 @@ ignore:
 - app/controllers/api/v3/methods_and_data_docs_controller.rb:
   - Layout/DotPosition
   - Style/StringLiterals
-- app/controllers/api/v3/newsletter_subscriptions_controller.rb:
-  - Style/StringLiterals
-  - Layout/SpaceInsideHashLiteralBraces
 - app/controllers/api/v3/node_types_controller.rb:
   - Layout/ArgumentAlignment
   - Style/StringLiterals
@@ -1620,8 +1617,6 @@ ignore:
 - spec/controllers/api/v3/flows_controller_spec.rb:
   - Style/StringLiterals
   - Style/TrailingCommaInHashLiteral
-- spec/controllers/api/v3/newsletter_subscriptions_controller_spec.rb:
-  - Style/StringLiterals
 - spec/controllers/api/v3/node_types_controller_spec.rb:
   - Style/StringLiterals
 - spec/controllers/api/v3/places_controller_spec.rb:
