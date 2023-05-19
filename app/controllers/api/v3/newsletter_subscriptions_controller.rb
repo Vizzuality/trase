@@ -5,6 +5,15 @@ module Api
 
       def create
         ensure_required_param_present(:email)
+
+        if params[:source].blank?
+          params[:source] =
+            if params[:country].present?
+              "download"
+            else
+              "footer"
+            end
+        end
         ensure_required_param_present(:source)
         begin
           signup_result = Api::V3::CreateNewsletterSubscription.new.call(
