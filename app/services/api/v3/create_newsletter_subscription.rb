@@ -39,7 +39,6 @@ module Api
           status: subscription_status(params[:subscribe]),
           merge_fields: merge_fields(params, referrer)
         }
-        Rails.logger.debug body
         response = @client.lists.add_list_member(audience_id, body)
         Rails.logger.debug response
         CreateNewsletterSubscriptionResult.new(:ok, response, nil)
