@@ -80,10 +80,10 @@ module Api
         return common_merge_fields if footer_form?
 
         common_merge_fields.merge({
-          "COUNTRY" => params[:country].presence || "-",
-          "TRASETYPE" => params[:trase_type].presence || "-",
-          "TRASEUSE" => params[:trase_use].presence || "-",
-          "TRASEWORK" => params[:trase_work].presence || "-",
+          "COUNTRY" => params[:country].presence,
+          "TRASETYPE" => params[:trase_type].presence,
+          "TRASEUSE" => params[:trase_use].presence,
+          "TRASEWORK" => params[:trase_work].presence,
           "TRASEMAIL" => params[:subscribe]
         })
       end
