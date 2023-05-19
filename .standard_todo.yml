@@ -153,8 +153,6 @@ ignore:
   - Layout/DotPosition
 - app/controllers/api/v3/methods_and_data_docs_controller.rb:
   - Layout/DotPosition
-- app/controllers/api/v3/newsletter_subscriptions_controller.rb:
-  - Layout/SpaceInsideHashLiteralBraces
 - app/controllers/api/v3/node_types_controller.rb:
   - Layout/ArgumentAlignment
 - app/controllers/api/v3/nodes_controller.rb:

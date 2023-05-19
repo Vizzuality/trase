@@ -47,7 +47,7 @@ gem "enumerate_it"
 gem "faraday", "< 2"
 gem "i18n_data"
 gem "kaminari"
-gem "mailchimp-api", require: "mailchimp"
+gem "MailchimpMarketing"
 # gem 'net-http' # https://github.com/ruby/net-imap/issues/16#issuecomment-803086765
 gem "oj"
 gem "kt-paperclip", "~> 7.1"
