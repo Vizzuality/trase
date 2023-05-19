@@ -90,7 +90,8 @@ class DataPortalForm extends Component {
         lastname: payload.lastname,
         organisation: payload.organisation,
         country: payload.country,
-        subscribe: payload.subscribe
+        subscribe: payload.subscribe,
+        source: 'download'
       });
     }
 
