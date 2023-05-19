@@ -19,8 +19,7 @@ class NewsletterForm extends React.PureComponent {
         firstname: '',
         lastname: '',
         organisation: '',
-        country: '',
-        subscribe: true // Always true in the newsletter form
+        country: ''
       },
       formErrors: {}
     };
@@ -64,7 +63,11 @@ class NewsletterForm extends React.PureComponent {
     this.setState({ submitted: true });
     this.updateErrors(true);
     if (this.form.checkValidity()) {
-      this.props.submitForm(this.state.form);
+      this.props.submitForm({
+        ...this.state.form,
+        subscribe: true,
+        source: 'footer'
+      });
     }
   }
 

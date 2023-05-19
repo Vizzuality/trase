@@ -21,7 +21,10 @@ class DataPortalForm extends Component {
       'organisationType',
       'dataUse',
       'comments',
-      'email'
+      'email',
+      'traseType',
+      'traseUse',
+      'traseWork'
     ];
 
     this.state = {
@@ -90,7 +93,11 @@ class DataPortalForm extends Component {
         lastname: payload.lastname,
         organisation: payload.organisation,
         country: payload.country,
-        subscribe: payload.subscribe
+        subscribe: payload.subscribe,
+        traseType: payload.traseType,
+        traseUse: payload.traseUse,
+        traseWork: payload.traseWork,
+        source: 'download'
       });
     }
 
@@ -151,12 +158,12 @@ class DataPortalForm extends Component {
                 <input type="text" placeholder="Type organisation name" id="organisation" />
               </label>
 
-              <label htmlFor="organisationType">
+              <label htmlFor="traseType">
                 Select or type the option that best describes your organisation:
                 <input
                   type="text"
                   placeholder="Select or type..."
-                  id="organisationType"
+                  id="traseType"
                   list="organisationTypeList"
                 />
                 <datalist id="organisationTypeList">
@@ -168,12 +175,12 @@ class DataPortalForm extends Component {
                 </datalist>
               </label>
 
-              <label htmlFor="dataUse">
+              <label htmlFor="traseUse">
                 How will you use the data?
                 <input
                   type="text"
                   placeholder="Select or type..."
-                  id="dataUse"
+                  id="traseUse"
                   list="dataUseList"
                 />
                 <datalist id="dataUseList">
@@ -183,10 +190,10 @@ class DataPortalForm extends Component {
                 </datalist>
               </label>
 
-              <label htmlFor="comments">
+              <label htmlFor="traseWork">
                 Please tell us more about your work and if you are interested in helping improve
                 Trase:
-                <input type="text" placeholder="Type comments" id="comments" />
+                <input type="text" placeholder="Type comments" id="traseWork" />
               </label>
 
               <label
