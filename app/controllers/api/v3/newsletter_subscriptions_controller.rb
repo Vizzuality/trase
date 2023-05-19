@@ -9,7 +9,7 @@ module Api
         begin
           signup_result = Api::V3::CreateNewsletterSubscription.new.call(
             params.slice(
-              :source, :email, :firstname, :lastname, :country, :organisation, :trase_type, :trase_use, :trase_work, :trase_mail
+              :source, :email, :firstname, :lastname, :country, :organisation, :trase_type, :trase_use, :trase_work, :subscribe
             ),
             request.referer
           )

@@ -34,11 +34,18 @@ RSpec.describe Api::V3::CreateNewsletterSubscription, :service do
       let(:source) { "footer" }
       let(:referrer) { nil }
 
-      it "sets status to subscribed" do
+      it "sets status to subscribed when subscribe set" do
         expect(@lists_api).to receive(:add_list_member) do |audience_id, body|
           expect(body[:status]).to eq(:subscribed)
         end
-        service.call({email: email, source: source}, referrer)
+        service.call({email: email, source: source, subscribe: "true"}, referrer)
+      end
+
+      it "sets status to unsubscribed when subscribe not set" do
+        expect(@lists_api).to receive(:add_list_member) do |audience_id, body|
+          expect(body[:status]).to eq(:unsubscribed)
+        end
+        service.call({email: email, source: source, subscribe: "false"}, referrer)
       end
 
       it "includes common merge fields" do
@@ -60,18 +67,18 @@ RSpec.describe Api::V3::CreateNewsletterSubscription, :service do
       let(:source) { "download" }
       let(:referrer) { nil }
 
-      it "sets status to subscribed when trase_mail set" do
+      it "sets status to subscribed when subscribe set" do
         expect(@lists_api).to receive(:add_list_member) do |audience_id, body|
           expect(body[:status]).to eq(:subscribed)
         end
-        service.call({email: email, source: source, trase_mail: "yes"}, referrer)
+        service.call({email: email, source: source, subscribe: "true"}, referrer)
       end
 
-      it "sets status to unsubscribed when trase_mail not set" do
+      it "sets status to unsubscribed when subscribe not set" do
         expect(@lists_api).to receive(:add_list_member) do |audience_id, body|
           expect(body[:status]).to eq(:unsubscribed)
         end
-        service.call({email: email, source: source, trase_mail: "no"}, referrer)
+        service.call({email: email, source: source, subscribe: "false"}, referrer)
       end
 
       it "includes common merge fields" do

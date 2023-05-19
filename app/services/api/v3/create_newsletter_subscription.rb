@@ -36,7 +36,7 @@ module Api
         end
         body = {
           email_address: params[:email],
-          status: subscription_status(params[:trase_mail]),
+          status: subscription_status(params[:subscribe]),
           merge_fields: merge_fields(params, referrer)
         }
         response = @client.lists.add_list_member(audience_id, body)
@@ -62,10 +62,8 @@ module Api
         end
       end
 
-      def subscription_status(trase_mail)
-        return :subscribed if footer_form?
-
-        if ["yes", "true", "1"].include?(trase_mail&.downcase)
+      def subscription_status(subscribe_param)
+        if ["yes", "true", "1"].include?(subscribe_param&.downcase)
           :subscribed
         else
           :unsubscribed
@@ -86,7 +84,7 @@ module Api
           "TRASETYPE" => params[:trase_type].presence || "-",
           "TRASEUSE" => params[:trase_use].presence || "-",
           "TRASEWORK" => params[:trase_work].presence || "-",
-          "TRASEMAIL" => params[:trase_mail]
+          "TRASEMAIL" => params[:subscribe]
         })
       end
     end
