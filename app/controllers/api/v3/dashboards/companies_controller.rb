@@ -14,8 +14,8 @@ module Api
           initialize_collection_for_index
 
           render json: @collection,
-                 root: "data",
-                 each_serializer: Api::V3::Dashboards::CompanySerializer
+            root: "data",
+            each_serializer: Api::V3::Dashboards::CompanySerializer
         end
 
         def search
@@ -23,8 +23,8 @@ module Api
           initialize_collection_for_search
 
           render json: @collection,
-                 root: "data",
-                 each_serializer: Api::V3::Dashboards::NodeSerializer
+            root: "data",
+            each_serializer: Api::V3::Dashboards::NodeSerializer
         end
 
         private

@@ -123,8 +123,6 @@ ignore:
   - Layout/ArgumentAlignment
 - app/controllers/api/v3/dashboards/commodities_controller.rb:
   - Layout/ArgumentAlignment
-- app/controllers/api/v3/dashboards/companies_controller.rb:
-  - Layout/ArgumentAlignment
 - app/controllers/api/v3/dashboards/countries_controller.rb:
   - Layout/ArgumentAlignment
 - app/controllers/api/v3/dashboards/destinations_controller.rb:
@@ -666,9 +664,6 @@ ignore:
 - app/services/api/v3/top_profiles/derive_top_profile_details.rb:
   - Lint/UselessRescue
 - app/services/api/v3/top_profiles/get_matching_image.rb:
-  - Layout/DotPosition
-- app/services/concerns/api/v3/dashboards/call_with_query_term.rb:
-  - Performance/StringReplacement
   - Layout/DotPosition
 - app/services/concerns/api/v3/dashboards/charts/flow_values_helpers.rb:
   - Layout/DotPosition

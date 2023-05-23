@@ -6,7 +6,7 @@ module Api
           # AR sanitisation replaces ' with '' rather than \', which breaks to_tsquery
           # But actually even when quoted correctly, the apostrophe would be treated as whitespace,
           # so better just get rid of it
-          query_term = query_term.gsub("'", " ")
+          query_term = query_term.gsub(/['?]/, " ")
           tsquery = ActiveRecord::Base.sanitize_sql_array(
             ["to_tsquery('simple', ? || ? || ? || ':*')", "' ", query_term, " '"]
           )
@@ -14,12 +14,12 @@ module Api
           if options[:include_country_id]
             @query = @query.select(:country_id).group(:country_id)
           end
-          @query = @query.
-            select(Arel.sql(tsrank)).
-            group(Arel.sql(tsrank)).
-            where("name_tsvector @@ #{tsquery}").
-            except(:order).
-            order(
+          @query = @query
+            .select(Arel.sql(tsrank))
+            .group(Arel.sql(tsrank))
+            .where("name_tsvector @@ #{tsquery}")
+            .except(:order)
+            .order(
               ActiveRecord::Base.send(
                 :sanitize_sql_for_order,
                 [
