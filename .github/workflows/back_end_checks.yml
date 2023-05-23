@@ -66,6 +66,10 @@ jobs:
           PGUSER: ${{ env.POSTGRES_USER }}
           PGPASSWORD: ${{ env.POSTGRES_PASSWORD }}
           RAILS_ENV: test
+          TWITTER_CONSUMER_KEY: ${{ env.TWITTER_CONSUMER_KEY }}
+          TWITTER_CONSUMER_SECRET: ${{ env.TWITTER_CONSUMER_SECRET }}
+          TWITTER_ACCESS_TOKEN: ${{ env.TWITTER_ACCESS_TOKEN }}
+          TWITTER_ACCESS_TOKEN_SECRET: ${{ env.TWITTER_ACCESS_TOKEN_SECRET }}
         run: bundle exec rspec spec --fail-fast
 
   rubo_cop:
