@@ -28,6 +28,13 @@ RSpec.describe Api::V3::Dashboards::CompaniesController, type: :controller do
         [api_v3_exporter1_node.name]
       )
     end
+
+    it "doesn't error when weird characters in query" do
+      get :search, params: {
+        q: "[?]"
+      }
+      expect(assigns(:collection)).to be_empty
+    end
   end
 
   describe "GET index" do
