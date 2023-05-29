@@ -197,6 +197,10 @@ RSpec.describe Api::V3::CountryProfilesController, type: :controller do
     end
 
     describe "GET top_consumer_countries" do
+      it "is not found - chart should not be served" do
+        get :top_consumer_countries, params: valid_params
+        expect(response).to have_http_status(404)
+      end
       context "when destination node type configuration missing" do
         it "is not found" do
           allow(Api::V3::Profiles::ChartConfiguration).to(
