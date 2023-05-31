@@ -9,6 +9,7 @@ export default [
   {
     type: GA_TRACK_DOWNLOAD_FILTERS,
     category: 'Download',
+    name: 'file_download',
     action: action => `Download ${action.payload.type} data`,
     getPayload: (action, state) => {
       const context = state.app.contexts.find(
@@ -66,18 +67,21 @@ export default [
   {
     type: GA_TRACK_DOWNLOAD_FORM_LOADED,
     category: 'Download',
+    name: 'file_download',
     action: 'Download form loaded',
     getPayload: action => action.payload
   },
   {
     type: GA_TRACK_DOWNLOAD_OUTPUT_TYPE,
     category: 'Download',
+    name: 'file_download',
     action: 'Download Output Type',
     getPayload: action => action.payload
   },
   {
     type: GA_TRACK_DOWNLOAD_FILE_TYPE,
     category: 'Download',
+    name: 'file_download',
     action: 'Download File Type',
     getPayload: action => action.payload
   }

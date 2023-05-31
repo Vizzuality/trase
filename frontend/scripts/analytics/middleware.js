@@ -53,13 +53,18 @@ function createGAEvent(event, action, state) {
 }
 
 const googleAnalyticsMiddleware = store => next => action => {
-  if (typeof window.ga !== 'undefined') {
+  if (typeof window.gtag !== 'undefined') {
     const state = store.getState();
     const event = GA_EVENT_WHITELIST[action.type];
     if (event) {
       const gaEvent = createGAEvent(event, action, state);
       if (gaEvent) {
-        window.ga('send', gaEvent);
+        if (gaEvent.hitType === 'pageview') {
+          window.gtag('send', gaEvent);
+        } else {
+          const { hitType, ...eventParams } = gaEvent;
+          window.gtag('event', event.name || event.category, eventParams);
+        }
       }
     }
   }
