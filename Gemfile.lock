@@ -289,7 +289,7 @@ GEM
       activerecord
       kaminari-core (= 1.2.2)
     kaminari-core (1.2.2)
-    kt-paperclip (7.1.1)
+    kt-paperclip (7.2.0)
       activemodel (>= 4.2.0)
       activesupport (>= 4.2.0)
       marcel (~> 1.0.1)
@@ -593,7 +593,7 @@ DEPENDENCIES
   i18n_data
   json-schema
   kaminari
-  kt-paperclip (~> 7.1)
+  kt-paperclip (~> 7.2)
   listen (~> 3.3)
   oj
   pg
