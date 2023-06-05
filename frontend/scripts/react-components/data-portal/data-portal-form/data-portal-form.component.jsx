@@ -4,8 +4,9 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import axios from 'axios';
 import MethodsDisclaimer from 'react-components/shared/methods-disclaimer';
+import Heading from 'react-components/shared/heading';
+import Text from 'react-components/shared/text';
 import { COUNTRIES } from '../../../countries';
-
 import './download-form.scss';
 
 class DataPortalForm extends Component {
@@ -123,27 +124,38 @@ class DataPortalForm extends Component {
         <div className="c-modal -below-nav">
           <div className="content -white -big-margin">
             <form className="c-download-form" onSubmit={this.handleSubmit}>
-              <p className="description">
-                Thank you for your interest in downloading data from Trase! To help us better
-                understand how the data is currently being used and to improve the platform, we
-                would appreciate if you could tell us a bit about yourself and your work.
-              </p>
+              <Heading as="h2" weight="bold" size="md" className="description-title">
+                Thank you for your interest in downloading data from Trase!
+              </Heading>
+              <Text as="p" className="description">
+                To help us better understand how the data is currently being used and to improve the
+                platform, we would appreciate if you could tell us a bit about yourself and your
+                work.
+              </Text>
               <p className={cx('missing', { 'is-hidden': !this.props.downloaded })}>
                 We&apos;d love to hear about how you use the data and how we could improve it.
                 Please fill in details below and click on &apos;submit&apos;:
               </p>
               {isBrazilSoyException && <MethodsDisclaimer />}
               <label htmlFor="name">
-                First name:
+                First name
                 <input type="text" placeholder="Type first name" id="name" />
               </label>
               <label htmlFor="lastname">
-                Last name:
+                Last name
                 <input type="text" placeholder="Type last name" id="lastname" />
+              </label>
+              <label
+                htmlFor="email"
+                className={cx('email', { highlighted: this.state.showEmailWarning })}
+              >
+                E-mail address<span className="highlighted">*</span>{' '}
+                <span className="gray">(required field)</span>
+                <input type="email" placeholder="Type email" id="email" />
               </label>
 
               <label htmlFor="country">
-                Country:
+                Country
                 <input
                   type="text"
                   placeholder="Select or type country..."
@@ -154,12 +166,12 @@ class DataPortalForm extends Component {
               </label>
 
               <label htmlFor="organisation">
-                Organisation name:
+                Organisation
                 <input type="text" placeholder="Type organisation name" id="organisation" />
               </label>
 
               <label htmlFor="traseType">
-                Select or type the option that best describes your organisation:
+                What describes your organisation best?
                 <input
                   type="text"
                   placeholder="Select or type..."
@@ -173,6 +185,10 @@ class DataPortalForm extends Component {
                   <option>Media</option>
                   <option>Research organisation</option>
                 </datalist>
+              </label>
+              <label htmlFor="traseWork">
+                What describes your work best?
+                <input type="text" placeholder="Type comments" id="traseWork" />
               </label>
 
               <label htmlFor="traseUse">
@@ -189,29 +205,14 @@ class DataPortalForm extends Component {
                   <option>Research</option>
                 </datalist>
               </label>
-
-              <label htmlFor="traseWork">
-                Please tell us more about your work and if you are interested in helping improve
-                Trase:
-                <input type="text" placeholder="Type comments" id="traseWork" />
-              </label>
-
-              <label
-                htmlFor="email"
-                className={cx('email', { '-highlighted': this.state.showEmailWarning })}
-              >
-                * Please provide your email address: (required field)
-                <input type="email" placeholder="Type email" id="email" />
-              </label>
-              <label htmlFor="subscribe">
+              <label htmlFor="subscribe" className="first-checkbox">
                 <input type="checkbox" id="subscribe" /> Would you like to hear more about
                 Trase&apos;s work by signing up to the mailing list?
               </label>
-
               <p
                 className={cx(
                   'tos',
-                  { '-highlighted': this.state.showTOSWarning },
+                  { highlighted: this.state.showTOSWarning },
                   { 'is-hidden': this.props.downloaded }
                 )}
               >
@@ -225,7 +226,7 @@ class DataPortalForm extends Component {
                   >
                     Terms of use
                   </a>{' '}
-                  (required field).
+                  <span className="gray">(required field)</span>
                 </label>
               </p>
               <label className="submit">
