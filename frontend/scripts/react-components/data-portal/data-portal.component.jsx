@@ -291,7 +291,8 @@ function DataPortal(props) {
       Object.assign(
         {
           file,
-          type: state.downloadType
+          type: state.downloadType,
+          url: getDownloadURL()
         },
         params
       )
