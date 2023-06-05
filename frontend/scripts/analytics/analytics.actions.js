@@ -3,8 +3,8 @@ export const GA_TRACK_DOWNLOAD_FORM_LOADED = 'GA_TRACK_DOWNLOAD_FORM_LOADED';
 export const GA_TRACK_DOWNLOAD_OUTPUT_TYPE = 'GA_TRACK_DOWNLOAD_OUTPUT_TYPE';
 export const GA_TRACK_DOWNLOAD_FILE_TYPE = 'GA_TRACK_DOWNLOAD_FILE_TYPE';
 
-export function trackDownload(params) {
-  return dispatch => {
+export function trackDownload() {
+  return () => {
     // dispatch({
     //   type: GA_TRACK_DOWNLOAD_FILTERS,
     //   payload: params
@@ -21,7 +21,7 @@ export function trackDownload(params) {
 }
 
 export function trackDataDownloadFormLoaded() {
-  return dispatch => {
+  return () => {
     // dispatch({
     //   type: GA_TRACK_DOWNLOAD_FORM_LOADED
     // });
