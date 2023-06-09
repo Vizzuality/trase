@@ -30,10 +30,13 @@ export const sendSubscriptionEmail = ({ email, firstname, lastname, organisation
         payload: { message }
       })
     )
-    .catch(error => dispatch({
+    .catch((error) => {
+      const message = `Error: ${error?.response?.data?.error || error}`;
+      dispatch({
         type: NEWSLETTER__SET_SUBSCRIPTION_MESSAGE,
-        payload: { message: `Error: ${error}` }
+        payload: { message }
       })
+    }
     );
 };
 
