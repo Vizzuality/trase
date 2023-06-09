@@ -16,7 +16,7 @@ module Api
         rescue ArgumentError => e
           raise ActionController::ParameterMissing, e.message
         end
-        render json: {error: signup_result.message} unless signup_result.ok?
+        render json: {error: signup_result.message}, status: signup_result.status unless signup_result.ok?
       end
     end
   end
