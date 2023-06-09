@@ -39,13 +39,22 @@ module Api
           status: subscription_status(params[:subscribe]),
           merge_fields: merge_fields(params, referrer)
         }
+
         response = @client.lists.add_list_member(audience_id, body)
         Rails.logger.debug response
         CreateNewsletterSubscriptionResult.new(:ok, response, nil)
       rescue MailchimpMarketing::ApiError => e
-        Rails.logger.debug e
         Appsignal.send_error(e)
-        CreateNewsletterSubscriptionResult.new(e.status, nil, e.message)
+        # currently no better way of extracting the error title
+        # message is a string, which is a serialized hash, which also includes JSON in response_body
+        begin
+          message_hash = JSON.parse(e.message.gsub(/:(.+?)=>/, '"\1"' + ": "), symbolize_names: true)
+          message_json = JSON.parse(message_hash[:response_body], symbolize_names: true)
+          error = message_json[:title]
+        rescue JSON::ParserError
+          error = "MailchimpMarketing::ApiError"
+        end
+        CreateNewsletterSubscriptionResult.new(e.status, nil, error)
       end
 
       private
