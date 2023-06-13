@@ -1,3 +1,5 @@
+require "faraday/retry"
+
 module Api
   module V3
     module CountriesWbIndicators
