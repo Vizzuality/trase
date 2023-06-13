@@ -340,7 +340,7 @@ GEM
     nokogiri (1.15.2)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
-    oj (3.14.3)
+    oj (3.15.0)
     orm_adapter (0.5.0)
     parallel (1.23.0)
     parser (3.2.2.3)
