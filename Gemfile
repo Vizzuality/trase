@@ -50,7 +50,7 @@ gem "kaminari"
 gem "MailchimpMarketing"
 # gem 'net-http' # https://github.com/ruby/net-imap/issues/16#issuecomment-803086765
 gem "oj"
-gem "kt-paperclip", "~> 7.1"
+gem "kt-paperclip", "~> 7.2"
 gem "pg_csv"
 gem "pg_search"
 gem "rack"
