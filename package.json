@@ -1,8 +1,8 @@
 {
   "dependencies": {
     "@rails/webpacker": "5.4.4",
-    "webpack": "^4.46.0",
-    "webpack-cli": "^3.3.12"
+    "webpack": "^5.86.0",
+    "webpack-cli": "^5.1.4"
   },
   "devDependencies": {
     "webpack-dev-server": "^4"
