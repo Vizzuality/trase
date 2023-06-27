@@ -8,7 +8,7 @@ gem "rails", "~> 6.1.7"
 # Use pg as the database for Active Record
 gem "pg"
 # Use Puma as the app server
-gem "puma", "~> 6.2"
+gem "puma", "~> 6.3"
 # Use SCSS for stylesheets
 gem "sass-rails", ">= 6"
 # Use CoffeeScript for .coffee assets and views
@@ -44,13 +44,14 @@ gem "devise"
 gem "devise_token_auth"
 gem "dotenv-rails"
 gem "enumerate_it"
-gem "faraday", "< 2"
+gem "faraday", "< 3"
+gem "faraday-retry"
 gem "i18n_data"
 gem "kaminari"
-gem "mailchimp-api", require: "mailchimp"
+gem "MailchimpMarketing"
 # gem 'net-http' # https://github.com/ruby/net-imap/issues/16#issuecomment-803086765
 gem "oj"
-gem "kt-paperclip", "~> 7.1"
+gem "kt-paperclip", "~> 7.2"
 gem "pg_csv"
 gem "pg_search"
 gem "rack"

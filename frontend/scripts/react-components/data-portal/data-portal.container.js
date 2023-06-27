@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { dataPortalActions } from 'react-components/data-portal/data-portal.register';
-import { trackDataDownloadFormLoaded, trackDownload } from 'analytics/analytics.actions';
+import { trackDownload } from 'analytics/analytics.actions';
 import {
   getDataDownloadContext,
   getEnabledContexts,
@@ -21,8 +21,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   loadDataDownloadLists: dataPortalActions.loadDataDownloadLists,
-  onDownloadTriggered: trackDownload,
-  onDataDownloadFormLoaded: trackDataDownloadFormLoaded
+  onDownloadTriggered: trackDownload
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(DataPortal);

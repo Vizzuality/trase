@@ -3,7 +3,7 @@ FactoryBot.define do
     association :staff_group
     sequence(:name) { |n| "Staff Member #{n}" }
     sequence(:position) { |n| n }
-    image { File.new("#{Rails.root}/spec/support/fixtures/blank.jpg") }
+    image { Rack::Test::UploadedFile.new "#{Rails.root}/spec/support/fixtures/blank.jpg", "image/jpg" }
     bio { "# Bio" }
   end
 end

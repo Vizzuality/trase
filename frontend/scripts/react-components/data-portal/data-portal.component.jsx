@@ -47,7 +47,6 @@ function DataPortal(props) {
     consumptionCountries,
     exporters,
     indicators,
-    onDataDownloadFormLoaded,
     onDownloadTriggered,
     selectedContext,
     bulkLogisticsData
@@ -218,11 +217,6 @@ function DataPortal(props) {
   const { width } = useWindowSize();
 
   useEffect(() => {
-    if (state.formVisible) {
-      onDataDownloadFormLoaded();
-    }
-  }, [onDataDownloadFormLoaded, state.formVisible]);
-  useEffect(() => {
     if (selectedCountry && selectedCommodity) {
       loadDataDownloadLists();
     }
@@ -291,7 +285,8 @@ function DataPortal(props) {
       Object.assign(
         {
           file,
-          type: state.downloadType
+          type: state.downloadType,
+          url: getDownloadURL()
         },
         params
       )
@@ -377,7 +372,6 @@ DataPortal.propTypes = {
   consumptionCountries: PropTypes.array,
   exporters: PropTypes.array,
   indicators: PropTypes.array,
-  onDataDownloadFormLoaded: PropTypes.func,
   onDownloadTriggered: PropTypes.func,
   selectedContext: PropTypes.object
 };

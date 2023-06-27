@@ -48,18 +48,28 @@ function createGAEvent(event, action, state) {
     hitType: 'event',
     eventCategory: event.category,
     eventAction: isFunction(event.action) ? event.action(action, state) : event.action,
-    eventLabel: event.getPayload ? event.getPayload(action, state) : undefined
+    params: event.getPayload ? event.getPayload(action, state) : undefined
   };
 }
 
 const googleAnalyticsMiddleware = store => next => action => {
-  if (typeof window.ga !== 'undefined') {
+  if (typeof window.gtag !== 'undefined') {
     const state = store.getState();
     const event = GA_EVENT_WHITELIST[action.type];
     if (event) {
       const gaEvent = createGAEvent(event, action, state);
       if (gaEvent) {
-        window.ga('send', gaEvent);
+        if (gaEvent.hitType === 'pageview') {
+          window.gtag('send', gaEvent);
+        } else {
+          const { hitType, ...eventParams } = gaEvent;
+          const parsedEventParams = eventParams?.params?.split(';')?.reduce((acc, param) => {
+            const [key, value] = param.split('=');
+            return { ...acc, [key]: value };
+          }, {});
+
+          window.gtag('event', event.name || event.category, parsedEventParams);
+        }
       }
     }
   }

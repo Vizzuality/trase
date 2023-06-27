@@ -63,7 +63,11 @@ class NewsletterForm extends React.PureComponent {
     this.setState({ submitted: true });
     this.updateErrors(true);
     if (this.form.checkValidity()) {
-      this.props.submitForm(this.state.form);
+      this.props.submitForm({
+        ...this.state.form,
+        subscribe: true,
+        source: 'footer'
+      });
     }
   }
 
@@ -194,7 +198,7 @@ class NewsletterForm extends React.PureComponent {
                 })}
                 {renderFormInput({
                   field: 'organisation',
-                  placeholder: 'Your organisation...',
+                  placeholder: 'Enter your organisation...',
                   formName: 'footer'
                 })}
                 <div className="footer-conditions">

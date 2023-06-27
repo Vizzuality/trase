@@ -64,15 +64,7 @@ module Api
               }
             ).call
           else
-            # because it is a cross-context chart, and because the node
-            # may exist as multiple node types across contexts,
-            # this chart will need to consider all matching nodes and contexts for commodity
-            Api::V3::CountryProfiles::TopSourceCountriesChart.new(
-              @node.commodity_id,
-              @node.geo_id,
-              @year,
-              {}
-            ).call
+            raise ActiveRecord::RecordNotFound("Chart not available")
           end
 
         render json: {data: @result}

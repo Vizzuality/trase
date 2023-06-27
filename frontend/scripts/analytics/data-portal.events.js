@@ -1,14 +1,10 @@
-import {
-  GA_TRACK_DOWNLOAD_FILE_TYPE,
-  GA_TRACK_DOWNLOAD_FILTERS,
-  GA_TRACK_DOWNLOAD_FORM_LOADED,
-  GA_TRACK_DOWNLOAD_OUTPUT_TYPE
-} from './analytics.actions';
+import { GA_TRACK_DOWNLOAD } from './analytics.actions';
 
 export default [
   {
-    type: GA_TRACK_DOWNLOAD_FILTERS,
+    type: GA_TRACK_DOWNLOAD,
     category: 'Download',
+    name: 'download',
     action: action => `Download ${action.payload.type} data`,
     getPayload: (action, state) => {
       const context = state.app.contexts.find(
@@ -44,8 +40,6 @@ export default [
       delete payload.c_ids;
       delete payload.e_ids;
       delete payload.context_id;
-      delete payload.file;
-      delete payload.type;
       delete payload.table;
       delete payload.separator;
 
@@ -62,23 +56,5 @@ export default [
 
       return payloadStringComponents.join(';');
     }
-  },
-  {
-    type: GA_TRACK_DOWNLOAD_FORM_LOADED,
-    category: 'Download',
-    action: 'Download form loaded',
-    getPayload: action => action.payload
-  },
-  {
-    type: GA_TRACK_DOWNLOAD_OUTPUT_TYPE,
-    category: 'Download',
-    action: 'Download Output Type',
-    getPayload: action => action.payload
-  },
-  {
-    type: GA_TRACK_DOWNLOAD_FILE_TYPE,
-    category: 'Download',
-    action: 'Download File Type',
-    getPayload: action => action.payload
   }
 ];

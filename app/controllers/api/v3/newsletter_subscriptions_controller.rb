@@ -4,28 +4,19 @@ module Api
       skip_before_action :load_context
 
       def create
-        mailchimp = Mailchimp::API.new(ENV["MAILCHIMP_API_KEY"])
-        response = mailchimp.lists.subscribe(
-          ENV["MAILCHIMP_LIST_ID"],
-          { email: params[:email] },
-          {
-            "FNAME" => params[:firstname],
-            "LNAME" => (params[:lastname] && params[:lastname] != "") ? params[:lastname] : "-",
-            "MMERGE3" => params[:organisation],
-            "MMERGE4" => params[:country] || "-",
-            "MMERGE5" => "-"
-          }
-        )
-        p response
-        render json: response and return
-      rescue Mailchimp::ListAlreadySubscribedError
-        # noop
-        render json: {email: params[:email]}
-      rescue => e
-        render json: {error: e.message}
-        Appsignal.send_error(e)
-        Rails.logger.error e.message
-        e.backtrace.each { |l| Rails.logger.error l }
+        ensure_required_param_present(:email)
+        ensure_required_param_present(:source)
+        begin
+          signup_result = Api::V3::CreateNewsletterSubscription.new.call(
+            params.slice(
+              :source, :email, :firstname, :lastname, :country, :organisation, :trase_type, :trase_use, :trase_work, :subscribe
+            ),
+            request.referer
+          )
+        rescue ArgumentError => e
+          raise ActionController::ParameterMissing, e.message
+        end
+        render json: {error: signup_result.message}, status: signup_result.status unless signup_result.ok?
       end
     end
   end
