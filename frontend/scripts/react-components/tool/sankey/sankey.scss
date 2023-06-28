@@ -115,5 +115,10 @@ $columns-selector-group-height: 66px;
 
   .tooltip-max-width {
     max-width: 300px;
+
+    // Avoid overflowing the tooltip container
+    .units-tooltip-text {
+      white-space: normal;
+    }
   }
 }
