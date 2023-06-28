@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Text from 'react-components/shared/text';
@@ -6,7 +7,7 @@ import Text from 'react-components/shared/text';
 import './units-tooltip.scss';
 
 function UnitsTooltip(props) {
-  const { className, text, items, show, x, y, height, width, disclaimer } = props;
+  const { className, text, items, show, x, y, height, width, disclaimer, portalRef } = props;
   const ref = useRef(null);
   const [position, setPosition] = useState({
     left: 0,
@@ -33,7 +34,7 @@ function UnitsTooltip(props) {
 
   const visibility = show ? 'visible' : 'hidden';
 
-  return (
+  const renderTooltip = (
     <div
       ref={ref}
       className={cx('c-units-tooltip', className)}
@@ -81,6 +82,7 @@ function UnitsTooltip(props) {
       )}
     </div>
   );
+  return portalRef ? ReactDOM.createPortal(renderTooltip, portalRef) : renderTooltip;
 }
 
 UnitsTooltip.defaultProps = {
@@ -96,7 +98,8 @@ UnitsTooltip.propTypes = {
   text: PropTypes.string,
   disclaimer: PropTypes.string,
   items: PropTypes.array,
-  show: PropTypes.bool
+  show: PropTypes.bool,
+  portalRef: PropTypes.node
 };
 
 export default React.memo(UnitsTooltip);
