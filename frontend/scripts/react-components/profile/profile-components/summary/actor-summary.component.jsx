@@ -27,8 +27,8 @@ class ActorSummary extends React.PureComponent {
     const { commodityName, countryName } = context;
     // Warning is only applicable to exporter activity. If is importer it has many exporting contexts
     const hasConfidenceWarning =
-      columnName === 'EXPORTER' ||
-      (columnName === 'EXPORTER GROUP' && hasConfidenceWarningFunction(context));
+      (columnName === 'EXPORTER' || columnName === 'EXPORTER GROUP') &&
+      hasConfidenceWarningFunction(context);
     const titles = [
       { name: columnName, label: 'Activity' },
       { name: commodityName, label: 'Commodity' },
