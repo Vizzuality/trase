@@ -54,3 +54,14 @@ export const getAppUrlProps = createStructuredSelector({
   selectedYears: getAppSelectedYears,
   selectedContextId: getAppSelectedContextId
 });
+
+export const hasConfidenceWarningFunction = (context) => {
+  if (!context) return false;
+  const { countryName, commodityName } = context;
+  // This condition may come from the CMS in the future
+  return countryName === 'INDONESIA' && commodityName === 'SHRIMP';
+}
+
+export const hasConfidenceWarning = createSelector(
+  [getSelectedContext],
+  hasConfidenceWarningFunction);

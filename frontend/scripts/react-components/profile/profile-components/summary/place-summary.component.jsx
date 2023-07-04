@@ -11,6 +11,8 @@ import SummaryTitle from 'react-components/profile/profile-components/summary/su
 import Map from 'react-components/profile/profile-components/map.component';
 import Text from 'react-components/shared/text';
 import formatValue from 'utils/formatValue';
+import ConfidenceWarning from 'react-components/shared/confidence-warning';
+import { hasConfidenceWarningFunction } from 'app/app.selectors';
 
 function PlaceSummary(props) {
   const {
@@ -34,6 +36,7 @@ function PlaceSummary(props) {
   } = props;
 
   const { commodityName } = context;
+  const hasConfidenceWarning = hasConfidenceWarningFunction(context);
   const titles = [
     { name: commodityName, label: 'Commodity' },
     {
@@ -122,7 +125,7 @@ function PlaceSummary(props) {
               </div>
             )}
           </Sticky>
-
+          {hasConfidenceWarning && <ConfidenceWarning variant="profile" />}
           {renderStats()}
         </div>
 

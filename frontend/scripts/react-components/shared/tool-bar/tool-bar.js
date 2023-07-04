@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import { connect } from 'react-redux';
+import { hasConfidenceWarning } from 'app/app.selectors';
 import ToolBar from './tool-bar.component';
 import { getToolBar } from './tool-bar.selectors';
 
@@ -27,7 +28,8 @@ const mapStateToProps = state => {
   const { left, right } = getToolBar(state);
   return {
     leftSlot: left,
-    rightSlot: right
+    rightSlot: right,
+    hasConfidenceWarning: hasConfidenceWarning(state),
   };
 };
 

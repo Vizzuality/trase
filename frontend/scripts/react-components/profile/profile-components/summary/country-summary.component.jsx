@@ -11,6 +11,8 @@ import SummaryTitle from 'react-components/profile/profile-components/summary/su
 import Map from 'react-components/profile/profile-components/map.component';
 import Text from 'react-components/shared/text';
 import formatValue from 'utils/formatValue';
+import ConfidenceWarning from 'react-components/shared/confidence-warning';
+import { hasConfidenceWarningFunction } from 'app/app.selectors';
 
 function CountrySummary(props) {
   const {
@@ -28,7 +30,6 @@ function CountrySummary(props) {
     } = {},
     data: { summary, headerAttributes } = {}
   } = props;
-
   const renderCountryMap = () => (
     <div className="c-overall-info page-break-inside-avoid">
       <div className="c-locator-map map-country-banner">
@@ -43,9 +44,12 @@ function CountrySummary(props) {
       </div>
     </div>
   );
-
   const selectedCommodity = commodities.find(c => c.id === commodityId);
+  const selectedContext = { commodityName: selectedCommodity.name, countryName };
   const selectedActivity = activities.find(a => a.name === activity);
+  // Warning is only applicable to exporter activity. If is importer it has many exporting contexts
+  const hasConfidenceWarning =
+    selectedActivity?.name === 'exporter' && hasConfidenceWarningFunction(selectedContext);
   const titles = [
     {
       dropdown: true,
@@ -134,6 +138,7 @@ function CountrySummary(props) {
                   titles={titles}
                   on={newYear => onChange('year', newYear)}
                 />
+                {hasConfidenceWarning && <ConfidenceWarning variant="profile" />}
                 {status !== Sticky.STATUS_FIXED &&
                   headerAttributes &&
                   Object.keys(headerAttributes).length > 0 &&
