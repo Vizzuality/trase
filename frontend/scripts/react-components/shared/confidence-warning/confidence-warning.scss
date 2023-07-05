@@ -1,5 +1,6 @@
 .warning {
-  margin: 5px 0 0px 0;
+  margin: 5px 0 0;
+  display: flex;
 }
 
 .warning-bell-icon {
@@ -7,10 +8,20 @@
   margin-left: 0;
 }
 
+.warning-text {
+  display: inline;
+}
+
 .warning-sankey,
 .warning-profile {
   .warning-bell-icon {
     margin-right: 5px;
+  }
+}
+
+.warning-sankey {
+  .warning-bell-icon {
+    margin-top: 2px;
   }
 }
 

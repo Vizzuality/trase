@@ -14,7 +14,12 @@ const ConfidenceWarning = ({ variant, noIcon }) => (
         <use xlinkHref="#icon-warning-bell" />
       </svg>
     )}
-    Note: This data is based on new methodological approaches and we welcome feedback.
+    <div className="warning-text">
+      <Text weight="bold" className="warning-bold" as="span">
+        Note:{' '}
+      </Text>
+      This data is based on new methodological approaches and we welcome feedback.
+    </div>
   </Text>
 );
 
