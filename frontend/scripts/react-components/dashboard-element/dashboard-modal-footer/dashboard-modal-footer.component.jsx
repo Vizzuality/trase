@@ -5,7 +5,6 @@ import Button from 'react-components/shared/button/button.component';
 import Text from 'react-components/shared/text/text.component';
 import { DASHBOARD_STEPS } from 'constants';
 import './dashboard-modal-footer.scss';
-import ConfidenceWarning from 'react-components/shared/confidence-warning';
 
 function DashboardModalFooter(props) {
   const {
@@ -18,8 +17,7 @@ function DashboardModalFooter(props) {
     onBack,
     backText,
     isDisabled,
-    step,
-    hasConfidenceWarning
+    step
   } = props;
 
   return (
@@ -32,7 +30,6 @@ function DashboardModalFooter(props) {
         placement="top-end"
         readOnly={step === DASHBOARD_STEPS.welcome}
       />
-      {hasConfidenceWarning && <ConfidenceWarning variant="dashboard" />}
       <div className="dashboard-modal-actions">
         {onBack && (
           <Button
@@ -84,8 +81,7 @@ DashboardModalFooter.propTypes = {
   draftDynamicSentenceParts: PropTypes.array,
   onContinue: PropTypes.func.isRequired,
   step: PropTypes.number,
-  backText: PropTypes.string,
-  hasConfidenceWarning: PropTypes.bool
+  backText: PropTypes.string
 };
 
 export default DashboardModalFooter;

@@ -124,8 +124,7 @@ class DashboardPanel extends Component {
       step,
       isDisabled,
       setSelectedItems,
-      canProceed,
-      hasConfidenceWarning
+      canProceed
     } = this.props;
 
     return (
@@ -163,7 +162,6 @@ class DashboardPanel extends Component {
           step={step}
           isDisabled={isDisabled}
           removeSentenceItem={setSelectedItems}
-          hasConfidenceWarning={hasConfidenceWarning}
         />
       </div>
     );
@@ -181,8 +179,7 @@ DashboardPanel.propTypes = {
   cancelPanelsDraft: PropTypes.func.isRequired,
   setSelectedItems: PropTypes.func.isRequired,
   canProceed: PropTypes.bool.isRequired,
-  countryNames: PropTypes.object.isRequired,
-  hasConfidenceWarning: PropTypes.bool
+  countryNames: PropTypes.object.isRequired
 };
 
 export default DashboardPanel;

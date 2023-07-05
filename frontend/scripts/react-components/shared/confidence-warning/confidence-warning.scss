@@ -1,42 +1,14 @@
 .warning {
-  margin: 5px 0 0;
+  margin-top: 10px;
   display: flex;
+  align-items: flex-start;
 }
 
 .warning-bell-icon {
   overflow: visible;
-  margin-left: 0;
+  margin: 2px 5px 0 0;
 }
 
 .warning-text {
   display: inline;
-}
-
-.warning-sankey,
-.warning-profile {
-  .warning-bell-icon {
-    margin-right: 5px;
-  }
-}
-
-.warning-sankey {
-  .warning-bell-icon {
-    margin-top: 2px;
-  }
-}
-
-.warning-dashboard {
-  &.warning {
-    margin: 5px 0 30px 0;
-  }
-
-  .warning-bell-icon {
-    margin-right: 5px;
-    overflow: visible;
-    transform: translate(0px, -1px);
-  }
-}
-
-.warning-profile {
-  margin-top: 10px;
 }

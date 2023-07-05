@@ -33,7 +33,7 @@ const types = {
 };
 
 function ToolBar(props) {
-  const { leftSlot, rightSlot, className, hasConfidenceWarning } = props;
+  const { leftSlot, rightSlot, className } = props;
   const [activeId, setId] = useState(null);
   function getListItem(item, ref) {
     const {
@@ -58,7 +58,6 @@ function ToolBar(props) {
       >
         {React.createElement(types[type], {
           ...updatedItem,
-          hasConfidenceWarning,
           onClick: props[`${updatedItem.id}_onClick`],
           className: cx(itemClassName, updatedItem.id === activeId ? '-hovered' : undefined)
         })}
@@ -102,8 +101,7 @@ function ToolBar(props) {
 
 ToolBar.defaultProps = {
   leftSlot: [],
-  rightSlot: [],
-  hasConfidenceWarning: false
+  rightSlot: []
 };
 
 ToolBar.propTypes = {
@@ -113,8 +111,7 @@ ToolBar.propTypes = {
   ),
   rightSlot: PropTypes.arrayOf(
     PropTypes.shape({ id: PropTypes.string.isRequired, content: PropTypes.any })
-  ),
-  hasConfidenceWarning: PropTypes.bool
+  )
 };
 
 export default ToolBar;

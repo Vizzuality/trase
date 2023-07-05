@@ -10,8 +10,6 @@ import Text from 'react-components/shared/text';
 import Icon from 'react-components/shared/icon';
 import formatValue from 'utils/formatValue';
 import 'react-components/profile/profile-components/summary/summary.scss';
-import ConfidenceWarning from 'react-components/shared/confidence-warning';
-import { hasConfidenceWarningFunction } from 'app/app.selectors';
 
 class ActorSummary extends React.PureComponent {
   render() {
@@ -25,10 +23,6 @@ class ActorSummary extends React.PureComponent {
       data: { nodeName, columnName, summary, headerAttributes } = {}
     } = this.props;
     const { commodityName, countryName } = context;
-    // Warning is only applicable to exporter activity. If is importer it has many exporting contexts
-    const hasConfidenceWarning =
-      (columnName === 'EXPORTER' || columnName === 'EXPORTER GROUP') &&
-      hasConfidenceWarningFunction(context);
     const titles = [
       { name: columnName, label: 'Activity' },
       { name: commodityName, label: 'Commodity' },
@@ -154,9 +148,6 @@ class ActorSummary extends React.PureComponent {
                     titles={titles}
                     on={onChange}
                   />
-                  {status !== Sticky.STATUS_FIXED && hasConfidenceWarning && (
-                    <ConfidenceWarning variant="profile" />
-                  )}
                   {status !== Sticky.STATUS_FIXED &&
                     headerAttributes &&
                     Object.keys(headerAttributes).length > 0 &&
