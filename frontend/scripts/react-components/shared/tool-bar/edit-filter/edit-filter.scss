@@ -29,6 +29,10 @@
     .edit-subtitle {
       color: $gray-500;
     }
+
+    .warning-bell-icon {
+      color: $gray-500;
+    }
   }
 
   .options-menu-label {
@@ -36,4 +40,16 @@
     color: $gray-300;
     margin-top: 7px;
   }
+
+  .warning-bell-icon {
+    transform: translate(5px, 2px);
+  }
+}
+
+.warning-tooltip {
+  padding: 16px 10px;
+  margin: 10px 0 0;
+  max-width: 280px;
+
+  z-index: $z-tooltip;
 }

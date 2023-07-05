@@ -1,0 +1,31 @@
+.warning {
+  margin: 5px 0 0px 0;
+}
+
+.warning-bell-icon {
+  overflow: visible;
+  margin-left: 0;
+}
+
+.warning-sankey,
+.warning-profile {
+  .warning-bell-icon {
+    margin-right: 5px;
+  }
+}
+
+.warning-dashboard {
+  &.warning {
+    margin: 5px 0 30px 0;
+  }
+
+  .warning-bell-icon {
+    margin-right: 5px;
+    overflow: visible;
+    transform: translate(0px, -1px);
+  }
+}
+
+.warning-profile {
+  margin-top: 10px;
+}

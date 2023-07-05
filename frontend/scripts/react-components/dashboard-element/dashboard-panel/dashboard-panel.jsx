@@ -5,7 +5,7 @@ import {
   getDraftDynamicSentence
 } from 'react-components/dashboard-element/dashboard-element.selectors';
 
-import { getCountryNamesByCountryId } from 'app/app.selectors';
+import { getCountryNamesByCountryId, hasConfidenceWarning } from 'app/app.selectors';
 
 import { nodesPanelActions } from 'react-components/nodes-panel/nodes-panel.register';
 import { getCanProceed } from 'react-components/nodes-panel/nodes-panel.selectors';
@@ -18,7 +18,8 @@ const mapStateToProps = (state, ownProps) => {
     canProceed: getCanProceed(state),
     isDisabled: getIsDisabled(state, ownProps),
     draftDynamicSentenceParts: getDraftDynamicSentence(state),
-    countryNames: getCountryNamesByCountryId(state)
+    countryNames: getCountryNamesByCountryId(state),
+    hasConfidenceWarning: hasConfidenceWarning(state)
   };
 };
 
