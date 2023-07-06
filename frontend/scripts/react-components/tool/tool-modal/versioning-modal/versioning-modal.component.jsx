@@ -5,10 +5,13 @@ import Text from 'react-components/shared/text';
 import MethodsDisclaimer from 'react-components/shared/methods-disclaimer';
 import 'react-components/tool/tool-modal/versioning-modal/versioning-modal.scss';
 import capitalize from 'lodash/capitalize';
+import { hasConfidenceWarningFunction } from 'app/app.selectors';
+import ConfidenceWarning from 'react-components/shared/confidence-warning';
 
 function VersioningModal({ data, context }) {
   const { url, version } = data || {};
   const { countryName, commodityName } = context || {};
+  const hasConfidenceWarning = hasConfidenceWarningFunction(context);
 
   return (
     <div className="c-versioning-modal">
@@ -72,6 +75,7 @@ function VersioningModal({ data, context }) {
               </Text>
             </a>
           </Text>
+          {hasConfidenceWarning && <ConfidenceWarning variant="profile" />}
           {countryName === 'BRAZIL' && commodityName === 'SOY' && <MethodsDisclaimer />}
         </div>
       </div>

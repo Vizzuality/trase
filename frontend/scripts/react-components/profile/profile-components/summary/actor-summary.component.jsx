@@ -148,7 +148,6 @@ class ActorSummary extends React.PureComponent {
                     titles={titles}
                     on={onChange}
                   />
-
                   {status !== Sticky.STATUS_FIXED &&
                     headerAttributes &&
                     Object.keys(headerAttributes).length > 0 &&

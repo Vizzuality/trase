@@ -122,7 +122,6 @@ function PlaceSummary(props) {
               </div>
             )}
           </Sticky>
-
           {renderStats()}
         </div>
 

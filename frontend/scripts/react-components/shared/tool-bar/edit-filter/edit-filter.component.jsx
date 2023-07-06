@@ -3,12 +3,10 @@ import PropTypes from 'prop-types';
 import Heading from 'react-components/shared/heading';
 import Text from 'react-components/shared/text';
 import cx from 'classnames';
-
 import 'react-components/shared/tool-bar/edit-filter/edit-filter.scss';
 
 function EditFilter(props) {
   const { id, title, subtitle, onClick, className, label } = props;
-
   return (
     <button onClick={() => onClick(id)} className={cx('c-edit-filter', className)}>
       <Text as="span" size="rg" variant="sans" transform="uppercase" className="options-menu-label">

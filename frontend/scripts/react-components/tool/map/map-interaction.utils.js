@@ -14,7 +14,7 @@ export const handleHover = ({
   logisticLayers,
   onPolygonHighlighted
 }) => {
-  const { features, offsetCenter } = event;
+  const { features, offsetCenter, center } = event;
   if (!features || !features.length) {
     return undefined;
   }
@@ -111,7 +111,7 @@ export const handleHover = ({
     const node = highlightedNodesData[0];
 
     if (node?.name) {
-      setTooltip({ x: offsetCenter.x, y: offsetCenter.y, text: node?.name, values: properties });
+      setTooltip({ x: offsetCenter.x, y: center.y, text: node?.name, values: properties });
     } else {
       // Reset last and current tooltip
       hoveredGeo.set({});

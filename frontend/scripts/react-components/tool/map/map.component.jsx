@@ -283,6 +283,7 @@ function Map(props) {
       <UnitsTooltip
         show={!!tooltipData && !!tooltipData.text}
         items={updatedTooltipValues}
+        portalRef={document.getElementsByTagName('body')[0]}
         {...tooltipData}
       />
     </div>

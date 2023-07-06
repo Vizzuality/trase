@@ -28,7 +28,6 @@ function CountrySummary(props) {
     } = {},
     data: { summary, headerAttributes } = {}
   } = props;
-
   const renderCountryMap = () => (
     <div className="c-overall-info page-break-inside-avoid">
       <div className="c-locator-map map-country-banner">
@@ -43,9 +42,9 @@ function CountrySummary(props) {
       </div>
     </div>
   );
-
   const selectedCommodity = commodities.find(c => c.id === commodityId);
   const selectedActivity = activities.find(a => a.name === activity);
+
   const titles = [
     {
       dropdown: true,

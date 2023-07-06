@@ -35,7 +35,6 @@ const types = {
 function ToolBar(props) {
   const { leftSlot, rightSlot, className } = props;
   const [activeId, setId] = useState(null);
-
   function getListItem(item, ref) {
     const {
       noHover,
