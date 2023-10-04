@@ -3,7 +3,7 @@ module Content
     before_action :set_caching_headers
 
     def index
-      render json: [] and return unless ENV["TWITTER_CONSUMER_KEY"].present? and ENV["TWITTER_CONSUMER_SECRET"].present? and ENV["TWITTER_ACCESS_TOKEN"].present? and ENV["TWITTER_ACCESS_TOKEN_SECRET"].present?
+      render json: [], root: "data" and return unless ENV["TWITTER_CONSUMER_KEY"].present? and ENV["TWITTER_CONSUMER_SECRET"].present? and ENV["TWITTER_ACCESS_TOKEN"].present? and ENV["TWITTER_ACCESS_TOKEN_SECRET"].present?
 
       client = Twitter::REST::Client.new do |config|
         config.consumer_key = ENV["TWITTER_CONSUMER_KEY"]
