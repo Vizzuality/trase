@@ -11,6 +11,7 @@
 #  is_disabled(When set, this attribute is not displayed)                                               :boolean          default(FALSE), not null
 #  is_default(When set, show this attribute by default)                                                 :boolean          default(FALSE), not null
 #  is_quick_fact                                                                                        :boolean          default(FALSE), not null
+#  parent_id                                                                                            :integer
 #
 # Indexes
 #
@@ -29,6 +30,7 @@ module Api
       include Api::V3::IsDownloadable
 
       belongs_to :context
+      belongs_to :parent, class_name: 'Api::V3::ResizeByAttribute', optional: true
       has_one :resize_by_quant, autosave: true
 
       validates :context, presence: true
@@ -52,6 +54,24 @@ module Api
         [
           {name: :context_id, table_class: Api::V3::Context}
         ]
+      end
+
+      def self.select_options(context_id: nil)
+        rel = Api::V3::ResizeByAttribute.includes(
+          resize_by_quant: :quant, context: [:country, :commodity]
+        )
+        rel = rel.where(context_id: context_id) if context_id
+
+        rel.all.map do |ra|
+          [
+            [
+              ra.context&.country&.name,
+              ra.context&.commodity&.name,
+              ra.resize_by_quant&.quant&.name
+            ].join(" / "),
+            ra.id
+          ]
+        end
       end
 
       private

@@ -68,7 +68,7 @@ module Api
               id: node_id,
               height: format("%0.6f", (cont_attribute_value / @total_height)).to_f,
               quant: format("%0.6f", cont_attribute_value).to_f,
-              extra_quants: value.except(@cont_attribute.id)
+              extra_attributes: value.except(@cont_attribute.id)
             }
           end
           @include = {

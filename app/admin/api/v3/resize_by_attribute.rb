@@ -9,10 +9,15 @@ ActiveAdmin.register Api::V3::ResizeByAttribute, as: "ResizeByAttribute" do
     :resize_by_quant
   ]
 
-  permit_params :context_id, :group_number, :tooltip_text,
-                :is_disabled, :is_default,
-                :is_downloadable, :download_name,
+  permit_params :context_id,
+                :parent_id,
                 :readonly_attribute_id,
+                :group_number,
+                :tooltip_text,
+                :is_disabled,
+                :is_default,
+                :is_downloadable,
+                :download_name,
                 :is_quick_fact
 
   after_action :clear_cache, only: [:create, :update, :destroy]
@@ -68,8 +73,10 @@ ActiveAdmin.register Api::V3::ResizeByAttribute, as: "ResizeByAttribute" do
   form do |f|
     f.semantic_errors
     inputs do
-      input :readonly_attribute_id, as: :select, collection: Api::V3::Readonly::Attribute.
-        select_options,
+      input :parent_id, as: :select, collection: Api::V3::ResizeByAttribute.select_options(context_id: params[:context_id]),
+      label: "Parent Resize By Property in case of dependent units",
+      hint: object.class.column_comment("parent_id")
+      input :readonly_attribute_id, as: :select, collection: Api::V3::Readonly::Attribute.select_options,
                                     label: "Resize By Property"
       input :group_number, required: true,
                            hint: object.class.column_comment("group_number")

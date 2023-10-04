@@ -2306,6 +2306,13 @@ COMMENT ON COLUMN public.context_properties.is_highlighted IS 'When set, shows t
 
 
 --
+-- Name: COLUMN context_properties.subnational_years; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.context_properties.subnational_years IS 'Defines which years light up as subnational in the sankey';
+
+
+--
 -- Name: context_properties_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -6552,7 +6559,8 @@ CREATE TABLE public.resize_by_attributes (
     is_default boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    is_quick_fact boolean DEFAULT false NOT NULL
+    is_quick_fact boolean DEFAULT false NOT NULL,
+    parent_id integer
 );
 
 
@@ -6650,7 +6658,9 @@ COMMENT ON TABLE public.resize_by_quants IS 'Quants available for recoloring (se
 
 CREATE VIEW public.resize_by_attributes_v AS
  SELECT ra.id,
+    ra.parent_id,
     a.id AS attribute_id,
+    parent_a.id AS parent_attribute_id,
     ra.context_id,
     (ra.group_number)::smallint AS group_number,
     (ra."position")::smallint AS "position",
@@ -6659,9 +6669,12 @@ CREATE VIEW public.resize_by_attributes_v AS
     ra.is_default,
     ra.is_quick_fact,
     ra.tooltip_text
-   FROM ((public.resize_by_quants raq
-     JOIN public.resize_by_attributes ra ON ((ra.id = raq.resize_by_attribute_id)))
-     JOIN public.attributes a ON (((a.original_id = raq.quant_id) AND (a.original_type = 'Quant'::text))));
+   FROM (((((public.resize_by_attributes ra
+     JOIN public.resize_by_quants raq ON ((ra.id = raq.resize_by_attribute_id)))
+     JOIN public.attributes a ON (((a.original_id = raq.quant_id) AND (a.original_type = 'Quant'::text))))
+     LEFT JOIN public.resize_by_attributes parent_ra ON ((parent_ra.id = ra.parent_id)))
+     LEFT JOIN public.resize_by_quants parent_raq ON ((parent_raq.resize_by_attribute_id = parent_ra.id)))
+     LEFT JOIN public.attributes parent_a ON (((parent_a.original_id = parent_raq.quant_id) AND (parent_a.original_type = 'Quant'::text))));
 
 
 --
@@ -6669,6 +6682,13 @@ CREATE VIEW public.resize_by_attributes_v AS
 --
 
 COMMENT ON VIEW public.resize_by_attributes_v IS 'View which merges resize_by_quants with resize_by_attributes.';
+
+
+--
+-- Name: COLUMN resize_by_attributes_v.parent_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.resize_by_attributes_v.parent_id IS 'Self-reference to parent used to define dependent units';
 
 
 --
@@ -10434,6 +10454,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20211202222956'),
 ('20220318110509'),
 ('20220530131615'),
-('20230529074111');
+('20230529074111'),
+('20231004140255');
 
 

@@ -8,7 +8,7 @@
 #  is_disabled(When set, do not show this context)                               :boolean          default(FALSE), not null
 #  is_default(When set, show this context as default (only use for one))         :boolean          default(FALSE), not null
 #  is_highlighted(When set, shows the context on the context picker suggestions) :boolean
-#  subnational_years                                                             :integer          is an Array
+#  subnational_years(Defines which years light up as subnational in the sankey)  :integer          is an Array
 #
 # Indexes
 #

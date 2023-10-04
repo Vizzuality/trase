@@ -54,16 +54,16 @@ module Api
               find_by_context_id_and_attribute_id(
                 context_id, ncont_attribute_id
               )&.readonly_attribute
-          @cont_attribute = cont_attribute_id &&
+          cont_attribute_ra = cont_attribute_id &&
             Api::V3::Readonly::ResizeByAttribute.
-              select(:attribute_id).
+              select(:id, :attribute_id).
               includes(:readonly_attribute).
               find_by_context_id_and_attribute_id(
                 context_id, cont_attribute_id
-              )&.readonly_attribute
-          @extra_cont_attributes = extra_cont_attributes_ids.map do |extra_cont_attribute_id|
-            Api::V3::Readonly::Attribute.find_by_id(extra_cont_attribute_id)
-          end
+              )
+          child_cont_attribute_ras = cont_attribute_ra&.children || []
+          @cont_attribute = cont_attribute_ra&.readonly_attribute
+          @extra_cont_attributes = Api::V3::Readonly::Attribute.where(id: extra_cont_attributes_ids + child_cont_attribute_ras.map(&:attribute_id)).all
           @selected_nodes_ids = initialize_int_set_param(
             params[:selected_nodes_ids]
           )
