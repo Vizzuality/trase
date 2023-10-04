@@ -63,10 +63,12 @@ module Api
 
         def initialize_include
           node_heights = @active_nodes.map do |node_id, value|
+            cont_attribute_value = value[@cont_attribute.id]
             {
               id: node_id,
-              height: format("%0.6f", (value / @total_height)).to_f,
-              quant: format("%0.6f", value).to_f
+              height: format("%0.6f", (cont_attribute_value / @total_height)).to_f,
+              quant: format("%0.6f", cont_attribute_value).to_f,
+              extra_quants: value.except(@cont_attribute.id)
             }
           end
           @include = {

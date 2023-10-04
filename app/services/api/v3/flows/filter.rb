@@ -3,10 +3,11 @@ module Api
     module Flows
       class Filter
         attr_reader :errors, :flows, :active_nodes, :total_height, :other_nodes,
-                    :cont_attribute, :ncont_attribute
+                    :cont_attribute, :ncont_attribute, :extra_cont_attributes
         # params:
         # node_types_ids - list of node type ids
         # cont_attribute_id - Quant for resizing
+        # extra_cont_attributes_ids - list of additional quant ids to be displayed in tooltip
         # ncont_attribute_id - Ind / Qual for recoloring
         # (only one of these may be specified, Ind takes precedence)
         # selected_nodes_ids - list of node ids for expanding
@@ -44,6 +45,7 @@ module Api
           @node_types_ids = initialize_int_set_param(params[:node_types_ids])
           context_id = @context.id
           cont_attribute_id = params[:cont_attribute_id]
+          extra_cont_attributes_ids = initialize_int_set_param(params[:extra_cont_attributes_ids])
           ncont_attribute_id = params[:ncont_attribute_id]
           @ncont_attribute = ncont_attribute_id &&
             Api::V3::Readonly::RecolorByAttribute.
@@ -59,6 +61,9 @@ module Api
               find_by_context_id_and_attribute_id(
                 context_id, cont_attribute_id
               )&.readonly_attribute
+          @extra_cont_attributes = extra_cont_attributes_ids.map do |extra_cont_attribute_id|
+            Api::V3::Readonly::Attribute.find_by_id(extra_cont_attribute_id)
+          end
           @selected_nodes_ids = initialize_int_set_param(
             params[:selected_nodes_ids]
           )
@@ -198,6 +203,7 @@ module Api
 
           # TODO: think about how to maybe move this out to the result object
           @total_height = active_nodes_by_position.first[1].values.
+            map { |v| v[@cont_attribute.id] }.
             reduce(:+)
 
           @errors << "No flows found" if @total_height.zero?
@@ -210,10 +216,13 @@ module Api
           active_nodes = {}
           other_nodes = []
           @active_node_types_positions.map.with_index do |position, i|
-            flows_through_position = flows_totals_per_node(position)
+            flows_through_position = flows_totals_per_node(position, @cont_attribute)
+            extra_flows_through_position = @extra_cont_attributes.map do |extra_cont_attribute|
+              flows_totals_per_node_without_order(position, extra_cont_attribute)
+            end
             active_nodes[position], other_nodes[i] =
               active_nodes_for_position(
-                flows_through_position, @other_nodes_ids[i]
+                flows_through_position, extra_flows_through_position, @other_nodes_ids[i]
               )
           end
           [active_nodes, other_nodes]
@@ -223,51 +232,66 @@ module Api
           active_nodes = {}
           other_nodes = []
           @active_node_types_positions.map.with_index do |position, i|
-            flows_through_position = flows_totals_per_node(position)
+            flows_through_position = flows_totals_per_node(position, @cont_attribute)
+            extra_flows_through_position = @extra_cont_attributes.map do |extra_cont_attribute|
+              flows_totals_per_node_without_order(position, extra_cont_attribute)
+            end
             other_node_id = @other_nodes_ids[i]
             active_nodes[position], other_nodes[i] =
               if @selected_nodes_by_position.key?(position)
                 active_nodes_for_expanded_position(
-                  flows_through_position, other_node_id
+                  flows_through_position, extra_flows_through_position, other_node_id
                 )
               else
                 active_nodes_for_position(
-                  flows_through_position, other_node_id
+                  flows_through_position, extra_flows_through_position, other_node_id
                 )
               end
           end
           [active_nodes, other_nodes]
         end
 
-        def active_nodes_for_position(flows_through_position, other_node_id)
-          result = {other_node_id => 0}
+        def active_nodes_for_position(flows_through_position, extra_flows_through_position, other_node_id)
+          active_nodes_summary(flows_through_position, extra_flows_through_position, other_node_id) do |node_idx, node_id|
+            # calculate summary for node if it is in the top limit or locked
+            node_idx < @limit || @locked_nodes_ids.include?(node_id)
+          end
+        end
+
+        def active_nodes_for_expanded_position(flows_through_position, extra_flows_through_position, other_node_id)
+          active_nodes_summary(flows_through_position, extra_flows_through_position, other_node_id) do |node_idx, node_id|
+            # calculate summary for node if it is selected or locked
+            @selected_nodes_ids.include?(node_id) || @locked_nodes_ids.include?(node_id)
+          end
+        end
+
+        def active_nodes_summary(flows_through_position, extra_flows_through_position, other_node_id)
+          result = {other_node_id => {@cont_attribute.id => 0}}
           other = {id: other_node_id, count: 0}
           flows_through_position.each.with_index do |flow, i|
-            if i < @limit || @locked_nodes_ids.include?(flow["node_id"])
-              result[flow["node_id"]] = flow["total"]
+            if yield(i, flow["node_id"])
+              result[flow["node_id"]] = {@cont_attribute.id => flow["total"]}
             else
-              result[other_node_id] += flow["total"]
+              result[other_node_id][@cont_attribute.id] += flow["total"]
               other[:count] += 1
+            end
+          end
+          # for extra cont attribute
+          extra_flows_through_position.each.with_index do |extra_flows, i|
+            cont_attribute_id = @extra_cont_attributes[i].id
+            extra_flows.each do |extra_flow|
+              if result.key?(extra_flow["node_id"])
+                result[extra_flow["node_id"]][cont_attribute_id] = extra_flow["total"]
+              else
+                result[other_node_id][cont_attribute_id] ||= 0
+                result[other_node_id][cont_attribute_id] += extra_flow["total"]
+              end
             end
           end
           [result, other]
         end
 
-        def active_nodes_for_expanded_position(flows_through_position, other_node_id)
-          result = {other_node_id => 0}
-          other = {id: other_node_id, count: 0}
-          flows_through_position.each do |flow|
-            if @selected_nodes_ids.include?(flow["node_id"]) || @locked_nodes_ids.include?(flow["node_id"])
-              result[flow["node_id"]] = flow["total"]
-            else
-              result[other_node_id] += flow["total"]
-              other[:count] += 1
-            end
-          end
-          [result, other]
-        end
-
-        def flows_totals_per_node(position)
+        def flows_totals_per_node_without_order(position, cont_attribute)
           select_clause = ActiveRecord::Base.send(
             :sanitize_sql_array,
             [
@@ -284,40 +308,20 @@ module Api
             ["year, flows.path[?]", position + 1]
           )
 
-          subquery = basic_flows_query.
+          subquery = basic_flows_query(cont_attribute).
             select(select_clause).
             group(group_clause)
 
           node_type = @active_node_types.find { |nt| nt.column_position == position }
-          # unknown_nodes_ids =
-          #   if node_type
-          #     Api::V3::Node.where(node_type_id: node_type.id, is_unknown: true).pluck(:id)
-          #   else
-          #     []
-          #   end
-
-          # if unknown_nodes_ids.any?
-          #   order_by_unknown_clause = ActiveRecord::Base.send(
-          #     :sanitize_sql_array,
-          #     [
-          #       'CASE WHEN node_id = ANY(ARRAY[?]) THEN 2 ELSE 1 END',
-          #       unknown_nodes_ids
-          #     ]
-          #   )
-          #   order_by_unknown_clause = Arel.sql(order_by_unknown_clause)
-          # end
-
-          # order_clause = [
-          #   order_by_unknown_clause, 'total DESC'
-          # ].compact
-
-          order_clause = ["total DESC"]
 
           Api::V3::Flow.
             from("(#{subquery.to_sql}) s").
-            select("node_id, #{@cont_attribute.aggregation_method}(total) AS total").
-            group("node_id").
-            order(order_clause)
+            select("node_id, SUM(total) AS total").
+            group("node_id")
+        end
+
+        def flows_totals_per_node(position, cont_attribute)
+          flows_totals_per_node_without_order(position, cont_attribute).order(total: :desc)
         end
 
         def flows_query
@@ -351,7 +355,7 @@ module Api
             query_select_clause_parts += ["ind_value", "qual_value"]
           end
 
-          subquery = basic_flows_query.
+          subquery = basic_flows_query(@cont_attribute).
             select(subquery_select_clause_parts.join(",")).
             where("#{cont_attr_table}.value > 0").
             group("1,2") # year and path
@@ -394,16 +398,16 @@ module Api
           end
         end
 
-        def basic_flows_query
-          cont_attr_table = @cont_attribute.flow_values_class.table_name
+        def basic_flows_query(cont_attribute)
+          cont_attr_table = cont_attribute.flow_values_class.table_name
           query = Api::V3::Flow.
             from("partitioned_flows flows").
             joins("JOIN partitioned_#{cont_attr_table} #{cont_attr_table} ON #{cont_attr_table}.flow_id = flows.id").
             where(context_id: @context.id).
             where("year >= ? AND year <= ?", @year_start, @year_end).
             where(
-              "#{cont_attr_table}.#{@cont_attribute.attribute_id_name}" =>
-                @cont_attribute.original_id
+              "#{cont_attr_table}.#{cont_attribute.attribute_id_name}" =>
+                cont_attribute.original_id
             )
 
           if @biome_position

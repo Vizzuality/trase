@@ -173,6 +173,23 @@ RSpec.describe Api::V3::Flows::Filter do
       end
     end
 
+    context "when extra attributes" do
+      let(:extra_cont_attributes_id) { api_v3_deforestation_v2.readonly_attribute.id }
+
+      it "includes values for extra attributes in acctive nodes" do
+        filter = Api::V3::Flows::Filter.new(
+          api_v3_brazil_soy_context,
+          filter_params.merge(extra_cont_attributes_ids: [extra_cont_attributes_id])
+        )
+        result = filter.call
+        municipality_node_heights = result.include[:node_heights].find do |node_height|
+          node_height[:id] == api_v3_municipality_node.id
+        end
+        expect(municipality_node_heights[:extra_quants]).to have_key(extra_cont_attributes_id)
+        expect(municipality_node_heights[:extra_quants][extra_cont_attributes_id]).to be = 45
+      end
+    end
+
     context "when required options missing" do
       context "node_type_ids missing" do
         let(:filter) { Api::V3::Flows::Filter.new(api_v3_brazil_soy_context, {}) }
