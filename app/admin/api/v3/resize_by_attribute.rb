@@ -10,15 +10,15 @@ ActiveAdmin.register Api::V3::ResizeByAttribute, as: "ResizeByAttribute" do
   ]
 
   permit_params :context_id,
-                :parent_id,
-                :readonly_attribute_id,
-                :group_number,
-                :tooltip_text,
-                :is_disabled,
-                :is_default,
-                :is_downloadable,
-                :download_name,
-                :is_quick_fact
+    :parent_id,
+    :readonly_attribute_id,
+    :group_number,
+    :tooltip_text,
+    :is_disabled,
+    :is_default,
+    :is_downloadable,
+    :download_name,
+    :is_quick_fact
 
   after_action :clear_cache, only: [:create, :update, :destroy]
 
@@ -74,22 +74,22 @@ ActiveAdmin.register Api::V3::ResizeByAttribute, as: "ResizeByAttribute" do
     f.semantic_errors
     inputs do
       input :parent_id, as: :select, collection: Api::V3::ResizeByAttribute.select_options(context_id: params[:context_id]),
-      label: "Parent Resize By Property in case of dependent units",
-      hint: object.class.column_comment("parent_id")
+        label: "Parent Resize By Property in case of dependent units",
+        hint: object.class.column_comment("parent_id")
       input :readonly_attribute_id, as: :select, collection: Api::V3::Readonly::Attribute.select_options,
-                                    label: "Resize By Property"
+        label: "Resize By Property"
       input :group_number, required: true,
-                           hint: object.class.column_comment("group_number")
+        hint: object.class.column_comment("group_number")
       input :tooltip_text, as: :string,
-                           hint: object.class.column_comment("tooltip_text")
+        hint: object.class.column_comment("tooltip_text")
       input :is_disabled,
-            as: :boolean,
-            hint: object.class.column_comment("is_disabled")
+        as: :boolean,
+        hint: object.class.column_comment("is_disabled")
       input :is_default,
-            as: :boolean,
-            hint: object.class.column_comment("is_default")
+        as: :boolean,
+        hint: object.class.column_comment("is_default")
       input :is_downloadable,
-            as: :boolean
+        as: :boolean
       input :download_name
     end
     f.actions

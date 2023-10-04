@@ -73,9 +73,6 @@ ignore:
   - Layout/ArgumentAlignment
 - app/admin/api/v3/recolor_by_attribute.rb:
   - Layout/ArgumentAlignment
-- app/admin/api/v3/resize_by_attribute.rb:
-  - Layout/ArgumentAlignment
-  - Layout/DotPosition
 - app/admin/api/v3/sankey_card_link.rb:
   - Layout/ArgumentAlignment
 - app/admin/api/v3/top_profile.rb:
@@ -273,9 +270,6 @@ ignore:
 - app/models/api/v3/recolor_by_attribute.rb:
   - Style/PercentLiteralDelimiters
   - Layout/ArgumentAlignment
-- app/models/api/v3/resize_by_attribute.rb:
-  - Layout/ArgumentAlignment
-  - Layout/DotPosition
 - app/models/api/v3/sankey_card_link.rb:
   - Layout/DotPosition
   - Layout/LineContinuationSpacing
@@ -356,8 +350,6 @@ ignore:
 - app/serializers/api/public/nodes/node_serializer.rb:
   - Layout/ArgumentAlignment
 - app/serializers/api/v3/contexts/recolor_by_attribute_serializer.rb:
-  - Layout/ArgumentAlignment
-- app/serializers/api/v3/contexts/resize_by_attribute_serializer.rb:
   - Layout/ArgumentAlignment
 - app/serializers/api/v3/dashboards/template_serializer.rb:
   - Layout/ArgumentAlignment
