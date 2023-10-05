@@ -27,6 +27,7 @@ module Api
           node_types_ids: params[:include_columns],
           ncont_attribute_id: params[:ncont_attribute_id],
           cont_attribute_id: params[:cont_attribute_id],
+          extra_cont_attributes_ids: params[:extra_cont_attributes_ids],
           selected_nodes_ids: params[:selected_nodes],
           excluded_nodes_ids: params[:excluded_nodes],
           locked_nodes_ids: params[:locked_nodes],

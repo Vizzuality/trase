@@ -21,6 +21,7 @@ module Api
 
         belongs_to :context
         belongs_to :readonly_attribute, foreign_key: :attribute_id, class_name: "Attribute"
+        has_many :children, foreign_key: :parent_id, class_name: "ResizeByAttribute"
 
         delegate :name, to: :readonly_attribute
         delegate :unit, to: :readonly_attribute

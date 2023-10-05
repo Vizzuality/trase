@@ -647,3 +647,5 @@ views:
     columns:
       - name: attribute_id
         comment: References the unique id in attributes.
+      - name: parent_id
+        comment: Self-reference to parent used to define dependent units
