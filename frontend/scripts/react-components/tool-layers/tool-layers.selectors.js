@@ -224,9 +224,10 @@ export const getAllSelectedGeoColumns = createSelector(
   }
 );
 
+// TODO: Please move this logic to the CMS as is getting really messy
 export const getSelectedUnitLayers = createSelector(
-  [getUnitLayers, getToolColumns, getSelectedContext, getAllSelectedGeoColumns],
-  (unitLayers, columns, selectedContext, selectedGeoColumns) => {
+  [getUnitLayers, getToolColumns, getSelectedContext, getAllSelectedGeoColumns, getSelectedYears],
+  (unitLayers, columns, selectedContext, selectedGeoColumns, selectedYears) => {
     if (!unitLayers || !selectedContext || !selectedGeoColumns) return null;
     // Use geometryNodeTypeId column for columns without own geometry e.g. logistic hubs
     const geoColumns = selectedGeoColumns.map(c =>
@@ -236,16 +237,50 @@ export const getSelectedUnitLayers = createSelector(
     const countryName = snakeCase(selectedContext.countryName);
     const columnName = c => snakeCase(c.name);
     const selectedUnitLayers = [];
+
+    // Exceptions inside the same country-column for each commodity
     const exceptions = [
       'indonesia_country_of_production_wood_pulp',
       'indonesia_province_wood_pulp',
-      'indonesia_province_of_production_wood_pulp'
+      'indonesia_province_of_production_wood_pulp',
+      'indonesia_province_of_production_wood_pulp',
     ];
+
+    // Changes in the column names
+    const changes = {
+      indonesia_wood_supplier: 'indonesia_concession_wood_pulp',
+    }
+
+    // Layers with different geometries depeinding on the selected year
+    const layersWithYears = {'indonesia_concession_wood_pulp': [
+      { firstYear: 2005, lastYear: 2019 },
+      { firstYear: 2020, lastYear: 2022 }
+    ]};
+
     geoColumns.forEach(geoColumn => {
       let layerId = `${countryName}_${columnName(geoColumn)}`;
       const exceptionId = `${layerId}_${snakeCase(selectedContext.commodityName)}`;
+
       if (exceptions.includes(exceptionId)) {
         layerId = exceptionId;
+      }
+
+      if (changes[layerId]) {
+        layerId = changes[layerId];
+      }
+
+      if (layersWithYears[layerId]) {
+        const [firstSelectedYear, lastSelectedYear] = selectedYears;
+        const layerWithYears = layersWithYears[layerId].find(
+          ({ firstYear, lastYear }) => {
+            const matchingRangeLayer = (firstSelectedYear >= firstYear && lastSelectedYear <= lastYear);
+            // If there is not a match with the range, return the last layer on the range
+            return matchingRangeLayer || lastSelectedYear <= lastYear;
+          }
+        );
+        if (layerWithYears) {
+          layerId = `${layerId}_years-${layerWithYears.firstYear}-${layerWithYears.lastYear}`;
+        }
       }
 
       // columns of production are the same than their respective without the of_production part
