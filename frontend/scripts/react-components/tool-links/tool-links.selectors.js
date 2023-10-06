@@ -39,6 +39,7 @@ const getToolExtraColumnId = createSelector(getToolExtraColumn, extraColumn =>
 export const getSelectedResizeBy = createSelector(
   [getToolResizeBy, getSelectedContext],
   (selectedResizeBy, selectedContext) => {
+
     if (!selectedContext) {
       return null;
     }
@@ -51,7 +52,12 @@ export const getSelectedResizeBy = createSelector(
       return selectedContext.resizeBy.find(resizeBy => resizeBy.isDefault === true);
     }
 
-    return resizeByItem;
+    // Children indicators are associated indicators not displayed on the resize by selection panel but displayed on the tooltip
+    const childrenIndicators = selectedContext.resizeBy.filter(
+      resizeBy => resizeBy.parentAttributeId === resizeByItem.attributeId
+    );
+
+    return {...resizeByItem, childrenIndicators };
   }
 );
 

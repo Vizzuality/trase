@@ -16,7 +16,9 @@ const isEnabled = (filter, selectedYears) =>
 
 export const makeGetResizeByItems = (getResizeBys, getSelectedYears) =>
   createSelector([getResizeBys, getSelectedYears], (resizeBy, selectedYears) =>
-    sortBy(resizeBy, ['groupNumber', 'position']).map((filter, index, list) => {
+    sortBy(resizeBy, ['groupNumber', 'position'])
+      .filter(filter => !filter.parentAttributeId) // Items with parent id should not be displayed
+      .map((filter, index, list) => {
       const isDisabled = !isEnabled(filter, selectedYears);
 
       const hasSeparator = list[index - 1] && list[index - 1].groupNumber !== filter.groupNumber;
