@@ -1,7 +1,27 @@
+import React from 'react';
 import pluralize from 'utils/pluralize';
 import getNodeMeta from 'app/helpers/getNodeMeta';
 import formatValue from 'utils/formatValue';
 import { NODE_TYPES } from 'constants';
+import RecolorByLegend from './recolor-by-legend';
+
+// Indicators can have related children indicators
+const getChildrenResizeByItems = (childrenNodeHeights, id, selectedContext) => {
+  const relatedNodeHeights = childrenNodeHeights?.[id]?.extraAttributes;
+  return (
+    relatedNodeHeights &&
+    Object.entries(relatedNodeHeights).map(([childrenIndicatorId, value]) => {
+      const childrenIndicator = selectedContext.resizeBy.find(
+        n => String(n.attributeId) === childrenIndicatorId
+      );
+      return {
+        title: childrenIndicator?.label,
+        unit: childrenIndicator?.unit,
+        value: `${formatValue(value, childrenIndicator?.label)}`
+      };
+    })
+  );
+};
 
 export const handleNodeOver = ({
   node,
@@ -17,6 +37,7 @@ export const handleNodeOver = ({
   selectedContext,
   selectedNodesIds,
   otherNodes,
+  childrenNodeHeights,
   nodeAttributes,
   toolColumns,
   columns,
@@ -37,6 +58,7 @@ export const handleNodeOver = ({
     value: `${formatValue(nodeHeight.quant, selectedResizeBy.label)}`
   };
 
+  const childrenResizeByItems = getChildrenResizeByItems(childrenNodeHeights, id, selectedContext);
   const nodeGroup = toolColumns && toolColumns[columnId] && toolColumns[columnId].group;
   const isFromFirstColumn = nodeGroup === 0;
   const isFromLastColumn = nodeGroup === columns.length - 1;
@@ -46,7 +68,7 @@ export const handleNodeOver = ({
 
   const tooltip = {
     text: name,
-    items: isDeforestationExposureException ? [] : [resizeByItem],
+    items: isDeforestationExposureException ? [] : [resizeByItem, ...childrenResizeByItems],
     width: rect.width,
     height: rect.height,
     x:
@@ -71,7 +93,8 @@ export const handleNodeOver = ({
         unit: selectedResizeBy.unit,
         value: formattedValue
       },
-      { ...resizeByItem, title: `Total ${selectedResizeBy.label}` }
+      { ...resizeByItem, title: `Total ${selectedResizeBy.label}` },
+      ...childrenResizeByItems
     ];
   } else if (hasDimensionSelected) {
     const nodeIndicators = selectedMapDimensions
@@ -117,4 +140,49 @@ export const handleNodeOver = ({
 
   setTooltipContent(tooltip);
   onNodeHighlighted(node.id);
+};
+
+export const handleLinkOver = ({
+  e,
+  link,
+  getRect,
+  setTooltipContent,
+  setHoveredLink,
+  selectedResizeBy,
+  selectedRecolorBy,
+  toolLayout
+}) => {
+  const rect = getRect(toolLayout);
+  const tooltip = {
+    text: `${link.sourceNodeName} > ${link.targetNodeName}`,
+    x: e.clientX - rect.x,
+    y: e.clientY - rect.y,
+    height: rect.height,
+    width: rect.width,
+    items: [
+      {
+        title: selectedResizeBy.label,
+        unit: selectedResizeBy.unit,
+        value: formatValue(link.quant, selectedResizeBy.label)
+      }
+    ]
+  };
+  if (selectedRecolorBy) {
+    let recolorValue = null;
+    let recolorChildren = null;
+    if (link.recolorBy === null) {
+      recolorValue = 'Unknown';
+    } else {
+      recolorChildren = <RecolorByLegend value={link.recolorBy} />;
+    }
+
+    tooltip.items.push({
+      title: selectedRecolorBy.label,
+      value: recolorValue,
+      children: recolorChildren
+    });
+  }
+
+  setHoveredLink(link.id);
+  setTooltipContent(tooltip);
 };

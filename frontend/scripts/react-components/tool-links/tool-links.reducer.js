@@ -152,6 +152,8 @@ const toolLinksReducer = {
 
       draft.data.nodeHeights = {};
       draft.data.otherNodes = {};
+      draft.data.childrenNodeHeights = {};
+
       linksMeta.nodeHeights.forEach(nodeHeight => {
         draft.data.nodeHeights[nodeHeight.id] = nodeHeight;
       });
@@ -159,6 +161,10 @@ const toolLinksReducer = {
       linksMeta.otherNodes.filter(Boolean).forEach(otherNode => {
         draft.data.otherNodes[otherNode.id] = otherNode;
       });
+      linksMeta.nodeHeights.forEach(nodeHeight => {
+        draft.data.childrenNodeHeights[nodeHeight.id] = nodeHeight;
+      });
+
       draft.data.links = links;
     });
   },
