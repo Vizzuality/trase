@@ -19,23 +19,26 @@ const getGroupedNodes = createSelector([filterSearch], allNodes =>
 );
 
 export const getSearchResults = createSelector([getGroupedNodes], nodes => {
-  const getNode = ([nodeA, nodeB]) => {
-    if (nodeB) {
-      const nodeTypes = [nodeA, nodeB].map(n => n.nodeType);
-      if (nodeTypes.includes('IMPORTER') && nodeTypes.includes('EXPORTER')) {
-        return {
-          id: `${nodeA.id}_${nodeB.id}`,
-          name: nodeA.name,
-          nodeType: 'IMPORTER & EXPORTER',
-          profile: nodeA.profile,
-          [nodeA.nodeType.toLowerCase()]: nodeA,
-          [nodeB.nodeType.toLowerCase()]: nodeB,
-          nodes: [nodeA.nodeType.toLowerCase(), nodeB.nodeType.toLowerCase()]
-        };
-      }
-      return [nodeA, nodeB];
+  const getNode = (groupedNodes) => {
+    const nodeTypes = groupedNodes.map(n => n.nodeType);
+
+    // TODO: Check why are we grouping importer and exporters on this code
+    if (nodeTypes.includes('IMPORTER') && nodeTypes.includes('EXPORTER')) {
+      const importerNode = groupedNodes.find(n => n.nodeType === 'IMPORTER');
+      const exporterNode = groupedNodes.find(n => n.nodeType === 'EXPORTER');
+      const restNodes = groupedNodes.filter(n => n.nodeType !== 'IMPORTER' && n.nodeType !== 'EXPORTER');
+      return [{
+        id: `${importerNode.id}_${exporterNode.id}`,
+        name: importerNode.name,
+        nodeType: 'IMPORTER & EXPORTER',
+        profile: importerNode.profile,
+        [importerNode.nodeType.toLowerCase()]: importerNode,
+        [exporterNode.nodeType.toLowerCase()]: exporterNode,
+        nodes: [importerNode.nodeType.toLowerCase(), exporterNode.nodeType.toLowerCase()]
+      }, ...restNodes];
     }
-    return nodeA;
+
+    return groupedNodes;
   };
 
   return flatten(nodes.map(groupedNodes => getNode(groupedNodes)));
