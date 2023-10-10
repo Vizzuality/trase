@@ -17,6 +17,8 @@
 
   svg {
     font-size: $font-size-xx-regular;
+    margin: 0 5px 0 0;
+    flex: none;
   }
 
   &.-visible {
@@ -26,5 +28,10 @@
   .warning-wrapper {
     margin-left: 70px;
     width: calc(100% - 70px);
+    display: flex;
+  }
+
+  .warnings-bold {
+    font-weight: $font-weight-bold;
   }
 }

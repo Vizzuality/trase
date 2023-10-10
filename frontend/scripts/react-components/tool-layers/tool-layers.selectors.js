@@ -224,6 +224,14 @@ export const getAllSelectedGeoColumns = createSelector(
   }
 );
 
+// Layers with different geometries depeinding on the selected year
+const layersWithYears = {
+  indonesia_concession_wood_pulp: [
+    { firstYear: 2005, lastYear: 2019 },
+    { firstYear: 2020, lastYear: 2022 }
+  ]
+};
+
 // TODO: Please move this logic to the CMS as is getting really messy
 export const getSelectedUnitLayers = createSelector(
   [getUnitLayers, getToolColumns, getSelectedContext, getAllSelectedGeoColumns, getSelectedYears],
@@ -243,19 +251,13 @@ export const getSelectedUnitLayers = createSelector(
       'indonesia_country_of_production_wood_pulp',
       'indonesia_province_wood_pulp',
       'indonesia_province_of_production_wood_pulp',
-      'indonesia_province_of_production_wood_pulp',
+      'indonesia_province_of_production_wood_pulp'
     ];
 
     // Changes in the column names
     const changes = {
-      indonesia_wood_supplier: 'indonesia_concession_wood_pulp',
-    }
-
-    // Layers with different geometries depeinding on the selected year
-    const layersWithYears = {'indonesia_concession_wood_pulp': [
-      { firstYear: 2005, lastYear: 2019 },
-      { firstYear: 2020, lastYear: 2022 }
-    ]};
+      indonesia_wood_supplier: 'indonesia_concession_wood_pulp'
+    };
 
     geoColumns.forEach(geoColumn => {
       let layerId = `${countryName}_${columnName(geoColumn)}`;
@@ -271,26 +273,59 @@ export const getSelectedUnitLayers = createSelector(
 
       if (layersWithYears[layerId]) {
         const [firstSelectedYear, lastSelectedYear] = selectedYears;
-        const layerWithYears = layersWithYears[layerId].find(
-          ({ firstYear, lastYear }) => {
-            const matchingRangeLayer = (firstSelectedYear >= firstYear && lastSelectedYear <= lastYear);
-            // If there is not a match with the range, return the last layer on the range
-            return matchingRangeLayer || lastSelectedYear <= lastYear;
-          }
-        );
+        const layerWithYears = layersWithYears[layerId].find(({ firstYear, lastYear }) => {
+          const matchingRangeLayer = firstSelectedYear >= firstYear && lastSelectedYear <= lastYear;
+          // If there is not a match with the range, return the last layer on the range
+          return matchingRangeLayer || lastSelectedYear <= lastYear;
+        });
         if (layerWithYears) {
           layerId = `${layerId}_years-${layerWithYears.firstYear}-${layerWithYears.lastYear}`;
         }
       }
 
       // columns of production are the same than their respective without the of_production part
-      const unitLayer = unitLayers.find(l => l.id === layerId || l.id === layerId.replace('_of_production', ''));
+      const unitLayer = unitLayers.find(
+        l => l.id === layerId || l.id === layerId.replace('_of_production', '')
+      );
 
       if (unitLayer) {
         selectedUnitLayers.push({ ...unitLayer, hasChoropleth: !geoColumn.isChoroplethDisabled });
       }
     });
     return selectedUnitLayers;
+  }
+);
+
+export const getUnitLayerWarnings = createSelector(
+  [getSelectedUnitLayers, getSelectedYears],
+  (selectedUnitLayers, selectedYears) => {
+    if (
+      !selectedUnitLayers ||
+      selectedYears.length === 0 ||
+      !selectedUnitLayers.some(l => l.id.includes('years'))
+    ) {
+      return null;
+    }
+    const selectedUnitLayersIds = selectedUnitLayers.map(layer => layer.id);
+    const warnings = [];
+    selectedUnitLayersIds.forEach(id => {
+      const availableYearRanges = Object.entries(layersWithYears).find(([rangesId]) =>
+        id.startsWith(rangesId)
+      )?.[1];
+      if (!availableYearRanges) return;
+      const [selectedFirstYear, selectedLastYear] = selectedYears;
+
+      const containsMultipleYearRanges =
+        availableYearRanges.filter(
+          ({ firstYear, lastYear }) =>
+            !(lastYear < selectedFirstYear || firstYear > selectedLastYear)
+        ).length > 1;
+
+      if (containsMultipleYearRanges) {
+        warnings.push('YEAR_RANGE_WARNING');
+      }
+    });
+    return warnings;
   }
 );
 
