@@ -10,6 +10,7 @@ module Api
           return if @errors.any?
 
           @flows = filter_flows.flows
+          @extra_attributes_flows = filter_flows.extra_attributes_flows
           @active_nodes = filter_flows.active_nodes
           @total_height = filter_flows.total_height
           @other_nodes = filter_flows.other_nodes
@@ -25,6 +26,15 @@ module Api
             path = flow.path
             identifier = flow.path.dup
             result[identifier] = initialize_flow_hash(flow, identifier)
+          end
+          @extra_attributes_flows.each do |attribute_id, flows|
+            flows.each do |flow|
+              identifier = flow.path.dup
+              next unless result[identifier]
+
+              result[identifier][:extra_attributes] ||= {}
+              result[identifier][:extra_attributes][attribute_id] = flow["quant_value"]
+            end
           end
 
           @data = process_data(result)

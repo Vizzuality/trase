@@ -174,19 +174,32 @@ RSpec.describe Api::V3::Flows::Filter do
     end
 
     context "when extra attributes" do
-      let(:extra_cont_attributes_id) { api_v3_deforestation_v2.readonly_attribute.id }
+      let(:extra_cont_attribute_id) { api_v3_deforestation_v2.readonly_attribute.id }
 
       it "includes values for extra attributes in active nodes" do
         filter = Api::V3::Flows::Filter.new(
           api_v3_brazil_soy_context,
-          filter_params.merge(extra_cont_attributes_ids: [extra_cont_attributes_id])
+          filter_params.merge(extra_cont_attributes_ids: [extra_cont_attribute_id])
         )
         result = filter.call
         municipality_node_heights = result.include[:node_heights].find do |node_height|
           node_height[:id] == api_v3_municipality_node.id
         end
-        expect(municipality_node_heights[:extra_attributes]).to have_key(extra_cont_attributes_id)
-        expect(municipality_node_heights[:extra_attributes][extra_cont_attributes_id]).to eq(45)
+        expect(municipality_node_heights[:extra_attributes]).to have_key(extra_cont_attribute_id)
+        expect(municipality_node_heights[:extra_attributes][extra_cont_attribute_id]).to eq(45)
+      end
+
+      it "includes values for extra attributes in flows" do
+        filter = Api::V3::Flows::Filter.new(
+          api_v3_brazil_soy_context,
+          filter_params.merge(extra_cont_attributes_ids: [extra_cont_attribute_id])
+        )
+        result = filter.call
+        municipality_flow = result.data.find do |flow|
+          flow[:path].include?(api_v3_municipality_node.id)
+        end
+        expect(municipality_flow[:extra_attributes]).to have_key(extra_cont_attribute_id)
+        expect(municipality_flow[:extra_attributes][extra_cont_attribute_id]).to eq(45)
       end
     end
 
