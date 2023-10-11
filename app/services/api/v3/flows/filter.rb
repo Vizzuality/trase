@@ -2,7 +2,7 @@ module Api
   module V3
     module Flows
       class Filter
-        attr_reader :errors, :flows, :active_nodes, :total_height, :other_nodes,
+        attr_reader :errors, :flows, :extra_attributes_flows, :active_nodes, :total_height, :other_nodes,
                     :cont_attribute, :ncont_attribute, :extra_cont_attributes
         # params:
         # node_types_ids - list of node type ids
@@ -34,7 +34,10 @@ module Api
           initialize_excluded_nodes
           if @errors.none?
             initialize_active_nodes
-            @flows = flows_query.all
+            @flows = flows_query(@cont_attribute).all
+            @extra_attributes_flows = @extra_cont_attributes.map do |extra_cont_attribute|
+              [extra_cont_attribute.id, flows_query(extra_cont_attribute).all]
+            end
           end
           Api::V3::Flows::Result.new(self)
         end
@@ -324,7 +327,7 @@ module Api
           flows_totals_per_node_without_order(position, cont_attribute).order(total: :desc)
         end
 
-        def flows_query
+        def flows_query(cont_attribute)
           case_expressions, case_substitutions = [], []
           @active_node_types_positions.map.with_index do |position, i|
             case_expressions <<
@@ -339,7 +342,7 @@ module Api
           select_clause_path = ActiveRecord::Base.send(
             :sanitize_sql_array, ["ARRAY[" + case_expressions.join(", ") + "] AS path", *case_substitutions]
           )
-          cont_attr_table = @cont_attribute.flow_values_class.table_name
+          cont_attr_table = cont_attribute.flow_values_class.table_name
           subquery_select_clause_parts = [
             "year",
             select_clause_path,
@@ -347,7 +350,7 @@ module Api
           ]
           query_select_clause_parts = [
             "path",
-            "#{@cont_attribute.aggregation_method}(quant_value) AS quant_value"
+            "#{cont_attribute.aggregation_method}(quant_value) AS quant_value"
           ]
 
           if @ncont_attribute
@@ -355,7 +358,7 @@ module Api
             query_select_clause_parts += ["ind_value", "qual_value"]
           end
 
-          subquery = basic_flows_query(@cont_attribute).
+          subquery = basic_flows_query(cont_attribute).
             select(subquery_select_clause_parts.join(",")).
             where("#{cont_attr_table}.value > 0").
             group("1,2") # year and path
