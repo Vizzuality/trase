@@ -43,7 +43,7 @@ module Api
 
             trase_name = row[commodity_column]
             {
-              com_trade_codes: codes_str.sub(/\{/, "").sub(/\}/, "").split(","),
+              com_trade_codes: codes_str.sub("{", "").sub("}", "").split(","),
               trase_name: trase_name,
               trase_id: commodities[trase_name],
               eq_factor: row[eq_factor_column]&.to_f

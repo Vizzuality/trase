@@ -427,6 +427,8 @@ ignore:
   - Style/HashConversion
 - app/services/api/v3/countries_com_trade_indicators/country_codes.rb:
   - Style/HashConversion
+- app/services/api/v3/countries_com_trade_indicators/importer_service.rb:
+  - Style/UnlessLogicalOperators
 - app/services/api/v3/countries_com_trade_indicators/world_request.rb:
   - Style/RedundantReturn
 - app/services/api/v3/countries_com_trade_indicators/world_request_uri_queue.rb:
@@ -436,11 +438,14 @@ ignore:
 - app/services/api/v3/countries_wb_indicators/api_service.rb:
   - Layout/SpaceAfterComma
   - Lint/UselessAssignment
+- app/services/api/v3/countries_wb_indicators/importer_service.rb:
+  - Style/UnlessLogicalOperators
 - app/services/api/v3/countries_wb_indicators/wb_request.rb:
   - Layout/DotPosition
 - app/services/api/v3/country_profiles/basic_attributes.rb:
   - Layout/DotPosition
   - Style/PercentLiteralDelimiters
+  - Style/UnlessLogicalOperators
 - app/services/api/v3/country_profiles/commodity_totals.rb:
   - Layout/DotPosition
 - app/services/api/v3/country_profiles/external_attribute_value.rb:
@@ -632,6 +637,7 @@ ignore:
   - Layout/IndentationConsistency
   - Layout/SpaceBeforeBlockBraces
   - Performance/RegexpMatch
+  - Style/UnlessLogicalOperators
 - app/services/api/v3/sankey_card_links/query_params.rb:
   - Naming/BinaryOperatorParameterName
   - Style/ConditionalAssignment
