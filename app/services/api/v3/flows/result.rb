@@ -25,15 +25,18 @@ module Api
           @flows.each do |flow|
             path = flow.path
             identifier = flow.path.dup
+            # the identifier will be mutated to include the value of the ncont attribute if one is present
             result[identifier] = initialize_flow_hash(flow, identifier)
           end
           @extra_attributes_flows.each do |attribute_id, flows|
             flows.each do |flow|
               identifier = flow.path.dup
+              # the identifier will be mutated to include the value of the ncont attribute if one is present
+              extra_flow_hash = initialize_flow_hash(flow, identifier)
               next unless result[identifier]
 
               result[identifier][:extra_attributes] ||= {}
-              result[identifier][:extra_attributes][attribute_id] = flow["quant_value"]
+              result[identifier][:extra_attributes][attribute_id] = extra_flow_hash[:quant]
             end
           end
 
