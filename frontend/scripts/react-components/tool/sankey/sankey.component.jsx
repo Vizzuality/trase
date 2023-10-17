@@ -91,7 +91,8 @@ function Sankey(props) {
       setHoveredLink,
       selectedResizeBy,
       selectedRecolorBy,
-      toolLayout
+      toolLayout,
+      selectedContext
     });
   };
 
