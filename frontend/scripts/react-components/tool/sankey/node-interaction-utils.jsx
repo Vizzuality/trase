@@ -5,22 +5,26 @@ import formatValue from 'utils/formatValue';
 import { NODE_TYPES } from 'constants';
 import RecolorByLegend from './recolor-by-legend';
 
+const getExtraResizeByItems = (extraAttributes, selectedContext) => {
+  const relatedNodeHeights = extraAttributes;
+  return relatedNodeHeights
+    ? Object.entries(relatedNodeHeights).map(([childrenIndicatorId, value]) => {
+        const childrenIndicator = selectedContext.resizeBy.find(
+          n => String(n.attributeId) === childrenIndicatorId
+        );
+        return {
+          title: childrenIndicator?.label,
+          unit: childrenIndicator?.unit,
+          value: `${formatValue(value, childrenIndicator?.label)}`
+        };
+      })
+    : [];
+};
+
 // Indicators can have related children indicators
 const getChildrenResizeByItems = (childrenNodeHeights, id, selectedContext) => {
   const relatedNodeHeights = childrenNodeHeights?.[id]?.extraAttributes;
-  return (
-    relatedNodeHeights &&
-    Object.entries(relatedNodeHeights).map(([childrenIndicatorId, value]) => {
-      const childrenIndicator = selectedContext.resizeBy.find(
-        n => String(n.attributeId) === childrenIndicatorId
-      );
-      return {
-        title: childrenIndicator?.label,
-        unit: childrenIndicator?.unit,
-        value: `${formatValue(value, childrenIndicator?.label)}`
-      };
-    })
-  );
+  return getExtraResizeByItems(relatedNodeHeights, selectedContext);
 };
 
 export const handleNodeOver = ({
@@ -150,9 +154,12 @@ export const handleLinkOver = ({
   setHoveredLink,
   selectedResizeBy,
   selectedRecolorBy,
-  toolLayout
+  toolLayout,
+  selectedContext
 }) => {
   const rect = getRect(toolLayout);
+  const extraLinksResizeByItems = getExtraResizeByItems(link.extraAttributes, selectedContext);
+
   const tooltip = {
     text: `${link.sourceNodeName} > ${link.targetNodeName}`,
     x: e.clientX - rect.x,
@@ -164,9 +171,11 @@ export const handleLinkOver = ({
         title: selectedResizeBy.label,
         unit: selectedResizeBy.unit,
         value: formatValue(link.quant, selectedResizeBy.label)
-      }
+      },
+      ...extraLinksResizeByItems
     ]
   };
+
   if (selectedRecolorBy) {
     let recolorValue = null;
     let recolorChildren = null;
