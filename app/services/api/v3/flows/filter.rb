@@ -319,7 +319,7 @@ module Api
 
           Api::V3::Flow.
             from("(#{subquery.to_sql}) s").
-            select("node_id, SUM(total) AS total").
+            select("node_id, #{cont_attribute.aggregation_method}(total) AS total").
             group("node_id")
         end
 
