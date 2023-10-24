@@ -27,7 +27,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Setup Node
-        uses: actions/setup-node@v3.1.0
+        uses: actions/setup-node@v4
         with:
           node-version: 16
       - name: Install modules
@@ -54,7 +54,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 16
 
@@ -112,7 +112,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 16
 
