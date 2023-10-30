@@ -35,8 +35,8 @@ Runs on every push to `develop`. Supports manual dispatch. Uses Capistrano. Cons
 - `Deploy to staging`, depends on `rspec` and `front_end`
 - `Deploy to sandbox`, depends on `rspec` and `front_end`
 
-## Auto deploy master
-Runs on every push to `master`. Supports manual dispatch. Uses Capistrano. Consists of 4 jobs:
+## Auto deploy demo
+Runs on every push to `develop` (previously `master`, which is why it is separate from the develop workflow). Supports manual dispatch. Uses Capistrano. Consists of 4 jobs:
 - `front_end`, Runs tests + verifies front end build
 - `rspec`
 - `Deploy to demo`, depends on `rspec` and `front_end`
