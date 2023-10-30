@@ -21,7 +21,7 @@ That is done using a dedicated rake task:
     3. the [SchemaSpy](http://schemaspy.readthedocs.io/en/latest/index.html) jar file and [PostgreSQL driver](https://jdbc.postgresql.org/download.html) file are already in doc/db
     4. `rake db:doc:html`
     5. output files are in `doc/gh-pages/db/all_tables` (complete schema) and `doc/gh-pages/db/blue_tables` (only blue tables)
-3. regenerating the html documentation and updating gh-pages is a part of the Travis CI build. When building against `master`, Travis will push to gh pages after a successful build. This uses the [Deployment Pages](https://docs.travis-ci.com/user/deployment/pages/) feature of Travis, and currently is set up using a personal GITHUB_TOKEN defined directly in Travis CI repo settings.
+3. regenerating the html documentation and updating gh-pages is a part of the GH Actions build.
 
 
 ## Ruby code documentation
@@ -30,4 +30,4 @@ Not available throughout, but recommended for new code and refactoring. We use [
 
 ## Swagger
 
-We maintain a swagger file to document the API.
+We maintain swagger files in doc/gh-pages/api to document the internal and public APIs. Regenerating the html documentation and updating gh-pages is a part of the GH Actions build (using redoc).

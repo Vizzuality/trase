@@ -7,15 +7,24 @@ menu: Backend
 
 We use `sidekiq` to process long running jobs in the background.
 
-Currently we're using it for 2 types of database jobs:
-- updating `download_flows_mv`, which takes around 2 minutes and is triggered by updates to a number of "yellow" tables, e.g. downlaod_attributes
-- importing new data from main database, which takes around two hours and is triggered either by clicking a button in the admin tool or running a rake task
+We're using it for a number of database jobs (app/workers):
+- importing indicators from World Bank APIs
+- importing indicators from ComTrade API (currently defunct, due to old API being retired)
+- exporting CMS configuration. That is part of a private API that was a first step towards automating CMS configuration.
+- database export - export a dump of the database from the current environment to S3
+- database import - import a dump from S3 into the current database
+- flow attribute available years update - automation for calculating available years of data per each flow indicator
+- full refresh - used to refresh a materialised view (used in the refresh routine of selected models)
+- partial refresh - used to partially refresh a materialised table  (used in the refresh routine of selected models)
+- map attributes export - exports values to CartoDB, runs during deployment
+- mirror database update worker - allows to update the database from a core data dump, never used in production, mostly used in sandbox / demo to prepare data
+- refresh actor basic attributes - refreshes the summary part of the profile for actor nodes
+- precomputed download refresh worker - recomputes batch downloads
+- upsert attributes worker - used for refreshing the attributes "materialised table"
 
-In both cases the times might grow as the dataset grows, which is important to keep in mind because the current configuration might need tuning when that happens.
+Jobs are sorted into different sidekiq queues based on how long they take to run.
 
-Our use case of sidekiq does not benefit from high concurrency, because both workers need to run one at a time. Therefore, concurrency settings in `config/sidekiq.yml` and `config/initializers/sidekiq.rb` are low to match that and avoid using up resources unnecessarily. Again, if we at any point later add more background jobs with different concurrency characteristics, this may need to be revised.
-
-To ensure only one database job can run at any single time we use `sidekiq-unique-jobs` gem. It works at 2 stages:
+For some jobs we need to ensure only one database job can run at any single time. For that we use `sidekiq-unique-jobs` gem. It works at 2 stages:
 - when adding a job to the queue,
 - when pulling the job from the queue to start execution.
 
