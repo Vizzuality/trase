@@ -227,7 +227,7 @@ export const getAllSelectedGeoColumns = createSelector(
 // Layers with different geometries depeinding on the selected year
 const layersWithYears = {
   indonesia_concession_wood_pulp: [
-    { firstYear: 2005, lastYear: 2019 },
+    { firstYear: 2015, lastYear: 2019 },
     { firstYear: 2020, lastYear: 2022 }
   ]
 };
