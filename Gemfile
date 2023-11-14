@@ -39,7 +39,7 @@ gem "acts_as_list"
 gem "appsignal"
 gem "aws-sdk-s3"
 gem "best_in_place", git: "https://github.com/mmotherwell/best_in_place" # for Rails 6.1
-gem "ckeditor", "< 5"
+gem "ckeditor", "< 6"
 gem "devise"
 gem "devise_token_auth"
 gem "dotenv-rails"

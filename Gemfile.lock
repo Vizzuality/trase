@@ -163,9 +163,8 @@ GEM
     case_transform (0.2)
       activesupport
     chronic (0.10.2)
-    ckeditor (4.3.0)
+    ckeditor (5.1.1)
       orm_adapter (~> 0.5.0)
-      terrapin
     climate_control (0.2.0)
     coffee-rails (5.0.0)
       coffee-script (>= 2.2.0)
@@ -569,7 +568,7 @@ DEPENDENCIES
   capistrano-rails
   capistrano-rvm
   capistrano-yarn
-  ckeditor (< 5)
+  ckeditor (< 6)
   coffee-rails
   database_cleaner
   devise
