@@ -11,6 +11,7 @@
 #  is_disabled(When set, this attribute is not displayed)                                               :boolean          default(FALSE), not null
 #  is_default(When set, show this attribute by default)                                                 :boolean          default(FALSE), not null
 #  is_quick_fact                                                                                        :boolean          default(FALSE), not null
+#  parent_id                                                                                            :integer
 #
 # Indexes
 #
@@ -29,6 +30,7 @@ module Api
       include Api::V3::IsDownloadable
 
       belongs_to :context
+      belongs_to :parent, class_name: "Api::V3::ResizeByAttribute", optional: true
       has_one :resize_by_quant, autosave: true
 
       validates :context, presence: true
@@ -36,10 +38,10 @@ module Api
       validates :is_disabled, inclusion: {in: [true, false]}
       validates :is_default, inclusion: {in: [true, false]}
       validates_with OneAssociatedAttributeValidator,
-                     attributes: [:resize_by_quant]
+        attributes: [:resize_by_quant]
       validates_with AttributeAssociatedOnceValidator,
-                     attribute: :resize_by_quant,
-                     if: :new_resize_by_quant_given?
+        attribute: :resize_by_quant,
+        if: :new_resize_by_quant_given?
       validate :at_most_two_quick_facts_per_context
 
       after_create :set_years
@@ -54,6 +56,24 @@ module Api
         ]
       end
 
+      def self.select_options(context_id: nil)
+        rel = Api::V3::ResizeByAttribute.includes(
+          resize_by_quant: :quant, context: [:country, :commodity]
+        )
+        rel = rel.where(context_id: context_id) if context_id
+
+        rel.all.map do |ra|
+          [
+            [
+              ra.context&.country&.name,
+              ra.context&.commodity&.name,
+              ra.resize_by_quant&.quant&.name
+            ].join(" / "),
+            ra.id
+          ]
+        end
+      end
+
       private
 
       def set_years
@@ -65,9 +85,9 @@ module Api
       def at_most_two_quick_facts_per_context
         return false unless context
 
-        current_quick_facts = context.resize_by_attributes.
-          where(is_quick_fact: true).
-          where.not(id: id)
+        current_quick_facts = context.resize_by_attributes
+          .where(is_quick_fact: true)
+          .where.not(id: id)
 
         return if current_quick_facts.length <= 1
 

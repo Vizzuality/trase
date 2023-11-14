@@ -42,7 +42,8 @@ export default function(rawLinks, nodes, columns, selectedRecolorBy, extraColumn
         quant: parseFloat(link.quant),
         recolorBy,
         recolorBySlug,
-        originalPath: path
+        originalPath: path,
+        extraAttributes: link.extraAttributes
       });
     }
   });

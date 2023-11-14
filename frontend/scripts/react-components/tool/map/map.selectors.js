@@ -4,7 +4,9 @@ import { getHighlightedNodesData } from 'react-components/tool/tool.selectors';
 import { getSelectedContext, getSelectedYears } from 'app/app.selectors';
 import {
   getSelectedMapDimensionsData,
-  getSelectedMapContextualLayersData
+  getSelectedMapContextualLayersData,
+  getMapDimensionsWarnings,
+  getUnitLayerWarnings
 } from 'react-components/tool-layers/tool-layers.selectors';
 import { getContextualLayersTemplates, getRasterLayerTemplate } from './layers/contextual-layers';
 import { getLogisticMapLayerTemplates } from './layers/logistic-layers';
@@ -133,3 +135,11 @@ export const getLogisticLayers = createSelector(
       .filter(Boolean);
   }
 );
+
+export const getWarnings = createSelector(
+  [getMapDimensionsWarnings,
+    getUnitLayerWarnings],
+  (dimensionsWarnings, unitLayersWarnings) => {
+    if(!dimensionsWarnings?.length && !unitLayersWarnings?.length) return null;
+    return [...(dimensionsWarnings || []), ...(unitLayersWarnings || [])];
+  });

@@ -10,6 +10,7 @@ module Api
           return if @errors.any?
 
           @flows = filter_flows.flows
+          @extra_attributes_flows = filter_flows.extra_attributes_flows
           @active_nodes = filter_flows.active_nodes
           @total_height = filter_flows.total_height
           @other_nodes = filter_flows.other_nodes
@@ -24,7 +25,19 @@ module Api
           @flows.each do |flow|
             path = flow.path
             identifier = flow.path.dup
+            # the identifier will be mutated to include the value of the ncont attribute if one is present
             result[identifier] = initialize_flow_hash(flow, identifier)
+          end
+          @extra_attributes_flows.each do |attribute_id, flows|
+            flows.each do |flow|
+              identifier = flow.path.dup
+              # the identifier will be mutated to include the value of the ncont attribute if one is present
+              extra_flow_hash = initialize_flow_hash(flow, identifier)
+              next unless result[identifier]
+
+              result[identifier][:extra_attributes] ||= {}
+              result[identifier][:extra_attributes][attribute_id] = extra_flow_hash[:quant]
+            end
           end
 
           @data = process_data(result)
@@ -63,10 +76,12 @@ module Api
 
         def initialize_include
           node_heights = @active_nodes.map do |node_id, value|
+            cont_attribute_value = value[@cont_attribute.id]
             {
               id: node_id,
-              height: format("%0.6f", (value / @total_height)).to_f,
-              quant: format("%0.6f", value).to_f
+              height: format("%0.6f", (cont_attribute_value / @total_height)).to_f,
+              quant: format("%0.6f", cont_attribute_value).to_f,
+              extra_attributes: value.except(@cont_attribute.id)
             }
           end
           @include = {

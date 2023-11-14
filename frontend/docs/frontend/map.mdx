@@ -19,6 +19,8 @@ This is needed when an update is needed on the map's vector layers. We have a se
       tippecanoe -o ./indonesia_country_of_production.mbtiles -l Colombia  -zg --drop-densest-as-needed --extend-zooms-if-still-dropping --force --read-parallel indonesia_country_of_production.geojson
     ```
 - IMPORTANT: layers should be named like [COUNTRY]_[SINGULAR_NODE_TYPE].mbtiles e.g ecuador_cantons.mbtiles This will help to automatically select the unit layer on the map component. It won't be loaded if it doesn't have the correct name. Also the source layer should be the capitalised country e.g. Ecuador
+  If the layers have a year range they should be named like [COUNTRY]_[SINGULAR_NODE_TYPE]_years[FIRST_YEAR]-[LAST YEAR].mbtiles e.g ecuador_cantons_years-2015-2016.mbtiles
+
 - Generated tiles should be in /var/www/tilesets
 - Use scp to upload the generated *.mbtiles into this folder of sandbox-data or production:
 ```

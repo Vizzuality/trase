@@ -22,7 +22,8 @@ import {
   getTooltipValues,
   getCountryName,
   getContextualLayers,
-  getLogisticLayers
+  getLogisticLayers,
+  getWarnings
 } from 'react-components/tool/map/map.selectors';
 import {
   getMapView,
@@ -32,7 +33,6 @@ import {
   getChoroplethOptions,
   getSelectedMapContextualLayersData,
   getShouldFitBoundsSelectedPolygons,
-  getMapDimensionsWarnings,
   getSelectedMapDimensionsUids,
   getSelectedUnitLayers
 } from 'react-components/tool-layers/tool-layers.selectors';
@@ -68,7 +68,7 @@ const mapStateToProps = state => {
     visibleNodes: getVisibleNodes(state),
     selectedBiomeFilter: getSelectedColumnFilterNode(state),
     basemapId: getBasemap(state),
-    selectedMapDimensionsWarnings: getMapDimensionsWarnings(state),
+    warnings: getWarnings(state),
     highlightedNodesData: getHighlightedNodesData(state),
     columns: state.toolLinks.data.columns,
     extraColumn: (getHasExtraColumn(state) && state.toolLinks.extraColumn) || null,

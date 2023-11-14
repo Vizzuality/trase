@@ -63,7 +63,7 @@ module Api
               }
             end
           rows = [
-            {name: "Score", have_unit: true, values: values}
+            {name: "Value", have_unit: true, values: values}
           ]
           if @state_ranking.present?
             rows << {name: "State Ranking", have_unit: false, values: ranking_scores}

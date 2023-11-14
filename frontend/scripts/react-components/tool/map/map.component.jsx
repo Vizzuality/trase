@@ -48,7 +48,7 @@ function Map(props) {
     basemapId,
     contextualLayers,
     logisticLayers,
-    selectedMapDimensionsWarnings,
+    warnings,
     onPolygonHighlighted,
     onPolygonClicked,
     selectedGeoNodes,
@@ -273,7 +273,7 @@ function Map(props) {
       {!minimized && (
         <>
           <Basemaps />
-          <Warnings warnings={selectedMapDimensionsWarnings} />
+          <Warnings warnings={warnings} />
         </>
       )}
       <div className="c-map-attribution">
@@ -297,7 +297,7 @@ Map.propTypes = {
   contextualLayers: PropTypes.array,
   logisticLayers: PropTypes.array,
   unitLayers: PropTypes.array,
-  selectedMapDimensionsWarnings: PropTypes.array,
+  warnings: PropTypes.array,
   selectedGeoNodes: PropTypes.array,
   onPolygonHighlighted: PropTypes.func,
   onPolygonClicked: PropTypes.func,

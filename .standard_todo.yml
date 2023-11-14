@@ -73,9 +73,6 @@ ignore:
   - Layout/ArgumentAlignment
 - app/admin/api/v3/recolor_by_attribute.rb:
   - Layout/ArgumentAlignment
-- app/admin/api/v3/resize_by_attribute.rb:
-  - Layout/ArgumentAlignment
-  - Layout/DotPosition
 - app/admin/api/v3/sankey_card_link.rb:
   - Layout/ArgumentAlignment
 - app/admin/api/v3/top_profile.rb:
@@ -273,9 +270,6 @@ ignore:
 - app/models/api/v3/recolor_by_attribute.rb:
   - Style/PercentLiteralDelimiters
   - Layout/ArgumentAlignment
-- app/models/api/v3/resize_by_attribute.rb:
-  - Layout/ArgumentAlignment
-  - Layout/DotPosition
 - app/models/api/v3/sankey_card_link.rb:
   - Layout/DotPosition
   - Layout/LineContinuationSpacing
@@ -357,8 +351,6 @@ ignore:
   - Layout/ArgumentAlignment
 - app/serializers/api/v3/contexts/recolor_by_attribute_serializer.rb:
   - Layout/ArgumentAlignment
-- app/serializers/api/v3/contexts/resize_by_attribute_serializer.rb:
-  - Layout/ArgumentAlignment
 - app/serializers/api/v3/dashboards/template_serializer.rb:
   - Layout/ArgumentAlignment
 - app/serializers/api/v3/download_attribute_serializer.rb:
@@ -435,6 +427,8 @@ ignore:
   - Style/HashConversion
 - app/services/api/v3/countries_com_trade_indicators/country_codes.rb:
   - Style/HashConversion
+- app/services/api/v3/countries_com_trade_indicators/importer_service.rb:
+  - Style/UnlessLogicalOperators
 - app/services/api/v3/countries_com_trade_indicators/world_request.rb:
   - Style/RedundantReturn
 - app/services/api/v3/countries_com_trade_indicators/world_request_uri_queue.rb:
@@ -444,11 +438,14 @@ ignore:
 - app/services/api/v3/countries_wb_indicators/api_service.rb:
   - Layout/SpaceAfterComma
   - Lint/UselessAssignment
+- app/services/api/v3/countries_wb_indicators/importer_service.rb:
+  - Style/UnlessLogicalOperators
 - app/services/api/v3/countries_wb_indicators/wb_request.rb:
   - Layout/DotPosition
 - app/services/api/v3/country_profiles/basic_attributes.rb:
   - Layout/DotPosition
   - Style/PercentLiteralDelimiters
+  - Style/UnlessLogicalOperators
 - app/services/api/v3/country_profiles/commodity_totals.rb:
   - Layout/DotPosition
 - app/services/api/v3/country_profiles/external_attribute_value.rb:
@@ -640,6 +637,7 @@ ignore:
   - Layout/IndentationConsistency
   - Layout/SpaceBeforeBlockBraces
   - Performance/RegexpMatch
+  - Style/UnlessLogicalOperators
 - app/services/api/v3/sankey_card_links/query_params.rb:
   - Naming/BinaryOperatorParameterName
   - Style/ConditionalAssignment

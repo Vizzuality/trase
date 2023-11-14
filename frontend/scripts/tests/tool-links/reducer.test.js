@@ -168,7 +168,8 @@ test(TOOL_LINKS__SET_LINKS, () => {
       ...initialState.data,
       links,
       nodeHeights: { 1: linksMeta.nodeHeights[0] },
-      otherNodes: {}
+      otherNodes: {},
+      childrenNodeHeights: { "1" : { height: 12345.34, id: 1 }}
     }
   });
 });

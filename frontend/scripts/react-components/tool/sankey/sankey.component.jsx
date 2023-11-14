@@ -1,13 +1,11 @@
 import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import formatValue from 'utils/formatValue';
 import Heading from 'react-components/shared/heading';
 import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.component';
 import { TOOL_LAYOUT, MIN_COLUMNS_NUMBER, NODE_TYPES } from 'constants';
-import { handleNodeOver } from './node-interaction-utils';
+import { handleNodeOver, handleLinkOver } from './node-interaction-utils';
 import { useNodeRefHeight, useMenuOptions, useMenuPosition } from './sankey-hooks';
-import RecolorByLegend from './recolor-by-legend';
 import SankeyColumn from './sankey-column.component';
 import NodeMenu from './node-menu.component';
 import SankeyLink from './sankey-link.component';
@@ -46,6 +44,7 @@ function Sankey(props) {
     flowsLoading,
     nodeHeights,
     otherNodes,
+    childrenNodeHeights,
     nodeAttributes,
     selectedMapDimensions,
     sankeyColumnsWidth,
@@ -84,39 +83,17 @@ function Sankey(props) {
   const placeholderHeight = useNodeRefHeight(scrollContainerRef);
 
   const onLinkOver = (e, link) => {
-    const rect = getRect(toolLayout);
-    const tooltip = {
-      text: `${link.sourceNodeName} > ${link.targetNodeName}`,
-      x: e.clientX - rect.x,
-      y: e.clientY - rect.y,
-      height: rect.height,
-      width: rect.width,
-      items: [
-        {
-          title: selectedResizeBy.label,
-          unit: selectedResizeBy.unit,
-          value: formatValue(link.quant, selectedResizeBy.label)
-        }
-      ]
-    };
-    if (selectedRecolorBy) {
-      let recolorValue = null;
-      let recolorChildren = null;
-      if (link.recolorBy === null) {
-        recolorValue = 'Unknown';
-      } else {
-        recolorChildren = <RecolorByLegend value={link.recolorBy} />;
-      }
-
-      tooltip.items.push({
-        title: selectedRecolorBy.label,
-        value: recolorValue,
-        children: recolorChildren
-      });
-    }
-
-    setHoveredLink(link.id);
-    setTooltipContent(tooltip);
+    handleLinkOver({
+      e,
+      link,
+      getRect,
+      setTooltipContent,
+      setHoveredLink,
+      selectedResizeBy,
+      selectedRecolorBy,
+      toolLayout,
+      selectedContext
+    });
   };
 
   const onLinkOut = () => {
@@ -138,6 +115,7 @@ function Sankey(props) {
       selectedMapDimensions,
       selectedContext,
       selectedNodesIds,
+      childrenNodeHeights,
       otherNodes,
       nodeAttributes,
       toolColumns,
@@ -273,6 +251,7 @@ Sankey.propTypes = {
   gapBetweenColumns: PropTypes.number,
   nodeHeights: PropTypes.object,
   otherNodes: PropTypes.object,
+  childrenNodeHeights: PropTypes.object,
   selectedContext: PropTypes.object,
   nodeAttributes: PropTypes.object,
   selectedMapDimensions: PropTypes.array,

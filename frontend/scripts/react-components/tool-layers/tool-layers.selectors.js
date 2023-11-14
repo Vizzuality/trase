@@ -224,9 +224,18 @@ export const getAllSelectedGeoColumns = createSelector(
   }
 );
 
+// Layers with different geometries depeinding on the selected year
+const layersWithYears = {
+  indonesia_concession_wood_pulp: [
+    { firstYear: 2015, lastYear: 2019 },
+    { firstYear: 2020, lastYear: 2022 }
+  ]
+};
+
+// TODO: Please move this logic to the CMS as is getting really messy
 export const getSelectedUnitLayers = createSelector(
-  [getUnitLayers, getToolColumns, getSelectedContext, getAllSelectedGeoColumns],
-  (unitLayers, columns, selectedContext, selectedGeoColumns) => {
+  [getUnitLayers, getToolColumns, getSelectedContext, getAllSelectedGeoColumns, getSelectedYears],
+  (unitLayers, columns, selectedContext, selectedGeoColumns, selectedYears) => {
     if (!unitLayers || !selectedContext || !selectedGeoColumns) return null;
     // Use geometryNodeTypeId column for columns without own geometry e.g. logistic hubs
     const geoColumns = selectedGeoColumns.map(c =>
@@ -236,16 +245,42 @@ export const getSelectedUnitLayers = createSelector(
     const countryName = snakeCase(selectedContext.countryName);
     const columnName = c => snakeCase(c.name);
     const selectedUnitLayers = [];
+
+    // Exceptions inside the same country-column for each commodity
     const exceptions = [
       'indonesia_country_of_production_wood_pulp',
       'indonesia_province_wood_pulp',
+      'indonesia_province_of_production_wood_pulp',
       'indonesia_province_of_production_wood_pulp'
     ];
+
+    // Changes in the column names
+    const changes = {
+      indonesia_wood_supplier: 'indonesia_concession_wood_pulp'
+    };
+
     geoColumns.forEach(geoColumn => {
       let layerId = `${countryName}_${columnName(geoColumn)}`;
       const exceptionId = `${layerId}_${snakeCase(selectedContext.commodityName)}`;
+
       if (exceptions.includes(exceptionId)) {
         layerId = exceptionId;
+      }
+
+      if (changes[layerId]) {
+        layerId = changes[layerId];
+      }
+
+      if (layersWithYears[layerId]) {
+        const [firstSelectedYear, lastSelectedYear] = selectedYears;
+        const layerWithYears = layersWithYears[layerId].find(({ firstYear, lastYear }) => {
+          const matchingRangeLayer = firstSelectedYear >= firstYear && lastSelectedYear <= lastYear;
+          // If there is not a match with the range, return the last layer on the range
+          return matchingRangeLayer || lastSelectedYear <= lastYear;
+        });
+        if (layerWithYears) {
+          layerId = `${layerId}_years-${layerWithYears.firstYear}-${layerWithYears.lastYear}`;
+        }
       }
 
       // columns of production are the same than their respective without the of_production part
@@ -258,6 +293,39 @@ export const getSelectedUnitLayers = createSelector(
       }
     });
     return selectedUnitLayers;
+  }
+);
+
+export const getUnitLayerWarnings = createSelector(
+  [getSelectedUnitLayers, getSelectedYears],
+  (selectedUnitLayers, selectedYears) => {
+    if (
+      !selectedUnitLayers ||
+      selectedYears.length === 0 ||
+      !selectedUnitLayers.some(l => l.id.includes('years'))
+    ) {
+      return null;
+    }
+    const selectedUnitLayersIds = selectedUnitLayers.map(layer => layer.id);
+    const warnings = [];
+    selectedUnitLayersIds.forEach(id => {
+      const availableYearRanges = Object.entries(layersWithYears).find(([rangesId]) =>
+        id.startsWith(rangesId)
+      )?.[1];
+      if (!availableYearRanges) return;
+      const [selectedFirstYear, selectedLastYear] = selectedYears;
+
+      const containsMultipleYearRanges =
+        availableYearRanges.filter(
+          ({ firstYear, lastYear }) =>
+            !(lastYear < selectedFirstYear || firstYear > selectedLastYear)
+        ).length > 1;
+
+      if (containsMultipleYearRanges) {
+        warnings.push('YEAR_RANGE_WARNING');
+      }
+    });
+    return warnings;
   }
 );
 
