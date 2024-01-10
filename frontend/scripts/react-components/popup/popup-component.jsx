@@ -20,37 +20,14 @@ function PopUp({ handleOnRequestClose }) {
       <div className="c-popup">
         <div className="popup-content">
           <Heading as="h3" weight="bold" size="md">
-            Recent updates to {`"`}Deforestation Exposure{`"`}
+            A new look is coming to Trase very soon.
           </Heading>
           <Text as="p" size="md" lineHeight="md" className="description">
-            On 10 November 2022, the term{' '}
-            <Text as="span" weight="bold" size="md">
-              ‘deforestation risk’
-            </Text>{' '}
-            was replaced with{' '}
-            <Text as="span" weight="bold" size="md">
-              ‘deforestation exposure’
-            </Text>{' '}
-            as a measure of the exposure of supply chain actors to deforestation from commodity
-            production based on sourcing patterns.
-          </Text>
-          <Text as="p" size="md" lineHeight="md" className="description">
-            Improvements in how commodity deforestation exposure is calculated were made on 7
-            December 2022. Numbers accessed before that date will differ from those accessed after.
-          </Text>
-          <Text as="p" size="md" lineHeight="md">
-            For more information, see{' '}
-            <a
-              className="link"
-              target="_blank"
-              rel="noopener noreferrer"
-              href="https://schema-cms-api-pages127dfd1a-1100pd61xro1g.s3.amazonaws.com/280/blocks/1043/Trase-deforestation-exposure.pdf"
-            >
-              Commodity deforestation exposure and carbon emissions assessment.
-            </a>
+            From 23 January, explore Trase’s trusted data through fresh and intuitive tools,
+            supported by expert analysis.
           </Text>
           <Button size="md" color="pink" onClick={handleOnRequestClose} className="button">
-            I understand
+            Ok
           </Button>
         </div>
       </div>
