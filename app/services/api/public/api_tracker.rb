@@ -18,7 +18,6 @@ module Api
         unless key
           error = "GOOGLE_ANALYTICS_KEY not set"
           Rails.logger.error error
-          Appsignal.send_error(error)
           return
         end
 
