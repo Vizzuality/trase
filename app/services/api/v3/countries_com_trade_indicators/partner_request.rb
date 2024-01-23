@@ -24,7 +24,6 @@ module Api
                element.inspect
             )
             Rails.logger.error error
-            Appsignal.send_error(error)
             return nil
           end
           result.merge(partner_iso3: partner_iso3, partner_iso2: partner_country[:iso2])

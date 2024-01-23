@@ -11,7 +11,6 @@ class ConfigurationExportWorker
     Api::Private::Configuration::Exporter.new(event).call
   rescue => e
     event.fail!(e)
-    Appsignal.send_error(e)
   ensure
     jid
   end

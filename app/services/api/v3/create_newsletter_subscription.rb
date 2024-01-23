@@ -44,7 +44,6 @@ module Api
         Rails.logger.debug response
         CreateNewsletterSubscriptionResult.new(:ok, response, nil)
       rescue MailchimpMarketing::ApiError => e
-        Appsignal.send_error(e)
         # currently no better way of extracting the error title
         # message is a string, which is a serialized hash, which also includes JSON in response_body
         begin

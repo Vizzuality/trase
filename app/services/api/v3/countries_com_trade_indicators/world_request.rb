@@ -49,7 +49,6 @@ module Api
             status["description"] + ")"
           )
           Rails.logger.error error
-          Appsignal.send_error(error)
           return false
         end
 
@@ -62,7 +61,6 @@ module Api
                element.inspect
             )
             Rails.logger.error error
-            Appsignal.send_error(error)
             return nil
           end
 
@@ -76,7 +74,6 @@ module Api
                element.inspect
             )
             Rails.logger.error error
-            Appsignal.send_error(error)
             return nil
           end
 
