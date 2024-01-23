@@ -45,7 +45,7 @@ module Cache
           end
         end
       rescue => e
-        Appsignal.send_error(e)
+        Rails.logger.error(e)
       end
     end
   end

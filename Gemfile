@@ -36,7 +36,6 @@ gem "activeadmin_addons"
 gem "activeadmin_simplemde"
 gem "activeadmin_sortable_table"
 gem "acts_as_list"
-gem "appsignal"
 gem "aws-sdk-s3"
 gem "best_in_place", git: "https://github.com/mmotherwell/best_in_place" # for Rails 6.1
 gem "ckeditor", "< 5"
