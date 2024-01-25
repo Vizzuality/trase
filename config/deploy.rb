@@ -80,7 +80,6 @@ after 'deploy:migrate', 'deploy:schema_comments'
 after 'sidekiq:restart', 'downloads:clear'
 after 'sidekiq:restart', 'map_attributes:refresh'
 after 'sidekiq:restart', 'downloads:refresh'
-# after 'deploy:updated', 'newrelic:notice_deployment'
 
 namespace :yarn do
   after 'yarn:install', 'yarn:build'

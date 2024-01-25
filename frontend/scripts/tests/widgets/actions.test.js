@@ -7,10 +7,10 @@ jest.mock('utils/getURLFromParams', () => ({
 
 describe('test prepareWidget helper function', () => {
   const someEndpoint = 'someEndpoint';
-  const rawEndpoint = 'https://supplychains.trase.earth/data';
+  const rawEndpoint = 'https://mongabay.trase.earth/data';
   const someKey = 'id0_namesomeName';
   const someParams = { id: 0, name: 'someName' };
-  const someUrl = 'http://supplychains.trase.earth';
+  const someUrl = 'http://mongabay.trase.earth';
   const someEndpoints = {
     [someEndpoint]: {
       key: someKey

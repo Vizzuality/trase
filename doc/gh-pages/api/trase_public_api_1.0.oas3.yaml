@@ -4,13 +4,13 @@ info:
   version: "1.0"
   contact:
     name: Trase Public API
-    url: https://supplychains.trase.earth/
+    url: https://mongabay.trase.earth/
     email: info@trase.earth
-  termsOfService: https://supplychains.trase.earth/terms-of-use.html
+  termsOfService: https://mongabay.trase.earth/terms-of-use.html
   license:
     name: MIT License
   description: >-
-    This is a first version of the public API for [Trase](http://supplychains.trase.earth).
+    This is a first version of the public API for [Trase](http://mongabay.trase.earth).
 
     # Introduction
 
@@ -107,7 +107,7 @@ info:
     /api/public/nodes/11113/data?year=2017
 
 servers:
-  - url: https://supplychains.trase.earth/api/public
+  - url: https://mongabay.trase.earth/api/public
 paths:
   /countries:
     get:
