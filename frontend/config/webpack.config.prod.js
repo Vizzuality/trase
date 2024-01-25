@@ -25,7 +25,7 @@ module.exports = merge(webpackBaseConfig, {
     }),
     new webpack.optimize.ModuleConcatenationPlugin(),
     new SWPrecacheWebpackPlugin({
-      cacheId: 'supplychains.trase.earth',
+      cacheId: 'mongabay.trase.earth',
       filename: 'service-worker.js',
       minify: true,
       staticFileGlobsIgnorePatterns: [/\.map$/, /asset-manifest\.json$/, /\.html$/],
