@@ -1,6 +1,4 @@
 # All robots allowed
 User-agent: *
-Disallow:
+Disallow: /
 
-# Sitemap files
-Sitemap: https://supplychains.trase.earth/sitemap.xml

@@ -58,7 +58,7 @@ function VersioningModal({ data, context }) {
             SEI-PCS approach to map subnational trade flows can be found for each of the countries
             and commodities in{' '}
             <a
-              href="https://supplychains.trase.earth/about"
+              href="https://mongabay.trase.earth/about"
               target="_blank"
               rel="noopener noreferrer"
               title="Methods and data"
