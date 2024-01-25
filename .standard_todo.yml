@@ -707,8 +707,6 @@ ignore:
 - config/deploy.rb:
   - Style/StringLiterals
   - Style/PercentLiteralDelimiters
-- config/deploy/production.rb:
-  - Style/PercentLiteralDelimiters
 - config/environments/development.rb:
   - Style/StringLiterals
 - config/environments/production.rb:
